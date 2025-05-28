@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
 
     // Validate request body
     if (!email || !password) {
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Forward the request to the backend API
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const response = await fetch(`${API_BASE_URL}/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -25,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       body: JSON.stringify({
         email,
         password,
+        name,
       }),
     });
 
@@ -32,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!response.ok) {
       return res.status(response.status).json({
-        error: data.message || 'Login failed',
+        error: data.message || 'Signup failed',
       });
     }
 
@@ -43,13 +44,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Return success response
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       message: data.message,
       user: data.user,
     });
   } catch (error) {
-    console.error('Login API error:', error);
+    console.error('Signup API error:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 }
