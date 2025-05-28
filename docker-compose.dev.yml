@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  ai-chat-api:
+    build:
+      context: ./ai-chat-api
+      dockerfile: Dockerfile.dev
+    container_name: ai-chat-api-dev
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=file:/app/data/dev.db
+      - JWT_SECRET=your-development-secret-key
+    volumes:
+      # ソースコードのボリュームマウント（ホットリロード用）
+      - ./ai-chat-api:/app
+      - /app/node_modules
+      # SQLiteデータベースの永続化
+      - api-dev-data:/app/data
+    restart: unless-stopped
+    networks:
+      - chat-dev-network
+    command: yarn dev
+
+  ai-chat-ui:
+    build:
+      context: ./ai-chat-ui
+      dockerfile: Dockerfile.dev
+    container_name: ai-chat-ui-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+    volumes:
+      # ソースコードのボリュームマウント（ホットリロード用）
+      - ./ai-chat-ui:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - ai-chat-api
+    restart: unless-stopped
+    networks:
+      - chat-dev-network
+    command: yarn dev
+
+volumes:
+  api-dev-data:
+    driver: local
+
+networks:
+  chat-dev-network:
+    driver: bridge
