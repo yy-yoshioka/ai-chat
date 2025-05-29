@@ -32,6 +32,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
+      - JWT_SECRET=development-secret-key-for-testing-only
     volumes:
       # ソースコードのボリュームマウント（ホットリロード用）
       - ./ai-chat-ui:/app
