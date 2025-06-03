@@ -1,0 +1,55 @@
+{
+  "name": "express-ts-template",
+  "version": "1.0.0",
+  "main": "src/server.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "@types/helmet": "^0.0.48",
+    "@types/ioredis": "^4.28.10",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "4.18.2",
+    "helmet": "^8.1.0",
+    "ioredis": "^5.6.1",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.ts",
+    "lint": "eslint src",
+    "format": "prettier --write .",
+    "prepare": "yarn husky install"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "**/*.{json,md,css,scss}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.18",
+    "@types/express": "4.17.21",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^22.15.21",
+    "@typescript-eslint/eslint-plugin": "6.21.0",
+    "@typescript-eslint/parser": "6.21.0",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
+    "prettier": "^3.5.3",
+    "prisma": "^6.8.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "5.3.3"
+  }
+}

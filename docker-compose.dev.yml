@@ -7,11 +7,13 @@ services:
       dockerfile: Dockerfile.dev
     container_name: ai-chat-api-dev
     ports:
-      - "3001:3001"
+      - "8000:3001"
     environment:
       - NODE_ENV=development
       - DATABASE_URL=file:/app/data/dev.db
       - JWT_SECRET=your-development-secret-key
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-your_openai_api_key_here}
+      - OPENAI_MODEL=gpt-4o-mini-2024-07-18
     volumes:
       # ソースコードのボリュームマウント（ホットリロード用）
       - ./ai-chat-api:/app
@@ -32,7 +34,8 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - JWT_SECRET=development-secret-key-for-testing-only
+      - NEXT_PUBLIC_API_URL=http://ai-chat-api:3001
     volumes:
       # ソースコードのボリュームマウント（ホットリロード用）
       - ./ai-chat-ui:/app
