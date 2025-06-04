@@ -11,11 +11,27 @@ async function main() {
   try {
     console.log('🌱 Starting seed...');
 
-    // Create a dummy company
-    const company = await prisma.company.upsert({
+    // Create a test user
+    const user = await prisma.user.upsert({
       where: { email: 'test@example.com' },
       update: {},
       create: {
+        email: 'test@example.com',
+        password:
+          '$2b$10$rOGmzKV1U6oiKthsO4LgQ.EXqKTGf/PjRmV8LPG/QNAjNJPq.3C9S', // password: "test123"
+        name: 'Test User',
+        isAdmin: true,
+      },
+    });
+
+    console.log('✅ Created user:', user.email);
+
+    // Create a dummy company with specific ID
+    const company = await prisma.company.upsert({
+      where: { id: 'test-company-id' },
+      update: {},
+      create: {
+        id: 'test-company-id',
         name: 'Test Company',
         email: 'test@example.com',
         plan: PlanType.pro,
