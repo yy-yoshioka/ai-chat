@@ -1,0 +1,37 @@
+{
+  "name": "ai-chat-embedded-widget",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "yarn install --cwd ai-chat-api && yarn install --cwd ai-chat-ui",
+    "dev:api": "yarn --cwd ai-chat-api dev",
+    "dev:ui": "yarn --cwd ai-chat-ui dev",
+    "dev": "concurrently \"yarn dev:api\" \"yarn dev:ui\"",
+    "build:api": "yarn --cwd ai-chat-api build",
+    "build:ui": "yarn --cwd ai-chat-ui build",
+    "build": "yarn build:api && yarn build:ui",
+    "lint:api": "yarn --cwd ai-chat-api lint",
+    "lint:ui": "yarn --cwd ai-chat-ui lint",
+    "lint": "yarn lint:api && yarn lint:ui",
+    "format:api": "yarn --cwd ai-chat-api format",
+    "format:ui": "yarn --cwd ai-chat-ui format",
+    "format": "yarn format:api && yarn format:ui",
+    "check:all": "yarn format && yarn lint && yarn build",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "ai-chat-api/**/*.{js,jsx,ts,tsx}": [
+      "yarn --cwd ai-chat-api lint --fix",
+      "yarn --cwd ai-chat-api format"
+    ],
+    "ai-chat-ui/**/*.{js,jsx,ts,tsx}": [
+      "yarn --cwd ai-chat-ui lint --fix",
+      "yarn --cwd ai-chat-ui format"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0"
+  }
+}

@@ -7,7 +7,6 @@ import {
 } from '../middleware/requireValidWidget';
 import { generateWidgetKey } from '../utils/widgetKey';
 import { sanitizeHexColor } from '../utils/validateHexColor';
-import { PlanType } from '@prisma/client';
 
 const router = Router();
 

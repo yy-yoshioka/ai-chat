@@ -7,7 +7,7 @@ router.get(
   '/:widgetKey(.v:version)?.js',
   async (req: Request, res: Response) => {
     try {
-      const { widgetKey, version } = req.params;
+      const { widgetKey, version: _version } = req.params;
 
       // Extract just the widget key (remove .v1 or similar version suffix)
       const cleanWidgetKey = widgetKey.replace(/\.v\d+$/, '');
@@ -15,7 +15,7 @@ router.get(
       // Generate the widget loader script
       const loaderScript = generateLoaderScript(
         cleanWidgetKey,
-        version || 'v1'
+        _version || 'v1'
       );
 
       // Set appropriate headers for caching
@@ -34,7 +34,7 @@ router.get(
   }
 );
 
-function generateLoaderScript(widgetKey: string, version: string): string {
+function generateLoaderScript(widgetKey: string, _version: string): string {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
 
