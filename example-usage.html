@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Widget Loader - Vanilla JS</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .widget-selector {
+        margin-bottom: 20px;
+      }
+      .widget-info {
+        background: #f5f5f5;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .widget-list {
+        display: grid;
+        gap: 10px;
+      }
+      .widget-item {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      select,
+      button {
+        padding: 8px 12px;
+        margin: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .loading {
+        color: #666;
+      }
+      .error {
+        color: #d32f2f;
+        background: #ffebee;
+        padding: 10px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Dynamic Widget Loader Demo</h1>
+
+    <div id="loading" class="loading">Loading widgets...</div>
+    <div id="error" class="error" style="display: none"></div>
+
+    <div id="content" style="display: none">
+      <div class="widget-selector">
+        <label for="widgetSelect">Select Widget:</label>
+        <select id="widgetSelect">
+          <option value="">Choose a widget...</option>
+        </select>
+        <button onclick="loadSelectedWidget()">Load Widget</button>
+      </div>
+
+      <div id="widgetInfo" class="widget-info" style="display: none">
+        <h3 id="widgetName"></h3>
+        <p>Key: <span id="widgetKey"></span></p>
+        <p>Color: <span id="widgetColor"></span></p>
+      </div>
+
+      <div id="widgetContainer">
+        <!-- Widget will be loaded here -->
+      </div>
+
+      <div>
+        <h3>Available Widgets:</h3>
+        <div id="widgetList" class="widget-list"></div>
+      </div>
+    </div>
+
+    <script>
+      // Configuration
+      const API_BASE_URL = "http://localhost:8000";
+      const COMPANY_NAME = "Test Company";
+
+      let availableWidgets = [];
+      let currentScript = null;
+
+      // Fetch available widgets
+      async function fetchWidgets() {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/api/widgets/keys/${encodeURIComponent(
+              COMPANY_NAME
+            )}`
+          );
+
+          if (!response.ok) {
+            throw new Error(`Failed to fetch widgets: ${response.status}`);
+          }
+
+          const data = await response.json();
+          availableWidgets = data.widgets;
+
+          // Hide loading, show content
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("content").style.display = "block";
+
+          // Populate select dropdown
+          populateWidgetSelect();
+
+          // Show available widgets
+          displayAvailableWidgets();
+
+          // Auto-select legacy widget if available
+          const legacyWidget = availableWidgets.find(
+            (w) => w.widgetKey === "test-widget-key-1"
+          );
+          if (legacyWidget) {
+            document.getElementById("widgetSelect").value =
+              legacyWidget.widgetKey;
+            showWidgetInfo(legacyWidget);
+          }
+        } catch (error) {
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("error").style.display = "block";
+          document.getElementById(
+            "error"
+          ).textContent = `Error: ${error.message}`;
+        }
+      }
+
+      // Populate widget selector dropdown
+      function populateWidgetSelect() {
+        const select = document.getElementById("widgetSelect");
+
+        availableWidgets.forEach((widget) => {
+          const option = document.createElement("option");
+          option.value = widget.widgetKey;
+          option.textContent = `${widget.name} (${
+            widget.widgetKey.length > 20 ? "New Format" : "Legacy"
+          })`;
+          select.appendChild(option);
+        });
+      }
+
+      // Display available widgets list
+      function displayAvailableWidgets() {
+        const listContainer = document.getElementById("widgetList");
+
+        availableWidgets.forEach((widget) => {
+          const item = document.createElement("div");
+          item.className = "widget-item";
+          item.innerHTML = `
+                    <div style="font-weight: bold;">${widget.name}</div>
+                    <div style="color: #666; font-size: 0.9em;">Key: ${widget.widgetKey}</div>
+                    <div style="font-size: 0.9em;">Color: <span style="color: ${widget.accentColor}">${widget.accentColor}</span></div>
+                `;
+          listContainer.appendChild(item);
+        });
+      }
+
+      // Show widget info
+      function showWidgetInfo(widget) {
+        document.getElementById("widgetName").textContent = widget.name;
+        document.getElementById("widgetKey").textContent = widget.widgetKey;
+        document.getElementById("widgetColor").textContent = widget.accentColor;
+        document.getElementById("widgetColor").style.color = widget.accentColor;
+        document.getElementById("widgetInfo").style.display = "block";
+      }
+
+      // Load selected widget
+      function loadSelectedWidget() {
+        const select = document.getElementById("widgetSelect");
+        const selectedKey = select.value;
+
+        if (!selectedKey) {
+          alert("Please select a widget first");
+          return;
+        }
+
+        const widget = availableWidgets.find(
+          (w) => w.widgetKey === selectedKey
+        );
+        if (!widget) {
+          alert("Widget not found");
+          return;
+        }
+
+        // Show widget info
+        showWidgetInfo(widget);
+
+        // Remove existing script if any
+        if (currentScript) {
+          document.head.removeChild(currentScript);
+        }
+
+        // Create and load new script
+        currentScript = document.createElement("script");
+        currentScript.src = `${API_BASE_URL}/widget-loader/${widget.widgetKey}.v1.js`;
+
+        currentScript.onload = function () {
+          console.log("Widget script loaded successfully for:", widget.name);
+        };
+
+        currentScript.onerror = function (e) {
+          console.error("Widget script failed to load:", e);
+          alert("Failed to load widget script");
+        };
+
+        document.head.appendChild(currentScript);
+      }
+
+      // Handle select change
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("widgetSelect")
+          .addEventListener("change", function () {
+            const selectedKey = this.value;
+            if (selectedKey) {
+              const widget = availableWidgets.find(
+                (w) => w.widgetKey === selectedKey
+              );
+              if (widget) {
+                showWidgetInfo(widget);
+              }
+            }
+          });
+      });
+
+      // Initialize
+      fetchWidgets();
+    </script>
+  </body>
+</html>

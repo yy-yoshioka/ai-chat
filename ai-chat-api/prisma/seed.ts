@@ -40,12 +40,19 @@ async function main() {
 
     console.log('✅ Created company:', company.name);
 
-    // Create two dummy widgets
+    // Generate proper widget keys
+    const widgetKey1 =
+      'a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456';
+    const widgetKey2 =
+      'f6e5d4c3b2a1098765432109876543210987654321fedcba0987654321fedcba';
+    const legacyWidgetKey = 'test-widget-key-1'; // Legacy format for backwards compatibility
+
+    // Create two dummy widgets with proper widget keys
     const widget1 = await prisma.widget.upsert({
-      where: { widgetKey: 'test-widget-key-1' },
+      where: { widgetKey: widgetKey1 },
       update: {},
       create: {
-        widgetKey: 'test-widget-key-1',
+        widgetKey: widgetKey1,
         name: 'Main Website Chat',
         companyId: company.id,
         isActive: true,
@@ -55,10 +62,10 @@ async function main() {
     });
 
     const widget2 = await prisma.widget.upsert({
-      where: { widgetKey: 'test-widget-key-2' },
+      where: { widgetKey: widgetKey2 },
       update: {},
       create: {
-        widgetKey: 'test-widget-key-2',
+        widgetKey: widgetKey2,
         name: 'Support Portal Chat',
         companyId: company.id,
         isActive: true,
@@ -67,7 +74,29 @@ async function main() {
       },
     });
 
-    console.log('✅ Created widgets:', widget1.name, '&', widget2.name);
+    // Create legacy widget for backwards compatibility
+    const legacyWidget = await prisma.widget.upsert({
+      where: { widgetKey: legacyWidgetKey },
+      update: {},
+      create: {
+        widgetKey: legacyWidgetKey,
+        name: 'Legacy Chat Widget',
+        companyId: company.id,
+        isActive: true,
+        accentColor: '#6c757d',
+        logoUrl: null,
+      },
+    });
+
+    console.log('✅ Created widgets:');
+    console.log('  - Widget 1:', widget1.name, 'Key:', widget1.widgetKey);
+    console.log('  - Widget 2:', widget2.name, 'Key:', widget2.widgetKey);
+    console.log(
+      '  - Legacy Widget:',
+      legacyWidget.name,
+      'Key:',
+      legacyWidget.widgetKey
+    );
 
     // Create some FAQs for testing
     await prisma.fAQ.upsert({

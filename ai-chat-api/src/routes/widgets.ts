@@ -202,4 +202,41 @@ router.delete(
   }
 );
 
+// Get widget keys by company name (public endpoint for external integration)
+router.get('/keys/:companyName', async (req: Request, res: Response) => {
+  try {
+    const { companyName } = req.params;
+
+    const company = await prisma.company.findFirst({
+      where: {
+        name: companyName, // Exact match for simplicity
+      },
+    });
+
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    const widgets = await prisma.widget.findMany({
+      where: {
+        companyId: company.id,
+        isActive: true,
+      },
+      select: {
+        widgetKey: true,
+        name: true,
+        accentColor: true,
+      },
+    });
+
+    res.json({
+      companyName: company.name,
+      widgets: widgets,
+    });
+  } catch (error) {
+    console.error('Get widget keys error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export { router as widgetRoutes };

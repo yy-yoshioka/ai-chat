@@ -116,4 +116,7 @@ app.get('/debug/db', async (_req, res) => {
   }
 });
 
+// ✅ [A] ヘルスチェック
+app.get('/health', (_req, res) => res.sendStatus(200));
+
 export default app;
