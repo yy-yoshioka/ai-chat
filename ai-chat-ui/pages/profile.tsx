@@ -29,6 +29,12 @@ function ProfilePage() {
                 Chat
               </Link>
               <Link
+                href="/widgets"
+                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Widgets
+              </Link>
+              <Link
                 href="/faq"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               >
@@ -173,6 +179,31 @@ function ProfilePage() {
                     <div>
                       <h3 className="font-medium text-gray-900">チャットを開始</h3>
                       <p className="text-sm text-gray-600">AIとの会話を始める</p>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/widgets"
+                    className="flex items-center p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200 hover:from-purple-100 hover:to-pink-100 transition-all duration-200 group"
+                  >
+                    <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
+                      <svg
+                        className="w-6 h-6 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">ウィジェット管理</h3>
+                      <p className="text-sm text-gray-600">チャットウィジェットの作成・管理</p>
                     </div>
                   </Link>
 

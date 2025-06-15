@@ -65,3 +65,27 @@ body {
 .chat-scroll::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+
+/* Custom scrollbar for textarea */
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Firefox scrollbar */
+textarea {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}

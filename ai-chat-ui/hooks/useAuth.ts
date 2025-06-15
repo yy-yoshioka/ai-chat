@@ -1,13 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '../lib/api';
-
-// User type definition
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  // Add other user properties as needed
-}
+import { User } from '@/types/user';
 
 // Auth state
 interface AuthState {

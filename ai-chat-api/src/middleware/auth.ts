@@ -15,8 +15,18 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   try {
-    // Get token from cookies
-    const token = req.cookies?.token;
+    let token: string | undefined;
+
+    // Try to get token from Authorization header first (for API calls)
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    }
+
+    // If no token in header, try cookies (for direct browser calls)
+    if (!token) {
+      token = req.cookies?.token;
+    }
 
     if (!token) {
       return res.status(401).json({ message: 'Not authenticated' });
@@ -28,6 +38,7 @@ export const authMiddleware = (
 
     next();
   } catch (error) {
+    console.error('Auth middleware error:', error);
     return res.status(401).json({ message: 'Not authenticated' });
   }
 };

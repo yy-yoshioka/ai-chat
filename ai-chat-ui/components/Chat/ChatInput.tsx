@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent } from 'react';
+import { useState, KeyboardEvent, useEffect, useRef } from 'react';
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -7,6 +7,7 @@ interface ChatInputProps {
 
 export default function ChatInput({ onSend, disabled = false }: ChatInputProps) {
   const [value, setValue] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = () => {
     if (!value.trim() || disabled) return;
@@ -21,38 +22,61 @@ export default function ChatInput({ onSend, disabled = false }: ChatInputProps) 
     }
   };
 
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      // Reset height to auto to get the correct scrollHeight
+      textareaRef.current.style.height = 'auto';
+      // Set the height to scrollHeight to expand as needed
+      const scrollHeight = textareaRef.current.scrollHeight;
+      const newHeight = Math.min(scrollHeight, 200);
+      textareaRef.current.style.height = `${newHeight}px`;
+    }
+  }, [value]);
+
+  // Reset height when value is cleared
+  useEffect(() => {
+    if (!value && textareaRef.current) {
+      textareaRef.current.style.height = '56px';
+    }
+  }, [value]);
+
   return (
-    <div className="flex items-end space-x-3">
-      <div className="flex-1 relative">
+    <div className="relative flex items-end">
+      <div className="flex-1 relative bg-white border border-gray-300 rounded-2xl shadow-sm transition-all duration-200 focus-within:shadow-md focus-within:border-gray-400">
         <textarea
-          className="w-full border border-gray-300 rounded-2xl px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all duration-200"
+          ref={textareaRef}
+          className="w-full bg-transparent px-4 py-3.5 pr-14 resize-none focus:outline-none text-gray-900 placeholder-gray-500 leading-relaxed rounded-2xl"
           rows={1}
-          placeholder={disabled ? 'AIが応答中...' : 'メッセージを入力してください...'}
+          placeholder={disabled ? 'AIが応答中...' : 'メッセージを入力して下さい'}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyPress={handleKeyPress}
           disabled={disabled}
           style={{
-            minHeight: '44px',
-            maxHeight: '120px',
-            height: 'auto',
+            minHeight: '56px',
+            maxHeight: '200px',
+            overflowY: 'auto',
           }}
         />
-      </div>
 
-      <button
-        onClick={handleSend}
-        disabled={!value.trim() || disabled}
-        className="px-6 py-3 bg-blue-600 text-white rounded-2xl font-medium hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2 flex-shrink-0"
-      >
-        {disabled ? (
-          <>
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span>送信中</span>
-          </>
-        ) : (
-          <>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Send button inside textarea */}
+        <button
+          onClick={handleSend}
+          disabled={!value.trim() || disabled}
+          className={`
+            absolute right-2 bottom-2.5 p-2 rounded-lg transition-all duration-200
+            ${
+              !value.trim() || disabled
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-gray-700 text-white hover:bg-gray-900'
+            }
+          `}
+        >
+          {disabled ? (
+            <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -60,10 +84,9 @@ export default function ChatInput({ onSend, disabled = false }: ChatInputProps) 
                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
               />
             </svg>
-            <span>送信</span>
-          </>
-        )}
-      </button>
+          )}
+        </button>
+      </div>
     </div>
   );
 }
