@@ -1,137 +1,266 @@
-import { PrismaClient, PlanType } from '@prisma/client';
-import * as crypto from 'crypto';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-function generateWidgetKey(): string {
-  return crypto.randomBytes(32).toString('hex');
-}
-
 async function main() {
-  try {
-    console.log('🌱 Starting seed...');
+  console.log('🌱 Starting seed...');
 
-    // Create a test user
-    const user = await prisma.user.upsert({
-      where: { email: 'test@example.com' },
+  // Create sample organization
+  const org = await prisma.organization.upsert({
+    where: { slug: 'demo-org' },
+    update: {},
+    create: {
+      name: 'Demo Organization',
+      slug: 'demo-org',
+    },
+  });
+
+  console.log('✅ Created organization:', org.name);
+
+  // Create sample knowledge base
+  const kb = await prisma.knowledgeBase.upsert({
+    where: { id: 'kb-demo-1' },
+    update: {},
+    create: {
+      id: 'kb-demo-1',
+      organizationId: org.id,
+      title: 'AI Chat サポートガイド',
+      description:
+        'AI Chatプラットフォームの基本的な使い方やよくある質問をまとめたガイドです。',
+      isActive: true,
+    },
+  });
+
+  console.log('✅ Created knowledge base:', kb.title);
+
+  // Create sample documents
+  const documents = [
+    {
+      id: 'doc-1',
+      title: 'AI Chat 基本ガイド',
+      content: `
+# AI Chat 基本ガイド
+
+## 概要
+AI Chatは、最新のGPT-4技術を使用した革新的なカスタマーサポートソリューションです。
+
+## 主な機能
+- リアルタイムチャット対応
+- 多言語サポート（100言語以上）
+- カスタムブランディング
+- 詳細な分析レポート
+
+## セットアップ方法
+1. アカウントの作成
+2. ウィジェットのカスタマイズ
+3. ウェブサイトへのコード埋め込み
+4. テストと調整
+
+## よくある問題
+- レスポンスが遅い場合の対処法
+- カスタマイズが反映されない場合
+- 統計データが表示されない場合
+      `,
+      sourceType: 'manual' as const,
+    },
+    {
+      id: 'doc-2',
+      title: '料金プランと請求',
+      content: `
+# 料金プランと請求について
+
+## プラン種類
+### 無料プラン
+- 月間メッセージ数: 100通まで
+- 基本的なカスタマイズ
+- コミュニティサポート
+
+### プロプラン (月額$199)
+- 月間メッセージ数: 10,000通まで
+- 高度なカスタマイズ
+- 優先サポート
+- 詳細な分析機能
+
+### エンタープライズプラン
+- 無制限メッセージ
+- カスタム統合
+- 専任サポート
+- SLA保証
+
+## 請求について
+- 毎月1日に自動請求
+- クレジットカード、PayPal対応
+- 領収書はメールで自動送信
+      `,
+      sourceType: 'manual' as const,
+    },
+  ];
+
+  for (const doc of documents) {
+    await prisma.document.upsert({
+      where: { id: doc.id },
       update: {},
       create: {
-        email: 'test@example.com',
-        password:
-          '$2b$10$rOGmzKV1U6oiKthsO4LgQ.EXqKTGf/PjRmV8LPG/QNAjNJPq.3C9S', // password: "test123"
-        name: 'Test User',
-        isAdmin: true,
+        ...doc,
+        knowledgeBaseId: kb.id,
+        status: 'completed',
+        wordCount: doc.content.split(' ').length,
       },
     });
-
-    console.log('✅ Created user:', user.email);
-
-    // Create a dummy company with specific ID
-    const company = await prisma.company.upsert({
-      where: { id: 'test-company-id' },
-      update: {},
-      create: {
-        id: 'test-company-id',
-        name: 'Test Company',
-        email: 'test@example.com',
-        plan: PlanType.pro,
-      },
-    });
-
-    console.log('✅ Created company:', company.name);
-
-    // Generate proper widget keys
-    const widgetKey1 =
-      'a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456';
-    const widgetKey2 =
-      'f6e5d4c3b2a1098765432109876543210987654321fedcba0987654321fedcba';
-    const legacyWidgetKey = 'test-widget-key-1'; // Legacy format for backwards compatibility
-
-    // Create two dummy widgets with proper widget keys
-    const widget1 = await prisma.widget.upsert({
-      where: { widgetKey: widgetKey1 },
-      update: {},
-      create: {
-        widgetKey: widgetKey1,
-        name: 'Main Website Chat',
-        companyId: company.id,
-        isActive: true,
-        accentColor: '#007bff',
-        logoUrl: null,
-      },
-    });
-
-    const widget2 = await prisma.widget.upsert({
-      where: { widgetKey: widgetKey2 },
-      update: {},
-      create: {
-        widgetKey: widgetKey2,
-        name: 'Support Portal Chat',
-        companyId: company.id,
-        isActive: true,
-        accentColor: '#28a745',
-        logoUrl: null,
-      },
-    });
-
-    // Create legacy widget for backwards compatibility
-    const legacyWidget = await prisma.widget.upsert({
-      where: { widgetKey: legacyWidgetKey },
-      update: {},
-      create: {
-        widgetKey: legacyWidgetKey,
-        name: 'Legacy Chat Widget',
-        companyId: company.id,
-        isActive: true,
-        accentColor: '#6c757d',
-        logoUrl: null,
-      },
-    });
-
-    console.log('✅ Created widgets:');
-    console.log('  - Widget 1:', widget1.name, 'Key:', widget1.widgetKey);
-    console.log('  - Widget 2:', widget2.name, 'Key:', widget2.widgetKey);
-    console.log(
-      '  - Legacy Widget:',
-      legacyWidget.name,
-      'Key:',
-      legacyWidget.widgetKey
-    );
-
-    // Create some FAQs for testing
-    await prisma.fAQ.upsert({
-      where: { id: 'faq-1' },
-      update: {},
-      create: {
-        id: 'faq-1',
-        question: 'What are your business hours?',
-        answer: 'We are open Monday to Friday, 9 AM to 6 PM EST.',
-      },
-    });
-
-    await prisma.fAQ.upsert({
-      where: { id: 'faq-2' },
-      update: {},
-      create: {
-        id: 'faq-2',
-        question: 'How can I contact support?',
-        answer:
-          'You can contact our support team via email at support@example.com or through this chat widget.',
-      },
-    });
-
-    console.log('✅ Created sample FAQs');
-
-    console.log('🎉 Seed completed successfully!');
-  } catch (error) {
-    console.error('❌ Seed failed:', error);
-    throw error;
   }
+
+  console.log('✅ Created sample documents');
+
+  // Create sample FAQs
+  const faqs = [
+    {
+      id: 'faq-1',
+      question: 'AI Chatの設置にはどのくらい時間がかかりますか？',
+      answer:
+        'AI Chatの設置は非常簡単で、通常5分以内で完了します。管理画面でウィジェットをカスタマイズし、生成されたJavaScriptコードを1行追加するだけです。技術的な知識は一切必要ありません。',
+      weight: 100,
+    },
+    {
+      id: 'faq-2',
+      question: '月額料金はいくらですか？',
+      answer:
+        'AI Chatは月額$199からご利用いただけます。無料プランもご用意しており、月間100メッセージまで無料でお試しいただけます。エンタープライズプランについては個別にお見積もりいたします。',
+      weight: 90,
+    },
+    {
+      id: 'faq-3',
+      question: 'どの言語に対応していますか？',
+      answer:
+        'AI Chatは100以上の言語に対応しています。日本語、英語、中国語、韓国語、スペイン語、フランス語、ドイツ語など、主要な言語はすべてサポートしています。',
+      weight: 85,
+    },
+    {
+      id: 'faq-4',
+      question: 'セキュリティは大丈夫ですか？',
+      answer:
+        'AI ChatはSOC2 Type II準拠、GDPR対応で、エンタープライズレベルのセキュリティを確保しています。すべての通信は暗号化され、お客様のデータは安全に保護されます。',
+      weight: 80,
+    },
+    {
+      id: 'faq-5',
+      question: 'カスタマイズはどこまで可能ですか？',
+      answer:
+        'ウィジェットの色、位置、フォント、サイズなど、幅広いカスタマイズが可能です。ブランドロゴの追加、カスタムCSSの適用、多言語での挨拶メッセージ設定なども行えます。',
+      weight: 75,
+    },
+  ];
+
+  for (const faq of faqs) {
+    await prisma.fAQ.upsert({
+      where: { id: faq.id },
+      update: {},
+      create: {
+        id: faq.id,
+        question: faq.question,
+        answer: faq.answer,
+        weight: faq.weight,
+        organizationId: org.id,
+        isActive: true,
+        timesUsed: Math.floor(Math.random() * 50), // Random usage count for demo
+      },
+    });
+  }
+
+  console.log('✅ Created sample FAQs');
+
+  // Create sample link rules
+  const linkRules = [
+    {
+      id: 'link-1',
+      name: '料金ページリンク',
+      triggerRegex: '(料金|価格|プラン|費用)',
+      targetUrl: '/pricing',
+      newTab: false,
+      description: '料金に関する質問があった場合、料金ページへのリンクを表示',
+    },
+    {
+      id: 'link-2',
+      name: 'ドキュメンテーション',
+      triggerRegex: '(使い方|設定|セットアップ|導入)',
+      targetUrl: '/docs',
+      newTab: true,
+      description: '使い方や設定に関する質問でドキュメントへのリンクを表示',
+    },
+    {
+      id: 'link-3',
+      name: 'お問い合わせフォーム',
+      triggerRegex: '(連絡|問い合わせ|サポート|ヘルプ)',
+      targetUrl: '/contact',
+      newTab: false,
+      description: 'サポートが必要な場合のお問い合わせフォームリンク',
+    },
+  ];
+
+  for (const rule of linkRules) {
+    await prisma.linkRule.upsert({
+      where: { id: rule.id },
+      update: {},
+      create: {
+        ...rule,
+        organizationId: org.id,
+        isActive: true,
+        clickCount: Math.floor(Math.random() * 20), // Random click count for demo
+      },
+    });
+  }
+
+  console.log('✅ Created sample link rules');
+
+  // Create sample unanswered messages
+  const unansweredMessages = [
+    {
+      message: 'APIの制限はありますか？',
+      count: 15,
+      confidence: 0.3,
+    },
+    {
+      message: 'Slackとの連携は可能ですか？',
+      count: 12,
+      confidence: 0.4,
+    },
+    {
+      message: 'データのエクスポート機能はありますか？',
+      count: 8,
+      confidence: 0.2,
+    },
+    {
+      message: 'チャットログの保存期間はどのくらいですか？',
+      count: 6,
+      confidence: 0.5,
+    },
+    {
+      message: 'モバイルアプリはありますか？',
+      count: 4,
+      confidence: 0.3,
+    },
+  ];
+
+  for (const msg of unansweredMessages) {
+    await prisma.unansweredMessage.create({
+      data: {
+        ...msg,
+        organizationId: org.id,
+        firstAskedAt: new Date(
+          Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
+        ), // Random date within last 30 days
+        lastAskedAt: new Date(),
+        isProcessed: false,
+      },
+    });
+  }
+
+  console.log('✅ Created sample unanswered messages');
+  console.log('🎉 Seeding completed successfully!');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Seed failed:', e);
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

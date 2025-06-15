@@ -3,6 +3,10 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import helmet from 'helmet';
+import {
+  metricsMiddleware,
+  errorTrackingMiddleware,
+} from './middleware/metrics';
 import authRoutes from './routes/auth';
 import faqRoutes from './routes/faqs';
 import chatRoutes from './routes/chat';
@@ -20,6 +24,9 @@ dotenv.config();
 
 // Initialize Express app
 const app = express();
+
+// Add metrics middleware early
+app.use(metricsMiddleware);
 
 // Security headers (except for widget loader which needs to be embeddable)
 app.use('/widget-loader', (req, res, next) => {
@@ -126,5 +133,8 @@ app.get('/debug/db', async (_req, res) => {
 
 // ✅ [A] ヘルスチェック
 app.get('/health', (_req, res) => res.sendStatus(200));
+
+// Add error tracking middleware at the end
+app.use(errorTrackingMiddleware);
 
 export default app;
