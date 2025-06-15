@@ -5,6 +5,8 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^6.8.2",
+    "@sentry/node": "^9.29.0",
+    "@sentry/profiling-node": "^9.29.0",
     "@types/helmet": "^0.0.48",
     "@types/ioredis": "^4.28.10",
     "bcrypt": "^6.0.0",
