@@ -36,6 +36,7 @@ model Company {
   widgets            Widget[]
   users              User[]
   usage              Usage[]
+  events             Event[]       // Event tracking
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
 
@@ -53,7 +54,18 @@ model Widget {
   isActive      Boolean   @default(true)
   accentColor   String    @default("#007bff")
   logoUrl       String?
+  
+  // Theme settings (B-1)
+  theme         String    @default("light") // light, dark, auto
+  primaryColor  String    @default("#007bff")
+  secondaryColor String   @default("#6c757d")
+  backgroundColor String  @default("#ffffff")
+  textColor     String    @default("#212529")
+  borderRadius  Int       @default(8) // in pixels
+  fontFamily    String    @default("system-ui")
+  
   chatLogs      ChatLog[]
+  events        Event[]   // Event tracking
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -72,6 +84,7 @@ model User {
   companyId String?
   company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
   chatLogs  ChatLog[]
+  events    Event[]  // Event tracking
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -135,4 +148,40 @@ model Organization {
 
   @@index([slug])
   @@map("organizations")
+}
+
+// Event tracking for analytics (B-3)
+model Event {
+  id         String   @id @default(uuid())
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  widgetId   String?
+  widget     Widget?  @relation(fields: [widgetId], references: [id], onDelete: SetNull)
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // Event details
+  eventType  String   // identify, message_sent, conversion, widget_loaded, etc.
+  eventName  String?  // Custom event name
+  properties Json?    // Event properties as JSON
+  
+  // User identification
+  anonymousId String? // For anonymous users
+  sessionId   String? // Session tracking
+  
+  // Context
+  userAgent   String?
+  ipAddress   String?
+  referrer    String?
+  pageUrl     String?
+  
+  createdAt   DateTime @default(now())
+
+  @@index([companyId])
+  @@index([widgetId])
+  @@index([userId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@index([sessionId])
+  @@map("events")
 }

@@ -1,0 +1,131 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "export": "Export",
+    "import": "Import"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "loginSuccess": "Login successful",
+    "loginError": "Login failed",
+    "registerSuccess": "Registration successful",
+    "registerError": "Registration failed"
+  },
+  "chat": {
+    "title": "AI Chat",
+    "placeholder": "Type your message...",
+    "send": "Send",
+    "typing": "AI is typing...",
+    "offline": "Currently offline",
+    "reconnecting": "Reconnecting...",
+    "connected": "Connected",
+    "startConversation": "Start a conversation",
+    "endConversation": "End conversation",
+    "newMessage": "New message",
+    "messageHistory": "Message history",
+    "clearHistory": "Clear history"
+  },
+  "widget": {
+    "title": "Chat Widget",
+    "settings": "Widget Settings",
+    "theme": "Theme",
+    "position": "Position",
+    "colors": "Colors",
+    "fonts": "Fonts",
+    "preview": "Preview",
+    "embedCode": "Embed Code",
+    "analytics": "Analytics",
+    "performance": "Performance",
+    "customization": "Customization"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "overview": "Overview",
+    "analytics": "Analytics",
+    "widgets": "Widgets",
+    "users": "Users",
+    "settings": "Settings",
+    "billing": "Billing",
+    "support": "Support",
+    "kpi": "Key Performance Indicators",
+    "wau": "Weekly Active Users",
+    "arpu": "Average Revenue Per User",
+    "messages": "Messages",
+    "conversions": "Conversions",
+    "conversionRate": "Conversion Rate"
+  },
+  "embed": {
+    "title": "Embed Widget",
+    "instructions": "Copy and paste this code into your website",
+    "position": {
+      "bottomRight": "Bottom Right",
+      "bottomLeft": "Bottom Left",
+      "topRight": "Top Right",
+      "topLeft": "Top Left"
+    },
+    "options": {
+      "autoOpen": "Auto Open",
+      "showBranding": "Show Branding",
+      "customCSS": "Custom CSS"
+    },
+    "platforms": {
+      "html": "HTML",
+      "wordpress": "WordPress",
+      "shopify": "Shopify",
+      "wix": "Wix",
+      "squarespace": "Squarespace"
+    }
+  },
+  "analytics": {
+    "title": "Analytics",
+    "realtime": "Real-time",
+    "events": "Events",
+    "users": "Users",
+    "sessions": "Sessions",
+    "pageViews": "Page Views",
+    "topPages": "Top Pages",
+    "conversionFunnel": "Conversion Funnel",
+    "dailyStats": "Daily Statistics",
+    "weeklyStats": "Weekly Statistics",
+    "monthlyStats": "Monthly Statistics"
+  },
+  "themes": {
+    "light": "Light",
+    "dark": "Dark",
+    "auto": "Auto",
+    "blue": "Blue",
+    "green": "Green",
+    "purple": "Purple",
+    "orange": "Orange",
+    "custom": "Custom"
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "serverError": "Server error",
+    "networkError": "Network error",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Forbidden",
+    "validationError": "Validation error",
+    "unknownError": "Unknown error"
+  }
+}

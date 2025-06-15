@@ -12,17 +12,17 @@ A. プロダクト基盤
 ---------------------------------------------------------
 B. 体験 & 成果計測
 ---------------------------------------------------------
-⬜  B‑1  ウィジェットカスタムテーマ (ライト/ダーク/ブランド色)
-⬜  B‑2  埋め込みスニペット発行ページ `/embed`
-⬜  B‑3  イベント計測 (identify, message_sent, conversion)
-⬜  B‑4  Admin ダッシュボードで KPI 表示 (日次 WAU, ARPU)
-⬜  B‑5  多言語 UI (i18n/next-intl) + GPT‑4o 翻訳 API
+✅  B‑1  ウィジェットカスタムテーマ (ライト/ダーク/ブランド色)
+✅  B‑2  埋め込みスニペット発行ページ `/embed`
+✅  B‑3  イベント計測 (identify, message_sent, conversion)
+✅  B‑4  Admin ダッシュボードで KPI 表示 (日次 WAU, ARPU)
+✅  B‑5  多言語 UI (i18n/next-intl) + GPT‑4o 翻訳 API
 
 ---------------------------------------------------------
 C. 信頼性・運用
 ---------------------------------------------------------
 ⬜  C‑1  Playwright e2e: sign‑up→embed→first message
-⬜  C‑2  Sentry + Slack Alert (p95>1 s, error rate>1 %)
+⬜  C‑2  Sentry + Slack Alert (p95>1 s, error rate>1 %)
 ⬜  C‑3  Blue‑Green デプロイワークフロー (Vercel Env)
 ⬜  C‑4  Data retention policy & GDPR pages
 ⬜  C‑5  Status page (UptimeRobot) & RSS incident feed
@@ -39,6 +39,6 @@ D. マーケ & CS 準備
 ---------------------------------------------------------
 E. β リリース判定ゲート
 ---------------------------------------------------------
-⬜  E‑1  100 社試用 / データ漏洩ゼロ / Billing 課金成功 ≥ 10
-⬜  E‑2  平均応答時間 <800 ms & 99.9 % 稼働 7 日連続
+⬜  E‑1  100 社試用 / データ漏洩ゼロ / Billing 課金成功 ≥ 10
+⬜  E‑2  平均応答時間 <800 ms & 99.9 % 稼働 7 日連続
 ⬜  E‑3  NPS 調査 (≥40) / 主要バグ Sev‑0 = 0
