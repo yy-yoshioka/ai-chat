@@ -1,13 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '../lib/api';
-
-// User type definition
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  // Add other user properties as needed
-}
+import { User } from '@/types/user';
 
 // Auth state
 interface AuthState {
@@ -20,6 +13,7 @@ interface AuthState {
 // useAuth hook return type
 interface UseAuthReturn extends AuthState {
   login: (email: string, password: string) => Promise<boolean>;
+  signup: (email: string, password: string, name?: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
   refreshUser: () => Promise<void>;
 }
@@ -79,7 +73,7 @@ export function useAuth(): UseAuthReturn {
       try {
         setAuthState((prev) => ({ ...prev, loading: true, error: null }));
 
-        const { error, status } = await api.post<{ token: string }>('/auth/login', {
+        const { error, status } = await api.post<{ token: string }>('/login', {
           email,
           password,
         });
@@ -102,6 +96,46 @@ export function useAuth(): UseAuthReturn {
           ...prev,
           loading: false,
           error: error instanceof Error ? error.message : 'Login failed',
+          authenticated: false,
+        }));
+        return false;
+      }
+    },
+    [refreshUser]
+  );
+
+  /**
+   * Sign up a new user with email, password, and optional name
+   */
+  const signup = useCallback(
+    async (email: string, password: string, name?: string): Promise<boolean> => {
+      try {
+        setAuthState((prev) => ({ ...prev, loading: true, error: null }));
+
+        const { error, status } = await api.post<{ user: User }>('/signup', {
+          email,
+          password,
+          name,
+        });
+
+        if (error || status !== 201) {
+          setAuthState((prev) => ({
+            ...prev,
+            loading: false,
+            error: error || 'Signup failed',
+            authenticated: false,
+          }));
+          return false;
+        }
+
+        // Refresh user data after successful signup
+        await refreshUser();
+        return true;
+      } catch (error) {
+        setAuthState((prev) => ({
+          ...prev,
+          loading: false,
+          error: error instanceof Error ? error.message : 'Signup failed',
           authenticated: false,
         }));
         return false;
@@ -150,11 +184,12 @@ export function useAuth(): UseAuthReturn {
   // Check authentication status on mount
   useEffect(() => {
     refreshUser();
-  }, [refreshUser]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     ...authState,
     login,
+    signup,
     logout,
     refreshUser,
   };

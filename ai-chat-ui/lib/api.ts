@@ -4,8 +4,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { z } from 'zod';
 
-// Base API URL from environment or default
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
+// Base API URL - use Next.js API routes (proxy) for browser compatibility
+const API_BASE_URL = '/api';
 
 // Create an axios instance with default configurations
 const axiosInstance = axios.create({

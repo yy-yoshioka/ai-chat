@@ -10,10 +10,13 @@ COPY package.json yarn.lock ./
 # Install dependencies
 RUN yarn install
 
+# Copy the rest of the application code
+COPY . .
+
 # Create a directory for the SQLite database
 RUN mkdir -p /app/data
 
-# Generate Prisma client
+# Generate Prisma client (after copying files)
 RUN npx prisma generate
 
 # Expose port

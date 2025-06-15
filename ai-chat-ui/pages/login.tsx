@@ -1,5 +1,6 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useAuth } from '../hooks/useAuth';
 
 export default function LoginPage() {
@@ -107,6 +108,15 @@ export default function LoginPage() {
             {isLoggingIn ? 'Logging in...' : 'Login'}
           </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-slate-600 text-sm">
+            Don&apos;t have an account?{' '}
+            <Link href="/signup" className="text-green-600 hover:text-green-800 font-semibold">
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

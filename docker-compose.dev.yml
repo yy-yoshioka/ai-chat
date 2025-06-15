@@ -1,27 +1,73 @@
 version: "3.8"
 
 services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-dev
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=ai_chat_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - chat-dev-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for rate limiting and caching
+  redis:
+    image: redis:7-alpine
+    container_name: redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-dev-data:/data
+    restart: unless-stopped
+    networks:
+      - chat-dev-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   ai-chat-api:
     build:
       context: ./ai-chat-api
       dockerfile: Dockerfile.dev
     container_name: ai-chat-api-dev
     ports:
-      - "3001:3001"
+      - "8000:3001"
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=file:/app/data/dev.db
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/ai_chat_db?schema=public
+      - REDIS_URL=redis://redis:6379
       - JWT_SECRET=your-development-secret-key
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-your_openai_api_key_here}
+      - OPENAI_MODEL=gpt-4o-mini-2024-07-18
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - FRONTEND_URL=http://localhost:3000
     volumes:
       # ソースコードのボリュームマウント（ホットリロード用）
       - ./ai-chat-api:/app
       - /app/node_modules
-      # SQLiteデータベースの永続化
-      - api-dev-data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - chat-dev-network
-    command: yarn dev
+    command: sh -c "npx prisma migrate deploy && yarn dev"
 
   ai-chat-ui:
     build:
@@ -32,7 +78,8 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - JWT_SECRET=development-secret-key-for-testing-only
+      - NEXT_PUBLIC_API_URL=http://ai-chat-api:3001
     volumes:
       # ソースコードのボリュームマウント（ホットリロード用）
       - ./ai-chat-ui:/app
@@ -46,7 +93,9 @@ services:
     command: yarn dev
 
 volumes:
-  api-dev-data:
+  postgres-dev-data:
+    driver: local
+  redis-dev-data:
     driver: local
 
 networks:
