@@ -10,6 +10,10 @@ import adminRoutes from './routes/admin';
 import { widgetRoutes } from './routes/widgets';
 import { widgetLoaderRoutes } from './routes/widgetLoader';
 import { prisma } from './lib/prisma';
+import { embedRoutes } from './routes/embed';
+import { analyticsRoutes } from './routes/analytics';
+import { translationRoutes } from './routes/translation';
+import { billingRoutes } from './routes/billing';
 
 // Load environment variables
 dotenv.config();
@@ -89,6 +93,10 @@ app.use('/api/faqs', faqRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/widgets', widgetRoutes);
+app.use('/api/billing', billingRoutes);
+app.use('/api/embed', embedRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/translation', translationRoutes);
 
 // Legacy routes (backwards compatibility)
 app.use('/auth', authRoutes);
