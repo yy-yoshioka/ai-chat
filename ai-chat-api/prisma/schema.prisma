@@ -6,17 +6,36 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  extensions = [pgvector(map: "vector")]
 }
 
 enum PlanType {
   free
   pro
   enterprise
+}
+
+enum DocumentSourceType {
+  pdf
+  url
+  markdown
+  csv
+  zendesk
+  intercom
+  manual
+}
+
+enum DocumentStatus {
+  pending
+  processing
+  completed
+  failed
 }
 
 model Company {
@@ -94,12 +113,28 @@ model User {
 }
 
 model FAQ {
-  id        String   @id @default(uuid())
-  question  String
-  answer    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  question       String
+  answer         String       @db.Text
+  weight         Int          @default(0)  // For ordering and prioritization
+  isActive       Boolean      @default(true)
+  
+  // Vector embedding for semantic search
+  embedding      Unsupported("vector(1536)")?
+  
+  // Usage statistics
+  timesUsed      Int          @default(0)
+  lastUsedAt     DateTime?
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
+  @@index([organizationId])
+  @@index([isActive])
+  @@index([weight])
+  @@index([timesUsed])
   @@map("faqs")
 }
 
@@ -139,12 +174,16 @@ model Usage {
 
 // Organization support (A-4)
 model Organization {
-  id        String   @id @default(uuid())
-  name      String
-  slug      String   @unique
-  companies Company[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String           @id @default(uuid())
+  name            String
+  slug            String           @unique
+  companies       Company[]
+  knowledgeBases  KnowledgeBase[]
+  faqs            FAQ[]
+  linkRules       LinkRule[]
+  unansweredMessages UnansweredMessage[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
   @@index([slug])
   @@map("organizations")
@@ -184,4 +223,104 @@ model Event {
   @@index([createdAt])
   @@index([sessionId])
   @@map("events")
+}
+
+// F-1: Knowledge Base Models
+
+model KnowledgeBase {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title          String
+  description    String?
+  isActive       Boolean      @default(true)
+  
+  documents      Document[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@index([isActive])
+  @@map("knowledge_bases")
+}
+
+model Document {
+  id                String             @id @default(uuid())
+  knowledgeBaseId   String
+  knowledgeBase     KnowledgeBase      @relation(fields: [knowledgeBaseId], references: [id], onDelete: Cascade)
+  sourceType        DocumentSourceType
+  url               String?            // Source URL (for url, zendesk, intercom types)
+  title             String
+  content           String             @db.Text
+  summary           String?            @db.Text
+  
+  // Vector embedding for RAG
+  embedding         Unsupported("vector(1536)")?  // OpenAI embedding dimension
+  
+  // Processing status
+  status            DocumentStatus     @default(pending)
+  errorMessage      String?
+  
+  // Metadata
+  wordCount         Int?
+  lastCrawledAt     DateTime?
+  sourceMetadata    Json?              // Additional metadata from source
+  
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([knowledgeBaseId])
+  @@index([sourceType])
+  @@index([status])
+  @@index([lastCrawledAt])
+  @@map("documents")
+}
+
+model LinkRule {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  triggerRegex   String       // Regex pattern to match user messages
+  targetUrl      String       // URL to link to
+  newTab         Boolean      @default(true)
+  description    String?
+  isActive       Boolean      @default(true)
+  
+  // Analytics
+  clickCount     Int          @default(0)
+  lastClickedAt  DateTime?
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@index([isActive])
+  @@map("link_rules")
+}
+
+// F-6: Unanswered message tracking for FAQ suggestions
+model UnansweredMessage {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  message        String
+  count          Int          @default(1)  // How many times this question was asked
+  confidence     Float?       // AI confidence score (0-1)
+  
+  // Suggested FAQ generation
+  suggestedQuestion String?
+  suggestedAnswer   String?    @db.Text
+  isProcessed       Boolean    @default(false)
+  
+  firstAskedAt   DateTime
+  lastAskedAt    DateTime     @default(now())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@index([isProcessed])
+  @@index([count])
+  @@index([lastAskedAt])
+  @@map("unanswered_messages")
 }

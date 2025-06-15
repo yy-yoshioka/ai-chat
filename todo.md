@@ -30,9 +30,9 @@ C. 信頼性・運用
 ---------------------------------------------------------
 D. マーケ & CS 準備
 ---------------------------------------------------------
-⬜  D‑1  Landing Page v2 (価値訴求 + ベータ招待フォーム)
-⬜  D‑2  Product Hunt 投稿素材 (サムネ・GIF・コピー)
-⬜  D‑3  Onboarding Email シリーズ (Day1, Day3, Day7)
+✅  D‑1  Landing Page v2 (価値訴求 + ベータ招待フォーム)
+✅  D‑2  Product Hunt 投稿素材 (サムネ・GIF・コピー)
+✅  D‑3  Onboarding Email シリーズ (Day1, Day3, Day7)
 ⬜  D‑4  Intercom 競合比較ブログ & ケーススタディ 3 本
 ⬜  D‑5  FAQ / Help Center (Markdown → next-mdx)
 
@@ -47,27 +47,27 @@ E. β リリース判定ゲート
 ──────────────────────────────────────────────────────────────
 F. ナレッジベース & FAQ オート応答      ★★ 新設 ★★
 ──────────────────────────────────────────────────────────────
-⬜  **F‑1  DB モデル追加**  
+✅  **F‑1  DB モデル追加**  
         • `KnowledgeBase` (orgId, title, desc)  
         • `Document` (kbId, sourceType, url, content, embedding)  
         • `FAQ` (orgId, question, answer, weight)  
         • `LinkRule` (orgId, triggerRegex, targetUrl, newTab)
 
-⬜  **F‑2  Prisma Migrate & Seed**  
+✅  **F‑2  Prisma Migrate & Seed**  
         • サンプル KB & FAQ を seed script で投入  
         • CI に `prisma migrate deploy` を追加
 
-⬜  **F‑3  管理 UI /admin/org/[id]/knowledge**  
+✅  **F‑3  管理 UI /admin/org/[id]/knowledge**  
         • タブ: ①Docs ②FAQ ③LinkRules  
         • ドラッグ&ドロップ PDF/URL 取込 → progress bar  
         • FAQ 並び替え・重み(weight) 編集
 
-⬜  **F‑4  Embedding Worker**  
-        • Queue (BullMQ) + OpenAI `embeddings` API  
+✅  **F‑4  Embedding Worker**  
+        • Queue (BullMQ) + OpenAI `embeddings` API  
         • pgvector 拡張を RDS に有効化  
-        • 再クロール用 Cron (毎日 04:00 UTC)
+        • 再クロール用 Cron (毎日 04:00 UTC)
 
-⬜  **F‑5  RAG サービス**  
+✅  **F‑5  RAG サービス**  
         • VecSearch (top‑k) → GPT‑4o prompt 合成  
         • Score 閾値 τ=0.82 未満は FAQ fallback  
         • Chat Flow を middleware で切替
