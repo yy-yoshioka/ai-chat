@@ -21,11 +21,11 @@ B. 体験 & 成果計測
 ---------------------------------------------------------
 C. 信頼性・運用
 ---------------------------------------------------------
-⬜  C‑1  Playwright e2e: sign‑up→embed→first message
-⬜  C‑2  Sentry + Slack Alert (p95>1 s, error rate>1 %)
-⬜  C‑3  Blue‑Green デプロイワークフロー (Vercel Env)
-⬜  C‑4  Data retention policy & GDPR pages
-⬜  C‑5  Status page (UptimeRobot) & RSS incident feed
+✅  C‑1  Playwright e2e: sign‑up→embed→first message
+✅  C‑2  Sentry + Slack Alert (p95>1 s, error rate>1 %)
+✅  C‑3  Blue‑Green デプロイワークフロー (Vercel Env)
+✅  C‑4  Data retention policy & GDPR pages
+✅  C‑5  Status page (UptimeRobot) & RSS incident feed
 
 ---------------------------------------------------------
 D. マーケ & CS 準備
