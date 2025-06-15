@@ -45,7 +45,7 @@ E. β リリース判定ゲート
 
 
 ──────────────────────────────────────────────────────────────
-F. ナレッジベース & FAQ オート応答      ★★ 新設 ★★
+F. ナレッジベース & FAQ オート応答      ★★ 完了 ★★
 ──────────────────────────────────────────────────────────────
 ✅  **F‑1  DB モデル追加**  
         • `KnowledgeBase` (orgId, title, desc)  
@@ -58,7 +58,7 @@ F. ナレッジベース & FAQ オート応答      ★★ 新設 ★★
         • CI に `prisma migrate deploy` を追加
 
 ✅  **F‑3  管理 UI /admin/org/[id]/knowledge**  
-        • タブ: ①Docs ②FAQ ③LinkRules  
+        • タブ: ①Docs ②FAQ ③FAQ候補 ④LinkRules  
         • ドラッグ&ドロップ PDF/URL 取込 → progress bar  
         • FAQ 並び替え・重み(weight) 編集
 
@@ -72,20 +72,57 @@ F. ナレッジベース & FAQ オート応答      ★★ 新設 ★★
         • Score 閾値 τ=0.82 未満は FAQ fallback  
         • Chat Flow を middleware で切替
 
-⬜  **F‑6  FAQ サジェスト生成**  
+✅  **F‑6  FAQ サジェスト生成**  
         • 未回答 or low‑conf messages を `unanswered` テーブルへ  
         • 週次バッチで TOP50 質問を抽出 → 管理 UI に「追加候補」表示  
         • 1‑click で FAQ 登録 & Embedding 再実行
 
-⬜  **F‑7  サードパーティ KB コネクタ**  
+✅  **F‑7  サードパーティ KB コネクタ**  
         • Zendesk Guide OAuth & Incremental Sync  
         • Intercom Articles API import  
         • Markdown/CSV 一括アップロード
 
-⬜  **F‑8  LinkRule 実装 & 計測**  
+✅  **F‑8  LinkRule 実装 & 計測**  
         • regex マッチでカードリンク挿入 (`<LinkCard …/>`)  
         • `event.link_clicked` を計測、CTR を Admin で表示
 
-⬜  **F‑9  セキュリティ & ガバナンス**  
+✅  **F‑9  セキュリティ & ガバナンス**  
         • 各 org の `vector` row‑level ACL 確認テスト  
         • PII フィルタリング (OpenAI Moderation) で Embedding 前検査
+
+
+──────────────────────────────────────────────────────────────
+G. ウィジェット & UI 拡張       ← **NEW**
+──────────────────────────────────────────────────────────────
+⬜  G‑1  テーマビルダー GUI（カラーピッカー / 角丸 / 影）
+⬜  G‑2  カスタムランチャー API（任意 DOM → openChat()）
+⬜  G‑3  インライン埋め込み & マルチインスタンス
+⬜  G‑4  WCAG 2.1 AA 準拠 & キーボード操作
+⬜  G‑5  フルホワイトラベル / 複数ブランド切替
+
+──────────────────────────────────────────────────────────────
+H. エコシステム & 連携           ← **NEW**
+──────────────────────────────────────────────────────────────
+⬜  H‑1  Zapier / Make コネクタ
+⬜  H‑2  Webflow & WordPress プラグイン
+⬜  H‑3  Public REST / GraphQL API & OAuth Portal
+⬜  H‑4  Webhook (message.created 等) + 署名検証
+⬜  H‑5  プラグイン SDK / マーケットプレイス α
+
+──────────────────────────────────────────────────────────────
+I. エンタープライズ & セキュリティ ← **NEW**
+──────────────────────────────────────────────────────────────
+⬜  I‑1  SAML SSO & SCIM プロビジョニング
+⬜  I‑2  監査ログ & CSV / API Export
+⬜  I‑3  フィールドレベル暗号化 (BYOK)
+⬜  I‑4  API Rate Limit & WAF
+⬜  I‑5  SOC‑2 Type I 監査準備
+
+──────────────────────────────────────────────────────────────
+J. 可用性 & 拡張                 ← **NEW**
+──────────────────────────────────────────────────────────────
+⬜  J‑1  マルチリージョン Active‑Active 構成
+⬜  J‑2  合成モニタリング 5 分毎
+⬜  J‑3  Chaos Test & Auto‑Heal
+⬜  J‑4  PWA & React‑Native SDK
+⬜  J‑5  課金プラン管理 UI + Overage 課金

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 // タブの種類
-type TabType = 'docs' | 'faq' | 'link-rules';
+type TabType = 'docs' | 'faq' | 'link-rules' | 'suggestions';
 
 // データ型定義
 interface KnowledgeBase {
@@ -46,19 +46,32 @@ interface LinkRule {
   clickCount: number;
 }
 
+interface FAQSuggestion {
+  id: string;
+  originalMessage: string;
+  suggestedQuestion: string;
+  suggestedAnswer: string;
+  confidence: number;
+  count: number;
+  lastAskedAt: string;
+  priority: 'high' | 'medium' | 'low';
+}
+
 export default function KnowledgeManagement() {
   const router = useRouter();
   const { id } = router.query;
   const organizationId = id as string;
 
   const [activeTab, setActiveTab] = useState<TabType>('docs');
-  const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
+  const [_knowledgeBases] = useState<KnowledgeBase[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [linkRules, setLinkRules] = useState<LinkRule[]>([]);
+  const [suggestions, setSuggestions] = useState<FAQSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [isGeneratingSuggestions, setIsGeneratingSuggestions] = useState(false);
 
   // データ読み込み
   useEffect(() => {
@@ -71,6 +84,9 @@ export default function KnowledgeManagement() {
     setIsLoading(true);
     try {
       await Promise.all([loadKnowledgeBases(), loadDocuments(), loadFAQs(), loadLinkRules()]);
+      if (activeTab === 'suggestions') {
+        await loadSuggestions();
+      }
     } catch (error) {
       console.error('Failed to load data:', error);
     } finally {
@@ -80,16 +96,7 @@ export default function KnowledgeManagement() {
 
   const loadKnowledgeBases = async () => {
     // TODO: API call to fetch knowledge bases
-    setKnowledgeBases([
-      {
-        id: 'kb-1',
-        title: 'AI Chat サポートガイド',
-        description: 'AI Chatプラットフォームの基本的な使い方やよくある質問をまとめたガイドです。',
-        isActive: true,
-        createdAt: '2024-01-15T10:00:00Z',
-        updatedAt: '2024-01-20T15:30:00Z',
-      },
-    ]);
+    // setKnowledgeBases([...]);
   };
 
   const loadDocuments = async () => {
@@ -173,6 +180,91 @@ export default function KnowledgeManagement() {
     ]);
   };
 
+  const loadSuggestions = async () => {
+    // TODO: API call to fetch FAQ suggestions
+    setSuggestions([
+      {
+        id: 'sug-1',
+        originalMessage: 'APIの制限はありますか？',
+        suggestedQuestion: 'APIには利用制限がありますか？',
+        suggestedAnswer:
+          'AI ChatのAPIには、プランに応じた利用制限があります。無料プランでは月間100回、プロプランでは月間10,000回まで利用できます。制限に達した場合は追加購入も可能です。',
+        confidence: 0.85,
+        count: 15,
+        lastAskedAt: '2024-01-20T09:00:00Z',
+        priority: 'high',
+      },
+      {
+        id: 'sug-2',
+        originalMessage: 'Slackとの連携は可能ですか？',
+        suggestedQuestion: 'Slackとの連携機能はありますか？',
+        suggestedAnswer:
+          'はい、AI ChatはSlackとの連携に対応しています。Webhook URLを設定することで、チャットログをSlackチャンネルに自動送信できます。',
+        confidence: 0.78,
+        count: 12,
+        lastAskedAt: '2024-01-19T16:30:00Z',
+        priority: 'medium',
+      },
+      {
+        id: 'sug-3',
+        originalMessage: 'データのエクスポート機能はありますか？',
+        suggestedQuestion: 'チャットデータのエクスポートは可能ですか？',
+        suggestedAnswer:
+          'プロプラン以上では、チャットログやFAQデータをCSV形式でエクスポートできます。管理画面の「データエクスポート」メニューからダウンロード可能です。',
+        confidence: 0.72,
+        count: 8,
+        lastAskedAt: '2024-01-18T11:15:00Z',
+        priority: 'medium',
+      },
+    ]);
+  };
+
+  // FAQサジェスト生成
+  const generateSuggestions = async () => {
+    setIsGeneratingSuggestions(true);
+    try {
+      // TODO: API call to generate suggestions
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate API call
+      await loadSuggestions();
+    } catch (error) {
+      console.error('Failed to generate suggestions:', error);
+    } finally {
+      setIsGeneratingSuggestions(false);
+    }
+  };
+
+  // FAQサジェスト承認
+  const approveSuggestion = async (
+    suggestionId: string,
+    overrides?: { question?: string; answer?: string }
+  ) => {
+    try {
+      // TODO: API call to approve suggestion
+      console.log('Approving suggestion:', suggestionId, overrides);
+
+      // サジェストリストから削除
+      setSuggestions((prev) => prev.filter((s) => s.id !== suggestionId));
+
+      // FAQ一覧を再読み込み
+      await loadFAQs();
+    } catch (error) {
+      console.error('Failed to approve suggestion:', error);
+    }
+  };
+
+  // FAQサジェスト却下
+  const rejectSuggestion = async (suggestionId: string, reason?: string) => {
+    try {
+      // TODO: API call to reject suggestion
+      console.log('Rejecting suggestion:', suggestionId, reason);
+
+      // サジェストリストから削除
+      setSuggestions((prev) => prev.filter((s) => s.id !== suggestionId));
+    } catch (error) {
+      console.error('Failed to reject suggestion:', error);
+    }
+  };
+
   // ファイルアップロード処理
   const handleFileUpload = async (files: FileList) => {
     if (!files || files.length === 0) return;
@@ -196,7 +288,7 @@ export default function KnowledgeManagement() {
     await loadDocuments(); // Reload documents
   };
 
-  const uploadFile = async (file: File): Promise<void> => {
+  const uploadFile = async (_file: File): Promise<void> => {
     // TODO: Implement actual file upload logic
     return new Promise((resolve) => {
       setTimeout(resolve, 1000); // Simulate upload time
@@ -212,6 +304,14 @@ export default function KnowledgeManagement() {
       [newFaqs[index], newFaqs[targetIndex]] = [newFaqs[targetIndex], newFaqs[index]];
       setFaqs(newFaqs);
       // TODO: API call to update order
+    }
+  };
+
+  // タブ切り替え時の処理
+  const handleTabChange = async (tab: TabType) => {
+    setActiveTab(tab);
+    if (tab === 'suggestions' && suggestions.length === 0) {
+      await loadSuggestions();
     }
   };
 
@@ -234,6 +334,27 @@ export default function KnowledgeManagement() {
     return (
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>
         {labels[status]}
+      </span>
+    );
+  };
+
+  // 優先度バッジ
+  const PriorityBadge = ({ priority }: { priority: FAQSuggestion['priority'] }) => {
+    const colors = {
+      high: 'bg-red-100 text-red-800',
+      medium: 'bg-yellow-100 text-yellow-800',
+      low: 'bg-gray-100 text-gray-800',
+    };
+
+    const labels = {
+      high: '高',
+      medium: '中',
+      low: '低',
+    };
+
+    return (
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>
+        {labels[priority]}
       </span>
     );
   };
@@ -270,11 +391,12 @@ export default function KnowledgeManagement() {
             {[
               { id: 'docs', label: 'ドキュメント', icon: '📄' },
               { id: 'faq', label: 'FAQ', icon: '❓' },
+              { id: 'suggestions', label: 'FAQ候補', icon: '💡', badge: suggestions.length },
               { id: 'link-rules', label: 'リンクルール', icon: '🔗' },
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as TabType)}
+                onClick={() => handleTabChange(tab.id as TabType)}
                 className={`${
                   activeTab === tab.id
                     ? 'border-blue-500 text-blue-600'
@@ -283,6 +405,11 @@ export default function KnowledgeManagement() {
               >
                 <span>{tab.icon}</span>
                 <span>{tab.label}</span>
+                {tab.badge && tab.badge > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 ml-2">
+                    {tab.badge}
+                  </span>
+                )}
               </button>
             ))}
           </nav>
@@ -471,6 +598,130 @@ export default function KnowledgeManagement() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* FAQ候補タブ */}
+        {activeTab === 'suggestions' && (
+          <div className="space-y-6">
+            {/* ヘッダーとアクション */}
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-lg font-medium text-gray-900">💡 FAQ候補</h2>
+                <p className="text-sm text-gray-600">未回答の質問からAIが生成したFAQ候補です</p>
+              </div>
+              <button
+                onClick={generateSuggestions}
+                disabled={isGeneratingSuggestions}
+                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50"
+              >
+                {isGeneratingSuggestions ? (
+                  <span className="flex items-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    生成中...
+                  </span>
+                ) : (
+                  '🔄 候補を生成'
+                )}
+              </button>
+            </div>
+
+            {/* FAQ候補一覧 */}
+            <div className="bg-white rounded-lg shadow">
+              {suggestions.length === 0 ? (
+                <div className="p-8 text-center text-gray-500">
+                  <div className="text-4xl mb-4">💭</div>
+                  <p className="text-lg font-medium mb-2">FAQ候補がありません</p>
+                  <p className="text-sm">
+                    未回答の質問が蓄積されたら、AI が自動的にFAQ候補を生成します。
+                  </p>
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-200">
+                  {suggestions.map((suggestion) => (
+                    <div key={suggestion.id} className="p-6">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-3">
+                            <PriorityBadge priority={suggestion.priority} />
+                            <span className="text-xs text-gray-500">
+                              {suggestion.count}回質問 | 信頼度:{' '}
+                              {Math.round(suggestion.confidence * 100)}% | 最終:{' '}
+                              {new Date(suggestion.lastAskedAt).toLocaleDateString('ja-JP')}
+                            </span>
+                          </div>
+
+                          <div className="mb-4">
+                            <div className="text-sm text-gray-600 mb-2">
+                              <strong>元の質問:</strong> {suggestion.originalMessage}
+                            </div>
+                            <div className="bg-gray-50 p-4 rounded-lg">
+                              <div className="mb-3">
+                                <strong className="text-gray-900">提案質問:</strong>
+                                <p className="mt-1 text-gray-800">{suggestion.suggestedQuestion}</p>
+                              </div>
+                              <div>
+                                <strong className="text-gray-900">提案回答:</strong>
+                                <p className="mt-1 text-gray-700">{suggestion.suggestedAnswer}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex space-x-3">
+                        <button
+                          onClick={() => approveSuggestion(suggestion.id)}
+                          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm"
+                        >
+                          ✅ そのまま承認
+                        </button>
+                        <button
+                          onClick={() => {
+                            // TODO: モーダルで編集してから承認
+                            const question = prompt('質問を編集:', suggestion.suggestedQuestion);
+                            const answer = prompt('回答を編集:', suggestion.suggestedAnswer);
+                            if (question && answer) {
+                              approveSuggestion(suggestion.id, { question, answer });
+                            }
+                          }}
+                          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                        >
+                          ✏️ 編集して承認
+                        </button>
+                        <button
+                          onClick={() => {
+                            const reason = prompt('却下理由（任意）:');
+                            rejectSuggestion(suggestion.id, reason || undefined);
+                          }}
+                          className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm"
+                        >
+                          ❌ 却下
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
