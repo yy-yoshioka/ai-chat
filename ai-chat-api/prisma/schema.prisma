@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -20,13 +20,28 @@ enum PlanType {
 }
 
 model Company {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  plan      PlanType @default(free)
-  widgets   Widget[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String        @id @default(uuid())
+  name               String
+  email              String        @unique
+  plan               PlanType      @default(free)
+  organizationId     String?
+  organization       Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  
+  // Stripe billing fields
+  stripeCustomerId   String?
+  subscriptionId     String?
+  subscriptionStatus String?       @default("inactive")
+  tokenBalance       Int           @default(0)
+  
+  widgets            Widget[]
+  users              User[]
+  usage              Usage[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  @@index([organizationId])
+  @@index([stripeCustomerId])
+  @@map("companies")
 }
 
 model Widget {
@@ -34,7 +49,7 @@ model Widget {
   widgetKey     String    @unique
   name          String
   companyId     String
-  company       Company   @relation(fields: [companyId], references: [id])
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
   isActive      Boolean   @default(true)
   accentColor   String    @default("#007bff")
   logoUrl       String?
@@ -44,6 +59,8 @@ model Widget {
 
   @@index([widgetKey])
   @@index([companyId])
+  @@index([isActive])
+  @@map("widgets")
 }
 
 model User {
@@ -52,9 +69,15 @@ model User {
   password  String
   name      String?
   isAdmin   Boolean  @default(false)
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
   chatLogs  ChatLog[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([companyId])
+  @@map("users")
 }
 
 model FAQ {
@@ -63,18 +86,53 @@ model FAQ {
   answer    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("faqs")
 }
 
 model ChatLog {
   id        String   @id @default(uuid())
   userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   widgetId  String?
-  widget    Widget?  @relation(fields: [widgetId], references: [id])
+  widget    Widget?  @relation(fields: [widgetId], references: [id], onDelete: SetNull)
   question  String
   answer    String
+  tokens    Int?     @default(0) // Usage tracking for billing
   createdAt DateTime @default(now())
 
   @@index([userId])
   @@index([widgetId])
+  @@index([createdAt])
+  @@map("chat_logs")
+}
+
+// Usage tracking for billing (A-6)
+model Usage {
+  id        String   @id @default(uuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  date      DateTime @db.Date
+  messages  Int      @default(0)
+  tokens    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([companyId, date])
+  @@index([companyId])
+  @@index([date])
+  @@map("usage")
+}
+
+// Organization support (A-4)
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  companies Company[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@map("organizations")
 }

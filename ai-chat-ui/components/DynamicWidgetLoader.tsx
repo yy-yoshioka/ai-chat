@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Script from "next/script";
+import React, { useState, useEffect } from 'react';
+import Script from 'next/script';
 
 interface Widget {
   widgetKey: string;
@@ -19,8 +19,8 @@ const DynamicWidgetLoader: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Configuration
-  const API_BASE_URL = "http://localhost:8000";
-  const COMPANY_NAME = "Test Company";
+  const API_BASE_URL = 'http://localhost:8000';
+  const COMPANY_NAME = 'Test Company';
 
   // Fetch available widgets dynamically
   useEffect(() => {
@@ -39,13 +39,11 @@ const DynamicWidgetLoader: React.FC = () => {
         setWidgets(data.widgets);
 
         // Automatically select the first widget (or legacy widget if available)
-        const legacyWidget = data.widgets.find(
-          (w) => w.widgetKey === "test-widget-key-1"
-        );
+        const legacyWidget = data.widgets.find((w) => w.widgetKey === 'test-widget-key-1');
         const defaultWidget = legacyWidget || data.widgets[0];
         setSelectedWidget(defaultWidget);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Unknown error");
+        setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
         setLoading(false);
       }
@@ -70,7 +68,7 @@ const DynamicWidgetLoader: React.FC = () => {
       <div className="mb-4">
         <label className="block mb-2">Select Widget:</label>
         <select
-          value={selectedWidget?.widgetKey || ""}
+          value={selectedWidget?.widgetKey || ''}
           onChange={(e) => {
             const widget = widgets.find((w) => w.widgetKey === e.target.value);
             setSelectedWidget(widget || null);
@@ -79,8 +77,7 @@ const DynamicWidgetLoader: React.FC = () => {
         >
           {widgets.map((widget) => (
             <option key={widget.widgetKey} value={widget.widgetKey}>
-              {widget.name} (
-              {widget.widgetKey.length > 20 ? "New Format" : "Legacy"})
+              {widget.name} ({widget.widgetKey.length > 20 ? 'New Format' : 'Legacy'})
             </option>
           ))}
         </select>
@@ -92,10 +89,8 @@ const DynamicWidgetLoader: React.FC = () => {
           <h3 className="font-semibold">{selectedWidget.name}</h3>
           <p>Key: {selectedWidget.widgetKey}</p>
           <p>
-            Color:{" "}
-            <span style={{ color: selectedWidget.accentColor }}>
-              {selectedWidget.accentColor}
-            </span>
+            Color:{' '}
+            <span style={{ color: selectedWidget.accentColor }}>{selectedWidget.accentColor}</span>
           </p>
         </div>
       )}
@@ -106,13 +101,10 @@ const DynamicWidgetLoader: React.FC = () => {
           src={`${API_BASE_URL}/widget-loader/${selectedWidget.widgetKey}.v1.js`}
           strategy="afterInteractive"
           onLoad={() => {
-            console.log(
-              "Widget script loaded successfully for:",
-              selectedWidget.name
-            );
+            console.log('Widget script loaded successfully for:', selectedWidget.name);
           }}
           onError={(e) => {
-            console.error("Widget script failed to load:", e);
+            console.error('Widget script failed to load:', e);
           }}
         />
       )}
@@ -124,14 +116,9 @@ const DynamicWidgetLoader: React.FC = () => {
           {widgets.map((widget) => (
             <div key={widget.widgetKey} className="p-3 border rounded">
               <div className="font-medium">{widget.name}</div>
-              <div className="text-sm text-gray-600">
-                Key: {widget.widgetKey}
-              </div>
+              <div className="text-sm text-gray-600">Key: {widget.widgetKey}</div>
               <div className="text-sm">
-                Color:{" "}
-                <span style={{ color: widget.accentColor }}>
-                  {widget.accentColor}
-                </span>
+                Color: <span style={{ color: widget.accentColor }}>{widget.accentColor}</span>
               </div>
             </div>
           ))}

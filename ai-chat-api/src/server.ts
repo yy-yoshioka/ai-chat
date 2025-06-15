@@ -1,4 +1,6 @@
+import { createServer } from 'http';
 import app from './app';
+import { initializeWebSocket } from './lib/websocket';
 
 const PORT = Number(process.env.PORT) || 3001;
 const HOST = '0.0.0.0'; // Allow external connections in Docker
@@ -14,8 +16,15 @@ process.on('unhandledRejection', (reason, promise) => {
   process.exit(1);
 });
 
-const server = app.listen(PORT, HOST, () => {
+// Create HTTP server
+const httpServer = createServer(app);
+
+// Initialize WebSocket
+initializeWebSocket(httpServer);
+
+const server = httpServer.listen(PORT, HOST, () => {
   console.log(`🚀 Server is running at http://localhost:${PORT}`);
+  console.log(`🔌 WebSocket server initialized`);
 });
 
 server.on('error', (error) => {
