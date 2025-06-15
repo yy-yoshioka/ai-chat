@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 import { authMiddleware } from '../middleware/auth';
 import {
   requireOrganizationAccess,
@@ -29,7 +29,8 @@ router.get(
     try {
       const { widgetKey } = req.params;
       const options: EmbedOptions = {
-        position: (req.query.position as any) || 'bottom-right',
+        position:
+          (req.query.position as EmbedOptions['position']) || 'bottom-right',
         offset: req.query.offset
           ? JSON.parse(req.query.offset as string)
           : { x: 20, y: 20 },
@@ -188,9 +189,21 @@ function generateEmbedCode(widgetKey: string, options: EmbedOptions): string {
 <!-- End AI Chat Widget -->`;
 }
 
-function generatePreviewHTML(widget: any, options: EmbedOptions): string {
+function generatePreviewHTML(
+  widget: {
+    name: string;
+    theme?: string;
+    primaryColor?: string;
+    secondaryColor?: string;
+    backgroundColor?: string;
+    textColor?: string;
+    borderRadius?: number;
+    fontFamily?: string;
+  },
+  options: EmbedOptions
+): string {
   const themeCSS = generateThemeCSS({
-    theme: widget.theme || 'light',
+    theme: (widget.theme as 'light' | 'dark' | 'auto') || 'light',
     primaryColor: widget.primaryColor || '#007bff',
     secondaryColor: widget.secondaryColor || '#6c757d',
     backgroundColor: widget.backgroundColor || '#ffffff',

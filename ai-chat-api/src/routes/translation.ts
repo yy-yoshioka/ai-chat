@@ -334,7 +334,7 @@ Supported language codes: ${Object.keys(SUPPORTED_LANGUAGES).join(', ')}`;
 function calculateTranslationConfidence(
   originalText: string,
   translatedText: string,
-  targetLanguage: string
+  _targetLanguage: string
 ): number {
   // Simple heuristic-based confidence calculation
   let confidence = 0.8; // Base confidence

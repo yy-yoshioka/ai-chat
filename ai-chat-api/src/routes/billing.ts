@@ -5,6 +5,7 @@ import {
   OrganizationRequest,
 } from '../middleware/organizationAccess';
 import { prisma } from '../lib/prisma';
+import { PlanType } from '@prisma/client';
 import {
   createCheckoutSession,
   createTokenCheckoutSession,
@@ -12,6 +13,7 @@ import {
   stripe,
   PRICING_PLANS,
 } from '../lib/stripe';
+import Stripe from 'stripe';
 
 const router = Router();
 
@@ -192,7 +194,9 @@ router.post('/webhook', async (req: Request, res: Response) => {
   try {
     switch (event.type) {
       case 'checkout.session.completed':
-        await handleCheckoutCompleted(event.data.object);
+        await handleCheckoutCompleted(
+          event.data.object as Stripe.Checkout.Session
+        );
         break;
 
       case 'customer.subscription.updated':
@@ -223,39 +227,51 @@ router.post('/webhook', async (req: Request, res: Response) => {
 });
 
 // Webhook event handlers
-async function handleCheckoutCompleted(session: {
-  metadata: {
-    companyId: string;
-    planType?: string;
-    tokenAmount?: string;
-    type?: string;
-  };
-  customer?: string;
-  subscription?: string;
-}) {
-  const { companyId, planType, tokenAmount, type } = session.metadata;
+/**
+ * Handle successful checkout completion
+ */
+async function handleCheckoutCompleted(
+  session: Stripe.Checkout.Session
+): Promise<void> {
+  try {
+    if (!session.metadata || !session.metadata.companyId) {
+      console.error('Missing companyId in session metadata');
+      return;
+    }
 
-  if (type === 'token_purchase') {
-    // Handle token purchase
-    await prisma.company.update({
-      where: { id: companyId },
-      data: {
-        tokenBalance: {
-          increment: parseInt(tokenAmount || '0'),
+    const { companyId, planType, tokenAmount, type } = session.metadata;
+
+    if (type === 'subscription' && planType) {
+      // Handle subscription
+      await prisma.company.update({
+        where: { id: companyId },
+        data: {
+          plan: planType as PlanType,
+          stripeCustomerId: session.customer as string,
+          subscriptionId: session.subscription as string,
+          subscriptionStatus: 'active',
         },
-      },
-    });
-  } else {
-    // Handle subscription
-    await prisma.company.update({
-      where: { id: companyId },
-      data: {
-        plan: planType as 'free' | 'pro' | 'enterprise',
-        stripeCustomerId: session.customer,
-        subscriptionId: session.subscription,
-        subscriptionStatus: 'active',
-      },
-    });
+      });
+
+      console.log(
+        `Subscription activated for company ${companyId}: ${planType}`
+      );
+    } else if (type === 'tokens' && tokenAmount) {
+      // Handle token purchase
+      const tokens = parseInt(tokenAmount);
+      await prisma.company.update({
+        where: { id: companyId },
+        data: {
+          tokenBalance: {
+            increment: tokens,
+          },
+        },
+      });
+
+      console.log(`Added ${tokens} tokens to company ${companyId}`);
+    }
+  } catch (error) {
+    console.error('Error handling checkout completion:', error);
   }
 }
 

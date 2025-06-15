@@ -2,7 +2,14 @@ import { prisma } from './prisma';
 import { Request } from 'express';
 
 export interface EventProperties {
-  [key: string]: any;
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | null
+    | undefined
+    | EventProperties
+    | EventProperties[];
 }
 
 export interface EventContext {
