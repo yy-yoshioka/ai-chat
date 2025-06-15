@@ -33,8 +33,8 @@ D. マーケ & CS 準備
 ✅  D‑1  Landing Page v2 (価値訴求 + ベータ招待フォーム)
 ✅  D‑2  Product Hunt 投稿素材 (サムネ・GIF・コピー)
 ✅  D‑3  Onboarding Email シリーズ (Day1, Day3, Day7)
-⬜  D‑4  Intercom 競合比較ブログ & ケーススタディ 3 本
-⬜  D‑5  FAQ / Help Center (Markdown → next-mdx)
+✅  D‑4  Intercom 競合比較ブログ & ケーススタディ 3 本
+✅  D‑5  FAQ / Help Center (Markdown → next-mdx)
 
 ---------------------------------------------------------
 E. β リリース判定ゲート
@@ -97,7 +97,7 @@ G. ウィジェット & UI 拡張       ← **NEW**
 ⬜  G‑1  テーマビルダー GUI（カラーピッカー / 角丸 / 影）
 ⬜  G‑2  カスタムランチャー API（任意 DOM → openChat()）
 ⬜  G‑3  インライン埋め込み & マルチインスタンス
-⬜  G‑4  WCAG 2.1 AA 準拠 & キーボード操作
+⬜  G‑4  WCAG 2.1 AA 準拠 & キーボード操作
 ⬜  G‑5  フルホワイトラベル / 複数ブランド切替
 
 ──────────────────────────────────────────────────────────────
@@ -112,17 +112,53 @@ H. エコシステム & 連携           ← **NEW**
 ──────────────────────────────────────────────────────────────
 I. エンタープライズ & セキュリティ ← **NEW**
 ──────────────────────────────────────────────────────────────
-⬜  I‑1  SAML SSO & SCIM プロビジョニング
+⬜  I‑1  SAML SSO & SCIM プロビジョニング
 ⬜  I‑2  監査ログ & CSV / API Export
 ⬜  I‑3  フィールドレベル暗号化 (BYOK)
 ⬜  I‑4  API Rate Limit & WAF
-⬜  I‑5  SOC‑2 Type I 監査準備
+⬜  I‑5  SOC‑2 Type I 監査準備
 
 ──────────────────────────────────────────────────────────────
 J. 可用性 & 拡張                 ← **NEW**
 ──────────────────────────────────────────────────────────────
 ⬜  J‑1  マルチリージョン Active‑Active 構成
-⬜  J‑2  合成モニタリング 5 分毎
+⬜  J‑2  合成モニタリング 5 分毎
 ⬜  J‑3  Chaos Test & Auto‑Heal
 ⬜  J‑4  PWA & React‑Native SDK
 ⬜  J‑5  課金プラン管理 UI + Overage 課金
+
+
+──────────────────────────────────────────────────────────────
+K. Advanced AI & Multimodal  ★★ NEW ★★
+──────────────────────────────────────────────────────────────
+⬜  K‑1  Conversation Summary API
+        • GPT‑4o   model="agentic-summarize‑2025‑06"
+        • Output: {intent, sentiment, next_steps[]}
+
+⬜  K‑2  Copilot Suggestions (agent‑side)
+        • Server streams 3 reply drafts + FAQ linkIDs
+        • Accept/Reject → Fine‑tune preference store
+
+⬜  K‑3  Voice & Multimodal Widget
+        • Web Speech API fallback → Whisper‑V3
+        • Toggle TTS (Edge‑Speech) + Auto‑language detect
+        • Screen‑share / co‑browsing via WebRTC (iframe opt‑in)
+
+⬜  K‑4  AI Governance Layer
+        • Answer JSON {text, citations[], confidence}
+        • Store in `ai_logs` table (sha256‑sig, expiry=3y)
+        • Admin UI: filter <70 % conf → manual review queue
+
+⬜  K‑5  AI Insights Hub
+        • Realtime dashboard: CSAT vs Sentiment, FAQ gap cloud
+        • Embedding drift monitor (cos‑sim <0.6 alert)
+
+⬜  K‑6  Interactive Product Tour Builder
+        • No‑code flow editor (steps, tooltip, video)
+        • Trigger via chat command `/tour start`
+        • Analytics: completion %, drop‑step
+
+⬜  K‑7  Generative Email Replies
+        • Shared inbox → GPT‑Reply w/ KB context
+        • Human‑in‑loop diff viewer & approve
+
