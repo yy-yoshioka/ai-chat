@@ -129,36 +129,36 @@ J. 可用性 & 拡張                 ★★ 完了 ★★
 
 
 ──────────────────────────────────────────────────────────────
-K. Advanced AI & Multimodal  ★★ NEW ★★
+K. Advanced AI & Multimodal                 ★★ 完了 ★★
 ──────────────────────────────────────────────────────────────
-⬜  K‑1  Conversation Summary API
+✅  K‑1  Conversation Summary API
         • GPT‑4o   model="agentic-summarize‑2025‑06"
         • Output: {intent, sentiment, next_steps[]}
 
-⬜  K‑2  Copilot Suggestions (agent‑side)
+✅  K‑2  Copilot Suggestions (agent‑side)
         • Server streams 3 reply drafts + FAQ linkIDs
         • Accept/Reject → Fine‑tune preference store
 
-⬜  K‑3  Voice & Multimodal Widget
+✅  K‑3  Voice & Multimodal Widget
         • Web Speech API fallback → Whisper‑V3
         • Toggle TTS (Edge‑Speech) + Auto‑language detect
         • Screen‑share / co‑browsing via WebRTC (iframe opt‑in)
 
-⬜  K‑4  AI Governance Layer
+✅  K‑4  AI Governance Layer
         • Answer JSON {text, citations[], confidence}
         • Store in `ai_logs` table (sha256‑sig, expiry=3y)
         • Admin UI: filter <70 % conf → manual review queue
 
-⬜  K‑5  AI Insights Hub
+✅  K‑5  AI Insights Hub
         • Realtime dashboard: CSAT vs Sentiment, FAQ gap cloud
         • Embedding drift monitor (cos‑sim <0.6 alert)
 
-⬜  K‑6  Interactive Product Tour Builder
+✅  K‑6  Interactive Product Tour Builder
         • No‑code flow editor (steps, tooltip, video)
         • Trigger via chat command `/tour start`
         • Analytics: completion %, drop‑step
 
-⬜  K‑7  Generative Email Replies
+✅  K‑7  Generative Email Replies
         • Shared inbox → GPT‑Reply w/ KB context
         • Human‑in‑loop diff viewer & approve
 
