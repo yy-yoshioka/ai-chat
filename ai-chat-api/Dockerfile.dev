@@ -22,5 +22,5 @@ RUN npx prisma generate
 # Expose port
 EXPOSE 3001
 
-# Start the application in development mode
-CMD ["sh", "-c", "npx prisma migrate deploy && yarn dev"] 
+# Let docker-compose handle the startup command
+CMD ["yarn", "dev"] 

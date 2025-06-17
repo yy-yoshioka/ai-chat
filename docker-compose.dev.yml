@@ -3,14 +3,14 @@ version: "3.8"
 services:
   # PostgreSQL Database
   postgres:
-    image: postgres:15-alpine
+    image: pgvector/pgvector:pg16
     container_name: postgres-dev
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=ai_chat_db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ai_chat_db
     volumes:
       - postgres-dev-data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -46,21 +46,20 @@ services:
     container_name: ai-chat-api-dev
     ports:
       - "8000:3001"
-    env_file:
-      - ./ai-chat-api/.env.local
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/ai_chat_db?schema=public
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/ai_chat_db?schema=public
       - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=your-development-secret-key
+      - JWT_SECRET=development-secret-key-for-testing-only
       - OPENAI_API_KEY=${OPENAI_API_KEY:-your_openai_api_key_here}
       - OPENAI_MODEL=gpt-4o-mini-2024-07-18
       - NEXT_PUBLIC_API_URL=http://localhost:8000
       - FRONTEND_URL=http://localhost:3000
-        # ✅ Stripe関連（追加する部分）
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-      - STRIPE_WEBHOOK_SECRET=whsec_XXXXXXXXXXXXXXXXXXXXXXXX
-      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+      - PORT=3001
+      # Stripe関連（開発用）
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-sk_test_development_key}
+      - STRIPE_WEBHOOK_SECRET=whsec_development_webhook_secret
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY:-pk_test_development_key}
     volumes:
       # ソースコードのボリュームマウント（ホットリロード用）
       - ./ai-chat-api:/app
@@ -73,7 +72,7 @@ services:
     restart: unless-stopped
     networks:
       - chat-dev-network
-    command: sh -c "npx prisma migrate deploy && yarn dev"
+    command: sh -c "npx prisma migrate deploy && yarn db:seed && yarn dev"
 
   ai-chat-ui:
     build:

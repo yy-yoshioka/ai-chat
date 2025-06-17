@@ -1,11 +1,15 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt'; // 追加
 
 const prisma = new PrismaClient();
+
+const adminEmail = 'admin@example.com';
+const adminPassword = 'password123';
 
 async function main() {
   console.log('🌱 Starting seed...');
 
-  // Create sample organization
+  // ✅ 1. Organization を先に作成
   const org = await prisma.organization.upsert({
     where: { slug: 'demo-org' },
     update: {},
@@ -14,8 +18,35 @@ async function main() {
       slug: 'demo-org',
     },
   });
-
   console.log('✅ Created organization:', org.name);
+
+  // ✅ 2. Organization ID を使って Company を作成
+  const company = await prisma.company.upsert({
+    where: { email: 'demo-company@example.com' },
+    update: {},
+    create: {
+      name: 'Demo Company',
+      email: 'demo-company@example.com',
+      plan: 'free',
+      organizationId: org.id,
+    },
+  });
+  console.log('✅ Created company:', company.name);
+
+  // ✅ 3. Company ID を使って Admin User を作成
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
+  const adminUser = await prisma.user.upsert({
+    where: { email: 'admin@example.com' },
+    update: {},
+    create: {
+      email: 'admin@example.com',
+      password: hashedPassword,
+      name: 'Demo Admin',
+      isAdmin: true,
+      companyId: company.id,
+    },
+  });
+  console.log('✅ Created admin user:', adminUser.email);
 
   // Create sample knowledge base
   const kb = await prisma.knowledgeBase.upsert({
