@@ -27,7 +27,7 @@ services:
     image: redis:7-alpine
     container_name: redis-dev
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis-dev-data:/data
     restart: unless-stopped
@@ -46,6 +46,8 @@ services:
     container_name: ai-chat-api-dev
     ports:
       - "8000:3001"
+    env_file:
+      - ./ai-chat-api/.env.local
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/ai_chat_db?schema=public
@@ -55,6 +57,10 @@ services:
       - OPENAI_MODEL=gpt-4o-mini-2024-07-18
       - NEXT_PUBLIC_API_URL=http://localhost:8000
       - FRONTEND_URL=http://localhost:3000
+        # ✅ Stripe関連（追加する部分）
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=whsec_XXXXXXXXXXXXXXXXXXXXXXXX
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
     volumes:
       # ソースコードのボリュームマウント（ホットリロード用）
       - ./ai-chat-api:/app
