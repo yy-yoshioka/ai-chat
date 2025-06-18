@@ -124,7 +124,12 @@ export default function WidgetsPage() {
 
       if (response.ok) {
         const newWidget = await response.json();
-        setWidgets([newWidget, ...widgets]);
+        // Add default _count values for newly created widgets
+        const widgetWithDefaults = {
+          ...newWidget,
+          _count: newWidget._count || { chatLogs: 0 },
+        };
+        setWidgets([widgetWithDefaults, ...widgets]);
         setShowCreateForm(false);
         setFormData({
           name: '',
@@ -167,6 +172,11 @@ export default function WidgetsPage() {
     const embedCode = `<script src="${window.location.origin}/widget-loader/${widgetKey}.v1.js"></script>`;
     navigator.clipboard.writeText(embedCode);
     alert('Embed code copied to clipboard!');
+  };
+
+  const copyWidgetId = (widgetKey: string) => {
+    navigator.clipboard.writeText(widgetKey);
+    alert('Widget ID copied to clipboard!');
   };
 
   if (loading || isLoading) {
@@ -372,9 +382,28 @@ export default function WidgetsPage() {
                 >
                   {/* Widget Header */}
                   <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <h3 className="text-xl font-bold text-slate-800 mb-1">{widget.name}</h3>
-                      <p className="text-sm text-slate-500">ID: {widget.widgetKey}</p>
+                      <div
+                        className="text-sm text-slate-500 cursor-pointer hover:text-slate-700 transition-colors group flex items-center"
+                        onClick={() => copyWidgetId(widget.widgetKey)}
+                        title="Click to copy full ID"
+                      >
+                        <span className="font-mono">ID: {widget.widgetKey.slice(0, 12)}...</span>
+                        <svg
+                          className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                          />
+                        </svg>
+                      </div>
                     </div>
                     <div className="flex items-center space-x-2">
                       <span
@@ -398,7 +427,7 @@ export default function WidgetsPage() {
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="bg-slate-50 rounded-lg p-4">
                       <div className="text-2xl font-bold text-slate-800">
-                        {widget._count.chatLogs}
+                        {widget._count?.chatLogs || 0}
                       </div>
                       <div className="text-sm text-slate-600">Messages</div>
                     </div>
