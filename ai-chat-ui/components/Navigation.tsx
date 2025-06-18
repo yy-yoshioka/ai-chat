@@ -7,7 +7,7 @@ export default function Navigation() {
 
   const isActive = (path: string) => router.pathname === path;
 
-  const { user } = useAuth();
+  const { user, authenticated } = useAuth();
   const getUserInitials = (name?: string) => {
     if (!name) return 'U';
     const names = name.trim().split(/\s+/);
@@ -42,26 +42,7 @@ export default function Navigation() {
             </Link>
           </div>
           <div className="flex items-center space-x-4">
-            <Link
-              href="/chat"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive('/chat')
-                  ? 'bg-blue-100 text-blue-700'
-                  : 'text-gray-700 hover:text-blue-600'
-              }`}
-            >
-              Chat
-            </Link>
-            <Link
-              href="/widgets"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive('/widgets')
-                  ? 'bg-blue-100 text-blue-700'
-                  : 'text-gray-700 hover:text-blue-600'
-              }`}
-            >
-              Widgets
-            </Link>
+            {/* Always visible links */}
             <Link
               href="/faq"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -70,19 +51,67 @@ export default function Navigation() {
             >
               FAQ
             </Link>
-            <Link
-              href="/profile"
-              className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">
-                  {getUserInitials(user?.name)}
-                </span>
+
+            {/* Authenticated user links */}
+            {authenticated && (
+              <>
+                <Link
+                  href="/chat"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive('/chat')
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-gray-700 hover:text-blue-600'
+                  }`}
+                >
+                  Chat
+                </Link>
+                <Link
+                  href="/widgets"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive('/widgets')
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-gray-700 hover:text-blue-600'
+                  }`}
+                >
+                  Widgets
+                </Link>
+                <Link
+                  href="/profile"
+                  className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-sm font-medium">
+                      {getUserInitials(user?.name)}
+                    </span>
+                  </div>
+                  <span className="hidden sm:inline">
+                    {user?.name ? user.name.split(' ')[0] : 'プロフィール'}
+                  </span>
+                </Link>
+              </>
+            )}
+
+            {/* Non-authenticated user links */}
+            {!authenticated && (
+              <div className="flex items-center space-x-2">
+                <Link
+                  href="/login"
+                  className={`px-4 py-2 text-sm font-medium transition-colors ${
+                    isActive('/login')
+                      ? 'bg-blue-100 text-blue-700 rounded-md'
+                      : 'text-gray-700 hover:text-blue-600'
+                  }`}
+                >
+                  ログイン
+                </Link>
+                <Link
+                  href="/signup"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+                >
+                  新規登録
+                </Link>
               </div>
-              <span className="hidden sm:inline">
-                {user?.name ? user.name.split(' ')[0] : 'プロフィール'}
-              </span>
-            </Link>
+            )}
           </div>
         </div>
       </div>
