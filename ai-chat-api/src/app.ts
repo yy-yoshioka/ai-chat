@@ -18,6 +18,7 @@ import { embedRoutes } from './routes/embed';
 import { analyticsRoutes } from './routes/analytics';
 import { translationRoutes } from './routes/translation';
 import { billingRoutes } from './routes/billing';
+import { companyRoutes } from './routes/companies';
 
 // Load environment variables
 dotenv.config();
@@ -104,6 +105,7 @@ app.use('/api/billing', billingRoutes);
 app.use('/api/embed', embedRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/translation', translationRoutes);
+app.use('/api/companies', companyRoutes);
 
 // Legacy routes (backwards compatibility)
 app.use('/auth', authRoutes);

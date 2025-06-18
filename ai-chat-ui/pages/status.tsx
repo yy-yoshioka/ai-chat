@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Layout from '../components/Layout';
 
 interface SystemStatus {
   component: string;
@@ -157,9 +158,11 @@ const StatusPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      </Layout>
     );
   }
 
@@ -176,205 +179,218 @@ const StatusPage: React.FC = () => {
         />
       </Head>
 
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <div className="bg-white shadow-sm">
-          <div className="max-w-4xl mx-auto px-4 py-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">AI Chat Status</h1>
-                <p className="text-gray-600 mt-1">Current system status and incident history</p>
-              </div>
-              <div className="text-right">
-                <div
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                    overallStatus === 'All Systems Operational'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-orange-100 text-orange-800'
-                  }`}
-                >
+      <Layout>
+        <div className="bg-gray-50 min-h-screen">
+          {/* Header */}
+          <div className="bg-white shadow-sm">
+            <div className="max-w-4xl mx-auto px-4 py-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900">System Status</h1>
+                  <p className="text-gray-600 mt-1">Current system status and incident history</p>
+                </div>
+                <div className="text-right">
                   <div
-                    className={`w-2 h-2 rounded-full mr-2 ${
-                      overallStatus === 'All Systems Operational' ? 'bg-green-500' : 'bg-orange-500'
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                      overallStatus === 'All Systems Operational'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-orange-100 text-orange-800'
                     }`}
-                  ></div>
-                  {overallStatus}
-                </div>
-                <p className="text-sm text-gray-500 mt-1">
-                  Last updated: {new Date().toLocaleString()}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-          {/* Current Status */}
-          <div className="bg-white rounded-lg shadow-sm border">
-            <div className="px-6 py-4 border-b">
-              <h2 className="text-xl font-semibold">Current Status</h2>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                {systemStatus.map((system, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 border rounded-lg"
                   >
-                    <div className="flex items-center">
-                      <div
-                        className={`w-3 h-3 rounded-full mr-3 ${getStatusColor(system.status)}`}
-                      ></div>
-                      <div>
-                        <h3 className="font-medium">{system.component}</h3>
-                        <p className="text-sm text-gray-600">{system.description}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <span
-                        className={`text-sm font-medium capitalize ${getStatusTextColor(system.status)}`}
-                      >
-                        {system.status.replace('_', ' ')}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Uptime Statistics */}
-          <div className="bg-white rounded-lg shadow-sm border">
-            <div className="px-6 py-4 border-b">
-              <h2 className="text-xl font-semibold">Uptime Statistics</h2>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {uptime.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-3xl font-bold text-green-600">
-                      {stat.percentage.toFixed(2)}%
-                    </div>
-                    <div className="text-sm text-gray-600 mt-1">{stat.period} uptime</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Recent Incidents */}
-          <div className="bg-white rounded-lg shadow-sm border">
-            <div className="px-6 py-4 border-b flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Recent Incidents</h2>
-              <a
-                href="/api/status/rss"
-                className="text-sm text-blue-600 hover:text-blue-800 flex items-center"
-              >
-                <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                RSS Feed
-              </a>
-            </div>
-            <div className="p-6">
-              {incidents.length === 0 ? (
-                <div className="text-center py-8">
-                  <div className="text-green-600 mb-2">
-                    <svg className="w-12 h-12 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-medium text-gray-900">No recent incidents</h3>
-                  <p className="text-gray-600">All systems have been running smoothly.</p>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {incidents.map((incident) => (
                     <div
-                      key={incident.id}
-                      className={`border-l-4 ${getIncidentColor(incident.impact)} pl-4`}
+                      className={`w-2 h-2 rounded-full mr-2 ${
+                        overallStatus === 'All Systems Operational'
+                          ? 'bg-green-500'
+                          : 'bg-orange-500'
+                      }`}
+                    ></div>
+                    {overallStatus}
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Last updated: {new Date().toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+            {/* Current Status */}
+            <div className="bg-white rounded-lg shadow-sm border">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-xl font-semibold">Current Status</h2>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4">
+                  {systemStatus.map((system, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-4 border rounded-lg"
                     >
-                      <div className="flex items-start justify-between">
+                      <div className="flex items-center">
+                        <div
+                          className={`w-3 h-3 rounded-full mr-3 ${getStatusColor(system.status)}`}
+                        ></div>
                         <div>
-                          <h3 className="font-medium text-gray-900">{incident.title}</h3>
-                          <div className="flex items-center mt-1 space-x-4">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
-                                incident.status === 'resolved'
-                                  ? 'bg-green-100 text-green-800'
-                                  : incident.status === 'monitoring'
-                                    ? 'bg-blue-100 text-blue-800'
-                                    : 'bg-orange-100 text-orange-800'
-                              }`}
-                            >
-                              {incident.status}
-                            </span>
-                            <span className="text-sm text-gray-500">{incident.impact} impact</span>
-                          </div>
+                          <h3 className="font-medium">{system.component}</h3>
+                          <p className="text-sm text-gray-600">{system.description}</p>
                         </div>
-                        <time className="text-sm text-gray-500">
-                          {new Date(incident.createdAt).toLocaleDateString()}
-                        </time>
                       </div>
-
-                      <p className="text-gray-600 mt-2">{incident.description}</p>
-
-                      <div className="mt-4 space-y-2">
-                        {incident.updates.map((update, updateIndex) => (
-                          <div key={updateIndex} className="text-sm">
-                            <div className="flex items-center space-x-2">
-                              <time className="text-gray-500">
-                                {new Date(update.timestamp).toLocaleString()}
-                              </time>
-                              <span
-                                className={`px-2 py-0.5 rounded text-xs font-medium capitalize ${
-                                  update.status === 'resolved'
-                                    ? 'bg-green-100 text-green-800'
-                                    : update.status === 'monitoring'
-                                      ? 'bg-blue-100 text-blue-800'
-                                      : 'bg-orange-100 text-orange-800'
-                                }`}
-                              >
-                                {update.status}
-                              </span>
-                            </div>
-                            <p className="text-gray-600 mt-1">{update.message}</p>
-                          </div>
-                        ))}
+                      <div className="text-right">
+                        <span
+                          className={`text-sm font-medium capitalize ${getStatusTextColor(system.status)}`}
+                        >
+                          {system.status.replace('_', ' ')}
+                        </span>
                       </div>
                     </div>
                   ))}
                 </div>
-              )}
+              </div>
+            </div>
+
+            {/* Uptime Statistics */}
+            <div className="bg-white rounded-lg shadow-sm border">
+              <div className="px-6 py-4 border-b">
+                <h2 className="text-xl font-semibold">Uptime Statistics</h2>
+              </div>
+              <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {uptime.map((stat, index) => (
+                    <div key={index} className="text-center">
+                      <div className="text-3xl font-bold text-green-600">
+                        {stat.percentage.toFixed(2)}%
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">{stat.period} uptime</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Recent Incidents */}
+            <div className="bg-white rounded-lg shadow-sm border">
+              <div className="px-6 py-4 border-b flex items-center justify-between">
+                <h2 className="text-xl font-semibold">Recent Incidents</h2>
+                <a
+                  href="/api/status/rss"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-blue-600 hover:text-blue-800 flex items-center"
+                >
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  RSS Feed
+                </a>
+              </div>
+              <div className="p-6">
+                {incidents.length === 0 ? (
+                  <div className="text-center py-8">
+                    <div className="text-green-600 mb-2">
+                      <svg className="w-12 h-12 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900">No recent incidents</h3>
+                    <p className="text-gray-600">All systems have been running smoothly.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {incidents.map((incident) => (
+                      <div
+                        key={incident.id}
+                        className={`border-l-4 ${getIncidentColor(incident.impact)} pl-4`}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h3 className="font-medium text-gray-900">{incident.title}</h3>
+                            <div className="flex items-center mt-1 space-x-4">
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
+                                  incident.status === 'resolved'
+                                    ? 'bg-green-100 text-green-800'
+                                    : incident.status === 'monitoring'
+                                      ? 'bg-blue-100 text-blue-800'
+                                      : 'bg-orange-100 text-orange-800'
+                                }`}
+                              >
+                                {incident.status}
+                              </span>
+                              <span className="text-sm text-gray-500">
+                                {incident.impact} impact
+                              </span>
+                            </div>
+                          </div>
+                          <time className="text-sm text-gray-500">
+                            {new Date(incident.createdAt).toLocaleDateString()}
+                          </time>
+                        </div>
+
+                        <p className="text-gray-600 mt-2">{incident.description}</p>
+
+                        <div className="mt-4 space-y-2">
+                          {incident.updates.map((update, updateIndex) => (
+                            <div key={updateIndex} className="text-sm">
+                              <div className="flex items-center space-x-2">
+                                <time className="text-gray-500">
+                                  {new Date(update.timestamp).toLocaleString()}
+                                </time>
+                                <span
+                                  className={`px-2 py-0.5 rounded text-xs font-medium capitalize ${
+                                    update.status === 'resolved'
+                                      ? 'bg-green-100 text-green-800'
+                                      : update.status === 'monitoring'
+                                        ? 'bg-blue-100 text-blue-800'
+                                        : 'bg-orange-100 text-orange-800'
+                                  }`}
+                                >
+                                  {update.status}
+                                </span>
+                              </div>
+                              <p className="text-gray-600 mt-1">{update.message}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="text-center text-sm text-gray-500">
+              <p>
+                Having issues? Contact our support team at{' '}
+                <a href="mailto:support@aichat.com" className="text-blue-600 hover:text-blue-800">
+                  support@aichat.com
+                </a>
+              </p>
+              <p className="mt-2">
+                Subscribe to our{' '}
+                <a
+                  href="/api/status/rss"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  RSS feed
+                </a>{' '}
+                for real-time status updates.
+              </p>
             </div>
           </div>
-
-          {/* Footer */}
-          <div className="text-center text-sm text-gray-500">
-            <p>
-              Having issues? Contact our support team at{' '}
-              <a href="mailto:support@aichat.com" className="text-blue-600 hover:text-blue-800">
-                support@aichat.com
-              </a>
-            </p>
-            <p className="mt-2">
-              Subscribe to our{' '}
-              <a href="/api/status/rss" className="text-blue-600 hover:text-blue-800">
-                RSS feed
-              </a>{' '}
-              for real-time status updates.
-            </p>
-          </div>
         </div>
-      </div>
+      </Layout>
     </>
   );
 };
