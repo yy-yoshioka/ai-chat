@@ -31,13 +31,13 @@ export default function ProfilePage() {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch('/api/auth/profile', {
+      const response = await fetch('/api/me', {
         credentials: 'include',
       });
 
       if (response.ok) {
         const data = await response.json();
-        setUserProfile(data);
+        setUserProfile(data.user);
       } else {
         console.error('Failed to fetch user profile');
       }
