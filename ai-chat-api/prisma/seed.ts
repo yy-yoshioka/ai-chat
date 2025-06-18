@@ -36,10 +36,10 @@ async function main() {
   // ✅ 3. Company ID を使って Admin User を作成
   const hashedPassword = await bcrypt.hash(adminPassword, 10);
   const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@example.com' },
+    where: { email: adminEmail },
     update: {},
     create: {
-      email: 'admin@example.com',
+      email: adminEmail,
       password: hashedPassword,
       name: 'Demo Admin',
       isAdmin: true,
