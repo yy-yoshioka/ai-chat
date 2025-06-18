@@ -97,7 +97,7 @@ export default function ProfilePage() {
                   <p className="text-blue-100 mb-2">{userProfile.email}</p>
 
                   {/* Role Badge */}
-                  <div className="inline-flex items-center px-3 py-1 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg text-white text-sm font-medium">
+                  <div className="inline-flex items-center px-3 py-1 bg-black bg-opacity-40 backdrop-blur-sm rounded-lg text-white text-sm font-medium border border-white border-opacity-50 shadow-lg">
                     <svg className="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"
@@ -113,7 +113,7 @@ export default function ProfilePage() {
               {/* Logout Button */}
               <button
                 onClick={handleLogout}
-                className="inline-flex items-center px-4 py-2 bg-white bg-opacity-20 backdrop-blur-sm text-white font-medium rounded-lg hover:bg-opacity-30 transition-all duration-200 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center px-4 py-2 bg-black bg-opacity-40 backdrop-blur-sm text-white font-medium rounded-lg hover:bg-opacity-50 transition-all duration-200 shadow-lg hover:shadow-xl border border-white border-opacity-50"
               >
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
