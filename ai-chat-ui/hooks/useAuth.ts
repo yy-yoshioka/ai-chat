@@ -16,6 +16,7 @@ interface UseAuthReturn extends AuthState {
   signup: (email: string, password: string, name?: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
   refreshUser: () => Promise<void>;
+  isAdmin: boolean;
 }
 
 /**
@@ -29,6 +30,11 @@ export function useAuth(): UseAuthReturn {
     error: null,
     authenticated: false,
   });
+
+  // Check if the current user is an organization admin
+  // Note: This checks for 'admin' role, which represents organization-level admin
+  // 'super_admin' role would be used for platform-level administrators (not implemented)
+  const isAdmin = authState.user?.role === 'admin';
 
   /**
    * Fetch the current user data from the /api/me endpoint
@@ -192,5 +198,6 @@ export function useAuth(): UseAuthReturn {
     signup,
     logout,
     refreshUser,
+    isAdmin,
   };
 }

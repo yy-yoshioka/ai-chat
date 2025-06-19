@@ -16,6 +16,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
+    // Development mock - admin login
+    if (
+      process.env.NODE_ENV === 'development' &&
+      email === 'admin@example.com' &&
+      password === 'admin123'
+    ) {
+      // Set development admin cookie
+      res.setHeader('Set-Cookie', [
+        'dev-admin=true; HttpOnly; Path=/; Max-Age=86400; SameSite=Lax',
+        'auth-token=dev-admin-token; HttpOnly; Path=/; Max-Age=86400; SameSite=Lax',
+      ]);
+
+      return res.status(200).json({
+        success: true,
+        message: 'Admin login successful',
+        user: {
+          id: 'admin-1',
+          name: '管理者',
+          email: 'admin@example.com',
+          role: 'admin',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      });
+    }
+
     // Forward the request to the backend API
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',

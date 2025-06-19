@@ -30,6 +30,22 @@ interface RAGResponse {
   confidence: number;
 }
 
+// データベースクエリ結果の型定義
+interface DocumentQueryResult {
+  id: string;
+  title: string;
+  content: string;
+  similarity: number;
+}
+
+interface FAQQueryResult {
+  id: string;
+  question: string;
+  answer: string;
+  weight: number;
+  similarity: number;
+}
+
 // ベクトル検索のためのエンベディング生成
 async function generateQueryEmbedding(query: string): Promise<number[]> {
   try {
@@ -69,7 +85,7 @@ async function searchDocuments(
         AND d.embedding IS NOT NULL
       ORDER BY d.embedding <=> ${embeddingVector}::vector
       LIMIT ${limit}
-    `) as any[];
+    `) as DocumentQueryResult[];
 
     return documents
       .filter((doc) => doc.similarity >= RAG_CONFIG.SIMILARITY_THRESHOLD)
@@ -108,7 +124,7 @@ async function searchFAQs(
         AND f.embedding IS NOT NULL
       ORDER BY f.embedding <=> ${embeddingVector}::vector
       LIMIT ${limit}
-    `) as any[];
+    `) as FAQQueryResult[];
 
     return faqs
       .filter((faq) => faq.similarity >= RAG_CONFIG.SIMILARITY_THRESHOLD)

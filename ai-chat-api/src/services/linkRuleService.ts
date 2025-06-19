@@ -19,6 +19,12 @@ export interface LinkRuleMatch {
   links: LinkCard[];
 }
 
+// イベントプロパティの型定義
+interface LinkClickEventProperties {
+  ruleId?: string;
+  clickedAt?: string;
+}
+
 // メッセージに対してリンクルールをマッチング
 export async function matchLinkRules(
   organizationId: string,
@@ -222,7 +228,7 @@ export async function getLinkRuleStats(
       const recentClicks = recentClicksData
         .filter((event) => {
           try {
-            const props = event.properties as any;
+            const props = event.properties as LinkClickEventProperties;
             return props?.ruleId === rule.id;
           } catch {
             return false;
@@ -416,7 +422,13 @@ export async function getUnusedLinkRules(
       },
     });
 
-    return unusedRules;
+    return unusedRules.map((rule) => ({
+      id: rule.id,
+      name: rule.name,
+      triggerRegex: rule.triggerRegex,
+      createdAt: rule.createdAt,
+      lastClickedAt: rule.lastClickedAt || undefined,
+    }));
   } catch (error) {
     console.error('Failed to get unused link rules:', error);
     return [];

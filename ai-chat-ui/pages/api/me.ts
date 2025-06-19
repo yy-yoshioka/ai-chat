@@ -9,6 +9,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    // Development mock - return admin user if special cookie is set
+    if (process.env.NODE_ENV === 'development' && req.headers.cookie?.includes('dev-admin=true')) {
+      return res.status(200).json({
+        user: {
+          id: 'admin-1',
+          name: '管理者',
+          email: 'admin@example.com',
+          role: 'admin',
+          organizationId: 'org-demo',
+          organizationName: 'デモ株式会社',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      });
+    }
+
     // Forward the request to the backend API with cookies
     const response = await fetch(`${API_BASE_URL}/auth/me`, {
       method: 'GET',

@@ -17,6 +17,15 @@ export interface FAQSuggestion {
   priority: 'high' | 'medium' | 'low';
 }
 
+// 未回答メッセージの型定義
+interface UnansweredMessage {
+  id: string;
+  message: string;
+  count: number;
+  lastAskedAt: Date;
+  confidence: number | null;
+}
+
 // 未回答メッセージからFAQを生成
 async function generateFAQFromMessage(
   message: string,
@@ -81,8 +90,10 @@ ${relatedContext ? `関連情報:\n${relatedContext}\n` : ''}
 }
 
 // 類似の質問をクラスタリング
-function clusterSimilarMessages(messages: any[]): any[][] {
-  const clusters: any[][] = [];
+function clusterSimilarMessages(
+  messages: UnansweredMessage[]
+): UnansweredMessage[][] {
+  const clusters: UnansweredMessage[][] = [];
   const used = new Set<string>();
 
   for (const message of messages) {
@@ -231,7 +242,7 @@ export async function generateFAQSuggestions(
           suggestedAnswer: answer,
           confidence,
           count: totalCount,
-          lastAskedAt: latestDate,
+          lastAskedAt: latestDate.toISOString(),
           priority,
         });
 

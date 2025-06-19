@@ -7,7 +7,7 @@ export default function Navigation() {
 
   const isActive = (path: string) => router.pathname === path;
 
-  const { user, authenticated } = useAuth();
+  const { user, authenticated, isAdmin } = useAuth();
   const getUserInitials = (name?: string) => {
     if (!name) return 'U';
     const names = name.trim().split(/\s+/);
@@ -95,6 +95,24 @@ export default function Navigation() {
                 >
                   Widgets
                 </Link>
+
+                {/* Admin link - only visible to admins */}
+                {isAdmin && (
+                  <Link
+                    href="/admin/dashboard"
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      router.pathname.startsWith('/admin')
+                        ? 'bg-red-100 text-red-700 font-semibold'
+                        : 'text-red-600 hover:text-red-700 hover:bg-red-50'
+                    }`}
+                  >
+                    <span className="flex items-center space-x-1">
+                      <span>🔧</span>
+                      <span>管理者</span>
+                    </span>
+                  </Link>
+                )}
+
                 <Link
                   href="/profile"
                   className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"

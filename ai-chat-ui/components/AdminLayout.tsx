@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
-import AuthGuard from './AuthGuard';
+import AdminAuthGuard from './AdminAuthGuard';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -53,7 +53,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   ];
 
   return (
-    <AuthGuard>
+    <AdminAuthGuard>
       <div className="min-h-screen bg-gray-50 flex">
         {/* Sidebar */}
         <div className="w-64 bg-white shadow-lg">
@@ -153,10 +153,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <main className="flex-1 p-6 overflow-auto">{children}</main>
         </div>
       </div>
-    </AuthGuard>
+    </AdminAuthGuard>
   );
 }
-
 function getPageTitle(pathname: string): string {
   if (pathname.includes('/admin/dashboard')) return 'ダッシュボード';
   if (pathname.includes('/admin/faq')) return 'FAQ管理';

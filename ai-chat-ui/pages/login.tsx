@@ -43,6 +43,28 @@ export default function LoginPage() {
     }
   };
 
+  // Quick login for admin (development only)
+  const handleAdminQuickLogin = async () => {
+    try {
+      setIsLoggingIn(true);
+      setErrorMessage('');
+
+      // Mock admin login - in real app this would use real credentials
+      const success = await login('admin@example.com', 'admin123');
+
+      if (success) {
+        router.push('/admin/dashboard');
+      } else {
+        setErrorMessage('管理者ログインに失敗しました');
+      }
+    } catch (error) {
+      setErrorMessage('管理者ログイン中にエラーが発生しました');
+      console.error('Admin login error:', error);
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
   // If already authenticated, redirect to profile
   useEffect(() => {
     if (!loading && authenticated) {
@@ -124,6 +146,22 @@ export default function LoginPage() {
               </Link>
             </p>
           </div>
+
+          {/* Development: Admin Quick Login */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="text-center">
+                <p className="text-xs text-gray-500 mb-3">開発用 - 管理者ログイン</p>
+                <button
+                  onClick={handleAdminQuickLogin}
+                  disabled={isLoggingIn}
+                  className="w-full py-2 px-4 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-200 transition-colors disabled:opacity-50"
+                >
+                  {isLoggingIn ? '管理者ログイン中...' : '🔧 管理者としてログイン'}
+                </button>
+              </div>
+            </div>
+          )}
 
           <div className="mt-4 text-center">
             <Link href="/faq" className="text-blue-600 hover:text-blue-800 text-sm font-medium">

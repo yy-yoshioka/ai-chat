@@ -17,8 +17,25 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       path: '/',
     });
 
+    // Development: also clear admin cookies
+    const cookies = [cookie];
+    if (process.env.NODE_ENV === 'development') {
+      cookies.push(
+        serialize('dev-admin', '', {
+          httpOnly: true,
+          maxAge: 0,
+          path: '/',
+        }),
+        serialize('auth-token', '', {
+          httpOnly: true,
+          maxAge: 0,
+          path: '/',
+        })
+      );
+    }
+
     // Set the cookie in the response
-    res.setHeader('Set-Cookie', cookie);
+    res.setHeader('Set-Cookie', cookies);
 
     // Return success
     return res.status(200).json({ success: true });

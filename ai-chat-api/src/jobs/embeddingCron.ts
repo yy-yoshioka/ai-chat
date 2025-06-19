@@ -4,6 +4,16 @@ import { reprocessAllEmbeddings } from '../services/embeddingWorker';
 
 const prisma = new PrismaClient();
 
+// Type definitions for config objects
+interface ZendeskConfig {
+  subdomain: string;
+  accessToken: string;
+}
+
+interface IntercomConfig {
+  accessToken: string;
+}
+
 // 毎日04:00 UTCに実行（日本時間13:00）
 const DAILY_REPROCESS_SCHEDULE = '0 4 * * *';
 
@@ -243,13 +253,17 @@ async function fetchIntercomContent(
 }
 
 // Zendesk設定を取得（実装はF-7で詳細化）
-async function getZendeskConfig(organizationId: string): Promise<any> {
+async function getZendeskConfig(
+  _organizationId: string
+): Promise<ZendeskConfig | null> {
   // TODO: 組織のZendesk認証情報を取得
   return null;
 }
 
 // Intercom設定を取得（実装はF-7で詳細化）
-async function getIntercomConfig(organizationId: string): Promise<any> {
+async function getIntercomConfig(
+  _organizationId: string
+): Promise<IntercomConfig | null> {
   // TODO: 組織のIntercom認証情報を取得
   return null;
 }
@@ -272,7 +286,7 @@ export function startEmbeddingCronJobs(): void {
 // Cronジョブの停止
 export function stopEmbeddingCronJobs(): void {
   console.log('🛑 Stopping embedding cron jobs...');
-  cron.getTasks().forEach((task) => {
+  cron.getTasks().forEach((task: cron.ScheduledTask) => {
     task.destroy();
   });
 }
