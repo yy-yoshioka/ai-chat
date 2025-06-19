@@ -66,6 +66,56 @@ interface OverageAlert {
   notifications: string[]; // email addresses
 }
 
+// Trial Alert Component
+function TrialAlert() {
+  // Mock trial data - replace with actual trial data from your API/context
+  const trialEndDate = new Date();
+  trialEndDate.setDate(trialEndDate.getDate() + 7); // 7 days from now
+
+  const today = new Date();
+  const timeDiff = trialEndDate.getTime() - today.getTime();
+  const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+  // Don't show alert if trial period is over or not in trial
+  if (daysLeft <= 0) return null;
+
+  const handleUpgradeClick = () => {
+    // Scroll to plans tab
+    const plansSection = document.querySelector('[data-tab="plans"]');
+    if (plansSection) {
+      plansSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div className="bg-gradient-to-r from-orange-100 to-yellow-100 border border-orange-200 rounded-lg p-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="mr-3">
+            <span className="text-2xl">⏰</span>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-orange-900">Proプラン無料トライアル中</h3>
+            <p className="text-orange-800">
+              トライアル終了まで <span className="font-bold">{daysLeft}日</span> です。 終了日:{' '}
+              {trialEndDate.toLocaleDateString('ja-JP')}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={handleUpgradeClick}
+            className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 font-semibold transition-colors"
+          >
+            プランをアップグレード
+          </button>
+          <button className="px-3 py-2 text-orange-700 hover:text-orange-900 text-sm">✕</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const BillingPlansPage = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -223,6 +273,9 @@ const BillingPlansPage = () => {
             + プラン作成
           </button>
         </div>
+
+        {/* Trial Alert */}
+        <TrialAlert />
 
         {/* 統計概要 */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
