@@ -81,7 +81,7 @@ export default function StepPlanPage() {
 
     try {
       // Get current organization ID (you may need to adjust this based on your auth system)
-      const orgId = localStorage.getItem('currentOrgId'); // or get from auth context
+      const orgId = localStorage.getItem('currentOrgId') || 'default-org'; // or get from auth context
 
       const response = await fetch('/api/billing/checkout', {
         method: 'POST',
@@ -95,11 +95,12 @@ export default function StepPlanPage() {
       });
 
       if (response.ok) {
-        const { sessionUrl } = await response.json();
-        window.location.href = sessionUrl;
+        const data = await response.json();
+        window.location.href = data.sessionUrl;
       } else {
-        console.error('Checkout failed');
-        alert('支払い処理の開始に失敗しました。もう一度お試しください。');
+        const error = await response.json();
+        console.error('Checkout failed:', error);
+        alert(`支払い処理の開始に失敗しました: ${error.error || 'エラーが発生しました'}`);
       }
     } catch (error) {
       console.error('Checkout error:', error);

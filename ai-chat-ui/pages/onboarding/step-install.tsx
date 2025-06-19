@@ -22,12 +22,16 @@ export default function StepInstallPage() {
 
     try {
       // Get current organization ID
-      const orgId = localStorage.getItem('currentOrgId'); // or get from auth context
+      const orgId = localStorage.getItem('currentOrgId') || 'default-org'; // or get from auth context
+
+      // Get auth token (you may need to adjust this based on your auth system)
+      const authToken = localStorage.getItem('authToken') || 'dev-org-admin-token'; // dev token for testing
 
       const response = await fetch('/api/trial/extend', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify({
           orgId: orgId,
@@ -35,12 +39,15 @@ export default function StepInstallPage() {
       });
 
       if (response.ok) {
-        // Update trial days
+        const data = await response.json();
+        // Update trial days based on response
         setTrialDaysLeft((prev) => prev + 7);
-        alert('トライアル期間を7日延長しました！');
+        alert(
+          `トライアル期間を7日延長しました！新しい終了日: ${new Date(data.newTrialEndAt).toLocaleDateString('ja-JP')}`
+        );
       } else {
         const error = await response.json();
-        alert(`延長に失敗しました: ${error.message || 'エラーが発生しました'}`);
+        alert(`延長に失敗しました: ${error.error || 'エラーが発生しました'}`);
       }
     } catch (error) {
       console.error('Trial extension error:', error);

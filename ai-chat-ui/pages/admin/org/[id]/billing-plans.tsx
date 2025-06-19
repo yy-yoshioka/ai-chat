@@ -79,11 +79,38 @@ function TrialAlert() {
   // Don't show alert if trial period is over or not in trial
   if (daysLeft <= 0) return null;
 
-  const handleUpgradeClick = () => {
-    // Scroll to plans tab
-    const plansSection = document.querySelector('[data-tab="plans"]');
-    if (plansSection) {
-      plansSection.scrollIntoView({ behavior: 'smooth' });
+  const handleUpgradeClick = async () => {
+    try {
+      // Get current organization ID from URL
+      const orgId = window.location.pathname.split('/')[3]; // Extract from /admin/org/[id]/billing-plans
+
+      if (!orgId) {
+        alert('組織IDが見つかりません');
+        return;
+      }
+
+      // Use Pro plan as default upgrade option
+      const response = await fetch('/api/billing/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: 'price_pro_monthly',
+          orgId: orgId,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        window.location.href = data.sessionUrl;
+      } else {
+        const error = await response.json();
+        alert(`アップグレードに失敗しました: ${error.error || 'エラーが発生しました'}`);
+      }
+    } catch (error) {
+      console.error('Failed to start upgrade:', error);
+      alert('アップグレード中にエラーが発生しました');
     }
   };
 
@@ -194,24 +221,38 @@ const BillingPlansPage = () => {
     setIsCreatingPlan(false);
   };
 
-  const activatePlan = async (planId: string) => {
+  const upgradePlan = async (plan: BillingPlan) => {
     try {
-      const response = await fetch(`/api/organizations/${id}/billing/plans/${planId}/activate`, {
+      // Get current organization ID from router
+      const orgId = Array.isArray(id) ? id[0] : id;
+
+      if (!orgId) {
+        alert('組織IDが見つかりません');
+        return;
+      }
+
+      // Use the new checkout API
+      const response = await fetch('/api/billing/checkout', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: plan.tier === 'pro' ? 'price_pro_monthly' : 'price_enterprise_monthly',
+          orgId: orgId,
+        }),
       });
 
       if (response.ok) {
-        setBillingPlans((prev) =>
-          prev.map((plan) => ({
-            ...plan,
-            isActive: plan.id === planId,
-          }))
-        );
-        alert('プランを有効化しました');
+        const data = await response.json();
+        window.location.href = data.sessionUrl;
+      } else {
+        const error = await response.json();
+        alert(`プラン変更に失敗しました: ${error.error || 'エラーが発生しました'}`);
       }
     } catch (error) {
-      console.error('Failed to activate plan:', error);
-      alert('プランの有効化に失敗しました');
+      console.error('Failed to upgrade plan:', error);
+      alert('プラン変更中にエラーが発生しました');
     }
   };
 
@@ -457,7 +498,7 @@ const BillingPlansPage = () => {
                   <div className="flex items-center justify-between">
                     <div className="text-sm text-gray-600">{plan.subscribedUsers} 契約者</div>
                     <button
-                      onClick={() => activatePlan(plan.id)}
+                      onClick={() => upgradePlan(plan)}
                       disabled={plan.isActive}
                       className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                         plan.isActive
@@ -465,7 +506,7 @@ const BillingPlansPage = () => {
                           : 'bg-blue-600 text-white hover:bg-blue-700'
                       }`}
                     >
-                      {plan.isActive ? '有効' : '有効化'}
+                      {plan.isActive ? '有効' : 'アップグレード'}
                     </button>
                   </div>
                 </div>

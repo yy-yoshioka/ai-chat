@@ -47,6 +47,18 @@ export interface CheckoutSessionRequest {
   trial?: boolean;
 }
 
+// 新しい仕様のCheckout リクエスト
+export interface BillingCheckoutRequest {
+  priceId: string;
+  orgId: string;
+}
+
+// 新しい仕様のCheckout レスポンス
+export interface BillingCheckoutResponse {
+  sessionId: string;
+  sessionUrl: string;
+}
+
 // Stripe Webhook イベント型
 export interface StripeWebhookEvent {
   id: string;
@@ -81,6 +93,18 @@ export interface TrialExtensionRequest {
   userId: string;
   extensionDays: number;
   reason?: string;
+}
+
+// 新しい仕様のTrial延長リクエスト
+export interface OrgTrialExtensionRequest {
+  orgId: string;
+}
+
+// Trial延長レスポンス
+export interface TrialExtensionResponse {
+  success: boolean;
+  newTrialEndAt: string;
+  message: string;
 }
 
 // 課金設定

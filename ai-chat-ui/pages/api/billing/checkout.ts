@@ -1,68 +1,54 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CheckoutSessionRequest } from '@/types/billing';
+import { BillingCheckoutRequest, BillingCheckoutResponse } from '@/types/billing';
 
 // Stripe設定（環境変数から取得）
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
-
-// 課金プラン設定
-const BILLING_PLANS = {
-  starter: {
-    id: 'starter',
-    name: 'Starter',
-    price: 2980,
-    currency: 'jpy',
-    interval: 'month' as const,
-    stripePriceId: process.env.STRIPE_STARTER_PRICE_ID || 'price_starter',
-    features: ['月間1,000メッセージ', 'ベーシックサポート', 'ウィジェット設置'],
-  },
-  professional: {
-    id: 'professional',
-    name: 'Professional',
-    price: 9800,
-    currency: 'jpy',
-    interval: 'month' as const,
-    stripePriceId: process.env.STRIPE_PRO_PRICE_ID || 'price_pro',
-    features: [
-      '月間10,000メッセージ',
-      'プライオリティサポート',
-      'カスタムブランディング',
-      'API アクセス',
-    ],
-  },
-  enterprise: {
-    id: 'enterprise',
-    name: 'Enterprise',
-    price: 29800,
-    currency: 'jpy',
-    interval: 'month' as const,
-    stripePriceId: process.env.STRIPE_ENTERPRISE_PRICE_ID || 'price_enterprise',
-    features: ['無制限メッセージ', '専任サポート', 'オンプレミス対応', 'SLA保証'],
-  },
-};
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
 // Mock Stripe implementation (実際の実装ではstripeライブラリを使用)
-async function createCheckoutSession(
+async function createStripeCheckoutSession(
   priceId: string,
-  customerId: string | undefined,
-  successUrl: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _cancelUrl: string
-): Promise<{ id: string; url: string }> {
+  orgId: string
+): Promise<{ sessionId: string; sessionUrl: string }> {
   // 開発環境用のモック実装
   if (process.env.NODE_ENV === 'development') {
-    return {
-      id: `cs_mock_${Date.now()}`,
-      url: `${successUrl}?session_id=cs_mock_${Date.now()}`,
-    };
+    console.log(`Creating checkout session for priceId: ${priceId}, orgId: ${orgId}`);
+
+    const sessionId = `cs_mock_${Date.now()}`;
+    const sessionUrl = `https://checkout.stripe.com/c/pay/cs_test_${sessionId}#fidkdWxOYHwnPyd1blpxYHZxWjA0VE5gckc3SmFBNzRqN3dhT2FsM3VQSDBFNU5sT2hMRXNiYkZsdz09fGBucHVrM3VvQmJyN3VqNG1hMkpQQ3VNMW9nVDFNMXFTYz0%3D`;
+
+    return { sessionId, sessionUrl };
   }
 
   // 実際の実装では以下のようになります:
   /*
   const stripe = require('stripe')(STRIPE_SECRET_KEY);
   
+  // 組織の情報を取得（実際の実装では）
+  const organization = await getOrganizationById(orgId);
+  if (!organization) {
+    throw new Error('Organization not found');
+  }
+
+  // Stripeカスタマーを取得または作成
+  let customerId = organization.stripeCustomerId;
+  if (!customerId) {
+    const customer = await stripe.customers.create({
+      email: organization.email,
+      name: organization.name,
+      metadata: {
+        orgId: orgId
+      }
+    });
+    customerId = customer.id;
+    
+    // 組織にStripeカスタマーIDを保存
+    await updateOrganization(orgId, { stripeCustomerId: customerId });
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     line_items: [{
@@ -77,17 +63,24 @@ async function createCheckoutSession(
         end_behavior: {
           missing_payment_method: 'pause'
         }
+      },
+      metadata: {
+        orgId: orgId
       }
     },
-    payment_method_collection: 'always', // カード必須
-    success_url: successUrl,
-    cancel_url: cancelUrl,
+    payment_method_collection: 'always',
+    success_url: `${baseUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${baseUrl}/onboarding/step-plan?canceled=true`,
     allow_promotion_codes: true,
     billing_address_collection: 'required',
-    locale: 'ja'
+    locale: 'ja',
+    metadata: {
+      orgId: orgId,
+      priceId: priceId
+    }
   });
 
-  return { id: session.id, url: session.url };
+  return { sessionId: session.id, sessionUrl: session.url };
   */
 
   throw new Error('Stripe not configured for production');
@@ -99,43 +92,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { planId, successUrl, cancelUrl, customerId }: CheckoutSessionRequest = req.body;
+    const { priceId, orgId }: BillingCheckoutRequest = req.body;
 
     // バリデーション
-    if (!planId || !successUrl || !cancelUrl) {
+    if (!priceId || !orgId) {
       return res.status(400).json({
-        error: 'Missing required fields: planId, successUrl, cancelUrl',
+        error: 'Missing required fields: priceId, orgId',
       });
     }
 
-    // プラン存在確認
-    const plan = BILLING_PLANS[planId as keyof typeof BILLING_PLANS];
-    if (!plan) {
-      return res.status(400).json({ error: 'Invalid plan ID' });
+    // Stripe価格IDの基本バリデーション
+    if (!priceId.startsWith('price_')) {
+      return res.status(400).json({
+        error: 'Invalid priceId format',
+      });
+    }
+
+    // 組織IDの基本バリデーション
+    if (typeof orgId !== 'string' || orgId.length < 1) {
+      return res.status(400).json({
+        error: 'Invalid orgId',
+      });
     }
 
     // チェックアウトセッション作成
-    const session = await createCheckoutSession(
-      plan.stripePriceId,
-      customerId,
-      successUrl,
-      cancelUrl
-    );
+    const { sessionId, sessionUrl } = await createStripeCheckoutSession(priceId, orgId);
 
     // セッション情報をログに記録
-    console.log(`Checkout session created: ${session.id} for plan: ${planId}`);
+    console.log(`Checkout session created: ${sessionId} for org: ${orgId}, price: ${priceId}`);
 
-    return res.status(200).json({
-      sessionId: session.id,
-      checkoutUrl: session.url,
-      plan: {
-        id: plan.id,
-        name: plan.name,
-        price: plan.price,
-        currency: plan.currency,
-        interval: plan.interval,
-      },
-    });
+    const response: BillingCheckoutResponse = {
+      sessionId,
+      sessionUrl,
+    };
+
+    return res.status(200).json(response);
   } catch (error) {
     console.error('Checkout session creation failed:', error);
     return res.status(500).json({

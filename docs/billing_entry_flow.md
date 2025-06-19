@@ -33,8 +33,8 @@
 ---
 
 ## 2. API 追加 / 改修
-- [ ] `/api/billing/checkout`  POST `{ priceId, orgId }` → Stripe Session
-- [ ] `/api/trial/extend`  POST `{ orgId }` → `trialEndAt += 7d` (OrgAdminのみ)
+- [x] `/api/billing/checkout`  POST `{ priceId, orgId }` → Stripe Session
+- [x] `/api/trial/extend`  POST `{ orgId }` → `trialEndAt += 7d` (OrgAdminのみ)
 
 ---
 
