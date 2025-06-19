@@ -1,204 +1,55 @@
-# AI Chat Application
+## 🌐 ロールと画面階層
 
-A modern AI-powered chat application with embedded widget capabilities.
+| レイヤ                          | 典型ユーザー       | パス構成                        | 役割                                     |
+| ------------------------------- | ------------------ | ------------------------------- | ---------------------------------------- |
+| **SuperAdmin (SaaS運営側)**     | あなた・運営チーム | `/root/*` ※今後実装予定         | 全テナント横断の監視・請求集計・障害対応 |
+| **OrgAdmin (導入企業の管理者)** | 企業 A 社の担当者  | `/admin/*`                      | 自社ウィジェット / 課金 / FAQ / AI 設定  |
+| **Member (企業内メンバー)**     | CS エージェント    | `/admin/chats`, `/admin/faq` 等 | 会話閲覧・Copilot 返信のみ               |
+| **End-user (訪問者)**           | LP 来訪者          | ― (埋め込みウィジェット)        | チャット質問・回答のみ                   |
 
-## Features
+> **注意:**  
+> 現在リポジトリに存在する `pages/admin/...` は **OrgAdmin** 向け UI です。  
+> SaaS運営用の SuperAdmin ダッシュボードは別パスで追加予定です。
 
-- **User Authentication**: Secure JWT-based authentication system
-- **Real-time Chat**: Interactive chat interface with AI responses
-- **Admin Dashboard**: Comprehensive admin panel for managing FAQs and users
-- **FAQ Management**: Dynamic FAQ system with CRUD operations
-- **Embedded Widget**: Customizable chat widget for external websites
-- **Rate Limiting**: Redis-based rate limiting for API protection
-- **Responsive Design**: Modern, mobile-friendly interface
+---
 
-## Tech Stack
+## 🗂️ OrgAdmin メニュー詳細
 
-### Backend (ai-chat-api)
-- **Express.js** + TypeScript
-- **Prisma** ORM with SQLite database
-- **JWT** authentication
-- **bcrypt** for password hashing
-- **Helmet** for security headers
-- **CORS** configuration
-- **Redis** for rate limiting
+| サイドメニュー     | 対応ファイル                            | 機能概要                                        |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| **ダッシュボード** | `admin/dashboard.tsx`                   | チャット数・CSAT・Trial 残日数・トークン使用量  |
+| **FAQ管理**        | `admin/org/[id]/knowledge.tsx`          | PDF/URL 取込・FAQ CRUD・未回答サジェスト        |
+| **ユーザー管理**   | `admin/users.tsx`                       | orgAdmin / member 招待・ロール付与・SCIM 同期   |
+| **組織管理**       | `admin/org/[id]/index.tsx` + サブページ | 課金プラン・SSO・Webhook・連携アプリ設定        |
+| **チャット監視**   | `admin/chats.tsx`                       | リアルタイム会話一覧・タグ・転送                |
+| **システム設定**   | `admin/settings.tsx`                    | ウィジェットテーマ・Voice/TTS・言語既定         |
+| **レポート**       | `admin/reports.tsx`                     | 月次 PDF / CSV レポート生成                     |
+| **ログ監視**       | `admin/logs.tsx`                        | Webhook 成功/失敗・AI ガバナンス・RateLimit 429 |
 
-### Frontend (ai-chat-ui)
-- **Next.js** (Pages Router)
-- **React** + TypeScript
-- **Tailwind CSS** for styling
-- **Axios** for API calls
-- **Cookie-based** session management
+---
 
-## Quick Start
+## 💳 14-Day Trial & 課金フロー
 
-### Prerequisites
-- Node.js 18+
-- Yarn package manager
-- Redis server (for rate limiting)
+1. **Sign-up 完了 → `/onboarding/step-plan`**  
+   - Stripe Checkout を発火（trial_period_days = 14, card 必須）  
+2. **Success リダイレクト** `/billing/success`  
+   - トライアル終了日と残日数を表示  
+3. **Trial 中バッジ**  
+   - `/admin` ヘッダー右側に “Trial 12 days left ▸ Upgrade”  
+4. **プラン変更 & カード更新**  
+   - `組織管理 › billing-plans` からいつでも可能  
+5. **Trial 延長**  
+   - 残 3 日を切ると “+7 日延長” ボタン (管理者のみ)  
+6. **自動課金開始**  
+   - 14 日後に Subscription が有効化 → 月次請求
 
-### Installation
+---
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd chat
-```
+## 🛠️ 今後追加予定 (SuperAdmin ダッシュボード)
 
-2. Install dependencies for both projects:
-```bash
-yarn install:all
-```
+- `/root/index.tsx` : ARR・MAU・エラー率
+- `/root/orgs/[id]` : 各テナントの Usage メータと Impersonate ログイン
+- `/root/incidents.tsx` : Sentry / UptimeRobot 集約表示
+- RBAC middleware `requireRole('superAdmin')`
 
-3. Set up environment variables:
-```bash
-# ai-chat-api/.env
-DATABASE_URL="file:./dev.db"
-JWT_SECRET="your-jwt-secret"
-REDIS_URL="redis://localhost:6379"
-NEXT_PUBLIC_API_URL="http://localhost:8000"
-FRONTEND_URL="http://localhost:3000"
-
-# ai-chat-ui/.env.local
-NEXT_PUBLIC_API_URL="http://localhost:8000"
-```
-
-4. Initialize the database:
-```bash
-cd ai-chat-api
-npx prisma migrate deploy
-npx prisma db seed
-cd ..
-```
-
-5. Start development servers:
-```bash
-yarn dev
-```
-
-The API will be available at `http://localhost:8000` and the UI at `http://localhost:3000`.
-
-## 🚀 Development Workflow
-
-This project uses automated code quality checks on every commit:
-
-### Pre-commit Hooks
-- **Format**: Automatically formats code using Prettier
-- **Lint**: Checks code quality using ESLint  
-- **Build**: Ensures both API and UI compile successfully
-
-### Available Scripts
-
-#### Root Level (manages both projects)
-```bash
-yarn install:all    # Install dependencies for both projects
-yarn dev            # Run both API and UI in development mode
-yarn build          # Build both projects
-yarn lint           # Lint both projects
-yarn format         # Format code in both projects
-yarn check:all      # Run format, lint, and build
-```
-
-#### API Project (ai-chat-api/)
-```bash
-yarn dev            # Start API development server
-yarn build          # Build API
-yarn lint           # Lint API code
-yarn format         # Format API code
-```
-
-#### UI Project (ai-chat-ui/)
-```bash
-yarn dev            # Start Next.js development server
-yarn build          # Build Next.js app
-yarn lint           # Lint UI code
-yarn format         # Format UI code
-```
-
-### Quality Assurance
-Every commit automatically runs:
-1. Code formatting with Prettier
-2. Linting with ESLint
-3. TypeScript compilation check
-4. Build verification
-
-This ensures consistent code quality and prevents broken commits from entering the repository.
-
-## Project Structure
-
-```
-├── ai-chat-api/           # Express.js backend
-│   ├── src/
-│   │   ├── routes/        # API routes
-│   │   ├── middleware/    # Custom middleware
-│   │   ├── utils/         # Utility functions
-│   │   └── lib/           # Library configurations
-│   ├── prisma/            # Database schema and migrations
-│   └── package.json
-├── ai-chat-ui/            # Next.js frontend
-│   ├── pages/             # Next.js pages
-│   ├── components/        # React components
-│   ├── hooks/             # Custom React hooks
-│   ├── lib/               # Utility libraries
-│   └── styles/            # CSS styles
-├── demo-widget.html       # Widget demo page
-└── package.json           # Root package.json for scripts
-```
-
-## Embedded Widget
-
-The application includes a customizable embedded chat widget that can be integrated into any website:
-
-### Integration
-
-1. Generate a widget in the admin dashboard
-2. Copy the provided embed code:
-```html
-<script src="https://your-domain.com/widget-loader/WIDGET_KEY.v1.js"></script>
-```
-3. Paste the code into your website
-
-### Features
-- Customizable accent colors
-- Logo upload support
-- Rate limiting protection
-- Responsive design
-- Cross-origin security
-
-## Deployment
-
-### Docker Setup
-
-Both applications include Docker configurations for easy deployment:
-
-```bash
-# Development
-docker-compose -f docker-compose.dev.yml up
-
-# Production
-docker-compose up
-```
-
-### Environment Configuration
-
-Make sure to set the following environment variables in production:
-
-- `JWT_SECRET`: Strong secret for JWT tokens
-- `DATABASE_URL`: Production database connection
-- `REDIS_URL`: Redis server URL
-- `NEXT_PUBLIC_API_URL`: Public API endpoint
-- `FRONTEND_URL`: Frontend domain for CORS
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Ensure all tests pass: `yarn check:all`
-5. Submit a pull request
-
-The pre-commit hooks will automatically format, lint, and build your code before committing.
-
-## License
-
-This project is licensed under the MIT License. 
+上記はロードマップ `YEAR-END_RELEASE_TODO_2025.md` の **R-1 / R-2** で実装予定です。

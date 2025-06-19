@@ -31,6 +31,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: '👥',
     },
     {
+      title: '組織管理',
+      path: '/admin/org',
+      icon: '🏢',
+    },
+    {
       title: 'チャット監視',
       path: '/admin/chats',
       icon: '💬',
@@ -160,6 +165,7 @@ function getPageTitle(pathname: string): string {
   if (pathname.includes('/admin/dashboard')) return 'ダッシュボード';
   if (pathname.includes('/admin/faq')) return 'FAQ管理';
   if (pathname.includes('/admin/users')) return 'ユーザー管理';
+  if (pathname.includes('/admin/org')) return '組織管理';
   if (pathname.includes('/admin/chats')) return 'チャット監視';
   if (pathname.includes('/admin/settings')) return 'システム設定';
   if (pathname.includes('/admin/reports')) return 'レポート';
@@ -171,6 +177,7 @@ function getPageDescription(pathname: string): string {
   if (pathname.includes('/admin/dashboard')) return 'システム全体の状況を監視';
   if (pathname.includes('/admin/faq')) return 'よくある質問の作成・編集・削除';
   if (pathname.includes('/admin/users')) return 'ユーザーアカウントの管理';
+  if (pathname.includes('/admin/org')) return '組織・テナントの管理と設定';
   if (pathname.includes('/admin/chats')) return 'チャット履歴とパフォーマンスの監視';
   if (pathname.includes('/admin/settings')) return 'システム設定とコンフィグレーション';
   if (pathname.includes('/admin/reports')) return '詳細なレポートと分析';
