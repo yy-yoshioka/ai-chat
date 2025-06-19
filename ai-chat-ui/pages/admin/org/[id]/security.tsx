@@ -49,7 +49,7 @@ const SecurityPage = () => {
 
   useEffect(() => {
     loadSecurityData();
-  }, [id]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadSecurityData = async () => {
     try {
@@ -94,21 +94,6 @@ const SecurityPage = () => {
 
     setRateLimitRules((prev) => [...prev, newRule]);
     setIsCreatingRule(false);
-  };
-
-  const createWAFRule = () => {
-    const newRule: WAFRule = {
-      id: `waf-${Date.now()}`,
-      name: 'New WAF Rule',
-      type: 'custom',
-      pattern: '',
-      action: 'block',
-      priority: 100,
-      enabled: true,
-      createdAt: new Date().toISOString(),
-    };
-
-    setWafRules((prev) => [...prev, newRule]);
   };
 
   const updateRateLimitRule = (ruleId: string, updates: Partial<RateLimitRule>) => {
@@ -315,7 +300,9 @@ const SecurityPage = () => {
                     <select
                       value={rule.method}
                       onChange={(e) =>
-                        updateRateLimitRule(rule.id, { method: e.target.value as any })
+                        updateRateLimitRule(rule.id, {
+                          method: e.target.value as 'GET' | 'POST' | 'PUT' | 'DELETE',
+                        })
                       }
                       className="w-full px-3 py-2 border rounded-lg text-sm"
                     >
@@ -348,7 +335,9 @@ const SecurityPage = () => {
                     <select
                       value={rule.window}
                       onChange={(e) =>
-                        updateRateLimitRule(rule.id, { window: e.target.value as any })
+                        updateRateLimitRule(rule.id, {
+                          window: e.target.value as 'minute' | 'hour' | 'day' | undefined,
+                        })
                       }
                       className="w-full px-3 py-2 border rounded-lg text-sm"
                     >
@@ -367,7 +356,9 @@ const SecurityPage = () => {
                     <select
                       value={rule.action}
                       onChange={(e) =>
-                        updateRateLimitRule(rule.id, { action: e.target.value as any })
+                        updateRateLimitRule(rule.id, {
+                          action: e.target.value as 'block' | 'throttle' | 'captcha' | undefined,
+                        })
                       }
                       className="w-full px-3 py-2 border rounded-lg text-sm"
                     >
@@ -449,7 +440,18 @@ const SecurityPage = () => {
                     </label>
                     <select
                       value={rule.type}
-                      onChange={(e) => updateWAFRule(rule.id, { type: e.target.value as any })}
+                      onChange={(e) =>
+                        updateWAFRule(rule.id, {
+                          type: e.target.value as
+                            | 'ip_block'
+                            | 'geo_block'
+                            | 'user_agent'
+                            | 'sql_injection'
+                            | 'xss'
+                            | 'custom'
+                            | undefined,
+                        })
+                      }
                       className="w-full px-3 py-2 border rounded-lg text-sm"
                     >
                       <option value="ip_block">IP ブロック</option>
@@ -467,7 +469,11 @@ const SecurityPage = () => {
                     </label>
                     <select
                       value={rule.action}
-                      onChange={(e) => updateWAFRule(rule.id, { action: e.target.value as any })}
+                      onChange={(e) =>
+                        updateWAFRule(rule.id, {
+                          action: e.target.value as 'block' | 'log' | 'challenge' | undefined,
+                        })
+                      }
                       className="w-full px-3 py-2 border rounded-lg text-sm"
                     >
                       <option value="block">ブロック</option>

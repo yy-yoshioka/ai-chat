@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import AdminLayout from '../../../../components/AdminLayout';
 
@@ -42,11 +42,7 @@ const APIPortalPage = () => {
   const [isCreatingKey, setIsCreatingKey] = useState(false);
   const [isCreatingApp, setIsCreatingApp] = useState(false);
 
-  useEffect(() => {
-    loadAPIData();
-  }, [id]);
-
-  const loadAPIData = async () => {
+  const loadAPIData = useCallback(async () => {
     try {
       const [keysResponse, appsResponse] = await Promise.all([
         fetch(`/api/organizations/${id}/api-keys`),
@@ -65,7 +61,13 @@ const APIPortalPage = () => {
     } catch (error) {
       console.error('Failed to load API data:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      loadAPIData();
+    }
+  }, [id, loadAPIData]);
 
   const generateAPIKey = () => {
     const newKey: APIKey = {
@@ -294,19 +296,13 @@ mutation SendMessage {
   };
 
   return (
-    <AdminLayout
-      title="API・OAuth ポータル"
-      breadcrumbs={[
-        { label: '組織管理', href: `/admin/org/${id}` },
-        { label: 'API・OAuthポータル', href: `/admin/org/${id}/api-portal` },
-      ]}
-    >
+    <AdminLayout>
       <div className="space-y-6">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">API・OAuth ポータル</h1>
-            <p className="text-gray-600 mt-1">Public REST/GraphQL API とOAuth認証の管理</p>
+            <h1 className="text-2xl font-bold text-gray-900">AI Chat API Portal & SDK</h1>
+            <p className="text-gray-600 mt-1">API文書・SDK・認証キー・使用量分析・開発者ポータル</p>
           </div>
           <div className="flex items-center space-x-3">
             <button

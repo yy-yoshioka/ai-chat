@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import AdminLayout from '../../../../components/AdminLayout';
 
@@ -84,11 +84,7 @@ const CopilotSuggestionsPage = () => {
   const [agentPerformance, setAgentPerformance] = useState<AgentPerformance[]>([]);
   const [selectedSuggestion, setSelectedSuggestion] = useState<CopilotSuggestion | null>(null);
 
-  useEffect(() => {
-    loadCopilotData();
-  }, [id]);
-
-  const loadCopilotData = async () => {
+  const loadCopilotData = useCallback(async () => {
     try {
       const [suggestionsResponse, templatesResponse, settingsResponse, performanceResponse] =
         await Promise.all([
@@ -120,7 +116,13 @@ const CopilotSuggestionsPage = () => {
     } catch (error) {
       console.error('Failed to load copilot data:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      loadCopilotData();
+    }
+  }, [id, loadCopilotData]);
 
   const generateSuggestions = async (conversationId: string, userMessage: string) => {
     try {
@@ -224,20 +226,14 @@ const CopilotSuggestionsPage = () => {
   };
 
   return (
-    <AdminLayout
-      title="Copilot Suggestions (agent-side)"
-      breadcrumbs={[
-        { label: '組織管理', href: `/admin/org/${id}` },
-        { label: 'Copilot候補提案', href: `/admin/org/${id}/copilot-suggestions` },
-      ]}
-    >
+    <AdminLayout>
       <div className="space-y-6">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Copilot Suggestions (agent-side)</h1>
+            <h1 className="text-2xl font-bold text-gray-900">AIコパイロット & サジェスト</h1>
             <p className="text-gray-600 mt-1">
-              エージェント向け返信候補・ファインチューニング・学習機能
+              リアルタイム提案・トレーニング・パフォーマンス分析・設定
             </p>
           </div>
           <button

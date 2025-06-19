@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import AdminLayout from '../../../../components/AdminLayout';
 
@@ -23,36 +23,13 @@ interface PWAConfig {
   cachingStrategy: 'cache-first' | 'network-first' | 'stale-while-revalidate';
 }
 
-interface ReactNativeSDK {
-  version: string;
-  platform: 'ios' | 'android' | 'expo';
-  packageName: string;
-  bundleId: string;
-  downloadUrl: string;
-  documentation: string;
-  sampleApp: string;
-  features: {
-    chat: boolean;
-    pushNotifications: boolean;
-    offline: boolean;
-    analytics: boolean;
-    customization: boolean;
-  };
-  configuration: {
-    apiKey: string;
-    baseUrl: string;
-    organizationId: string;
-    theme: Record<string, string>;
-  };
-}
-
 interface PushNotification {
   id: string;
   title: string;
   body: string;
   icon?: string;
   badge?: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   target: 'all' | 'segment' | 'user';
   targetValue?: string;
   scheduled: boolean;
@@ -108,20 +85,14 @@ const MobileSDKPage = () => {
     offlinePages: ['/chat', '/help'],
     cachingStrategy: 'stale-while-revalidate',
   });
-  const [reactNativeSDKs, setReactNativeSDKs] = useState<ReactNativeSDK[]>([]);
   const [pushNotifications, setPushNotifications] = useState<PushNotification[]>([]);
   const [analytics, setAnalytics] = useState<MobileAnalytics | null>(null);
   const [isCreatingNotification, setIsCreatingNotification] = useState(false);
 
-  useEffect(() => {
-    loadMobileData();
-  }, [id]);
-
-  const loadMobileData = async () => {
+  const loadMobileData = useCallback(async () => {
     try {
-      const [pwaResponse, sdkResponse, pushResponse, analyticsResponse] = await Promise.all([
+      const [pwaResponse, pushResponse, analyticsResponse] = await Promise.all([
         fetch(`/api/organizations/${id}/mobile/pwa-config`),
-        fetch(`/api/organizations/${id}/mobile/react-native-sdks`),
         fetch(`/api/organizations/${id}/mobile/push-notifications`),
         fetch(`/api/organizations/${id}/mobile/analytics`),
       ]);
@@ -129,11 +100,6 @@ const MobileSDKPage = () => {
       if (pwaResponse.ok) {
         const pwaData = await pwaResponse.json();
         setPwaConfig(pwaData);
-      }
-
-      if (sdkResponse.ok) {
-        const sdkData = await sdkResponse.json();
-        setReactNativeSDKs(sdkData);
       }
 
       if (pushResponse.ok) {
@@ -148,7 +114,11 @@ const MobileSDKPage = () => {
     } catch (error) {
       console.error('Failed to load mobile data:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadMobileData();
+  }, [loadMobileData]);
 
   const updatePWAConfig = (updates: Partial<PWAConfig>) => {
     setPwaConfig((prev) => ({ ...prev, ...updates }));
@@ -261,13 +231,7 @@ const MobileSDKPage = () => {
   };
 
   return (
-    <AdminLayout
-      title="PWA & React-Native SDK"
-      breadcrumbs={[
-        { label: '組織管理', href: `/admin/org/${id}` },
-        { label: 'モバイルSDK', href: `/admin/org/${id}/mobile-sdk` },
-      ]}
-    >
+    <AdminLayout>
       <div className="space-y-6">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">
@@ -453,7 +417,9 @@ const MobileSDKPage = () => {
                     </label>
                     <select
                       value={pwaConfig.display}
-                      onChange={(e) => updatePWAConfig({ display: e.target.value as any })}
+                      onChange={(e) =>
+                        updatePWAConfig({ display: e.target.value as PWAConfig['display'] })
+                      }
                       className="w-full px-3 py-2 border rounded-lg"
                     >
                       <option value="standalone">Standalone</option>
@@ -466,7 +432,9 @@ const MobileSDKPage = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">画面向き</label>
                     <select
                       value={pwaConfig.orientation}
-                      onChange={(e) => updatePWAConfig({ orientation: e.target.value as any })}
+                      onChange={(e) =>
+                        updatePWAConfig({ orientation: e.target.value as PWAConfig['orientation'] })
+                      }
                       className="w-full px-3 py-2 border rounded-lg"
                     >
                       <option value="any">Any</option>
@@ -482,7 +450,11 @@ const MobileSDKPage = () => {
                   </label>
                   <select
                     value={pwaConfig.cachingStrategy}
-                    onChange={(e) => updatePWAConfig({ cachingStrategy: e.target.value as any })}
+                    onChange={(e) =>
+                      updatePWAConfig({
+                        cachingStrategy: e.target.value as PWAConfig['cachingStrategy'],
+                      })
+                    }
                     className="w-full px-3 py-2 border rounded-lg"
                   >
                     <option value="cache-first">Cache First</option>

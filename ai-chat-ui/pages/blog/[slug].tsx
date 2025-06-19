@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
-import html from 'remark-html';
+import remarkHtml from 'remark-html';
 import remarkGfm from 'remark-gfm';
 import Layout from '../../components/Layout';
 
@@ -284,7 +284,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   let filenames: string[] = [];
   try {
     filenames = fs.readdirSync(postsDirectory);
-  } catch (error) {
+  } catch {
     console.warn('Blog content directory not found, creating empty paths');
     return {
       paths: [],
@@ -316,7 +316,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const { data, content } = matter(fileContents);
 
     // MarkdownをHTMLに変換
-    const processedContent = await remark().use(remarkGfm).use(html).process(content);
+    const processedContent = await remark().use(remarkGfm).use(remarkHtml).process(content);
     const htmlContent = processedContent.toString();
 
     // 関連記事を取得（同じタグを持つ記事を3件まで）

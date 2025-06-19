@@ -1,4 +1,5 @@
 import { User } from '@/types/user';
+import Image from 'next/image';
 
 interface ChatMessageProps {
   role: 'user' | 'assistant';
@@ -31,7 +32,7 @@ export default function ChatMessage({ role, content, timestamp, user }: ChatMess
     if (isUser) {
       if (user?.profileImage) {
         return (
-          <img
+          <Image
             src={user.profileImage}
             alt={user.name || 'User'}
             className="w-8 h-8 rounded-full object-cover"

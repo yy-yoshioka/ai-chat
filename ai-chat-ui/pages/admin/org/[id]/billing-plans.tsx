@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import AdminLayout from '../../../../components/AdminLayout';
 
@@ -77,11 +77,7 @@ const BillingPlansPage = () => {
   const [overageAlerts, setOverageAlerts] = useState<OverageAlert[]>([]);
   const [isCreatingPlan, setIsCreatingPlan] = useState(false);
 
-  useEffect(() => {
-    loadBillingData();
-  }, [id]);
-
-  const loadBillingData = async () => {
+  const loadBillingData = useCallback(async () => {
     try {
       const [plansResponse, usageResponse, alertsResponse] = await Promise.all([
         fetch(`/api/organizations/${id}/billing/plans`),
@@ -106,7 +102,11 @@ const BillingPlansPage = () => {
     } catch (error) {
       console.error('Failed to load billing data:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadBillingData();
+  }, [loadBillingData]);
 
   const createBillingPlan = () => {
     const newPlan: BillingPlan = {
@@ -142,12 +142,6 @@ const BillingPlansPage = () => {
 
     setBillingPlans((prev) => [...prev, newPlan]);
     setIsCreatingPlan(false);
-  };
-
-  const updateBillingPlan = (planId: string, updates: Partial<BillingPlan>) => {
-    setBillingPlans((prev) =>
-      prev.map((plan) => (plan.id === planId ? { ...plan, ...updates } : plan))
-    );
   };
 
   const activatePlan = async (planId: string) => {
@@ -214,13 +208,7 @@ const BillingPlansPage = () => {
   };
 
   return (
-    <AdminLayout
-      title="課金プラン管理 UI + Overage課金"
-      breadcrumbs={[
-        { label: '組織管理', href: `/admin/org/${id}` },
-        { label: '課金管理', href: `/admin/org/${id}/billing-plans` },
-      ]}
-    >
+    <AdminLayout>
       <div className="space-y-6">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">

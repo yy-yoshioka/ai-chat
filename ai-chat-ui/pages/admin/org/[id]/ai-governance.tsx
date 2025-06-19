@@ -1,20 +1,6 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
-
-interface AILog {
-  id: string;
-  timestamp: string;
-  question: string;
-  answer: string;
-  confidence: number;
-  citations: string[];
-  reviewed: boolean;
-}
 
 const AIGovernancePage = () => {
-  const router = useRouter();
-  const { id } = router.query;
-  const [logs, setLogs] = useState<AILog[]>([]);
   const [settings, setSettings] = useState({
     confidenceThreshold: 70,
     autoReview: true,

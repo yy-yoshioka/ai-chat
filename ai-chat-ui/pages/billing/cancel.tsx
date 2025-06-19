@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
@@ -18,33 +18,36 @@ export default function BillingCancelPage() {
   const [feedbackSent, setFeedbackSent] = useState(false);
   const [feedback, setFeedback] = useState('');
 
+  const fetchCancelSession = useCallback(
+    async (sessionId: string) => {
+      try {
+        setLoading(true);
+
+        // モック実装
+        setTimeout(() => {
+          setSession({
+            id: sessionId,
+            planName: 'Professional',
+            amount: 9800,
+            cancelReason: (reason as string) || 'user_cancelled',
+          });
+          setLoading(false);
+        }, 500);
+      } catch (err) {
+        console.error('Failed to fetch cancel session:', err);
+        setLoading(false);
+      }
+    },
+    [reason]
+  );
+
   useEffect(() => {
     if (session_id) {
       fetchCancelSession(session_id as string);
     } else {
       setLoading(false);
     }
-  }, [session_id]);
-
-  const fetchCancelSession = async (sessionId: string) => {
-    try {
-      setLoading(true);
-
-      // モック実装
-      setTimeout(() => {
-        setSession({
-          id: sessionId,
-          planName: 'Professional',
-          amount: 9800,
-          cancelReason: (reason as string) || 'user_cancelled',
-        });
-        setLoading(false);
-      }, 500);
-    } catch (err) {
-      console.error('Failed to fetch cancel session:', err);
-      setLoading(false);
-    }
-  };
+  }, [session_id, fetchCancelSession]);
 
   const handleFeedbackSubmit = async () => {
     if (!feedback.trim()) return;

@@ -46,7 +46,7 @@ const IntegrationsPage = () => {
 
   useEffect(() => {
     loadConnectors();
-  }, [id]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadConnectors = async () => {
     try {
