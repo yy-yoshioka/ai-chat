@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 interface Message {
   id: string;
@@ -29,33 +30,7 @@ export default function ChatWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (widgetKey) {
-      fetchWidgetConfig();
-      // Add welcome message
-      setMessages([
-        {
-          id: '1',
-          content: 'Hello! How can I help you today?',
-          isUser: false,
-          timestamp: new Date(),
-        },
-      ]);
-    }
-  }, [widgetKey]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
-    // Apply custom CSS variables for theming
-    if (config) {
-      document.documentElement.style.setProperty('--widget-accent', config.accentColor);
-    }
-  }, [config]);
-
-  const fetchWidgetConfig = async () => {
+  const fetchWidgetConfig = useCallback(async () => {
     try {
       const response = await fetch(`/api/widgets/${widgetKey}`);
       if (response.ok) {
@@ -72,7 +47,33 @@ export default function ChatWidget() {
       console.error('Failed to fetch widget config:', error);
       setError('Failed to load chat widget.');
     }
-  };
+  }, [widgetKey]);
+
+  useEffect(() => {
+    if (widgetKey) {
+      fetchWidgetConfig();
+      // Add welcome message
+      setMessages([
+        {
+          id: '1',
+          content: 'Hello! How can I help you today?',
+          isUser: false,
+          timestamp: new Date(),
+        },
+      ]);
+    }
+  }, [widgetKey, fetchWidgetConfig]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    // Apply custom CSS variables for theming
+    if (config) {
+      document.documentElement.style.setProperty('--widget-accent', config.accentColor);
+    }
+  }, [config]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -189,7 +190,13 @@ export default function ChatWidget() {
       >
         <div className="flex items-center space-x-3">
           {config.logoUrl && (
-            <img src={config.logoUrl} alt="Logo" className="w-8 h-8 rounded-full object-cover" />
+            <Image
+              src={config.logoUrl}
+              alt="Logo"
+              width={32}
+              height={32}
+              className="rounded-full object-cover"
+            />
           )}
           <div>
             <h3 className="font-semibold text-sm">{config.name}</h3>

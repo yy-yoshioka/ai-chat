@@ -51,7 +51,7 @@ const MultiRegionPage = () => {
 
   useEffect(() => {
     loadMultiRegionData();
-  }, [id]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadMultiRegionData = async () => {
     try {
@@ -373,7 +373,14 @@ const MultiRegionPage = () => {
                       <select
                         value={region.provider}
                         onChange={(e) =>
-                          updateRegion(region.id, { provider: e.target.value as any })
+                          updateRegion(region.id, {
+                            provider: e.target.value as
+                              | 'aws'
+                              | 'gcp'
+                              | 'azure'
+                              | 'cloudflare'
+                              | undefined,
+                          })
                         }
                         className="w-full px-3 py-2 border rounded-lg text-sm"
                       >

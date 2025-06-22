@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 
@@ -6,15 +6,6 @@ import Head from 'next/head';
 type TabType = 'docs' | 'faq' | 'link-rules' | 'suggestions';
 
 // データ型定義
-interface KnowledgeBase {
-  id: string;
-  title: string;
-  description: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
 interface Document {
   id: string;
   title: string;
@@ -63,7 +54,6 @@ export default function KnowledgeManagement() {
   const organizationId = id as string;
 
   const [activeTab, setActiveTab] = useState<TabType>('docs');
-  const [_knowledgeBases] = useState<KnowledgeBase[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [linkRules, setLinkRules] = useState<LinkRule[]>([]);
@@ -74,17 +64,11 @@ export default function KnowledgeManagement() {
   const [isGeneratingSuggestions, setIsGeneratingSuggestions] = useState(false);
 
   // データ読み込み
-  useEffect(() => {
-    if (organizationId) {
-      loadData();
-    }
-  }, [organizationId]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setIsLoading(true);
     try {
       await Promise.all([loadKnowledgeBases(), loadDocuments(), loadFAQs(), loadLinkRules()]);
-      if (activeTab === 'suggestions') {
+      if (activeTab === 'suggestions' && suggestions.length === 0) {
         await loadSuggestions();
       }
     } catch (error) {
@@ -92,7 +76,13 @@ export default function KnowledgeManagement() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [activeTab]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (organizationId) {
+      loadData();
+    }
+  }, [organizationId, loadData]);
 
   const loadKnowledgeBases = async () => {
     // TODO: API call to fetch knowledge bases
@@ -277,7 +267,7 @@ export default function KnowledgeManagement() {
 
       try {
         // TODO: Implement actual file upload
-        await uploadFile(file);
+        await uploadFile();
         setUploadProgress(((i + 1) / files.length) * 100);
       } catch (error) {
         console.error(`Failed to upload ${file.name}:`, error);
@@ -288,7 +278,7 @@ export default function KnowledgeManagement() {
     await loadDocuments(); // Reload documents
   };
 
-  const uploadFile = async (_file: File): Promise<void> => {
+  const uploadFile = async (): Promise<void> => {
     // TODO: Implement actual file upload logic
     return new Promise((resolve) => {
       setTimeout(resolve, 1000); // Simulate upload time

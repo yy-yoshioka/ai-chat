@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import AdminLayout from '../../../../components/AdminLayout';
 
@@ -59,12 +59,7 @@ const WebhooksPage = () => {
     { key: 'billing.invoice.created', label: '請求書作成', description: '請求書が作成された時' },
   ];
 
-  useEffect(() => {
-    loadWebhooks();
-    loadWebhookEvents();
-  }, [id]);
-
-  const loadWebhooks = async () => {
+  const loadWebhooks = useCallback(async () => {
     try {
       const response = await fetch(`/api/organizations/${id}/webhooks`);
       if (response.ok) {
@@ -74,9 +69,9 @@ const WebhooksPage = () => {
     } catch (error) {
       console.error('Failed to load webhooks:', error);
     }
-  };
+  }, [id]);
 
-  const loadWebhookEvents = async () => {
+  const loadWebhookEvents = useCallback(async () => {
     try {
       const response = await fetch(`/api/organizations/${id}/webhook-events`);
       if (response.ok) {
@@ -86,7 +81,12 @@ const WebhooksPage = () => {
     } catch (error) {
       console.error('Failed to load webhook events:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadWebhooks();
+    loadWebhookEvents();
+  }, [loadWebhooks, loadWebhookEvents]);
 
   const createWebhook = () => {
     const newWebhook: Webhook = {
@@ -148,21 +148,10 @@ const WebhooksPage = () => {
     }
   };
 
-  const generateSignature = (payload: string, secret: string) => {
-    // HMAC-SHA256 signature generation example
-    return `sha256=${btoa(payload + secret)}`;
-  };
-
   const currentWebhook = webhooks.find((w) => w.id === selectedWebhook);
 
   return (
-    <AdminLayout
-      title="Webhook 管理"
-      breadcrumbs={[
-        { label: '組織管理', href: `/admin/org/${id}` },
-        { label: 'Webhook管理', href: `/admin/org/${id}/webhooks` },
-      ]}
-    >
+    <AdminLayout>
       <div className="space-y-6">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">

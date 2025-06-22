@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 
 interface AuditLog {
@@ -13,7 +13,7 @@ interface AuditLog {
   ipAddress: string;
   userAgent: string;
   status: 'success' | 'failed' | 'blocked';
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   sessionId: string;
   geolocation?: {
     country: string;
@@ -59,11 +59,7 @@ const AuditLogsPage = () => {
     columns: ['timestamp', 'user', 'action', 'resource', 'status'],
   });
 
-  useEffect(() => {
-    loadAuditLogs();
-  }, [id, filters]);
-
-  const loadAuditLogs = async () => {
+  const loadAuditLogs = useCallback(async () => {
     try {
       const params = new URLSearchParams({
         search: filters.search,
@@ -81,7 +77,11 @@ const AuditLogsPage = () => {
     } catch (error) {
       console.error('Failed to load audit logs:', error);
     }
-  };
+  }, [id, filters]);
+
+  useEffect(() => {
+    loadAuditLogs();
+  }, [loadAuditLogs]);
 
   const exportLogs = async () => {
     try {

@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 
 const VoiceMultimodalPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
   const [settings, setSettings] = useState({
     voiceEnabled: true,
     ttsEnabled: true,

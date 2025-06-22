@@ -35,15 +35,13 @@ const PluginsPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const [plugins, setPlugins] = useState<PluginConfig[]>([]);
-  const [selectedPlugin, setSelectedPlugin] = useState<string>('');
   const [selectedTab, setSelectedTab] = useState<'overview' | 'webflow' | 'wordpress' | 'custom'>(
     'overview'
   );
-  const [isCreatingPlugin, setIsCreatingPlugin] = useState(false);
 
   useEffect(() => {
     loadPlugins();
-  }, [id]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadPlugins = async () => {
     try {
@@ -231,13 +229,7 @@ add_shortcode('ai_chat', 'ai_chat_shortcode');
   };
 
   return (
-    <AdminLayout
-      title="プラットフォーム連携"
-      breadcrumbs={[
-        { label: '組織管理', href: `/admin/org/${id}` },
-        { label: 'プラットフォーム連携', href: `/admin/org/${id}/plugins` },
-      ]}
-    >
+    <AdminLayout>
       <div className="space-y-6">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">
@@ -516,7 +508,9 @@ add_shortcode('ai_chat', 'ai_chat_shortcode');
                   <h4 className="font-medium text-blue-900 mb-2">📋 Webflow設置手順</h4>
                   <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
                     <li>プロジェクト設定 → カスタムコード を開く</li>
-                    <li>「Head Code」または「Footer Code」に下記コードを貼り付け</li>
+                    <li>
+                      &quot;Head Code&quot;または&quot;Footer Code&quot;に下記コードを貼り付け
+                    </li>
                     <li>サイトを公開</li>
                     <li>チャットウィジェットの動作を確認</li>
                   </ol>
@@ -634,11 +628,11 @@ add_shortcode('ai_chat', 'ai_chat_shortcode');
                     <code>[ai_chat]</code> - デフォルト設定で表示
                   </div>
                   <div>
-                    <code>[ai_chat theme="dark"]</code> - ダークテーマで表示
+                    <code>[ai_chat theme=&quot;dark&quot;]</code> - ダークテーマで表示
                   </div>
                   <div>
-                    <code>[ai_chat position="bottom-left" size="compact"]</code> -
-                    位置とサイズを指定
+                    <code>[ai_chat position=&quot;bottom-left&quot; size=&quot;compact&quot;]</code>{' '}
+                    - 位置とサイズを指定
                   </div>
                 </div>
               </div>

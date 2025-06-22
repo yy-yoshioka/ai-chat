@@ -58,7 +58,7 @@ const SSOPage = () => {
 
   useEffect(() => {
     loadSSOData();
-  }, [id]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadSSOData = async () => {
     try {

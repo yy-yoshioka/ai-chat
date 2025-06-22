@@ -23,6 +23,16 @@ export interface ConnectorSyncResult {
   errors: string[];
 }
 
+// ZendeskのSection型定義
+interface ZendeskSection {
+  id: string;
+  name: string;
+  category?: {
+    id: string;
+    name: string;
+  };
+}
+
 // Zendesk Guide記事の取得
 export async function syncZendeskArticles(
   organizationId: string,
@@ -119,7 +129,7 @@ async function syncZendeskSection(
   organizationId: string,
   config: ZendeskConfig,
   knowledgeBaseId: string,
-  section: any,
+  section: ZendeskSection,
   authHeader: string,
   result: ConnectorSyncResult
 ): Promise<void> {
@@ -476,7 +486,8 @@ export async function importMarkdownFiles(
 export async function saveConnectorConfig(
   organizationId: string,
   type: 'zendesk' | 'intercom',
-  config: ZendeskConfig | IntercomConfig
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _config: ZendeskConfig | IntercomConfig
 ): Promise<void> {
   try {
     // TODO: 設定を暗号化して保存

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import AdminLayout from '../../../../components/AdminLayout';
 
@@ -66,6 +66,83 @@ interface OverageAlert {
   notifications: string[]; // email addresses
 }
 
+// Trial Alert Component
+function TrialAlert() {
+  // Mock trial data - replace with actual trial data from your API/context
+  const trialEndDate = new Date();
+  trialEndDate.setDate(trialEndDate.getDate() + 7); // 7 days from now
+
+  const today = new Date();
+  const timeDiff = trialEndDate.getTime() - today.getTime();
+  const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+  // Don't show alert if trial period is over or not in trial
+  if (daysLeft <= 0) return null;
+
+  const handleUpgradeClick = async () => {
+    try {
+      // Get current organization ID from URL
+      const orgId = window.location.pathname.split('/')[3]; // Extract from /admin/org/[id]/billing-plans
+
+      if (!orgId) {
+        alert('組織IDが見つかりません');
+        return;
+      }
+
+      // Use Pro plan as default upgrade option
+      const response = await fetch('/api/billing/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: 'price_pro_monthly',
+          orgId: orgId,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        window.location.href = data.sessionUrl;
+      } else {
+        const error = await response.json();
+        alert(`アップグレードに失敗しました: ${error.error || 'エラーが発生しました'}`);
+      }
+    } catch (error) {
+      console.error('Failed to start upgrade:', error);
+      alert('アップグレード中にエラーが発生しました');
+    }
+  };
+
+  return (
+    <div className="bg-gradient-to-r from-orange-100 to-yellow-100 border border-orange-200 rounded-lg p-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="mr-3">
+            <span className="text-2xl">⏰</span>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-orange-900">Proプラン無料トライアル中</h3>
+            <p className="text-orange-800">
+              トライアル終了まで <span className="font-bold">{daysLeft}日</span> です。 終了日:{' '}
+              {trialEndDate.toLocaleDateString('ja-JP')}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={handleUpgradeClick}
+            className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 font-semibold transition-colors"
+          >
+            プランをアップグレード
+          </button>
+          <button className="px-3 py-2 text-orange-700 hover:text-orange-900 text-sm">✕</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const BillingPlansPage = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -77,11 +154,7 @@ const BillingPlansPage = () => {
   const [overageAlerts, setOverageAlerts] = useState<OverageAlert[]>([]);
   const [isCreatingPlan, setIsCreatingPlan] = useState(false);
 
-  useEffect(() => {
-    loadBillingData();
-  }, [id]);
-
-  const loadBillingData = async () => {
+  const loadBillingData = useCallback(async () => {
     try {
       const [plansResponse, usageResponse, alertsResponse] = await Promise.all([
         fetch(`/api/organizations/${id}/billing/plans`),
@@ -106,7 +179,11 @@ const BillingPlansPage = () => {
     } catch (error) {
       console.error('Failed to load billing data:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadBillingData();
+  }, [loadBillingData]);
 
   const createBillingPlan = () => {
     const newPlan: BillingPlan = {
@@ -144,30 +221,38 @@ const BillingPlansPage = () => {
     setIsCreatingPlan(false);
   };
 
-  const updateBillingPlan = (planId: string, updates: Partial<BillingPlan>) => {
-    setBillingPlans((prev) =>
-      prev.map((plan) => (plan.id === planId ? { ...plan, ...updates } : plan))
-    );
-  };
-
-  const activatePlan = async (planId: string) => {
+  const upgradePlan = async (plan: BillingPlan) => {
     try {
-      const response = await fetch(`/api/organizations/${id}/billing/plans/${planId}/activate`, {
+      // Get current organization ID from router
+      const orgId = Array.isArray(id) ? id[0] : id;
+
+      if (!orgId) {
+        alert('組織IDが見つかりません');
+        return;
+      }
+
+      // Use the new checkout API
+      const response = await fetch('/api/billing/checkout', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: plan.tier === 'pro' ? 'price_pro_monthly' : 'price_enterprise_monthly',
+          orgId: orgId,
+        }),
       });
 
       if (response.ok) {
-        setBillingPlans((prev) =>
-          prev.map((plan) => ({
-            ...plan,
-            isActive: plan.id === planId,
-          }))
-        );
-        alert('プランを有効化しました');
+        const data = await response.json();
+        window.location.href = data.sessionUrl;
+      } else {
+        const error = await response.json();
+        alert(`プラン変更に失敗しました: ${error.error || 'エラーが発生しました'}`);
       }
     } catch (error) {
-      console.error('Failed to activate plan:', error);
-      alert('プランの有効化に失敗しました');
+      console.error('Failed to upgrade plan:', error);
+      alert('プラン変更中にエラーが発生しました');
     }
   };
 
@@ -214,13 +299,7 @@ const BillingPlansPage = () => {
   };
 
   return (
-    <AdminLayout
-      title="課金プラン管理 UI + Overage課金"
-      breadcrumbs={[
-        { label: '組織管理', href: `/admin/org/${id}` },
-        { label: '課金管理', href: `/admin/org/${id}/billing-plans` },
-      ]}
-    >
+    <AdminLayout>
       <div className="space-y-6">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">
@@ -235,6 +314,9 @@ const BillingPlansPage = () => {
             + プラン作成
           </button>
         </div>
+
+        {/* Trial Alert */}
+        <TrialAlert />
 
         {/* 統計概要 */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -416,7 +498,7 @@ const BillingPlansPage = () => {
                   <div className="flex items-center justify-between">
                     <div className="text-sm text-gray-600">{plan.subscribedUsers} 契約者</div>
                     <button
-                      onClick={() => activatePlan(plan.id)}
+                      onClick={() => upgradePlan(plan)}
                       disabled={plan.isActive}
                       className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                         plan.isActive
@@ -424,7 +506,7 @@ const BillingPlansPage = () => {
                           : 'bg-blue-600 text-white hover:bg-blue-700'
                       }`}
                     >
-                      {plan.isActive ? '有効' : '有効化'}
+                      {plan.isActive ? '有効' : 'アップグレード'}
                     </button>
                   </div>
                 </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 
 interface ComplianceControl {
@@ -44,11 +44,7 @@ const CompliancePage = () => {
   const [reports, setReports] = useState<AuditReport[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  useEffect(() => {
-    loadComplianceData();
-  }, [id]);
-
-  const loadComplianceData = async () => {
+  const loadComplianceData = useCallback(async () => {
     try {
       const [controlsResponse, reportsResponse] = await Promise.all([
         fetch(`/api/organizations/${id}/compliance/controls`),
@@ -67,7 +63,13 @@ const CompliancePage = () => {
     } catch (error) {
       console.error('Failed to load compliance data:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      loadComplianceData();
+    }
+  }, [id, loadComplianceData]);
 
   const updateControlStatus = (controlId: string, status: ComplianceControl['status']) => {
     setControls((prev) =>

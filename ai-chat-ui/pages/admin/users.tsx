@@ -148,8 +148,6 @@ export default function AdminUsersPage() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-<<<<<<< Updated upstream
-=======
         {/* Organization Context */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div className="flex items-start">
@@ -171,7 +169,6 @@ export default function AdminUsersPage() {
           </div>
         </div>
 
->>>>>>> Stashed changes
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="bg-white rounded-lg shadow p-6">

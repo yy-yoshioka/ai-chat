@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import AdminLayout from '../../../../components/AdminLayout';
 
@@ -75,11 +75,7 @@ const ConversationSummaryPage = () => {
   });
   const [selectedSummary, setSelectedSummary] = useState<ConversationSummary | null>(null);
 
-  useEffect(() => {
-    loadSummaryData();
-  }, [id]);
-
-  const loadSummaryData = async () => {
+  const loadSummaryData = useCallback(async () => {
     try {
       const [summariesResponse, templatesResponse, settingsResponse] = await Promise.all([
         fetch(`/api/organizations/${id}/ai/conversation-summaries`),
@@ -104,7 +100,13 @@ const ConversationSummaryPage = () => {
     } catch (error) {
       console.error('Failed to load summary data:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      loadSummaryData();
+    }
+  }, [id, loadSummaryData]);
 
   const generateSummary = async (conversationId: string) => {
     try {
@@ -195,19 +197,13 @@ const ConversationSummaryPage = () => {
   };
 
   return (
-    <AdminLayout
-      title="Conversation Summary API"
-      breadcrumbs={[
-        { label: '組織管理', href: `/admin/org/${id}` },
-        { label: '会話要約API', href: `/admin/org/${id}/conversation-summary` },
-      ]}
-    >
+    <AdminLayout>
       <div className="space-y-6">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Conversation Summary API</h1>
-            <p className="text-gray-600 mt-1">GPT-4o会話要約・意図分析・感情分析・次ステップ提案</p>
+            <h1 className="text-2xl font-bold text-gray-900">会話サマリー & AI分析</h1>
+            <p className="text-gray-600 mt-1">リアルタイム分析・傾向把握・AI洞察・エクスポート</p>
           </div>
           <button
             onClick={() => generateSummary('sample-conversation')}

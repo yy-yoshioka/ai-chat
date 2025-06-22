@@ -32,7 +32,7 @@ interface MonitorResult {
   responseTime: number;
   statusCode?: number;
   error?: string;
-  details: Record<string, any>;
+  details: Record<string, string | number | boolean>;
 }
 
 interface Alert {
@@ -61,7 +61,7 @@ const SyntheticMonitoringPage = () => {
     loadMonitoringData();
     const interval = setInterval(loadMonitoringData, 30000); // Refresh every 30 seconds
     return () => clearInterval(interval);
-  }, [id]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadMonitoringData = async () => {
     try {
@@ -421,7 +421,17 @@ const SyntheticMonitoringPage = () => {
                       </label>
                       <select
                         value={monitor.type}
-                        onChange={(e) => updateMonitor(monitor.id, { type: e.target.value as any })}
+                        onChange={(e) =>
+                          updateMonitor(monitor.id, {
+                            type: e.target.value as
+                              | 'http'
+                              | 'https'
+                              | 'ping'
+                              | 'tcp'
+                              | 'dns'
+                              | undefined,
+                          })
+                        }
                         className="w-full px-3 py-2 border rounded-lg text-sm"
                       >
                         <option value="https">HTTPS</option>

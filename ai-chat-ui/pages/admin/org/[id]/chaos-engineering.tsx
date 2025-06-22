@@ -1,42 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import AdminLayout from '../../../../components/AdminLayout';
 
 interface ChaosExperiment {
   id: string;
   name: string;
-  type:
-    | 'network_latency'
-    | 'packet_loss'
-    | 'cpu_stress'
-    | 'memory_stress'
-    | 'disk_io'
-    | 'service_failure'
-    | 'database_failure';
-  status: 'scheduled' | 'running' | 'completed' | 'failed' | 'stopped';
+  description: string;
+  type: 'latency' | 'error' | 'resource' | 'network' | 'database';
+  status: 'running' | 'paused' | 'completed' | 'failed';
+  parameters: {
+    duration?: number;
+    intensity?: number;
+    blastRadius?: number;
+    [key: string]: unknown;
+  };
   target: {
     service: string;
-    region: string;
-    environment: 'production' | 'staging' | 'development';
+    percentage: number;
+    duration: number;
+    region?: string;
+    environment?: string;
   };
-  parameters: {
-    duration: number; // minutes
-    intensity: number; // percentage
-    blastRadius: number; // percentage of instances
-    scheduleType: 'immediate' | 'scheduled' | 'recurring';
-    scheduleTime?: string;
-    recurrence?: string;
-  };
-  results: {
-    startTime?: string;
-    endTime?: string;
-    successRate: number;
-    responseTime: number;
+  results?: {
+    affectedRequests: number;
     errorRate: number;
-    recoveryTime: number;
+    responseTime: number;
+    impactScore: number;
+    recoveryTime?: number;
   };
-  autoHeal: boolean;
-  createdAt: string;
+  scheduledAt?: string;
+  startedAt?: string;
+  completedAt?: string;
+  createdBy: string;
+  autoHeal?: boolean;
 }
 
 interface AutoHealRule {
@@ -50,7 +46,7 @@ interface AutoHealRule {
   };
   action: {
     type: 'restart_service' | 'scale_up' | 'scale_down' | 'switch_region' | 'rollback_deployment';
-    parameters: Record<string, any>;
+    parameters: Record<string, string | number | boolean>;
   };
   enabled: boolean;
   lastTriggered?: string;
@@ -81,13 +77,7 @@ const ChaosEngineeringPage = () => {
   const [metrics, setMetrics] = useState<SystemMetrics | null>(null);
   const [isCreatingExperiment, setIsCreatingExperiment] = useState(false);
 
-  useEffect(() => {
-    loadChaosData();
-    const interval = setInterval(loadChaosData, 30000);
-    return () => clearInterval(interval);
-  }, [id]);
-
-  const loadChaosData = async () => {
+  const loadChaosData = useCallback(async () => {
     try {
       const [experimentsResponse, rulesResponse, metricsResponse] = await Promise.all([
         fetch(`/api/organizations/${id}/chaos/experiments`),
@@ -112,61 +102,65 @@ const ChaosEngineeringPage = () => {
     } catch (error) {
       console.error('Failed to load chaos data:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      loadChaosData();
+    }
+  }, [id, loadChaosData]);
 
   const createExperiment = () => {
     const newExperiment: ChaosExperiment = {
       id: `chaos-${Date.now()}`,
       name: 'New Chaos Experiment',
-      type: 'network_latency',
-      status: 'scheduled',
+      description: '',
+      type: 'latency',
+      status: 'paused',
+      parameters: {
+        duration: 30,
+        intensity: 50,
+        blastRadius: 25,
+      },
       target: {
         service: 'api-service',
+        percentage: 0,
+        duration: 0,
         region: 'us-east-1',
         environment: 'staging',
       },
-      parameters: {
-        duration: 10,
-        intensity: 50,
-        blastRadius: 25,
-        scheduleType: 'immediate',
-      },
       results: {
-        successRate: 0,
-        responseTime: 0,
+        affectedRequests: 0,
         errorRate: 0,
+        responseTime: 0,
+        impactScore: 0,
         recoveryTime: 0,
       },
-      autoHeal: true,
-      createdAt: new Date().toISOString(),
+      scheduledAt: '',
+      startedAt: '',
+      completedAt: '',
+      createdBy: 'admin',
+      autoHeal: false,
     };
 
     setExperiments((prev) => [...prev, newExperiment]);
     setIsCreatingExperiment(false);
   };
 
-  const runExperiment = async (experimentId: string) => {
+  const runExperiment = async (experimentId: string, config: Record<string, unknown>) => {
     try {
       const response = await fetch(
         `/api/organizations/${id}/chaos/experiments/${experimentId}/run`,
         {
           method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(config),
         }
       );
 
       if (response.ok) {
-        setExperiments((prev) =>
-          prev.map((exp) =>
-            exp.id === experimentId
-              ? {
-                  ...exp,
-                  status: 'running' as const,
-                  results: { ...exp.results, startTime: new Date().toISOString() },
-                }
-              : exp
-          )
-        );
-        alert('カオス実験を開始しました');
+        await loadChaosData();
+        alert('実験を開始しました');
       }
     } catch (error) {
       console.error('Failed to run experiment:', error);
@@ -189,8 +183,8 @@ const ChaosEngineeringPage = () => {
             exp.id === experimentId
               ? {
                   ...exp,
-                  status: 'stopped' as const,
-                  results: { ...exp.results, endTime: new Date().toISOString() },
+                  status: 'paused' as const,
+                  results: exp.results ? { ...exp.results, recoveryTime: Date.now() } : undefined,
                 }
               : exp
           )
@@ -244,10 +238,8 @@ const ChaosEngineeringPage = () => {
         return 'bg-green-100 text-green-700';
       case 'failed':
         return 'bg-red-100 text-red-700';
-      case 'stopped':
+      case 'paused':
         return 'bg-yellow-100 text-yellow-700';
-      case 'scheduled':
-        return 'bg-gray-100 text-gray-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }
@@ -268,19 +260,15 @@ const ChaosEngineeringPage = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'network_latency':
+      case 'latency':
         return '🌐';
-      case 'packet_loss':
+      case 'error':
         return '📡';
-      case 'cpu_stress':
+      case 'resource':
         return '🔥';
-      case 'memory_stress':
-        return '💾';
-      case 'disk_io':
-        return '💿';
-      case 'service_failure':
-        return '⚙️';
-      case 'database_failure':
+      case 'network':
+        return '🔄';
+      case 'database':
         return '🗄️';
       default:
         return '🧪';
@@ -288,13 +276,7 @@ const ChaosEngineeringPage = () => {
   };
 
   return (
-    <AdminLayout
-      title="Chaos Test & Auto-Heal"
-      breadcrumbs={[
-        { label: '組織管理', href: `/admin/org/${id}` },
-        { label: 'カオスエンジニアリング', href: `/admin/org/${id}/chaos-engineering` },
-      ]}
-    >
+    <AdminLayout>
       <div className="space-y-6">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">
@@ -415,8 +397,9 @@ const ChaosEngineeringPage = () => {
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900">{experiment.name}</h3>
                         <p className="text-sm text-gray-600">
-                          {experiment.target.service} • {experiment.target.region} •{' '}
-                          {experiment.target.environment}
+                          {experiment.target.service}
+                          {experiment.target.region && ` • ${experiment.target.region}`}
+                          {experiment.target.environment && ` • ${experiment.target.environment}`}
                         </p>
                       </div>
                     </div>
@@ -426,9 +409,9 @@ const ChaosEngineeringPage = () => {
                       >
                         {experiment.status}
                       </span>
-                      {experiment.status === 'scheduled' && (
+                      {experiment.status === 'paused' && (
                         <button
-                          onClick={() => runExperiment(experiment.id)}
+                          onClick={() => runExperiment(experiment.id, experiment.parameters)}
                           className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition-colors"
                         >
                           実行
@@ -453,30 +436,30 @@ const ChaosEngineeringPage = () => {
                       <select
                         value={experiment.type}
                         onChange={(e) =>
-                          updateExperiment(experiment.id, { type: e.target.value as any })
+                          updateExperiment(experiment.id, {
+                            type: e.target.value as ChaosExperiment['type'],
+                          })
                         }
                         className="w-full px-3 py-2 border rounded-lg text-sm"
                         disabled={experiment.status === 'running'}
                       >
-                        <option value="network_latency">ネットワーク遅延</option>
-                        <option value="packet_loss">パケットロス</option>
-                        <option value="cpu_stress">CPU負荷</option>
-                        <option value="memory_stress">メモリ負荷</option>
-                        <option value="disk_io">ディスクI/O負荷</option>
-                        <option value="service_failure">サービス障害</option>
-                        <option value="database_failure">データベース障害</option>
+                        <option value="latency">ネットワーク遅延</option>
+                        <option value="error">パケットロス</option>
+                        <option value="resource">CPU負荷</option>
+                        <option value="network">ネットワーク分断</option>
+                        <option value="database">データベース障害</option>
                       </select>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        継続時間: {experiment.parameters.duration}分
+                        継続時間: {experiment.parameters.duration || 30}分
                       </label>
                       <input
                         type="range"
                         min="1"
                         max="60"
-                        value={experiment.parameters.duration}
+                        value={experiment.parameters.duration || 30}
                         onChange={(e) =>
                           updateExperiment(experiment.id, {
                             parameters: {
@@ -492,13 +475,13 @@ const ChaosEngineeringPage = () => {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        強度: {experiment.parameters.intensity}%
+                        強度: {experiment.parameters.intensity || 50}%
                       </label>
                       <input
                         type="range"
                         min="10"
                         max="100"
-                        value={experiment.parameters.intensity}
+                        value={experiment.parameters.intensity || 50}
                         onChange={(e) =>
                           updateExperiment(experiment.id, {
                             parameters: {
@@ -514,13 +497,13 @@ const ChaosEngineeringPage = () => {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        影響範囲: {experiment.parameters.blastRadius}%
+                        影響範囲: {experiment.parameters.blastRadius || 25}%
                       </label>
                       <input
                         type="range"
                         min="5"
                         max="50"
-                        value={experiment.parameters.blastRadius}
+                        value={experiment.parameters.blastRadius || 25}
                         onChange={(e) =>
                           updateExperiment(experiment.id, {
                             parameters: {
@@ -535,12 +518,12 @@ const ChaosEngineeringPage = () => {
                     </div>
                   </div>
 
-                  {experiment.status !== 'scheduled' && (
+                  {experiment.status !== 'paused' && experiment.results && (
                     <div className="mt-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
                       <div className="bg-green-50 p-3 rounded-lg">
                         <p className="text-sm font-medium text-green-600">成功率</p>
                         <p className="text-xl font-bold text-green-900">
-                          {experiment.results.successRate.toFixed(1)}%
+                          {(100 - experiment.results.errorRate).toFixed(1)}%
                         </p>
                       </div>
                       <div className="bg-blue-50 p-3 rounded-lg">
@@ -558,7 +541,7 @@ const ChaosEngineeringPage = () => {
                       <div className="bg-purple-50 p-3 rounded-lg">
                         <p className="text-sm font-medium text-purple-600">復旧時間</p>
                         <p className="text-xl font-bold text-purple-900">
-                          {experiment.results.recoveryTime}秒
+                          {experiment.results.recoveryTime || 0}秒
                         </p>
                       </div>
                     </div>
@@ -568,7 +551,7 @@ const ChaosEngineeringPage = () => {
                     <label className="flex items-center space-x-2">
                       <input
                         type="checkbox"
-                        checked={experiment.autoHeal}
+                        checked={experiment.autoHeal || false}
                         onChange={(e) =>
                           updateExperiment(experiment.id, { autoHeal: e.target.checked })
                         }
@@ -889,11 +872,11 @@ const ChaosEngineeringPage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">実験タイプ</label>
                   <select className="w-full px-3 py-2 border rounded-lg">
-                    <option value="network_latency">ネットワーク遅延</option>
-                    <option value="packet_loss">パケットロス</option>
-                    <option value="cpu_stress">CPU負荷</option>
-                    <option value="memory_stress">メモリ負荷</option>
-                    <option value="service_failure">サービス障害</option>
+                    <option value="latency">ネットワーク遅延</option>
+                    <option value="error">パケットロス</option>
+                    <option value="resource">CPU負荷</option>
+                    <option value="network">ネットワーク分断</option>
+                    <option value="database">データベース障害</option>
                   </select>
                 </div>
                 <div>

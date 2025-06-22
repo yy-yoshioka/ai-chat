@@ -1,8 +1,8 @@
 echo "🔍 Running format, lint, and build checks..."
 
-# # Format all code
-# echo "📝 Formatting code..."
-# yarn format
+# Format all code
+echo "📝 Formatting code..."
+yarn format
 
 # # Lint all code
 # echo "🔍 Linting code..."

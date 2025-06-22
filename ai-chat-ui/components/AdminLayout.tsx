@@ -31,6 +31,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: '👥',
     },
     {
+      title: '組織管理',
+      path: '/admin/org',
+      icon: '🏢',
+    },
+    {
       title: 'チャット監視',
       path: '/admin/chats',
       icon: '💬',
@@ -124,6 +129,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 <p className="text-gray-600 mt-1">{getPageDescription(router.pathname)}</p>
               </div>
               <div className="flex items-center space-x-4">
+                <TrialBadge />
                 <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
@@ -133,17 +139,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                       d="M15 17h5l-5 5-5-5h5v-12z"
                     />
                   </svg>
-                </button>
-                <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full relative">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 17h5l-5 5-5-5h5v-12z"
-                    />
-                  </svg>
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
                 </button>
               </div>
             </div>
@@ -156,10 +151,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     </AdminAuthGuard>
   );
 }
+
 function getPageTitle(pathname: string): string {
   if (pathname.includes('/admin/dashboard')) return 'ダッシュボード';
   if (pathname.includes('/admin/faq')) return 'FAQ管理';
   if (pathname.includes('/admin/users')) return 'ユーザー管理';
+  if (pathname.includes('/admin/org')) return '組織管理';
   if (pathname.includes('/admin/chats')) return 'チャット監視';
   if (pathname.includes('/admin/settings')) return 'システム設定';
   if (pathname.includes('/admin/reports')) return 'レポート';
@@ -171,9 +168,40 @@ function getPageDescription(pathname: string): string {
   if (pathname.includes('/admin/dashboard')) return 'システム全体の状況を監視';
   if (pathname.includes('/admin/faq')) return 'よくある質問の作成・編集・削除';
   if (pathname.includes('/admin/users')) return 'ユーザーアカウントの管理';
+  if (pathname.includes('/admin/org')) return '組織・テナントの管理と設定';
   if (pathname.includes('/admin/chats')) return 'チャット履歴とパフォーマンスの監視';
   if (pathname.includes('/admin/settings')) return 'システム設定とコンフィグレーション';
   if (pathname.includes('/admin/reports')) return '詳細なレポートと分析';
   if (pathname.includes('/admin/logs')) return 'システムログとエラー監視';
   return 'AI Chatシステムの管理';
+}
+
+// Trial Badge Component
+function TrialBadge() {
+  const router = useRouter();
+
+  // This would normally come from your organization/trial context
+  // For now, using mock data - you should replace with actual trial data
+  const trialEndDate = new Date();
+  trialEndDate.setDate(trialEndDate.getDate() + 7); // 7 days from now
+
+  const today = new Date();
+  const timeDiff = trialEndDate.getTime() - today.getTime();
+  const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+  // Don't show badge if trial period is over or if no trial
+  if (daysLeft <= 0) return null;
+
+  const currentOrgId = router.query.id || 'default'; // Get from router or context
+
+  return (
+    <Link
+      href={`/admin/org/${currentOrgId}/billing-plans`}
+      className="flex items-center px-3 py-1.5 bg-orange-100 hover:bg-orange-200 border border-orange-300 rounded-full text-orange-800 text-sm font-medium transition-colors"
+    >
+      <span className="mr-1">⏰</span>
+      Trial <span className="font-bold mx-1">{daysLeft}</span> days left
+      <span className="ml-1">▸ Upgrade</span>
+    </Link>
+  );
 }
