@@ -9,19 +9,29 @@ interface User {
   organizationName?: string;
 }
 
-// Helper function to verify JWT token (simplified for now)
+// Helper function to verify JWT token (simplified for development)
 async function verifyToken(token: string): Promise<User | null> {
   try {
-    // In a real implementation, use proper JWT verification
-    // For now, use a simple decode for development
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-      return null;
+    // For development, skip JWT verification and return mock user
+    if (process.env.NODE_ENV === 'development') {
+      // In development, we ignore the token and return mock user
+      console.log(
+        'Development mode: using mock user, ignoring token:',
+        token ? 'present' : 'absent'
+      );
+      return {
+        id: 'dev-user',
+        name: 'Development User',
+        email: 'dev@example.com',
+        role: 'admin',
+        organizationId: 'org-demo',
+        organizationName: 'Demo Organization',
+      };
     }
 
-    const payload = parts[1];
-    const decodedPayload = Buffer.from(payload, 'base64').toString('utf-8');
-    return JSON.parse(decodedPayload) as User;
+    // In production, implement proper JWT verification
+    // For now, just return null to require proper authentication
+    return null;
   } catch (error) {
     console.error('JWT verification failed:', error);
     return null;
