@@ -39,9 +39,9 @@
 ---
 
 ## 3. メール & リマインド
-- [ ] `jobs/email-drip.ts` を作成  
+- [x] `jobs/email-drip.ts` を作成  
   - Day-1, Day-3, Day-7, Day-12 のメールテンプレ
-- [ ] `cron.yaml` に 04:00 UTC daily ジョブを追加
+- [x] `cron.yaml` に 04:00 UTC daily ジョブを追加
 
 ---
 
