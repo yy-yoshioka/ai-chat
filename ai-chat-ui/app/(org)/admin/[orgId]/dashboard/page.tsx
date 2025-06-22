@@ -7,8 +7,36 @@ interface DashboardWidget {
   type: 'stat' | 'chart' | 'activity' | 'health';
   title: string;
   position: { x: number; y: number; w: number; h: number };
-  data?: any;
-  config?: any;
+  data?: StatData | ChartData | ActivityData | HealthData;
+  config?: Record<string, unknown>;
+}
+
+interface StatData {
+  value: number | string;
+  icon: string;
+  color: string;
+}
+
+interface ChartData {
+  chartType: string;
+  data: unknown[];
+}
+
+interface ActivityData {
+  activities: Array<{
+    id: number;
+    action: string;
+    user: string;
+    time: string;
+  }>;
+}
+
+interface HealthData {
+  items: Array<{
+    name: string;
+    status: 'good' | 'warning' | 'error';
+    percentage: number;
+  }>;
 }
 
 interface DashboardStats {
@@ -120,7 +148,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ orgId: st
   const addWidget = (type: string) => {
     const newWidget: DashboardWidget = {
       id: `widget-${Date.now()}`,
-      type: type as any,
+      type: type as DashboardWidget['type'],
       title: getWidgetTitle(type),
       position: { x: 0, y: 6, w: 4, h: 3 },
       data: getWidgetData(type),
@@ -149,7 +177,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ orgId: st
     }
   };
 
-  const getWidgetData = (type: string): any => {
+  const getWidgetData = (type: string): StatData | ChartData | ActivityData | HealthData => {
     switch (type) {
       case 'stat':
         return { value: stats?.apiCalls || 0, icon: '🔥', color: 'red' };
@@ -160,7 +188,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ orgId: st
       case 'health':
         return { items: [] };
       default:
-        return {};
+        return { value: 0, icon: '📊', color: 'blue' };
     }
   };
 
@@ -267,7 +295,9 @@ function StatWidget({
   widget: DashboardWidget;
   onRemove: (id: string) => void;
 }) {
-  const { data } = widget;
+  const data = widget.data as StatData;
+  if (!data) return null;
+
   const colorClasses = {
     blue: 'bg-blue-100 text-blue-600',
     green: 'bg-green-100 text-green-600',
@@ -308,7 +338,8 @@ function HealthWidget({
   widget: DashboardWidget;
   onRemove: (id: string) => void;
 }) {
-  const { data } = widget;
+  const data = widget.data as HealthData;
+  if (!data || !data.items) return null;
 
   return (
     <div className="bg-white rounded-lg shadow p-6 relative group">
@@ -320,7 +351,7 @@ function HealthWidget({
       </button>
       <h3 className="text-lg font-semibold text-gray-900 mb-4">{widget.title}</h3>
       <div className="space-y-4">
-        {data.items?.map((item: any, index: number) => (
+        {data.items.map((item: HealthData['items'][0], index: number) => (
           <div key={index}>
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">{item.name}</span>
@@ -362,7 +393,8 @@ function ActivityWidget({
   widget: DashboardWidget;
   onRemove: (id: string) => void;
 }) {
-  const { data } = widget;
+  const data = widget.data as ActivityData;
+  if (!data || !data.activities) return null;
 
   return (
     <div className="bg-white rounded-lg shadow p-6 relative group">
@@ -374,7 +406,7 @@ function ActivityWidget({
       </button>
       <h3 className="text-lg font-semibold text-gray-900 mb-4">{widget.title}</h3>
       <div className="space-y-4">
-        {data.activities?.map((activity: any) => (
+        {data.activities.map((activity: ActivityData['activities'][0]) => (
           <div key={activity.id} className="flex items-center space-x-3">
             <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
             <div className="flex-1">

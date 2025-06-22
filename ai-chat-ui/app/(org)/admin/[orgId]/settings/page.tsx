@@ -74,7 +74,7 @@ export default function SettingsPage() {
 }
 
 // Branding Settings Component
-function BrandingSettings({ orgId }: { orgId: string }) {
+function BrandingSettings({ orgId: _orgId }: { orgId: string }) {
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border p-6">
@@ -196,7 +196,7 @@ function WidgetsSettings({ orgId }: { orgId: string }) {
 }
 
 // API Settings Component
-function APISettings({ orgId }: { orgId: string }) {
+function APISettings({ orgId: _orgId }: { orgId: string }) {
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border p-6">
@@ -239,7 +239,7 @@ function APISettings({ orgId }: { orgId: string }) {
 }
 
 // Notification Settings Component
-function NotificationSettings({ orgId }: { orgId: string }) {
+function NotificationSettings({ orgId: _orgId }: { orgId: string }) {
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border p-6">
@@ -293,7 +293,7 @@ function NotificationSettings({ orgId }: { orgId: string }) {
 }
 
 // Security Settings Component
-function SecuritySettings({ orgId }: { orgId: string }) {
+function SecuritySettings({ orgId: _orgId }: { orgId: string }) {
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border p-6">
