@@ -1,0 +1,18 @@
+cron:
+  # Email Drip Campaign - トライアルユーザー向け自動メール配信
+  - description: 'Daily email drip campaign for trial users'
+    url: /api/cron/email-drip
+    schedule: 0 4 * * * # 毎日 04:00 UTC (日本時間 13:00)
+    timezone: UTC
+    target: default
+    headers:
+      Authorization: Bearer ${CRON_SECRET_TOKEN}
+
+  # Usage Record Processing - 使用量記録の定期処理
+  - description: 'Process usage records and send to Stripe'
+    url: /api/cron/usage-record
+    schedule: 0 2 * * * # 毎日 02:00 UTC (日本時間 11:00)
+    timezone: UTC
+    target: default
+    headers:
+      Authorization: Bearer ${CRON_SECRET_TOKEN}

@@ -41,8 +41,8 @@ export default function SignupPage() {
       const success = await signup(email, password, name || undefined);
 
       if (success) {
-        // Redirect to the profile page after successful signup
-        router.push('/profile');
+        // Redirect to the onboarding plan selection after successful signup
+        router.push('/onboarding/step-plan');
       } else {
         setErrorMessage('新規登録に失敗しました。もう一度お試しください。');
       }

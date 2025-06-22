@@ -1,11 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { TrialExtensionRequest } from '@/types/billing';
+import { OrgTrialExtensionRequest, TrialExtensionResponse } from '@/types/billing';
 
-// JWT token verification (実際の実装ではjwtライブラリを使用)
-function verifyAdminToken(token: string): { userId: string; isAdmin: boolean } | null {
+// JWT token verification for organization admin (実際の実装ではjwtライブラリを使用)
+function verifyOrgAdminToken(
+  token: string
+): { userId: string; orgId: string; isOrgAdmin: boolean } | null {
   // 開発環境用のモック実装
-  if (process.env.NODE_ENV === 'development' && token === 'dev-admin-token') {
-    return { userId: 'admin-1', isAdmin: true };
+  if (process.env.NODE_ENV === 'development' && token === 'dev-org-admin-token') {
+    return { userId: 'org-admin-1', orgId: 'org-1', isOrgAdmin: true };
   }
 
   // 実際の実装では以下のようになります:
@@ -14,9 +16,14 @@ function verifyAdminToken(token: string): { userId: string; isAdmin: boolean } |
   
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET) as any;
+    
+    // ユーザーが指定された組織の管理者かチェック
+    const userOrgRole = await getUserOrganizationRole(decoded.userId, orgId);
+    
     return {
       userId: decoded.userId,
-      isAdmin: decoded.role === 'admin' || decoded.role === 'super_admin'
+      orgId: userOrgRole.orgId,
+      isOrgAdmin: userOrgRole.role === 'admin' || userOrgRole.role === 'owner'
     };
   } catch (error) {
     console.error('Token verification failed:', error);
@@ -27,53 +34,56 @@ function verifyAdminToken(token: string): { userId: string; isAdmin: boolean } |
   return null;
 }
 
-// Trial延長処理
-async function extendTrialPeriod(
-  userId: string,
-  extensionDays: number,
-  adminId: string,
-  reason?: string
-): Promise<{ success: boolean; newTrialEnd: string; message: string }> {
+// Organization Trial延長処理（7日固定）
+async function extendOrganizationTrial(
+  orgId: string,
+  adminUserId: string
+): Promise<TrialExtensionResponse> {
   try {
     // 実際の実装では以下のような処理を行います:
     /*
-    // ユーザーのサブスクリプション情報を取得
-    const subscription = await prisma.subscription.findFirst({
-      where: {
-        userId: userId,
-        status: 'trial'
-      }
+    // 組織のサブスクリプション情報を取得
+    const orgSubscription = await prisma.organization.findUnique({
+      where: { id: orgId },
+      include: { subscription: true }
     });
 
-    if (!subscription) {
-      throw new Error('Active trial subscription not found');
+    if (!orgSubscription) {
+      throw new Error('Organization not found');
     }
 
-    if (!subscription.trialEnd) {
-      throw new Error('Trial end date not found');
+    if (!orgSubscription.subscription || orgSubscription.subscription.status !== 'trial') {
+      throw new Error('Organization is not in trial period');
     }
 
-    // 新しいトライアル終了日を計算
-    const currentTrialEnd = new Date(subscription.trialEnd);
-    const newTrialEnd = new Date(currentTrialEnd.getTime() + extensionDays * 24 * 60 * 60 * 1000);
+    const currentTrialEnd = new Date(orgSubscription.subscription.trialEnd);
+    const now = new Date();
+
+    // トライアルが既に終了している場合はエラー
+    if (currentTrialEnd < now) {
+      throw new Error('Trial period has already ended');
+    }
+
+    // 7日延長
+    const newTrialEnd = new Date(currentTrialEnd.getTime() + 7 * 24 * 60 * 60 * 1000);
 
     // データベースを更新
     await prisma.subscription.update({
-      where: { id: subscription.id },
+      where: { id: orgSubscription.subscription.id },
       data: {
         trialEnd: newTrialEnd,
         updatedAt: new Date()
       }
     });
 
-    // Trial延長ログを記録
+    // 延長ログを記録
     await prisma.trialExtensionLog.create({
       data: {
-        userId: userId,
-        subscriptionId: subscription.id,
-        adminId: adminId,
-        extensionDays: extensionDays,
-        reason: reason || 'Admin extension',
+        organizationId: orgId,
+        subscriptionId: orgSubscription.subscription.id,
+        adminUserId: adminUserId,
+        extensionDays: 7,
+        reason: 'Organization admin trial extension',
         previousTrialEnd: currentTrialEnd,
         newTrialEnd: newTrialEnd,
         createdAt: new Date()
@@ -81,22 +91,24 @@ async function extendTrialPeriod(
     });
 
     // Stripeのサブスクリプションも更新
-    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-    await stripe.subscriptions.update(subscription.stripeSubscriptionId, {
-      trial_end: Math.floor(newTrialEnd.getTime() / 1000)
-    });
+    if (orgSubscription.subscription.stripeSubscriptionId) {
+      const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+      await stripe.subscriptions.update(orgSubscription.subscription.stripeSubscriptionId, {
+        trial_end: Math.floor(newTrialEnd.getTime() / 1000)
+      });
+    }
 
-    // ユーザーに通知メール送信
-    await sendTrialExtensionEmail(userId, {
-      extensionDays,
+    // 組織メンバーに通知メール送信
+    await sendTrialExtensionNotificationEmail(orgId, {
+      extensionDays: 7,
       newTrialEnd: newTrialEnd.toISOString(),
-      reason
+      extendedBy: adminUserId
     });
 
     return {
       success: true,
-      newTrialEnd: newTrialEnd.toISOString(),
-      message: `Trial extended by ${extensionDays} days`
+      newTrialEndAt: newTrialEnd.toISOString(),
+      message: 'Trial extended by 7 days successfully'
     };
     */
 
@@ -104,60 +116,27 @@ async function extendTrialPeriod(
     const currentTrialEnd = new Date();
     currentTrialEnd.setDate(currentTrialEnd.getDate() + 7); // 現在から7日後と仮定
 
-    const newTrialEnd = new Date(currentTrialEnd.getTime() + extensionDays * 24 * 60 * 60 * 1000);
+    const newTrialEnd = new Date(currentTrialEnd.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-    console.log(`Trial extended for user ${userId} by ${extensionDays} days by admin ${adminId}`);
+    console.log(`Trial extended for organization ${orgId} by admin ${adminUserId}`);
     console.log(`New trial end: ${newTrialEnd.toISOString()}`);
-    console.log(`Reason: ${reason || 'Admin extension'}`);
 
     return {
       success: true,
-      newTrialEnd: newTrialEnd.toISOString(),
-      message: `Trial extended by ${extensionDays} days`,
+      newTrialEndAt: newTrialEnd.toISOString(),
+      message: 'Trial extended by 7 days successfully',
     };
   } catch (error) {
-    console.error('Failed to extend trial:', error);
+    console.error('Failed to extend organization trial:', error);
     throw error;
   }
 }
 
-// ユーザー検索（管理者機能）
-async function searchUser(
-  query: string
-): Promise<Array<{ id: string; email: string; name: string }>> {
-  // 実際の実装では以下のような処理を行います:
-  /*
-  const users = await prisma.user.findMany({
-    where: {
-      OR: [
-        { email: { contains: query, mode: 'insensitive' } },
-        { name: { contains: query, mode: 'insensitive' } }
-      ]
-    },
-    select: {
-      id: true,
-      email: true,
-      name: true
-    },
-    take: 10
-  });
-
-  return users;
-  */
-
-  // モック実装
-  const mockUsers = [
-    { id: 'user-1', email: 'user1@example.com', name: '田中太郎' },
-    { id: 'user-2', email: 'user2@example.com', name: '佐藤花子' },
-    { id: 'user-3', email: 'user3@example.com', name: '山田一郎' },
-  ];
-
-  return mockUsers.filter(
-    (user) => user.email.toLowerCase().includes(query.toLowerCase()) || user.name.includes(query)
-  );
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
     // 認証チェック
     const authHeader = req.headers.authorization;
@@ -166,58 +145,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const token = authHeader.split(' ')[1];
-    const user = verifyAdminToken(token);
+    const user = verifyOrgAdminToken(token);
 
-    if (!user || !user.isAdmin) {
-      return res.status(403).json({ error: 'Admin access required' });
+    if (!user || !user.isOrgAdmin) {
+      return res.status(403).json({ error: 'Organization admin access required' });
     }
 
-    if (req.method === 'POST') {
-      // Trial延長処理
-      const { userId, extensionDays, reason }: TrialExtensionRequest = req.body;
+    const { orgId }: OrgTrialExtensionRequest = req.body;
 
-      // バリデーション
-      if (!userId) {
-        return res.status(400).json({ error: 'userId is required' });
-      }
+    // バリデーション
+    if (!orgId) {
+      return res.status(400).json({ error: 'orgId is required' });
+    }
 
-      if (!extensionDays || extensionDays <= 0 || extensionDays > 30) {
-        return res.status(400).json({
-          error: 'extensionDays must be between 1 and 30',
-        });
-      }
+    // 管理者が自分の組織のトライアルのみ延長できることを確認
+    if (user.orgId !== orgId) {
+      return res.status(403).json({
+        error: 'You can only extend trial for your own organization',
+      });
+    }
 
-      try {
-        const result = await extendTrialPeriod(userId, extensionDays, user.userId, reason);
-
-        return res.status(200).json(result);
-      } catch (error) {
-        console.error('Trial extension failed:', error);
-        return res.status(500).json({
-          error: 'Failed to extend trial period',
-          details: error instanceof Error ? error.message : 'Unknown error',
-        });
-      }
-    } else if (req.method === 'GET') {
-      // ユーザー検索
-      const { q } = req.query;
-
-      if (!q || typeof q !== 'string') {
-        return res.status(400).json({ error: 'Search query parameter "q" is required' });
-      }
-
-      try {
-        const users = await searchUser(q);
-        return res.status(200).json({ users });
-      } catch (error) {
-        console.error('User search failed:', error);
-        return res.status(500).json({
-          error: 'Failed to search users',
-          details: error instanceof Error ? error.message : 'Unknown error',
-        });
-      }
-    } else {
-      return res.status(405).json({ error: 'Method not allowed' });
+    try {
+      const result = await extendOrganizationTrial(orgId, user.userId);
+      return res.status(200).json(result);
+    } catch (error) {
+      console.error('Organization trial extension failed:', error);
+      return res.status(500).json({
+        error: 'Failed to extend organization trial period',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      });
     }
   } catch (error) {
     console.error('API error:', error);
