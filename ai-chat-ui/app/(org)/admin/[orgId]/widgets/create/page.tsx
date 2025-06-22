@@ -40,21 +40,35 @@ export default function CreateWidgetPage({ params }: { params: Promise<{ orgId: 
     },
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
 
     try {
-      // API call to create widget
-      console.log('Creating widget:', form);
+      setLoading(true);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const widgetData = {
+        name: form.name,
+        theme: form.theme,
+        primaryColor: form.theme.primaryColor,
+        secondaryColor: form.theme.secondaryColor,
+        backgroundColor: '',
+        textColor: '',
+        borderRadius: parseInt(form.theme.borderRadius.toString()),
+        fontFamily: '',
+        welcomeMessage: form.settings.welcomeMessage,
+        placeholder: form.settings.placeholder,
+        showAvatar: form.settings.showAvatar,
+        enableFileUpload: form.settings.enableFileUpload,
+      };
 
-      // Redirect to widgets list
-      router.push(`/admin/${orgId}/widgets`);
-    } catch (error) {
-      console.error('Failed to create widget:', error);
+      console.log('Creating widget:', widgetData);
+      // TODO: Send to API
+
+      alert('ウィジェットが作成されました！');
+      // router.push(`/admin/${orgId}/widgets`);
+    } catch (error: unknown) {
+      console.error('Widget creation failed:', error);
+      alert('ウィジェット作成に失敗しました');
     } finally {
       setLoading(false);
     }
@@ -203,7 +217,7 @@ export default function CreateWidgetPage({ params }: { params: Promise<{ orgId: 
                     type="range"
                     min="0"
                     max="24"
-                    value={form.theme.borderRadius}
+                    value={form.theme.borderRadius.toString()}
                     onChange={(e) => updateForm('theme.borderRadius', parseInt(e.target.value))}
                     className="w-full"
                   />

@@ -75,6 +75,19 @@ export default function SettingsPage() {
 
 // Branding Settings Component
 function BrandingSettings({ orgId }: { orgId: string }) {
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [organizationName, setOrganizationName] = useState('');
+  const [primaryColor, setPrimaryColor] = useState('#3B82F6');
+  const [secondaryColor, setSecondaryColor] = useState('#64748B');
+
+  const handleLogoUpload = async () => {
+    if (!logoFile) return;
+
+    console.log('Uploading logo for org:', orgId);
+    // TODO: Implement S3 upload
+    alert('Logo upload functionality will be implemented');
+  };
+
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border p-6">
@@ -155,6 +168,23 @@ function BrandingSettings({ orgId }: { orgId: string }) {
 
 // Members Settings Component
 function MembersSettings({ orgId }: { orgId: string }) {
+  const [members, setMembers] = useState([
+    { id: 1, name: '田中太郎', email: 'tanaka@example.com', role: 'admin', joinedAt: '2024-01-15' },
+    {
+      id: 2,
+      name: '山田花子',
+      email: 'yamada@example.com',
+      role: 'member',
+      joinedAt: '2024-01-20',
+    },
+  ]);
+
+  const handleInviteMember = () => {
+    console.log('Inviting member to org:', orgId);
+    // TODO: Implement member invitation
+    alert('Member invitation functionality will be implemented');
+  };
+
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border p-6">
@@ -197,6 +227,19 @@ function WidgetsSettings({ orgId }: { orgId: string }) {
 
 // API Settings Component
 function APISettings({ orgId }: { orgId: string }) {
+  const [apiKey, setApiKey] = useState('ak_1234567890abcdef');
+  const [webhookUrl, setWebhookUrl] = useState('');
+
+  const regenerateApiKey = () => {
+    console.log('Regenerating API key for org:', orgId);
+    // TODO: Implement API key regeneration
+    if (confirm('APIキーを再生成しますか？既存のキーは無効になります。')) {
+      const newKey = 'ak_' + Math.random().toString(36).substring(2, 18);
+      setApiKey(newKey);
+      alert('新しいAPIキーが生成されました');
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border p-6">
@@ -240,6 +283,20 @@ function APISettings({ orgId }: { orgId: string }) {
 
 // Notification Settings Component
 function NotificationSettings({ orgId }: { orgId: string }) {
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [slackWebhook, setSlackWebhook] = useState('');
+
+  const testSlackWebhook = async () => {
+    if (!slackWebhook) {
+      alert('Slack Webhook URLを入力してください');
+      return;
+    }
+
+    console.log('Testing Slack webhook for org:', orgId);
+    // TODO: Implement Slack webhook test
+    alert('Slack Webhook test functionality will be implemented');
+  };
+
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border p-6">
@@ -293,7 +350,7 @@ function NotificationSettings({ orgId }: { orgId: string }) {
 }
 
 // Security Settings Component
-function SecuritySettings({ orgId }: { orgId: string }) {
+function SecuritySettings({ orgId: _orgId }: { orgId: string }) {
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border p-6">

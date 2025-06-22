@@ -38,6 +38,13 @@ enum DocumentStatus {
   failed
 }
 
+enum Role {
+  owner
+  org_admin
+  editor
+  viewer
+}
+
 model Company {
   id                 String        @id @default(uuid())
   name               String
@@ -95,20 +102,31 @@ model Widget {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String?
-  isAdmin   Boolean  @default(false)
-  companyId String?
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  chatLogs  ChatLog[]
-  events    Event[]  // Event tracking
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  email           String   @unique
+  password        String
+  name            String?
+  
+  // Legacy admin field (to be migrated)
+  isAdmin         Boolean  @default(false)
+  
+  // New role system
+  roles           Role[]   @default([viewer])
+  
+  // Organization membership
+  organizationId  String?
+  organization    Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  
+  companyId       String?
+  company         Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  chatLogs        ChatLog[]
+  events          Event[]  // Event tracking
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([email])
   @@index([companyId])
+  @@index([organizationId])
   @@map("users")
 }
 
@@ -177,6 +195,11 @@ model Organization {
   id              String           @id @default(uuid())
   name            String
   slug            String           @unique
+  
+  // Dashboard layout settings
+  settings        Json?            @default("{\"dashboard\":{\"layout\":[]}}")
+  
+  users           User[]           // Organization members
   companies       Company[]
   knowledgeBases  KnowledgeBase[]
   faqs            FAQ[]

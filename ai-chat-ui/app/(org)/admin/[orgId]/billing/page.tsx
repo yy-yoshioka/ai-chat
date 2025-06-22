@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 
 interface UsageData {
   apiCalls: number;
@@ -142,7 +141,7 @@ export default function BillingPage({ params }: { params: Promise<{ orgId: strin
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'plan' | 'usage' | 'invoices')}
               className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
                 activeTab === tab.id
                   ? 'border-blue-500 text-blue-600'

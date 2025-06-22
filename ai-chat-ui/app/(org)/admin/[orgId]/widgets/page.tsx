@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Plus, Edit3, Copy, Trash2, Eye, Settings } from 'lucide-react';
 
@@ -32,11 +32,7 @@ export default function WidgetsPage({ params }: { params: Promise<{ orgId: strin
   const [widgets, setWidgets] = useState<Widget[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchWidgets();
-  }, [orgId]);
-
-  const fetchWidgets = async () => {
+  const fetchWidgets = useCallback(async () => {
     setLoading(true);
     try {
       // Mock data - replace with actual API call
@@ -92,7 +88,11 @@ export default function WidgetsPage({ params }: { params: Promise<{ orgId: strin
     } finally {
       setLoading(false);
     }
-  };
+  }, [orgId]);
+
+  useEffect(() => {
+    fetchWidgets();
+  }, [fetchWidgets]);
 
   const handleDeleteWidget = async (widgetId: string) => {
     if (!confirm('このウィジェットを削除してもよろしいですか？')) return;
