@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '../_lib/api';
-import { User } from '@/types/user';
+import { User, Role, hasRole, hasPermission } from '@/types/user';
 
 // Auth state
 interface AuthState {
@@ -17,6 +17,8 @@ interface UseAuthReturn extends AuthState {
   logout: () => Promise<boolean>;
   refreshUser: () => Promise<void>;
   isAdmin: boolean;
+  hasOrgPermission: (orgId: string, role: Role) => boolean;
+  hasOrgResourcePermission: (orgId: string, resource: string, action: string) => boolean;
 }
 
 /**
@@ -35,6 +37,24 @@ export function useAuth(): UseAuthReturn {
   // Note: This checks for 'admin' role, which represents organization-level admin
   // 'super_admin' role would be used for platform-level administrators (not implemented)
   const isAdmin = authState.user?.role === 'admin';
+
+  // Check if user has specific role in organization
+  const hasOrgPermission = useCallback(
+    (orgId: string, role: Role): boolean => {
+      if (!authState.user) return false;
+      return hasRole(authState.user, orgId, role);
+    },
+    [authState.user]
+  );
+
+  // Check if user has specific resource permission in organization
+  const hasOrgResourcePermission = useCallback(
+    (orgId: string, resource: string, action: string): boolean => {
+      if (!authState.user) return false;
+      return hasPermission(authState.user, orgId, resource, action);
+    },
+    [authState.user]
+  );
 
   /**
    * Fetch the current user data from the /api/me endpoint
@@ -199,5 +219,7 @@ export function useAuth(): UseAuthReturn {
     logout,
     refreshUser,
     isAdmin,
+    hasOrgPermission,
+    hasOrgResourcePermission,
   };
 }

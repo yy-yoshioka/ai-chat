@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import AdminAuthGuard from '../../../_components/AdminAuthGuard';
+import OrgAdminGuard from '../../../_components/OrgAdminGuard';
 import { useAuth } from '../../../_hooks/useAuth';
 
 interface AdminLayoutProps {
@@ -29,6 +29,11 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       icon: '📊',
     },
     {
+      title: 'ウィジェット',
+      path: `/admin/${orgId}/widgets`,
+      icon: '🧩',
+    },
+    {
       title: 'チャット',
       path: `/admin/${orgId}/chats`,
       icon: '💬',
@@ -49,6 +54,11 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       icon: '📈',
     },
     {
+      title: '請求・利用状況',
+      path: `/admin/${orgId}/billing`,
+      icon: '💳',
+    },
+    {
       title: 'ログ監視',
       path: `/admin/${orgId}/logs`,
       icon: '📋',
@@ -61,7 +71,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
   ];
 
   return (
-    <AdminAuthGuard>
+    <OrgAdminGuard orgId={orgId} requiredRole="viewer">
       <div className="min-h-screen bg-gray-50 flex">
         {/* Sidebar */}
         <div className="w-64 bg-white shadow-lg">
@@ -149,27 +159,33 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
           <main className="flex-1 p-6 overflow-auto">{children}</main>
         </div>
       </div>
-    </AdminAuthGuard>
+    </OrgAdminGuard>
   );
 }
 
 function getPageTitle(pathname: string): string {
   if (pathname.includes('/dashboard')) return 'ダッシュボード';
+  if (pathname.includes('/widgets')) return 'ウィジェット管理';
   if (pathname.includes('/faq')) return 'FAQ管理';
   if (pathname.includes('/users')) return 'ユーザー管理';
   if (pathname.includes('/chats')) return 'チャット監視';
   if (pathname.includes('/reports')) return 'レポート';
+  if (pathname.includes('/billing')) return '請求・利用状況';
   if (pathname.includes('/logs')) return 'ログ監視';
+  if (pathname.includes('/settings')) return '設定';
   return '管理者パネル';
 }
 
 function getPageDescription(pathname: string): string {
   if (pathname.includes('/dashboard')) return 'システム全体の状況を監視';
+  if (pathname.includes('/widgets')) return 'チャットウィジェットの作成・管理';
   if (pathname.includes('/faq')) return 'よくある質問の作成・編集・削除';
   if (pathname.includes('/users')) return 'ユーザーアカウントの管理';
   if (pathname.includes('/chats')) return 'チャット履歴とパフォーマンスの監視';
   if (pathname.includes('/reports')) return '詳細なレポートと分析';
+  if (pathname.includes('/billing')) return '請求情報と利用状況の確認';
   if (pathname.includes('/logs')) return 'システムログとエラー監視';
+  if (pathname.includes('/settings')) return '組織設定の管理';
   return 'AI Chatシステムの管理';
 }
 
@@ -189,7 +205,7 @@ function TrialBadge({ orgId }: { orgId: string }) {
 
   return (
     <Link
-      href={`/admin/${orgId}/billing-plans`}
+      href={`/admin/${orgId}/billing`}
       className="flex items-center px-3 py-1.5 bg-orange-100 hover:bg-orange-200 border border-orange-300 rounded-full text-orange-800 text-sm font-medium transition-colors"
     >
       <span className="mr-1">⏰</span>
