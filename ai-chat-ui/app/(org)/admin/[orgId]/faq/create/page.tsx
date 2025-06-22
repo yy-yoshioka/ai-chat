@@ -2,12 +2,18 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
-export default function CreateFAQPage() {
-  const params = useParams();
+interface CreateFAQProps {
+  params: Promise<{ orgId: string }>;
+}
+
+export default function CreateFAQ({ params }: CreateFAQProps) {
   const router = useRouter();
-  const orgId = params.orgId as string;
+
+  // Use React.use() to unwrap the params Promise
+  const { orgId } = React.use(params);
 
   const [formData, setFormData] = useState({
     question: '',

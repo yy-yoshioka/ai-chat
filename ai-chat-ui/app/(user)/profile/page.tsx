@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/_hooks/useAuth';
 import Layout from '@/app/_components/Layout';

@@ -1,39 +1,93 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Helper function to check authentication (mock implementation)
-function checkAuthentication(request: NextRequest): boolean {
-  // In a real implementation, you would:
-  // 1. Check for JWT token in cookies or headers
-  // 2. Validate the token
-  // 3. Return authentication status
-
-  // Mock implementation - check for auth cookie
-  const authToken = request.cookies.get('auth-token');
-  const sessionToken = request.cookies.get('next-auth.session-token');
-
-  return !!(authToken || sessionToken);
+// User info interface
+interface UserInfo {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  organizationId: string;
+  organizationName: string;
+  [key: string]: unknown; // For additional properties
 }
 
-// Helper function to check admin role (mock implementation)
-function checkAdminRole(request: NextRequest): boolean {
-  // In a real implementation, you would:
-  // 1. Decode the JWT token
-  // 2. Check user role/permissions
-  // 3. Return admin status
+// Helper function to decode JWT token and extract user info
+function decodeJWTToken(token: string): UserInfo | null {
+  try {
+    // Split JWT token into parts
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      return null;
+    }
 
-  // Mock implementation - check for admin role cookie
-  const userRole = request.cookies.get('user-role');
-  return userRole?.value === 'admin';
+    // Decode the payload (second part)
+    const payload = parts[1];
+    const decodedPayload = Buffer.from(payload, 'base64').toString('utf-8');
+    return JSON.parse(decodedPayload) as UserInfo;
+  } catch (error) {
+    console.error('Error decoding JWT token:', error);
+    return null;
+  }
+}
+
+// Helper function to get user info from request
+function getUserInfo(request: NextRequest): UserInfo | null {
+  // Development mode: Check for dev-admin cookie first
+  if (process.env.NODE_ENV === 'development') {
+    const devAdmin = request.cookies.get('dev-admin')?.value;
+    if (devAdmin === 'true') {
+      // Return mock admin user data for development
+      return {
+        id: 'admin-1',
+        name: '管理者',
+        email: 'admin@example.com',
+        role: 'admin',
+        organizationId: 'org-demo',
+        organizationName: 'デモ株式会社',
+      };
+    }
+  }
+
+  // Try to get JWT token from cookies
+  const authToken = request.cookies.get('auth-token')?.value;
+  const sessionToken = request.cookies.get('next-auth.session-token')?.value;
+  const backendToken = request.cookies.get('token')?.value; // Backend API token
+
+  // Try to get token from Authorization header
+  const authHeader = request.headers.get('authorization');
+  const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
+
+  const token = authToken || sessionToken || backendToken || bearerToken;
+
+  if (!token) {
+    return null;
+  }
+
+  return decodeJWTToken(token);
+}
+
+// Helper function to check authentication
+function checkAuthentication(request: NextRequest): boolean {
+  const userInfo = getUserInfo(request);
+  return !!userInfo;
+}
+
+// Helper function to check admin role
+function checkAdminRole(request: NextRequest): boolean {
+  const userInfo = getUserInfo(request);
+  return userInfo?.role === 'admin' || userInfo?.role === 'super_admin';
 }
 
 // Helper function to get user's default organization
 function getDefaultOrgId(request: NextRequest): string {
-  // In a real implementation, you would:
-  // 1. Get user ID from token
-  // 2. Query database for user's default org
-  // 3. Return org ID
+  const userInfo = getUserInfo(request);
 
-  // Mock implementation - return from cookie or default
+  // Return organizationId from user info if available
+  if (userInfo?.organizationId) {
+    return userInfo.organizationId;
+  }
+
+  // Fallback: check for organization ID in cookie
   const defaultOrg = request.cookies.get('default-org-id');
   return defaultOrg?.value || 'default';
 }

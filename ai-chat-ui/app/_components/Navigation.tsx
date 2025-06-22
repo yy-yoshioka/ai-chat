@@ -10,6 +10,7 @@ export default function Navigation() {
   const isActive = (path: string) => pathname === path;
 
   const { user, authenticated, isAdmin } = useAuth();
+  console.log(user);
   const getUserInitials = (name?: string) => {
     if (!name) return 'U';
     const names = name.trim().split(/\s+/);
@@ -78,7 +79,7 @@ export default function Navigation() {
             {authenticated && (
               <>
                 <Link
-                  href="/admin/org-selector"
+                  href="/admin"
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     pathname?.startsWith('/admin')
                       ? 'bg-blue-100 text-blue-700'
@@ -91,7 +92,7 @@ export default function Navigation() {
                 {/* Admin link - only visible to admins */}
                 {isAdmin && (
                   <Link
-                    href="/admin/org-selector"
+                    href="/admin"
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                       pathname?.startsWith('/admin')
                         ? 'bg-red-100 text-red-700 font-semibold'

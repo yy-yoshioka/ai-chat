@@ -8,51 +8,54 @@ import { useAuth } from '../../../_hooks/useAuth';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
-  params: {
+  params: Promise<{
     orgId: string;
-  };
+  }>;
 }
 
 export default function AdminLayout({ children, params }: AdminLayoutProps) {
   const pathname = usePathname();
   const { user } = useAuth();
 
+  // Use React.use() to unwrap the params Promise
+  const { orgId } = React.use(params);
+
   const isActive = (path: string) => pathname?.startsWith(path) || false;
 
   const sidebarItems = [
     {
       title: 'ダッシュボード',
-      path: `/admin/${params.orgId}/dashboard`,
+      path: `/admin/${orgId}/dashboard`,
       icon: '📊',
     },
     {
       title: 'チャット',
-      path: `/admin/${params.orgId}/chats`,
+      path: `/admin/${orgId}/chats`,
       icon: '💬',
     },
     {
       title: 'FAQ管理',
-      path: `/admin/${params.orgId}/faq`,
+      path: `/admin/${orgId}/faq`,
       icon: '❓',
     },
     {
       title: 'ユーザー管理',
-      path: `/admin/${params.orgId}/users`,
+      path: `/admin/${orgId}/users`,
       icon: '👥',
     },
     {
       title: 'レポート',
-      path: `/admin/${params.orgId}/reports`,
+      path: `/admin/${orgId}/reports`,
       icon: '📈',
     },
     {
       title: 'ログ監視',
-      path: `/admin/${params.orgId}/logs`,
+      path: `/admin/${orgId}/logs`,
       icon: '📋',
     },
     {
       title: '設定',
-      path: `/admin/${params.orgId}/settings`,
+      path: `/admin/${orgId}/settings`,
       icon: '⚙️',
     },
   ];
@@ -63,7 +66,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
         {/* Sidebar */}
         <div className="w-64 bg-white shadow-lg">
           <div className="p-6 border-b">
-            <Link href={`/admin/${params.orgId}/dashboard`} className="flex items-center space-x-3">
+            <Link href={`/admin/${orgId}/dashboard`} className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-pink-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">🔧</span>
               </div>
@@ -127,7 +130,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
                 <p className="text-gray-600 mt-1">{getPageDescription(pathname || '')}</p>
               </div>
               <div className="flex items-center space-x-4">
-                <TrialBadge orgId={params.orgId} />
+                <TrialBadge orgId={orgId} />
                 <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path

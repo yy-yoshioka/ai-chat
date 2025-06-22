@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import React from 'react';
 
 interface FAQ {
   id: string;
@@ -14,9 +14,14 @@ interface FAQ {
   updatedAt: string;
 }
 
-export default function AdminFAQPage() {
-  const params = useParams();
-  const orgId = params.orgId as string;
+interface AdminFAQProps {
+  params: Promise<{ orgId: string }>;
+}
+
+export default function AdminFAQ({ params }: AdminFAQProps) {
+  // Use React.use() to unwrap the params Promise
+  const { orgId } = React.use(params);
+
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [categoryFilter, setCategoryFilter] = useState<string>('all');

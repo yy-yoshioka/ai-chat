@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
 interface FAQ {
   id: string;
@@ -14,11 +15,15 @@ interface FAQ {
   updatedAt: string;
 }
 
-export default function EditFAQPage() {
-  const params = useParams();
+interface EditFAQProps {
+  params: Promise<{ orgId: string; id: string }>;
+}
+
+export default function EditFAQ({ params }: EditFAQProps) {
   const router = useRouter();
-  const orgId = params.orgId as string;
-  const faqId = params.id as string;
+
+  // Use React.use() to unwrap the params Promise
+  const { orgId, id } = React.use(params);
 
   const [formData, setFormData] = useState({
     question: '',
@@ -38,7 +43,7 @@ export default function EditFAQPage() {
 
         // Sample FAQ data
         const faq: FAQ = {
-          id: faqId,
+          id: id,
           question: 'サービスの料金プランについて教えてください',
           answer: '当サービスでは、Freeプラン、Proプラン、Enterpriseプランをご用意しています。',
           category: '料金',
@@ -61,7 +66,7 @@ export default function EditFAQPage() {
     };
 
     loadFAQ();
-  }, [faqId]);
+  }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

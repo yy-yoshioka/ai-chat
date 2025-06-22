@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import React from 'react';
 
 interface BillingPlan {
   id: string;
@@ -144,9 +144,9 @@ function TrialAlert() {
   );
 }
 
-const BillingPlansPage = () => {
-  const params = useParams();
-  const orgId = params.orgId as string;
+const BillingPlansPage = ({ params }: { params: Promise<{ orgId: string }> }) => {
+  // Use React.use() to unwrap the params Promise
+  const { orgId } = React.use(params);
   const [selectedTab, setSelectedTab] = useState<'plans' | 'usage' | 'overage' | 'analytics'>(
     'plans'
   );
