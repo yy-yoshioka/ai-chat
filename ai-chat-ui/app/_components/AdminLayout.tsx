@@ -1,59 +1,59 @@
-'use client';
-
-import React from 'react';
+import { ReactNode } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import AdminAuthGuard from '../../../_components/AdminAuthGuard';
-import { useAuth } from '../../../_hooks/useAuth';
+import { useAuth } from '@/app/_hooks/useAuth';
+import AdminAuthGuard from './AdminAuthGuard';
 
 interface AdminLayoutProps {
-  children: React.ReactNode;
-  params: {
-    orgId: string;
-  };
+  children: ReactNode;
 }
 
-export default function AdminLayout({ children, params }: AdminLayoutProps) {
-  const pathname = usePathname();
+export default function AdminLayout({ children }: AdminLayoutProps) {
+  const router = useRouter();
   const { user } = useAuth();
 
-  const isActive = (path: string) => pathname?.startsWith(path) || false;
+  const isActive = (path: string) => router.pathname.startsWith(path);
 
   const sidebarItems = [
     {
       title: 'ダッシュボード',
-      path: `/admin/${params.orgId}/dashboard`,
+      path: '/admin/dashboard',
       icon: '📊',
     },
     {
-      title: 'チャット',
-      path: `/admin/${params.orgId}/chats`,
-      icon: '💬',
-    },
-    {
       title: 'FAQ管理',
-      path: `/admin/${params.orgId}/faq`,
+      path: '/admin/faq',
       icon: '❓',
     },
     {
       title: 'ユーザー管理',
-      path: `/admin/${params.orgId}/users`,
+      path: '/admin/users',
       icon: '👥',
     },
     {
+      title: '組織管理',
+      path: '/admin/org',
+      icon: '🏢',
+    },
+    {
+      title: 'チャット監視',
+      path: '/admin/chats',
+      icon: '💬',
+    },
+    {
+      title: 'システム設定',
+      path: '/admin/settings',
+      icon: '⚙️',
+    },
+    {
       title: 'レポート',
-      path: `/admin/${params.orgId}/reports`,
+      path: '/admin/reports',
       icon: '📈',
     },
     {
       title: 'ログ監視',
-      path: `/admin/${params.orgId}/logs`,
+      path: '/admin/logs',
       icon: '📋',
-    },
-    {
-      title: '設定',
-      path: `/admin/${params.orgId}/settings`,
-      icon: '⚙️',
     },
   ];
 
@@ -63,7 +63,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
         {/* Sidebar */}
         <div className="w-64 bg-white shadow-lg">
           <div className="p-6 border-b">
-            <Link href={`/admin/${params.orgId}/dashboard`} className="flex items-center space-x-3">
+            <Link href="/admin/dashboard" className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-pink-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">🔧</span>
               </div>
@@ -123,11 +123,13 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
           <header className="bg-white shadow-sm border-b px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">{getPageTitle(pathname || '')}</h2>
-                <p className="text-gray-600 mt-1">{getPageDescription(pathname || '')}</p>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  {getPageTitle(router.pathname)}
+                </h2>
+                <p className="text-gray-600 mt-1">{getPageDescription(router.pathname)}</p>
               </div>
               <div className="flex items-center space-x-4">
-                <TrialBadge orgId={params.orgId} />
+                <TrialBadge />
                 <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
@@ -151,27 +153,33 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
 }
 
 function getPageTitle(pathname: string): string {
-  if (pathname.includes('/dashboard')) return 'ダッシュボード';
-  if (pathname.includes('/faq')) return 'FAQ管理';
-  if (pathname.includes('/users')) return 'ユーザー管理';
-  if (pathname.includes('/chats')) return 'チャット監視';
-  if (pathname.includes('/reports')) return 'レポート';
-  if (pathname.includes('/logs')) return 'ログ監視';
+  if (pathname.includes('/admin/dashboard')) return 'ダッシュボード';
+  if (pathname.includes('/admin/faq')) return 'FAQ管理';
+  if (pathname.includes('/admin/users')) return 'ユーザー管理';
+  if (pathname.includes('/admin/org')) return '組織管理';
+  if (pathname.includes('/admin/chats')) return 'チャット監視';
+  if (pathname.includes('/admin/settings')) return 'システム設定';
+  if (pathname.includes('/admin/reports')) return 'レポート';
+  if (pathname.includes('/admin/logs')) return 'ログ監視';
   return '管理者パネル';
 }
 
 function getPageDescription(pathname: string): string {
-  if (pathname.includes('/dashboard')) return 'システム全体の状況を監視';
-  if (pathname.includes('/faq')) return 'よくある質問の作成・編集・削除';
-  if (pathname.includes('/users')) return 'ユーザーアカウントの管理';
-  if (pathname.includes('/chats')) return 'チャット履歴とパフォーマンスの監視';
-  if (pathname.includes('/reports')) return '詳細なレポートと分析';
-  if (pathname.includes('/logs')) return 'システムログとエラー監視';
+  if (pathname.includes('/admin/dashboard')) return 'システム全体の状況を監視';
+  if (pathname.includes('/admin/faq')) return 'よくある質問の作成・編集・削除';
+  if (pathname.includes('/admin/users')) return 'ユーザーアカウントの管理';
+  if (pathname.includes('/admin/org')) return '組織・テナントの管理と設定';
+  if (pathname.includes('/admin/chats')) return 'チャット履歴とパフォーマンスの監視';
+  if (pathname.includes('/admin/settings')) return 'システム設定とコンフィグレーション';
+  if (pathname.includes('/admin/reports')) return '詳細なレポートと分析';
+  if (pathname.includes('/admin/logs')) return 'システムログとエラー監視';
   return 'AI Chatシステムの管理';
 }
 
 // Trial Badge Component
-function TrialBadge({ orgId }: { orgId: string }) {
+function TrialBadge() {
+  const router = useRouter();
+
   // This would normally come from your organization/trial context
   // For now, using mock data - you should replace with actual trial data
   const trialEndDate = new Date();
@@ -184,9 +192,11 @@ function TrialBadge({ orgId }: { orgId: string }) {
   // Don't show badge if trial period is over or if no trial
   if (daysLeft <= 0) return null;
 
+  const currentOrgId = router.query.id || 'default'; // Get from router or context
+
   return (
     <Link
-      href={`/admin/${orgId}/billing-plans`}
+      href={`/admin/org/${currentOrgId}/billing-plans`}
       className="flex items-center px-3 py-1.5 bg-orange-100 hover:bg-orange-200 border border-orange-300 rounded-full text-orange-800 text-sm font-medium transition-colors"
     >
       <span className="mr-1">⏰</span>

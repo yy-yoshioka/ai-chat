@@ -117,41 +117,5 @@ Already in place. To do:
 
 ---
 
-## 8 . Jobs / CRON / Messages / Content
 
-| Type                                | Path                                                 | Action |
-| ----------------------------------- | ---------------------------------------------------- | ------ |
-| CRON functions (`pages/api/cron/*`) | move to `app/api/cron/*/route.ts`                    |
-| `jobs/` queue workers               | keep at repo root                                    |
-| `content/` (MDX)                    | move marketing posts into `app/(marketing)/_content` |
-| `messages/`                         | relocate next to feature (`_messages` per folder)    |
 
----
-
-## 9 . Cleanup
-
-- [ ] Delete `pages_legacy/` after QA green  
-- [ ] Remove any unused redirects from `next.config.js`  
-- [ ] Update README route examples  
-- [ ] Run `yarn prisma generate` if path references changed
-
----
-
-## 10 . Final QA
-
-| Check         | How                                   |
-| ------------- | ------------------------------------- |
-| **Build**     | `yarn build` → no ts / ESLint errors  |
-| **E2E**       | `yarn test:e2e` (Playwright) all pass |
-| **Prod link** | Deploy preview → click every nav link |
-| **API**       | Postman collection passes             |
-
----
-
-## 11 . Pull Request Checklist
-
-- [ ] PR title: “feat: migrate to full App Router”  
-- [ ] CI ✔️ (build, lint, test)  
-- [ ] Linked issue #xxx (#RouterRefactor)  
-- [ ] Screenshot / Loom of new nav flow  
-- [ ] Request reviews: @frontend-team @platform-team  

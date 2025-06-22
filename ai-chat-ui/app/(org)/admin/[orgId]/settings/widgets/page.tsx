@@ -76,32 +76,35 @@ export default function WidgetsPage() {
     fetchCompanies();
   }, [fetchCompanies]);
 
+  const fetchWidgets = useCallback(
+    async (companyId: string) => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(`/api/organizations/${orgId}/widgets?companyId=${companyId}`, {
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setWidgets(data);
+        } else {
+          console.error('Failed to fetch widgets');
+        }
+      } catch (error) {
+        console.error('Error fetching widgets:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [orgId]
+  );
+
   useEffect(() => {
     console.log('Selected company effect - selectedCompanyId:', selectedCompanyId);
     if (selectedCompanyId) {
       fetchWidgets(selectedCompanyId);
     }
-  }, [selectedCompanyId]);
-
-  const fetchWidgets = async (companyId: string) => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(`/api/organizations/${orgId}/widgets?companyId=${companyId}`, {
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setWidgets(data);
-      } else {
-        console.error('Failed to fetch widgets');
-      }
-    } catch (error) {
-      console.error('Error fetching widgets:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [selectedCompanyId, fetchWidgets]);
 
   const handleCreateWidget = async (e: React.FormEvent) => {
     e.preventDefault();

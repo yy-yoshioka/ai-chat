@@ -12,9 +12,6 @@ const withMDX = require('@next/mdx')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-  experimental: {
-    appDir: true, // Enable App Router alongside Pages Router
-  },
 
   // Legacy admin route redirects (301 permanent redirects)
   async redirects() {
