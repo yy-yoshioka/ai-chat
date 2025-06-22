@@ -347,7 +347,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="p-4 space-y-3">
                   <Link
-                    href="/chat"
+                    href="/admin/org-selector"
                     className="group flex items-center w-full p-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                   >
                     <div className="flex items-center justify-center w-8 h-8 bg-white bg-opacity-20 rounded-lg mr-3">
@@ -366,8 +366,8 @@ export default function ProfilePage() {
                       </svg>
                     </div>
                     <div className="flex-1">
-                      <div className="font-semibold text-sm">Start Chat</div>
-                      <div className="text-xs text-blue-100">Begin conversation</div>
+                      <div className="font-semibold text-sm">Go to Dashboard</div>
+                      <div className="text-xs text-blue-100">Access your workspace</div>
                     </div>
                     <svg
                       className="w-4 h-4 group-hover:translate-x-1 transition-transform"
@@ -385,7 +385,7 @@ export default function ProfilePage() {
                   </Link>
 
                   <Link
-                    href="/widgets"
+                    href="/admin/org-selector"
                     className="group flex items-center w-full p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                   >
                     <div className="flex items-center justify-center w-8 h-8 bg-white bg-opacity-20 rounded-lg mr-3">
@@ -404,8 +404,8 @@ export default function ProfilePage() {
                       </svg>
                     </div>
                     <div className="flex-1">
-                      <div className="font-semibold text-sm">Manage Widgets</div>
-                      <div className="text-xs text-green-100">Configure widgets</div>
+                      <div className="font-semibold text-sm">Manage Settings</div>
+                      <div className="text-xs text-green-100">Configure your workspace</div>
                     </div>
                     <svg
                       className="w-4 h-4 group-hover:translate-x-1 transition-transform"

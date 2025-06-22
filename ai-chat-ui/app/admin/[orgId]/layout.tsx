@@ -17,13 +17,18 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
   const pathname = usePathname();
   const { user } = useAuth();
 
-  const isActive = (path: string) => pathname.startsWith(path);
+  const isActive = (path: string) => pathname?.startsWith(path) || false;
 
   const sidebarItems = [
     {
       title: 'ダッシュボード',
       path: `/admin/${params.orgId}/dashboard`,
       icon: '📊',
+    },
+    {
+      title: 'チャット',
+      path: `/admin/${params.orgId}/chats`,
+      icon: '💬',
     },
     {
       title: 'FAQ管理',
@@ -36,11 +41,6 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       icon: '👥',
     },
     {
-      title: 'チャット監視',
-      path: `/admin/${params.orgId}/chats`,
-      icon: '💬',
-    },
-    {
       title: 'レポート',
       path: `/admin/${params.orgId}/reports`,
       icon: '📈',
@@ -49,6 +49,11 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
       title: 'ログ監視',
       path: `/admin/${params.orgId}/logs`,
       icon: '📋',
+    },
+    {
+      title: '設定',
+      path: `/admin/${params.orgId}/settings`,
+      icon: '⚙️',
     },
   ];
 
@@ -118,8 +123,8 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
           <header className="bg-white shadow-sm border-b px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">{getPageTitle(pathname)}</h2>
-                <p className="text-gray-600 mt-1">{getPageDescription(pathname)}</p>
+                <h2 className="text-2xl font-bold text-gray-900">{getPageTitle(pathname || '')}</h2>
+                <p className="text-gray-600 mt-1">{getPageDescription(pathname || '')}</p>
               </div>
               <div className="flex items-center space-x-4">
                 <TrialBadge orgId={params.orgId} />

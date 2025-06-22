@@ -19,6 +19,18 @@ const nextConfig = {
   // Legacy admin route redirects (301 permanent redirects)
   async redirects() {
     return [
+      // Legacy top-level routes (v2 refactor)
+      {
+        source: '/chat',
+        destination: '/admin/default/chats',
+        permanent: true,
+      },
+      {
+        source: '/widgets',
+        destination: '/admin/default/settings/widgets',
+        permanent: true,
+      },
+
       // Legacy admin dashboard routes
       {
         source: '/admin/dashboard',

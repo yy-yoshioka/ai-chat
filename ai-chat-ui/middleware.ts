@@ -55,6 +55,33 @@ export function middleware(request: NextRequest) {
   const isAuthenticated = checkAuthentication(request);
   const isAdmin = checkAdminRole(request);
 
+  // Handle legacy /chat and /widgets routes - redirect to organization-aware structure
+  if (pathname === '/chat' || pathname.startsWith('/chat/')) {
+    if (!isAuthenticated) {
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('next', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    const defaultOrgId = getDefaultOrgId(request);
+    return NextResponse.redirect(
+      new URL(`/admin/${defaultOrgId}/chats`, request.url),
+      { status: 301 } // Permanent redirect
+    );
+  }
+
+  if (pathname === '/widgets' || pathname.startsWith('/widgets/')) {
+    if (!isAuthenticated) {
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('next', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    const defaultOrgId = getDefaultOrgId(request);
+    return NextResponse.redirect(
+      new URL(`/admin/${defaultOrgId}/settings/widgets`, request.url),
+      { status: 301 } // Permanent redirect
+    );
+  }
+
   // Handle /admin routes
   if (pathname.startsWith('/admin')) {
     // Authentication check
