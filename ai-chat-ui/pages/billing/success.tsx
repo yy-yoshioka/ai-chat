@@ -207,7 +207,7 @@ export default function BillingSuccessPage() {
                     あなたのWebサイトにAIチャットウィジェットを設置しましょう。
                   </p>
                   <Link
-                    href="/widgets"
+                    href="/admin/org-selector"
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
                     ウィジェット設置ガイド →
@@ -225,7 +225,7 @@ export default function BillingSuccessPage() {
                     よくある質問を追加して、AIの回答精度を向上させましょう。
                   </p>
                   <Link
-                    href="/admin/faq"
+                    href="/admin/org-selector"
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
                     FAQ管理 →
@@ -243,7 +243,7 @@ export default function BillingSuccessPage() {
                     チャットの応答や外観を御社のブランドに合わせて調整できます。
                   </p>
                   <Link
-                    href="/admin/settings"
+                    href="/admin/org-selector"
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
                     設定管理 →
@@ -256,7 +256,7 @@ export default function BillingSuccessPage() {
           {/* Action Buttons */}
           <div className="text-center space-y-4">
             <Link
-              href="/admin/dashboard"
+              href="/admin/org-selector"
               className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
             >
               管理画面へ進む

@@ -76,30 +76,20 @@ export default function Navigation() {
             {authenticated && (
               <>
                 <Link
-                  href="/chat"
+                  href="/admin/org-selector"
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive('/chat')
+                    router.pathname.startsWith('/admin')
                       ? 'bg-blue-100 text-blue-700'
                       : 'text-gray-700 hover:text-blue-600'
                   }`}
                 >
-                  Chat
-                </Link>
-                <Link
-                  href="/widgets"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive('/widgets')
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-700 hover:text-blue-600'
-                  }`}
-                >
-                  Widgets
+                  Dashboard
                 </Link>
 
                 {/* Admin link - only visible to admins */}
                 {isAdmin && (
                   <Link
-                    href="/admin/dashboard"
+                    href="/admin/org-selector"
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                       router.pathname.startsWith('/admin')
                         ? 'bg-red-100 text-red-700 font-semibold'
