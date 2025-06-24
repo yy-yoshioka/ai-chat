@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import { BillingCheckoutRequest, BillingCheckoutResponse } from '@/types/billing';
 
 // Stripe設定（環境変数から取得）
@@ -86,33 +86,27 @@ async function createStripeCheckoutSession(
   throw new Error('Stripe not configured for production');
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    const { priceId, orgId }: BillingCheckoutRequest = req.body;
+    const body: BillingCheckoutRequest = await req.json();
+    const { priceId, orgId } = body;
 
     // バリデーション
     if (!priceId || !orgId) {
-      return res.status(400).json({
-        error: 'Missing required fields: priceId, orgId',
-      });
+      return NextResponse.json(
+        { error: 'Missing required fields: priceId, orgId' },
+        { status: 400 }
+      );
     }
 
     // Stripe価格IDの基本バリデーション
     if (!priceId.startsWith('price_')) {
-      return res.status(400).json({
-        error: 'Invalid priceId format',
-      });
+      return NextResponse.json({ error: 'Invalid priceId format' }, { status: 400 });
     }
 
     // 組織IDの基本バリデーション
     if (typeof orgId !== 'string' || orgId.length < 1) {
-      return res.status(400).json({
-        error: 'Invalid orgId',
-      });
+      return NextResponse.json({ error: 'Invalid orgId' }, { status: 400 });
     }
 
     // チェックアウトセッション作成
@@ -126,12 +120,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       sessionUrl,
     };
 
-    return res.status(200).json(response);
+    return NextResponse.json(response);
   } catch (error) {
     console.error('Checkout session creation failed:', error);
-    return res.status(500).json({
-      error: 'Failed to create checkout session',
-      details: error instanceof Error ? error.message : 'Unknown error',
-    });
+    return NextResponse.json(
+      {
+        error: 'Failed to create checkout session',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    );
   }
 }

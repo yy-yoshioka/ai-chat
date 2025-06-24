@@ -1,26 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-
-interface UsageData {
-  apiCalls: number;
-  messages: number;
-  mau: number;
-  storage: number;
-  period: string;
-}
-
-interface PlanInfo {
-  name: string;
-  price: number;
-  features: string[];
-  limits: {
-    apiCalls: number;
-    messages: number;
-    users: number;
-    storage: number;
-  };
-}
+import React, { useState } from 'react';
+import { useBilling } from './_hooks/useBilling';
 
 interface Invoice {
   id: string;
@@ -33,74 +14,34 @@ interface Invoice {
 export default function BillingPage({ params }: { params: Promise<{ orgId: string }> }) {
   const { orgId } = React.use(params);
   const [activeTab, setActiveTab] = useState<'plan' | 'usage' | 'invoices'>('plan');
-  const [usage, setUsage] = useState<UsageData | null>(null);
-  const [currentPlan, setCurrentPlan] = useState<PlanInfo | null>(null);
-  const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchBillingData();
-  }, [orgId]);
+  // Use TanStack Query for data fetching
+  const { data, isLoading, error } = useBilling(orgId);
 
-  const fetchBillingData = async () => {
-    setLoading(true);
-    try {
-      // Mock data - replace with actual API calls
-      setCurrentPlan({
-        name: 'Pro',
-        price: 9800,
-        features: [
-          '月間10,000APIコール',
-          '無制限チャットセッション',
-          '最大100ユーザー',
-          '10GB ストレージ',
-          'メールサポート',
-        ],
-        limits: {
-          apiCalls: 10000,
-          messages: -1, // unlimited
-          users: 100,
-          storage: 10, // GB
-        },
-      });
-
-      setUsage({
-        apiCalls: 7543,
-        messages: 15623,
-        mau: 67,
-        storage: 3.2,
-        period: '2024年3月',
-      });
-
-      setInvoices([
-        {
-          id: 'inv-001',
-          date: new Date('2024-03-01'),
-          amount: 9800,
-          status: 'paid',
-          downloadUrl: '/invoices/inv-001.pdf',
-        },
-        {
-          id: 'inv-002',
-          date: new Date('2024-02-01'),
-          amount: 9800,
-          status: 'paid',
-          downloadUrl: '/invoices/inv-002.pdf',
-        },
-        {
-          id: 'inv-003',
-          date: new Date('2024-01-01'),
-          amount: 9800,
-          status: 'paid',
-          downloadUrl: '/invoices/inv-003.pdf',
-        },
-      ]);
-    } catch (error) {
-      console.error('Failed to fetch billing data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Mock invoices data (would be fetched separately in real implementation)
+  const invoices: Invoice[] = [
+    {
+      id: 'inv-001',
+      date: new Date('2024-03-01'),
+      amount: 9800,
+      status: 'paid',
+      downloadUrl: '/invoices/inv-001.pdf',
+    },
+    {
+      id: 'inv-002',
+      date: new Date('2024-02-01'),
+      amount: 9800,
+      status: 'paid',
+      downloadUrl: '/invoices/inv-002.pdf',
+    },
+    {
+      id: 'inv-003',
+      date: new Date('2024-01-01'),
+      amount: 9800,
+      status: 'paid',
+      downloadUrl: '/invoices/inv-003.pdf',
+    },
+  ];
 
   const getUsagePercentage = (used: number, limit: number) => {
     if (limit === -1) return 0; // unlimited
@@ -114,7 +55,7 @@ export default function BillingPage({ params }: { params: Promise<{ orgId: strin
     }).format(amount);
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -122,6 +63,47 @@ export default function BillingPage({ params }: { params: Promise<{ orgId: strin
       </div>
     );
   }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center text-red-600">
+          <div className="text-4xl mb-2">❌</div>
+          <p>データの読み込みに失敗しました</p>
+          <p className="text-sm">{error.message}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center text-gray-500">
+          <div className="text-4xl mb-2">📊</div>
+          <p>データがありません</p>
+        </div>
+      </div>
+    );
+  }
+
+  const { plans, usage } = data;
+
+  // Convert plans data to current plan format (first plan as mock current plan)
+  const currentPlan =
+    plans.length > 0
+      ? {
+          name: plans[0].name,
+          price: plans[0].price,
+          features: plans[0].features,
+          limits: {
+            apiCalls: 10000,
+            messages: -1, // unlimited
+            users: 100,
+            storage: 10, // GB
+          },
+        }
+      : null;
 
   return (
     <div className="space-y-6">
@@ -224,31 +206,14 @@ export default function BillingPage({ params }: { params: Promise<{ orgId: strin
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">プランのアップグレード</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  name: 'Starter',
-                  price: 2980,
-                  features: ['月間1,000APIコール', '最大10ユーザー', '1GB ストレージ'],
-                },
-                {
-                  name: 'Pro',
-                  price: 9800,
-                  features: ['月間10,000APIコール', '最大100ユーザー', '10GB ストレージ'],
-                  current: true,
-                },
-                {
-                  name: 'Enterprise',
-                  price: 29800,
-                  features: ['無制限APIコール', '無制限ユーザー', '100GB ストレージ'],
-                },
-              ].map((plan) => (
+              {plans.map((plan, index) => (
                 <div
-                  key={plan.name}
+                  key={plan.id}
                   className={`relative rounded-lg border p-6 ${
-                    plan.current ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                    index === 0 ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
                   }`}
                 >
-                  {plan.current && (
+                  {index === 0 && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                       <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">
                         現在のプラン
@@ -260,11 +225,13 @@ export default function BillingPage({ params }: { params: Promise<{ orgId: strin
                     <div className="mt-2 text-2xl font-bold text-gray-900">
                       {formatCurrency(plan.price)}
                     </div>
-                    <div className="text-sm text-gray-500">/月</div>
+                    <div className="text-sm text-gray-500">
+                      /{plan.interval === 'month' ? '月' : '年'}
+                    </div>
                   </div>
                   <ul className="mt-4 space-y-2">
-                    {plan.features.map((feature, index) => (
-                      <li key={index} className="text-sm text-gray-700 flex items-center">
+                    {plan.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="text-sm text-gray-700 flex items-center">
                         <span className="text-green-500 mr-2">✓</span>
                         {feature}
                       </li>
@@ -272,13 +239,13 @@ export default function BillingPage({ params }: { params: Promise<{ orgId: strin
                   </ul>
                   <button
                     className={`mt-6 w-full px-4 py-2 rounded-lg transition-colors ${
-                      plan.current
+                      index === 0
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                         : 'bg-blue-600 text-white hover:bg-blue-700'
                     }`}
-                    disabled={plan.current}
+                    disabled={index === 0}
                   >
-                    {plan.current ? '現在のプラン' : 'アップグレード'}
+                    {index === 0 ? '現在のプラン' : 'アップグレード'}
                   </button>
                 </div>
               ))}
@@ -292,31 +259,31 @@ export default function BillingPage({ params }: { params: Promise<{ orgId: strin
           {/* Usage Overview */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">利用状況概要</h3>
-            <p className="text-gray-600 mb-6">{usage.period}の利用状況</p>
+            <p className="text-gray-600 mb-6">{usage.period.start}の利用状況</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div>
                 <div className="text-sm font-medium text-gray-600 mb-2">APIコール</div>
                 <div className="text-2xl font-bold text-gray-900 mb-2">
-                  {usage.apiCalls.toLocaleString()}
+                  {usage.usage.apiCalls.toLocaleString()}
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-blue-600 h-2 rounded-full"
                     style={{
-                      width: `${getUsagePercentage(usage.apiCalls, currentPlan.limits.apiCalls)}%`,
+                      width: `${getUsagePercentage(usage.usage.apiCalls, usage.limits.apiCalls)}%`,
                     }}
                   />
                 </div>
                 <div className="text-xs text-gray-500 mt-1">
-                  {currentPlan.limits.apiCalls.toLocaleString()}まで
+                  {usage.limits.apiCalls.toLocaleString()}まで
                 </div>
               </div>
 
               <div>
                 <div className="text-sm font-medium text-gray-600 mb-2">メッセージ数</div>
                 <div className="text-2xl font-bold text-gray-900 mb-2">
-                  {usage.messages.toLocaleString()}
+                  {usage.usage.messages.toLocaleString()}
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div className="bg-green-600 h-2 rounded-full w-full" />
@@ -325,29 +292,39 @@ export default function BillingPage({ params }: { params: Promise<{ orgId: strin
               </div>
 
               <div>
-                <div className="text-sm font-medium text-gray-600 mb-2">アクティブユーザー</div>
-                <div className="text-2xl font-bold text-gray-900 mb-2">{usage.mau}</div>
+                <div className="text-sm font-medium text-gray-600 mb-2">トークン数</div>
+                <div className="text-2xl font-bold text-gray-900 mb-2">
+                  {usage.usage.tokens.toLocaleString()}
+                </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-purple-600 h-2 rounded-full"
-                    style={{ width: `${getUsagePercentage(usage.mau, currentPlan.limits.users)}%` }}
+                    style={{
+                      width: `${getUsagePercentage(usage.usage.tokens, usage.limits.tokens)}%`,
+                    }}
                   />
                 </div>
-                <div className="text-xs text-gray-500 mt-1">{currentPlan.limits.users}人まで</div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {usage.limits.tokens.toLocaleString()}まで
+                </div>
               </div>
 
               <div>
-                <div className="text-sm font-medium text-gray-600 mb-2">ストレージ</div>
-                <div className="text-2xl font-bold text-gray-900 mb-2">{usage.storage}GB</div>
+                <div className="text-sm font-medium text-gray-600 mb-2">API呼び出し</div>
+                <div className="text-2xl font-bold text-gray-900 mb-2">
+                  {usage.usage.apiCalls.toLocaleString()}
+                </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-orange-600 h-2 rounded-full"
                     style={{
-                      width: `${getUsagePercentage(usage.storage, currentPlan.limits.storage)}%`,
+                      width: `${getUsagePercentage(usage.usage.apiCalls, usage.limits.apiCalls)}%`,
                     }}
                   />
                 </div>
-                <div className="text-xs text-gray-500 mt-1">{currentPlan.limits.storage}GBまで</div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {usage.limits.apiCalls.toLocaleString()}まで
+                </div>
               </div>
             </div>
           </div>

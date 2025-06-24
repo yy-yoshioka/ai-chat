@@ -1,17 +1,11 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://ai-chat-api:3001';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req;
-
-  if (method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function GET(req: NextRequest) {
   try {
     // Get cookies from the request and forward them
-    const cookies = req.headers.cookie || '';
+    const cookies = req.headers.get('cookie') || '';
 
     const apiUrl = `${API_BASE_URL}/api/companies`;
 
@@ -26,12 +20,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(response.status).json(data);
+      return NextResponse.json(data, { status: response.status });
     }
 
-    res.status(response.status).json(data);
+    return NextResponse.json(data, { status: response.status });
   } catch (error) {
     console.error('Companies API error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

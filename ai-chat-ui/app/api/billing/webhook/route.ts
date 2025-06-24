@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import { StripeWebhookEvent } from '@/types/billing';
 
 // Webhook signature verification (実際の実装ではstripeライブラリを使用)
@@ -158,33 +158,28 @@ async function handleCustomerDeleted(customerData: Record<string, unknown>): Pro
   }
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(req: NextRequest) {
   try {
     // Webhook signature verification
-    const signature = req.headers['stripe-signature'] as string;
+    const signature = req.headers.get('stripe-signature');
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
     if (!webhookSecret) {
       console.error('STRIPE_WEBHOOK_SECRET not configured');
-      return res.status(500).json({ error: 'Webhook secret not configured' });
+      return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
     }
 
-    // Raw body取得（実際の実装ではmiddlewareでraw bodyを取得）
-    const payload = JSON.stringify(req.body);
+    // Raw body取得
+    const payload = await req.text();
 
     // Signature verification
     if (!verifyWebhookSignature(payload, signature || '', webhookSecret)) {
       console.error('Webhook signature verification failed');
-      return res.status(400).json({ error: 'Invalid signature' });
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
     // Webhook event parsing
-    const event: StripeWebhookEvent =
-      typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const event: StripeWebhookEvent = JSON.parse(payload);
 
     console.log(`Processing webhook event: ${event.type} (${event.id})`);
 
@@ -221,12 +216,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         break;
     }
 
-    return res.status(200).json({ received: true, processed: event.type });
+    return NextResponse.json({ received: true, processed: event.type });
   } catch (error) {
     console.error('Webhook processing failed:', error);
-    return res.status(500).json({
-      error: 'Webhook processing failed',
-      details: error instanceof Error ? error.message : 'Unknown error',
-    });
+    return NextResponse.json(
+      {
+        error: 'Webhook processing failed',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    );
   }
 }

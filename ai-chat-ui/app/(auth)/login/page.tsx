@@ -1,19 +1,27 @@
 'use client';
 
-import { useState, FormEvent, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, FormEvent, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../../_hooks/useAuth';
 
-function LoginContent() {
+export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { login, authenticated, loading } = useAuth();
+
+  // Get redirect path from URL parameters
+  const getRedirectPath = () => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('from') || '/profile';
+    }
+    return '/profile';
+  };
 
   // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
@@ -32,7 +40,7 @@ function LoginContent() {
 
       if (success) {
         // Redirect to the page they were trying to access, or to the dashboard
-        const redirectPath = searchParams?.get('from') || '/profile';
+        const redirectPath = getRedirectPath();
         router.push(redirectPath);
       } else {
         setErrorMessage('Invalid email or password');
@@ -169,19 +177,5 @@ function LoginContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center min-h-[80vh]">
-          <div className="text-slate-700 text-lg">Loading...</div>
-        </div>
-      }
-    >
-      <LoginContent />
-    </Suspense>
   );
 }
