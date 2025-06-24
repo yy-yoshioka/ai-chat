@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { UsageData } from '@/src/shared/billing';
-import { API_BASE } from '@/src/server/env';
+import { UsageData } from '@/app/_schemas/billing';
+import { API_BASE } from '@/server/env';
 
 export async function GET(req: NextRequest) {
   try {

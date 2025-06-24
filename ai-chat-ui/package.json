@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:routes": "find app/api -name '*.ts' | grep -v route.ts$ && (echo 'Non-route file detected in app/api' && exit 1) || true",
     "format": "prettier --write .",
     "prepare": "yarn husky install",
     "test:e2e": "playwright test",

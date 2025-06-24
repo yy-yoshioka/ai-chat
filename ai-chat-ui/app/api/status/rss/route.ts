@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
 interface StatusUpdate {
   id: string;
@@ -9,11 +9,7 @@ interface StatusUpdate {
   link: string;
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
-
+export async function GET() {
   // Mock data - in production, this would fetch from your database
   const statusUpdates: StatusUpdate[] = [
     {
@@ -48,10 +44,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com';
   const rssXml = generateRSSXML(statusUpdates, baseUrl);
 
-  res.setHeader('Content-Type', 'application/rss+xml; charset=utf-8');
-  res.setHeader('Cache-Control', 'public, max-age=300'); // Cache for 5 minutes
-
-  return res.status(200).send(rssXml);
+  return new NextResponse(rssXml, {
+    headers: {
+      'Content-Type': 'application/rss+xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=300', // Cache for 5 minutes
+    },
+  });
 }
 
 function generateRSSXML(statusUpdates: StatusUpdate[], baseUrl: string): string {

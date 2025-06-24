@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { BillingPlan, UsageData } from '@/src/shared/billing';
+import { BillingPlan, UsageData } from '@/app/_schemas/billing';
 
 export function useBilling(orgId: string) {
   return useQuery({

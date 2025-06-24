@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://ai-chat-api:3001';
+import { API_BASE_URL } from '@/app/_lib/config';
 
 export async function POST(req: NextRequest) {
   try {

@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { BillingPlans } from '@/src/shared/billing';
-import { API_BASE } from '@/src/server/env';
+import { BillingPlans } from '@/app/_schemas/billing';
+import { API_BASE } from '@/server/env';
 
 export const revalidate = 60; // ISR: 60 秒
 

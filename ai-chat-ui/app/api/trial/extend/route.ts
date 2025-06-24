@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { OrgTrialExtensionRequest, TrialExtensionResponse } from '@/types/billing';
+import { NextRequest, NextResponse } from 'next/server';
+import { OrgTrialExtensionRequest, TrialExtensionResponse } from '@/app/_schemas/trial';
 
 // JWT token verification for organization admin (実際の実装ではjwtライブラリを使用)
 function verifyOrgAdminToken(
@@ -132,54 +132,58 @@ async function extendOrganizationTrial(
   }
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(req: NextRequest) {
   try {
     // 認証チェック
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers.get('authorization');
     if (!authHeader) {
-      return res.status(401).json({ error: 'Authorization header required' });
+      return NextResponse.json({ error: 'Authorization header required' }, { status: 401 });
     }
 
     const token = authHeader.split(' ')[1];
     const user = verifyOrgAdminToken(token);
 
     if (!user || !user.isOrgAdmin) {
-      return res.status(403).json({ error: 'Organization admin access required' });
+      return NextResponse.json({ error: 'Organization admin access required' }, { status: 403 });
     }
 
-    const { orgId }: OrgTrialExtensionRequest = req.body;
+    const body: OrgTrialExtensionRequest = await req.json();
+    const { orgId } = body;
 
     // バリデーション
     if (!orgId) {
-      return res.status(400).json({ error: 'orgId is required' });
+      return NextResponse.json({ error: 'orgId is required' }, { status: 400 });
     }
 
     // 管理者が自分の組織のトライアルのみ延長できることを確認
     if (user.orgId !== orgId) {
-      return res.status(403).json({
-        error: 'You can only extend trial for your own organization',
-      });
+      return NextResponse.json(
+        { error: 'You can only extend trial for your own organization' },
+        { status: 403 }
+      );
     }
 
     try {
       const result = await extendOrganizationTrial(orgId, user.userId);
-      return res.status(200).json(result);
+      return NextResponse.json(result);
     } catch (error) {
       console.error('Organization trial extension failed:', error);
-      return res.status(500).json({
-        error: 'Failed to extend organization trial period',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      });
+      return NextResponse.json(
+        {
+          error: 'Failed to extend organization trial period',
+          details: error instanceof Error ? error.message : 'Unknown error',
+        },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error('API error:', error);
-    return res.status(500).json({
-      error: 'Internal server error',
-      details: error instanceof Error ? error.message : 'Unknown error',
-    });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    );
   }
 }
