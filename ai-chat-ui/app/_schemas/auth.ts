@@ -1,33 +1,71 @@
+// app/_schemas/auth.ts
 import { z } from 'zod';
+import { Role } from '../_domains/auth';
 
-// User types
-export const User = z.object({
+// Role は z.enum() に変換して再利用
+export const RoleEnum = z.enum(Role);
+
+/* -------------------------------------------------
+ * 1. ドメイン列挙・サブ型
+ * ------------------------------------------------*/
+
+export const PermissionSchema = z.object({
+  resource: z.string(), // e.g. 'widgets'
+  actions: z.array(z.string()), // e.g. ['read','write']
+});
+export type Permission = z.infer<typeof PermissionSchema>;
+
+export const OrgMembershipSchema = z.object({
+  organizationId: z.string(),
+  organizationName: z.string().optional(),
+  roles: z.array(RoleEnum),
+  permissions: z.array(PermissionSchema),
+  joinedAt: z.string(), // ISO 文字列
+});
+export type OrgMembership = z.infer<typeof OrgMembershipSchema>;
+
+/* -------------------------------------------------
+ * 2. User
+ * ------------------------------------------------*/
+export const UserSchema = z.object({
   id: z.string(),
   email: z.string().email(),
-  name: z.string(),
-  role: z.enum(['user', 'admin', 'super']),
-  orgId: z.string().optional(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  /** Prisma は name? と optional なので合わせる */
+  name: z.string().optional(),
+
+  /* ---------------- legacy fields -------------- */
+  role: z.enum(['user', 'admin', 'super_admin']),
+  organizationId: z.string().optional(),
+
+  /* ---------------- new role system ------------ */
+  roles: z.array(RoleEnum).optional(),
+  organizations: z.array(OrgMembershipSchema).optional(),
+
+  /* ---------------- misc ----------------------- */
+  companyId: z.string().optional(),
+  profileImage: z.string().optional(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 });
+export type User = z.infer<typeof UserSchema>;
 
-export type User = z.infer<typeof User>;
-
-// Organization types
-export const Organization = z.object({
+/* -------------------------------------------------
+ * 3. Organization
+ * ------------------------------------------------*/
+export const OrganizationSchema = z.object({
   id: z.string(),
   name: z.string(),
   slug: z.string(),
-  plan: z.string().optional(),
-  stripeCustomerId: z.string().optional(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  settings: z.any().optional(), // Json 型
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 });
+export type Organization = z.infer<typeof OrganizationSchema>;
 
-export type Organization = z.infer<typeof Organization>;
-
-// JWT Payload types
-export const JWTPayload = z.object({
+/* -------------------------------------------------
+ * 4. JWT Payload
+ * ------------------------------------------------*/
+export const JWTPayloadSchema = z.object({
   userId: z.string(),
   email: z.string(),
   role: z.string(),
@@ -35,5 +73,4 @@ export const JWTPayload = z.object({
   exp: z.number(),
   iat: z.number(),
 });
-
-export type JWTPayload = z.infer<typeof JWTPayload>;
+export type JWTPayload = z.infer<typeof JWTPayloadSchema>;

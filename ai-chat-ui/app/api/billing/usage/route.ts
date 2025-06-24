@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { UsageData } from '@/app/_schemas/billing';
-import { API_BASE } from '@/server/env';
+import { API_BASE_URL } from '@/app/_lib/config';
 
 export async function GET(req: NextRequest) {
   try {
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Missing orgId parameter' }, { status: 400 });
     }
 
-    const res = await fetch(`${API_BASE}/billing/usage?orgId=${orgId}`, {
+    const res = await fetch(`${API_BASE_URL}/billing/usage?orgId=${orgId}`, {
       headers: { Authorization: `Bearer ${jwt}` },
       cache: 'no-store',
     });

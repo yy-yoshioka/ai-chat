@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { BillingPlans } from '@/app/_schemas/billing';
-import { API_BASE } from '@/server/env';
+import { API_BASE_URL } from '@/app/_lib/config';
 
 export const revalidate = 60; // ISR: 60 秒
 
@@ -10,7 +10,7 @@ export async function GET() {
     const cookieStore = await cookies();
     const jwt = cookieStore.get('session')?.value ?? '';
 
-    const res = await fetch(`${API_BASE}/billing/plans`, {
+    const res = await fetch(`${API_BASE_URL}/billing/plans`, {
       headers: { Authorization: `Bearer ${jwt}` },
       cache: 'no-store',
     });
