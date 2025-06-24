@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '../_lib/api';
-import { User, Role, hasRole, hasPermission } from '@/types/user';
+import { Role } from '@/types/user';
 
 // Auth state
 interface AuthState {
