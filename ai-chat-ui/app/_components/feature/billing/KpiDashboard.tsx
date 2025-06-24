@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BillingKPI } from '@/types/billing';
+import { BillingKPI } from '@/app/_domains/billing';
 
 interface KPICardProps {
   title: string;

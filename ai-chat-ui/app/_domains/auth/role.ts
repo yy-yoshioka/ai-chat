@@ -3,4 +3,4 @@
  */
 export const Role = ['owner', 'org_admin', 'editor', 'viewer', 'super_admin'] as const;
 
-export type Role = (typeof Role)[number];
+export type Role = 'owner' | 'org_admin' | 'editor' | 'viewer' | 'super_admin';

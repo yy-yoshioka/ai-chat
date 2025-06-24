@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
-import { api } from '@/lib/api';
 import { useAuth } from '@/app/_hooks/useAuth';
 
 export interface ChatMessageItem {

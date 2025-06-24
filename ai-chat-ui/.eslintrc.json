@@ -3,5 +3,19 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": ["error"]
-  }
+  },
+  "import/order": [
+    "error",
+    {
+      "groups": [
+        "builtin",
+        "external",
+        "@/app/_components",
+        "internal",
+        "parent",
+        "sibling",
+        "index"
+      ]
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { BillingCheckoutRequest, BillingCheckoutResponse } from '@/types/billing';
+import { BillingCheckoutRequest, BillingCheckoutResponse } from '@/app/_domains/billing';
 
 // Stripe設定（環境変数から取得）
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

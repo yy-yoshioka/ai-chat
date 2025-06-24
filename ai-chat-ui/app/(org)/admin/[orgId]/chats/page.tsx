@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import AuthGuard from '../../../../_components/AuthGuard';
-import ChatContainer from '../../../../_components/Chat/ChatContainer';
+import ChatContainer from '../../../../_components/feature/chat/ChatContainer';
 
 interface ChatSession {
   id: string;

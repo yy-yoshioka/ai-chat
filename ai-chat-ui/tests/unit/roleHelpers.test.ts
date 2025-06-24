@@ -1,4 +1,4 @@
-import { hasRole, hasPermission, User, Role } from '../../types/user';
+import { hasRole, hasPermission, User, Role } from '../../app/_domains/auth';
 
 describe('Role Helpers', () => {
   const mockUser: User = {

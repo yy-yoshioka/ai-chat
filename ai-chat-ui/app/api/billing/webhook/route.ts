@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { StripeWebhookEvent } from '@/types/billing';
+import { StripeWebhookEvent } from '@/app/_domains/billing';
 
 // Webhook signature verification (実際の実装ではstripeライブラリを使用)
 function verifyWebhookSignature(payload: string, signature: string, secret: string): boolean {

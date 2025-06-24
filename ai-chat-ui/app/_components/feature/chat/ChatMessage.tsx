@@ -1,4 +1,4 @@
-import { User } from '@/types/user';
+import { User } from '@/app/_domains/auth';
 import Image from 'next/image';
 
 interface ChatMessageProps {

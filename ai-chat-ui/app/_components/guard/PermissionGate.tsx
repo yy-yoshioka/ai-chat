@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAuth } from '../_hooks/useAuth';
-import { Role } from '@/types/user';
+import { Role } from '@/app/_domains/auth';
 
 interface PermissionGateProps {
   children: React.ReactNode;

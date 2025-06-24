@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BillingPlan, Subscription } from '@/types/billing';
+import { BillingPlan, Subscription } from '@/app/_domains/billing';
 
 interface BillingPlansProps {
   currentSubscription?: Subscription | null;
