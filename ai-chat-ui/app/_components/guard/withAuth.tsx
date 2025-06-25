@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/app/_hooks/useAuth';
+import { useAuth } from '@/app/_hooks/auth/useAuth';
 
 // Options for the withAuth HOC
 interface WithAuthOptions {

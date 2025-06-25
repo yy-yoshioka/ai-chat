@@ -1,7 +1,7 @@
 /**
  * プラン種類（Prisma の enum PlanType と合わせる）
  */
-export type PlanType = 'free' | 'pro' | 'enterprise';
+export type PlanType = 'free' | 'pro' | 'enterprise' | 'subscription';
 
 /**
  * 課金間隔

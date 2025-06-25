@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '../_lib/api';
-import { User } from '../_schemas';
-import { Role } from '../_domains/auth';
-import { hasPermission, hasRole } from '../_utils/auth-utils';
+import { User } from '../../_schemas';
+import { Role } from '../../_domains/auth';
+import { hasPermission, hasRole } from '../../_utils/auth-utils';
 
 // Auth state
 interface AuthState {

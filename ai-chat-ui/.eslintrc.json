@@ -2,20 +2,26 @@
   "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": ["error"]
-  },
-  "import/order": [
-    "error",
-    {
-      "groups": [
-        "builtin",
-        "external",
-        "@/app/_components",
-        "internal",
-        "parent",
-        "sibling",
-        "index"
-      ]
-    }
-  ]
+    "prettier/prettier": ["error"],
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@/app/_components/**",
+            "group": "internal",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always"
+      }
+    ]
+  }
 }

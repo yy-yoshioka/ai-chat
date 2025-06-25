@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '../../_hooks/useAuth';
+import { useAuth } from '../../_hooks/auth/useAuth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';

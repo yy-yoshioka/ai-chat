@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAuth } from '@/app/_hooks/useAuth';
+import { useAuth } from '@/app/_hooks/auth/useAuth';
 import Layout from '@/app/_components/Layout';
 
 interface UserProfile {

@@ -1,5 +1,5 @@
+import { API_BASE_URL } from '@/app/_config';
 import { NextRequest, NextResponse } from 'next/server';
-import { API_BASE_URL } from '@/app/_lib/config';
 
 export async function GET(
   req: NextRequest,

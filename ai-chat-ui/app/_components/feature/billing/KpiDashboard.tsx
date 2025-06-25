@@ -116,7 +116,7 @@ export default function BillingKPIDashboard({
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const mockKPIData: BillingKPI = {
-        trialToePaidConversionRate: 23.5,
+        trialToPaidConversionRate: 23.5,
         monthlyChurnRate: 2.8,
         averageLTV: 45600,
         totalActiveSubscriptions: 128,
@@ -227,7 +227,7 @@ export default function BillingKPIDashboard({
           {/* Trial to Paid Conversion Rate */}
           <KPICard
             title="Trial→Paid 転換率"
-            value={formatPercentage(kpiData.trialToePaidConversionRate)}
+            value={formatPercentage(kpiData.trialToPaidConversionRate)}
             subtitle="過去30日間"
             trend={{
               value: 5.2,
