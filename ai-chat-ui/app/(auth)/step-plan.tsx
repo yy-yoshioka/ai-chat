@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { PLANS } from '../_config/billing/plans';
+import { TRIAL_DAYS } from '../_config/billing/trial';
+import { formatCurrency } from '../_utils/formatters';
 
 interface PlanOption {
   id: string;
@@ -20,55 +23,6 @@ export default function StepPlanPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string>('');
-
-  const plans: PlanOption[] = [
-    {
-      id: 'free',
-      name: 'Free',
-      description: '個人利用や小規模チーム向け',
-      priceId: '',
-      price: 0,
-      currency: 'JPY',
-      interval: 'month',
-      features: ['月間100メッセージ', '1ユーザー', '基本的なAI機能', 'コミュニティサポート'],
-    },
-    {
-      id: 'pro',
-      name: 'Pro',
-      description: '成長中のビジネス向け',
-      priceId: 'price_pro_monthly',
-      price: 2980,
-      currency: 'JPY',
-      interval: 'month',
-      features: [
-        '月間10,000メッセージ',
-        '最大10ユーザー',
-        '高度なAI機能',
-        '優先サポート',
-        'カスタムブランディング',
-        '詳細な分析レポート',
-      ],
-      popular: true,
-    },
-    {
-      id: 'enterprise',
-      name: 'Enterprise',
-      description: '大企業・エンタープライズ向け',
-      priceId: 'price_enterprise_monthly',
-      price: 9800,
-      currency: 'JPY',
-      interval: 'month',
-      features: [
-        '無制限メッセージ',
-        '無制限ユーザー',
-        '専用AI・カスタムモデル',
-        '24/7専任サポート',
-        'SSO・SAML連携',
-        'API制限なし',
-        'カスタム統合',
-      ],
-    },
-  ];
 
   const handlePlanSelect = async (plan: PlanOption) => {
     if (plan.id === 'free') {
@@ -112,14 +66,6 @@ export default function StepPlanPage() {
     }
   };
 
-  const formatPrice = (price: number, currency: string) => {
-    const formatter = new Intl.NumberFormat('ja-JP', {
-      style: 'currency',
-      currency: currency,
-    });
-    return formatter.format(price);
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
       <div className="max-w-6xl mx-auto">
@@ -130,14 +76,14 @@ export default function StepPlanPage() {
             あなたのニーズに最適なプランを選んでAIチャットを始めましょう。
             <br />
             <span className="text-blue-600 font-semibold">
-              Proプランは14日間無料でお試しいただけます
+              Proプランは{TRIAL_DAYS}日間無料でお試しいただけます
             </span>
           </p>
         </div>
 
         {/* プランカード */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          {plans.map((plan) => (
+          {PLANS.map((plan) => (
             <div
               key={plan.id}
               className={`relative bg-white rounded-2xl shadow-lg border-2 p-8 transition-all ${
@@ -160,7 +106,7 @@ export default function StepPlanPage() {
                   <div className="text-3xl font-bold text-gray-900">無料</div>
                 ) : (
                   <div className="text-3xl font-bold text-gray-900">
-                    {formatPrice(plan.price, plan.currency)}
+                    {formatCurrency(plan.price, plan.currency)}
                     <span className="text-lg font-normal text-gray-600">
                       /{plan.interval === 'month' ? '月' : '年'}
                     </span>
@@ -206,7 +152,7 @@ export default function StepPlanPage() {
                 ) : plan.id === 'free' ? (
                   '無料で始める'
                 ) : (
-                  '14日無料で試す'
+                  `${TRIAL_DAYS}日無料で試す`
                 )}
               </button>
             </div>
