@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Script from 'next/script';
+import { API_BASE_URL, COMPANY_NAME } from '@/app/_config';
 
 interface Widget {
   widgetKey: string;
@@ -17,10 +18,6 @@ const DynamicWidgetLoader: React.FC = () => {
   const [selectedWidget, setSelectedWidget] = useState<Widget | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Configuration
-  const API_BASE_URL = 'http://localhost:8000';
-  const COMPANY_NAME = 'Test Company';
 
   // Fetch available widgets dynamically
   useEffect(() => {

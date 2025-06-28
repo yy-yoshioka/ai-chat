@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/_hooks/auth/useAuth';
-import AdminAuthGuard from '@/app/_components/layout/AdminAuthGuard';
+import AdminAuthGuard from '../guard/AdminAuthGuard';
 
 interface AdminLayoutProps {
   children: ReactNode;

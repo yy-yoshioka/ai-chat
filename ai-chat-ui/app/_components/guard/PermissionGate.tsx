@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { useAuth } from '../_hooks/useAuth';
+import React, { FC } from 'react';
 import { Role } from '@/app/_domains/auth';
+import { useAuth } from '@/app/_hooks/auth/useAuth';
 
 interface PermissionGateProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ interface PermissionGateProps {
   fallback?: React.ReactNode;
 }
 
-const PermissionGate: React.FC<PermissionGateProps> = ({
+const PermissionGate: FC<PermissionGateProps> = ({
   children,
   orgId,
   requiredRole,
@@ -52,7 +52,7 @@ const PermissionGate: React.FC<PermissionGateProps> = ({
 };
 
 // Default loading screen component
-const LoadingScreen: React.FC = () => (
+const LoadingScreen: FC = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50">
     <div className="text-center">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -62,7 +62,7 @@ const LoadingScreen: React.FC = () => (
 );
 
 // Default access denied component
-const AccessDenied: React.FC = () => (
+const AccessDenied: FC = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50">
     <div className="text-center max-w-md mx-auto">
       <div className="mb-6">

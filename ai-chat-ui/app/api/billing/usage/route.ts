@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { UsageData } from '@/app/_schemas/billing';
-import { API_BASE_URL } from '@/app/_lib/config';
+import { API_BASE_URL } from '@/app/_config';
 
 export async function GET(req: NextRequest) {
   try {

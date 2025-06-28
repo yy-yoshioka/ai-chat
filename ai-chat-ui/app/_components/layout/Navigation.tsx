@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useAuth } from '../_hooks/useAuth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/app/_hooks/auth/useAuth';
 
 export default function Navigation() {
   const pathname = usePathname();

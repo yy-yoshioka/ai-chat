@@ -8,7 +8,7 @@
 
 const OrgAdminGuard = ({ children, orgId, requiredRole = 'viewer' }) => {
     const router = useRouter();
-    const { authenticated, loading, hasOrgPermission } = useAuth();
+    const { loading, hasOrgPermission } = useAuth();
 
     if (loading) {
         return (
