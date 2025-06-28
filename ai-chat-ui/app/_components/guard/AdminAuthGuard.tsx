@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/_hooks/auth/useAuth';
 
 interface AdminAuthGuardProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {

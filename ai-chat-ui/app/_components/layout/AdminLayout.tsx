@@ -1,63 +1,23 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/_hooks/auth/useAuth';
 import AdminAuthGuard from '../guard/AdminAuthGuard';
+import { TrialBadge } from '../ui/badge/TrialBadge';
+import { resolveAdminMeta, ADMIN_SIDEBAR, NavItem } from '../../_config/navigation/admin';
 
 interface AdminLayoutProps {
   children: ReactNode;
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const router = useRouter();
+  const pathname = usePathname();
   const { user } = useAuth();
+  const { title: pageTitle, desc: pageDesc } = resolveAdminMeta(pathname);
 
-  const isActive = (path: string) => router.pathname.startsWith(path);
-
-  const sidebarItems = [
-    {
-      title: 'ダッシュボード',
-      path: '/admin/dashboard',
-      icon: '📊',
-    },
-    {
-      title: 'FAQ管理',
-      path: '/admin/faq',
-      icon: '❓',
-    },
-    {
-      title: 'ユーザー管理',
-      path: '/admin/users',
-      icon: '👥',
-    },
-    {
-      title: '組織管理',
-      path: '/admin/org',
-      icon: '🏢',
-    },
-    {
-      title: 'チャット監視',
-      path: '/admin/chats',
-      icon: '💬',
-    },
-    {
-      title: 'システム設定',
-      path: '/admin/settings',
-      icon: '⚙️',
-    },
-    {
-      title: 'レポート',
-      path: '/admin/reports',
-      icon: '📈',
-    },
-    {
-      title: 'ログ監視',
-      path: '/admin/logs',
-      icon: '📋',
-    },
-  ];
+  const isActive = (path: string) => pathname.startsWith(path);
 
   return (
     <AdminAuthGuard>
@@ -78,7 +38,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
           <nav className="p-4">
             <ul className="space-y-2">
-              {sidebarItems.map((item) => (
+              {ADMIN_SIDEBAR.map((item: NavItem) => (
                 <li key={item.path}>
                   <Link
                     href={item.path}
@@ -125,13 +85,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <header className="bg-white shadow-sm border-b px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  {getPageTitle(router.pathname)}
-                </h2>
-                <p className="text-gray-600 mt-1">{getPageDescription(router.pathname)}</p>
+                <h2 className="text-2xl font-bold text-gray-900">{pageTitle}</h2>
+                <p className="text-gray-600 mt-1">{pageDesc}</p>
               </div>
               <div className="flex items-center space-x-4">
-                <TrialBadge />
+                <TrialBadge daysLeft={7} />
                 <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
@@ -151,59 +109,5 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </div>
     </AdminAuthGuard>
-  );
-}
-
-function getPageTitle(pathname: string): string {
-  if (pathname.includes('/admin/dashboard')) return 'ダッシュボード';
-  if (pathname.includes('/admin/faq')) return 'FAQ管理';
-  if (pathname.includes('/admin/users')) return 'ユーザー管理';
-  if (pathname.includes('/admin/org')) return '組織管理';
-  if (pathname.includes('/admin/chats')) return 'チャット監視';
-  if (pathname.includes('/admin/settings')) return 'システム設定';
-  if (pathname.includes('/admin/reports')) return 'レポート';
-  if (pathname.includes('/admin/logs')) return 'ログ監視';
-  return '管理者パネル';
-}
-
-function getPageDescription(pathname: string): string {
-  if (pathname.includes('/admin/dashboard')) return 'システム全体の状況を監視';
-  if (pathname.includes('/admin/faq')) return 'よくある質問の作成・編集・削除';
-  if (pathname.includes('/admin/users')) return 'ユーザーアカウントの管理';
-  if (pathname.includes('/admin/org')) return '組織・テナントの管理と設定';
-  if (pathname.includes('/admin/chats')) return 'チャット履歴とパフォーマンスの監視';
-  if (pathname.includes('/admin/settings')) return 'システム設定とコンフィグレーション';
-  if (pathname.includes('/admin/reports')) return '詳細なレポートと分析';
-  if (pathname.includes('/admin/logs')) return 'システムログとエラー監視';
-  return 'AI Chatシステムの管理';
-}
-
-// Trial Badge Component
-function TrialBadge() {
-  const router = useRouter();
-
-  // This would normally come from your organization/trial context
-  // For now, using mock data - you should replace with actual trial data
-  const trialEndDate = new Date();
-  trialEndDate.setDate(trialEndDate.getDate() + 7); // 7 days from now
-
-  const today = new Date();
-  const timeDiff = trialEndDate.getTime() - today.getTime();
-  const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-  // Don't show badge if trial period is over or if no trial
-  if (daysLeft <= 0) return null;
-
-  const currentOrgId = router.query.id || 'default'; // Get from router or context
-
-  return (
-    <Link
-      href={`/admin/org/${currentOrgId}/billing-plans`}
-      className="flex items-center px-3 py-1.5 bg-orange-100 hover:bg-orange-200 border border-orange-300 rounded-full text-orange-800 text-sm font-medium transition-colors"
-    >
-      <span className="mr-1">⏰</span>
-      Trial <span className="font-bold mx-1">{daysLeft}</span> days left
-      <span className="ml-1">▸ Upgrade</span>
-    </Link>
   );
 }

@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../_hooks/useAuth';
+import { useAuth } from '@/app/_hooks/auth/useAuth';
+import { Role } from '@/app/_domains/auth';
 
 interface OrgAdminGuardProps {
-  children: React.ReactNode;
+  children: ReactNode;
   orgId: string;
-  requiredRole?: 'owner' | 'org_admin' | 'editor' | 'viewer';
+  requiredRole?: Role;
 }
 
 export default function OrgAdminGuard({

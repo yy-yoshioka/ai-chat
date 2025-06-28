@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import Script from 'next/script';
 import { API_BASE_URL, COMPANY_NAME } from '@/app/_config';
 
@@ -13,7 +13,7 @@ interface WidgetResponse {
   widgets: Widget[];
 }
 
-const DynamicWidgetLoader: React.FC = () => {
+const DynamicWidgetLoader: FC = () => {
   const [widgets, setWidgets] = useState<Widget[]>([]);
   const [selectedWidget, setSelectedWidget] = useState<Widget | null>(null);
   const [loading, setLoading] = useState(true);

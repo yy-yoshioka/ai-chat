@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { useAuth } from '../_hooks/auth/useAuth';
+import { useAuth } from '@/app/_hooks/auth/useAuth';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {

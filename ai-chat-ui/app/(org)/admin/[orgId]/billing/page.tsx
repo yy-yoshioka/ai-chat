@@ -1,7 +1,7 @@
 'use client';
 
+import { useBilling } from '@/app/_hooks/billing/useBilling';
 import React, { useState } from 'react';
-import { useBilling } from './_hooks/useBilling';
 
 interface Invoice {
   id: string;
