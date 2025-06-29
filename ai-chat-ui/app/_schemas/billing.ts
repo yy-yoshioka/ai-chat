@@ -143,11 +143,13 @@ export const BillingKpiSchema = z.object({
   activeSubscriptions: KpiMetricSchema,
   churnRate: KpiMetricSchema,
   averageRevenuePerUser: KpiMetricSchema,
-  chartData: z.object({
-    labels: z.array(z.string()),
-    revenue: z.array(z.number()),
-    subscriptions: z.array(z.number()),
-  }).optional(),
+  chartData: z
+    .object({
+      labels: z.array(z.string()),
+      revenue: z.array(z.number()),
+      subscriptions: z.array(z.number()),
+    })
+    .optional(),
 });
 
 // Billing Request Schemas

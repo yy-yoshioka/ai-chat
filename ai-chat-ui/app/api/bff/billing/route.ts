@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    
+
     // Validate request
     const parsed = UpdateBillingPlanSchema.safeParse(body);
     if (!parsed.success) {
