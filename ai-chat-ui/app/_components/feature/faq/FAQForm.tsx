@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { api } from '@/lib/api';
+import { api } from '@/app/_lib/api';
 
 export interface FAQFormValues {
   question: string;

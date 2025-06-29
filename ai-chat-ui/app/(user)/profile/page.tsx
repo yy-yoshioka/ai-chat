@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Layout from '@/app/_components/Layout';
 import { ProfileLoadingState } from '@/app/_components/feature/profile/shared/ProfileLoadingState';
 import { ProfileErrorState } from '@/app/_components/feature/profile/shared/ProfileErrorState';
 import { ProfileHero } from '@/app/_components/feature/profile/hero/ProfileHero';
@@ -14,37 +13,27 @@ export default function ProfilePage() {
   const { userProfile, isLoading, error, handleLogout, daysActive } = useProfileData();
 
   if (isLoading) {
-    return (
-      <Layout>
-        <ProfileLoadingState />
-      </Layout>
-    );
+    return <ProfileLoadingState />;
   }
 
   if (error || !userProfile) {
-    return (
-      <Layout>
-        <ProfileErrorState message={error || 'Unable to load user profile.'} />
-      </Layout>
-    );
+    return <ProfileErrorState message={error || 'Unable to load user profile.'} />;
   }
 
   return (
-    <Layout>
-      <div className="py-6 px-4 sm:px-6 lg:px-8">
-        <ProfileHero profile={userProfile} daysActive={daysActive} />
+    <div className="py-6 px-4 sm:px-6 lg:px-8">
+      <ProfileHero profile={userProfile} daysActive={daysActive} />
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <AccountInfoCard profile={userProfile} daysActive={daysActive} />
-            <QuickActionsCard />
-          </div>
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <AccountInfoCard profile={userProfile} daysActive={daysActive} />
+          <QuickActionsCard />
+        </div>
 
-          <div className="space-y-6">
-            <AccountSettingsCard onLogout={handleLogout} />
-          </div>
+        <div className="space-y-6">
+          <AccountSettingsCard onLogout={handleLogout} />
         </div>
       </div>
-    </Layout>
+    </div>
   );
 }

@@ -287,7 +287,7 @@ export function startEmbeddingCronJobs(): void {
 export function stopEmbeddingCronJobs(): void {
   console.log('🛑 Stopping embedding cron jobs...');
   cron.getTasks().forEach((task: cron.ScheduledTask) => {
-    task.destroy();
+    task.stop();
   });
 }
 

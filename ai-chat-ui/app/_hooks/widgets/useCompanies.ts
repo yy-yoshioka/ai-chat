@@ -20,7 +20,7 @@ export function useCompanies(orgId: string) {
         const data = await response.json();
         console.log('Companies fetched:', data);
         setCompanies(data);
-        
+
         if (data.length > 0 && !selectedCompanyId) {
           setSelectedCompanyId(data[0].id);
         }

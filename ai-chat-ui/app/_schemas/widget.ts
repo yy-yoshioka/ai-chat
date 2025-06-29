@@ -19,14 +19,18 @@ export const widgetSettingsSchema = z.object({
   logoUrl: z.string().nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  company: z.object({
-    id: z.string(),
-    name: z.string(),
-    plan: z.string(),
-  }).optional(),
-  _count: z.object({
-    chatLogs: z.number(),
-  }).optional(),
+  company: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      plan: z.string(),
+    })
+    .optional(),
+  _count: z
+    .object({
+      chatLogs: z.number(),
+    })
+    .optional(),
 });
 
 // Legacy Widget schema for backward compatibility

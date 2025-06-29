@@ -42,13 +42,19 @@ router.get('/:id', async (req, res) => {
 
 // POST /faqs - create FAQ (admin)
 router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
-  const { question, answer } = req.body;
-  if (!question || !answer) {
+  const { question, answer, organizationId } = req.body;
+  if (!question || !answer || !organizationId) {
     return res
       .status(400)
-      .json({ message: 'Question and answer are required' });
+      .json({ message: 'Question, answer, and organizationId are required' });
   }
-  const faq = await prisma.fAQ.create({ data: { question, answer } });
+  const faq = await prisma.fAQ.create({ 
+    data: { 
+      question, 
+      answer,
+      organizationId 
+    } 
+  });
   res.status(201).json(faq);
 });
 

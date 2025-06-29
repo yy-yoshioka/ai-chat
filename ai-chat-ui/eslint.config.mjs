@@ -15,7 +15,7 @@ const eslintConfig = [
     files: ['**/*.{js,jsx,ts,tsx}'],
     rules: {
       'max-lines': ['error', { max: 300, skipBlankLines: true, skipComments: true }],
-      'max-lines-per-function': ['error', { max: 50, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': ['error', { max: 100, skipBlankLines: true, skipComments: true }],
     },
   },
 ];

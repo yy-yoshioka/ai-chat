@@ -423,14 +423,12 @@ export async function getRAGStats(organizationId: string) {
         where: {
           knowledgeBase: { organizationId },
           status: 'completed',
-          embedding: { not: null },
         },
       }),
       prisma.fAQ.count({
         where: {
           organizationId,
           isActive: true,
-          embedding: { not: null },
         },
       }),
       prisma.unansweredMessage.count({

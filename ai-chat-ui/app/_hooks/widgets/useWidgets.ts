@@ -78,9 +78,7 @@ export function useWidgets(orgId: string) {
         });
 
         if (response.ok) {
-          setWidgets((prev) =>
-            prev.map((w) => (w.id === widgetId ? { ...w, isActive } : w))
-          );
+          setWidgets((prev) => prev.map((w) => (w.id === widgetId ? { ...w, isActive } : w)));
         } else {
           alert('ウィジェットの更新に失敗しました');
         }
