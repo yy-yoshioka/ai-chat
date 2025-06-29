@@ -1,49 +1,40 @@
-name: Slack Notify for Commits & PR # Workflow 名
+# .github/workflows/notify.yml
+name: Slack Notify for Commits & PR
 
 on:
-  push: # すべてのブランチ
-    branches: ["**"]
+  push:
+    branches: ["**"] # すべてのブランチ
   pull_request:
     types: [opened, reopened, ready_for_review]
 
 jobs:
-  slack-notify:
+  notify-slack:
     runs-on: ubuntu-latest
 
-    # GitHub → Slack 連携に最低限必要な 2 変数を env に展開
-    env:
-      SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+    env: # Secrets を環境変数へ
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
 
     steps:
-      # jq は Ubuntu イメージに入っていないので 1 行で取得
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
+      # jq が不要な構成にしたので install ステップは省略 OK
 
-      # ▶ メッセージ組み立て
-      - name: Build Slack payload
-        id: fmt
+      - name: Compose Slack message
+        id: compose
         run: |
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            # push イベント（コミット → diff リンクも付ける）
-            TEXT="📦 *Commit pushed* by ${{ github.actor }} → <${{ github.event.compare }}|diff>"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            MSG="📦 *Commit pushed* by ${{ github.actor }} -> <${{ github.event.compare }}|diff>"
           else
-            # pull_request イベント
-            PR_URL=${{ github.event.pull_request.html_url }}
-            TITLE=${{ github.event.pull_request.title }}
-            TEXT="🔍 *PR created* <$PR_URL|${TITLE}> by ${{ github.actor }}"
+            MSG="🔍 *PR created* <${{ github.event.pull_request.html_url }}|${{ github.event.pull_request.title }}> by ${{ github.actor }}"
           fi
+          echo "SLACK_MESSAGE=$MSG" >> "$GITHUB_ENV"   # 後段で参照できるようにエクスポート
 
-          # jq で JSON に整形して outputs に渡す
-          echo "payload=$(jq -nc \
-                --arg c \"$SLACK_CHANNEL_ID\" \
-                --arg t \"$TEXT\" \
-                '{channel:$c,text:$t}')" >> "$GITHUB_OUTPUT"
-
-      # ▶ Slack へ投稿
       - name: Post to Slack
         uses: slackapi/slack-github-action@v1
         with:
-          payload: ${{ steps.fmt.outputs.payload }}
+          channel-id: ${{ env.SLACK_CHANNEL_ID }} # 公式引数
+          payload: |
+            {
+              "text": "${{ env.SLACK_MESSAGE }}"
+            }
         env:
           SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
