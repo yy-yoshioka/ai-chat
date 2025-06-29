@@ -12,11 +12,7 @@ class ApiClient {
     this.baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
   }
 
-  private async request<T>(
-    method: string,
-    path: string,
-    body?: unknown
-  ): Promise<ApiResponse<T>> {
+  private async request<T>(method: string, path: string, body?: unknown): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(`${this.baseUrl}${path}`, {
         method,

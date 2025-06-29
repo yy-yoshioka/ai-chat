@@ -80,7 +80,7 @@ export default function CreateWidgetPage({ params }: { params: Promise<{ orgId: 
       } else if (keys.length === 2) {
         const firstKey = keys[0] as keyof WidgetForm;
         const prevValue = prev[firstKey];
-        
+
         if (typeof prevValue === 'object' && prevValue !== null) {
           return {
             ...prev,

@@ -48,12 +48,12 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
       .status(400)
       .json({ message: 'Question, answer, and organizationId are required' });
   }
-  const faq = await prisma.fAQ.create({ 
-    data: { 
-      question, 
+  const faq = await prisma.fAQ.create({
+    data: {
+      question,
       answer,
-      organizationId 
-    } 
+      organizationId,
+    },
   });
   res.status(201).json(faq);
 });

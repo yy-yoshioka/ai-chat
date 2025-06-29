@@ -12,10 +12,10 @@ const withMDX = require('@next/mdx')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-  
+
   // Enable standalone output for Docker
   output: 'standalone',
-  
+
   // Disable ESLint during production build
   eslint: {
     // Warning: This allows production builds to successfully complete even if
