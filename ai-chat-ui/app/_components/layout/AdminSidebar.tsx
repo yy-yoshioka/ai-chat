@@ -54,9 +54,7 @@ export function AdminSidebar({ orgId, pathname, user }: AdminSidebarProps) {
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
-              {user?.name || '管理者'}
-            </p>
+            <p className="text-sm font-medium text-gray-900 truncate">{user?.name || '管理者'}</p>
             <p className="text-xs text-gray-500 truncate">管理者権限</p>
           </div>
         </div>

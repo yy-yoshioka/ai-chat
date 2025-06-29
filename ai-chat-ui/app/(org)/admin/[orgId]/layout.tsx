@@ -23,7 +23,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
     <OrgAdminGuard orgId={orgId} requiredRole="viewer">
       <div className="min-h-screen bg-gray-50 flex">
         <AdminSidebar orgId={orgId} pathname={pathname} user={user} />
-        
+
         <div className="flex-1 flex flex-col">
           <AdminHeader pathname={pathname} orgId={orgId} />
           <main className="flex-1 p-6 overflow-auto">{children}</main>
