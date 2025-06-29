@@ -1,11 +1,12 @@
 'use client';
 import { useState } from 'react';
-import TabBar from '@/app/_components/feature/billing/pg/TabBar';
-import PlanTab from '@/app/_components/feature/billing/pg/PlanTab';
-import UsageTab from '@/app/_components/feature/billing/pg/UsageTab';
-import InvoiceTab from '@/app/_components/feature/billing/pg/InvoiceTab';
-import ScreenMessage from '@/app/_components/feature/billing/pg/ScreenMessage';
+
 import { useBilling } from '@/app/_hooks/billing/useBilling';
+import ScreenMessage from '@/app/_components/feature/billing/admin-billing/screen/ScreenMessage';
+import TabBar from '@/app/_components/feature/billing/admin-billing/screen/TabBar';
+import PlanTab from '@/app/_components/feature/billing/admin-billing/tab-plans/PlanTab';
+import UsageTab from '@/app/_components/feature/billing/admin-billing/tab-usage/UsageTab';
+import InvoiceTab from '@/app/_components/feature/billing/admin-billing/tab-usage/InvoiceTab';
 
 export default function BillingPage({ params }: { params: { orgId: string } }) {
   const { orgId } = params;

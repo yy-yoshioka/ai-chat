@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BillingKPI } from '@/app/_domains/billing';
-import KPICard from '../../ui/billing/KPICard';
+import KPICard from '@/app/_components/ui/billing/KPICard';
 
 interface BillingKPIDashboardProps {
   organizationId?: string;
