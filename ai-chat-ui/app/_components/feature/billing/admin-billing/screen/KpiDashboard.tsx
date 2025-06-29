@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
 import { BillingKPI } from '@/app/_domains/billing';
 import KPICard from '@/app/_components/ui/billing/KPICard';
+import { useBillingKpi } from '@/app/_hooks/billing/useBillingKpi';
 
 interface BillingKPIDashboardProps {
   organizationId?: string;
@@ -11,48 +12,22 @@ export default function BillingKPIDashboard({
   organizationId,
   refreshInterval = 300000, // 5分間隔
 }: BillingKPIDashboardProps) {
-  const [kpiData, setKpiData] = useState<BillingKPI | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const { data: kpiData, isLoading: loading, error, refetch } = useBillingKpi(organizationId);
+  const [lastUpdated, setLastUpdated] = React.useState<Date>(new Date());
 
-  useEffect(() => {
-    fetchKPIData();
-
+  React.useEffect(() => {
     // 定期更新
-    const interval = setInterval(fetchKPIData, refreshInterval);
+    const interval = setInterval(() => {
+      refetch();
+      setLastUpdated(new Date());
+    }, refreshInterval);
+    
     return () => clearInterval(interval);
-  }, [organizationId, refreshInterval]);
+  }, [refreshInterval, refetch]);
 
   const fetchKPIData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      // 実際の実装では以下のAPIを呼び出します:
-      // const response = await fetch(`/api/billing/kpi${organizationId ? `?orgId=${organizationId}` : ''}`);
-      // const data = await response.json();
-
-      // モック実装
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const mockKPIData: BillingKPI = {
-        trialToPaidConversionRate: 23.5,
-        monthlyChurnRate: 2.8,
-        averageLTV: 45600,
-        totalActiveSubscriptions: 128,
-        totalTrialUsers: 34,
-        monthlyRecurringRevenue: 1245000,
-      };
-
-      setKpiData(mockKPIData);
-      setLastUpdated(new Date());
-    } catch (err) {
-      console.error('Failed to fetch KPI data:', err);
-      setError('KPIデータの取得に失敗しました');
-    } finally {
-      setLoading(false);
-    }
+    await refetch();
+    setLastUpdated(new Date());
   };
 
   const formatCurrency = (amount: number): string => {
@@ -63,7 +38,7 @@ export default function BillingKPIDashboard({
     return `${rate.toFixed(1)}%`;
   };
 
-  if (loading && !kpiData) {
+  if (loading) {
     return (
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <div className="flex items-center justify-center h-48">
@@ -145,16 +120,20 @@ export default function BillingKPIDashboard({
       {/* KPI Cards Grid */}
       {kpiData && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Trial to Paid Conversion Rate */}
+          {/* Revenue KPI */}
           <KPICard
-            title="Trial→Paid 転換率"
-            value={formatPercentage(kpiData.trialToPaidConversionRate)}
-            subtitle="過去30日間"
-            trend={{
-              value: 5.2,
-              isPositive: true,
-              period: '先月比',
-            }}
+            title={kpiData.revenue.label}
+            value={kpiData.revenue.value.toString()}
+            subtitle={kpiData.revenue.unit || ''}
+            trend={
+              kpiData.revenue.change
+                ? {
+                    value: kpiData.revenue.change,
+                    isPositive: kpiData.revenue.changeType === 'increase',
+                    period: '先月比',
+                  }
+                : undefined
+            }
             icon={
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -168,62 +147,20 @@ export default function BillingKPIDashboard({
             color="green"
           />
 
-          {/* Monthly Churn Rate */}
+          {/* Active Subscriptions KPI */}
           <KPICard
-            title="月次チャーン率"
-            value={formatPercentage(kpiData.monthlyChurnRate)}
-            subtitle="解約率"
-            trend={{
-              value: -1.2,
-              isPositive: true,
-              period: '先月比',
-            }}
-            icon={
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
-                />
-              </svg>
+            title={kpiData.activeSubscriptions.label}
+            value={kpiData.activeSubscriptions.value.toString()}
+            subtitle={kpiData.activeSubscriptions.unit || ''}
+            trend={
+              kpiData.activeSubscriptions.change
+                ? {
+                    value: kpiData.activeSubscriptions.change,
+                    isPositive: kpiData.activeSubscriptions.changeType === 'increase',
+                    period: '先月比',
+                  }
+                : undefined
             }
-            color="red"
-          />
-
-          {/* Average LTV */}
-          <KPICard
-            title="平均LTV"
-            value={formatCurrency(kpiData.averageLTV)}
-            subtitle="顧客生涯価値"
-            trend={{
-              value: 8.7,
-              isPositive: true,
-              period: '先月比',
-            }}
-            icon={
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                />
-              </svg>
-            }
-            color="purple"
-          />
-
-          {/* Total Active Subscriptions */}
-          <KPICard
-            title="アクティブ契約数"
-            value={kpiData.totalActiveSubscriptions.toLocaleString()}
-            subtitle="有効なサブスクリプション"
-            trend={{
-              value: 12.3,
-              isPositive: true,
-              period: '先月比',
-            }}
             icon={
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -237,50 +174,58 @@ export default function BillingKPIDashboard({
             color="blue"
           />
 
-          {/* Total Trial Users */}
+          {/* Churn Rate KPI */}
           <KPICard
-            title="トライアルユーザー"
-            value={kpiData.totalTrialUsers.toLocaleString()}
-            subtitle="無料試用中"
-            trend={{
-              value: 15.8,
-              isPositive: true,
-              period: '先月比',
-            }}
+            title={kpiData.churnRate.label}
+            value={kpiData.churnRate.value.toString()}
+            subtitle={kpiData.churnRate.unit || ''}
+            trend={
+              kpiData.churnRate.change
+                ? {
+                    value: Math.abs(kpiData.churnRate.change),
+                    isPositive: kpiData.churnRate.changeType === 'decrease',
+                    period: '先月比',
+                  }
+                : undefined
+            }
             icon={
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
                 />
               </svg>
             }
-            color="orange"
+            color="red"
           />
 
-          {/* Monthly Recurring Revenue */}
+          {/* ARPU KPI */}
           <KPICard
-            title="MRR"
-            value={formatCurrency(kpiData.monthlyRecurringRevenue)}
-            subtitle="月次経常収益"
-            trend={{
-              value: 18.4,
-              isPositive: true,
-              period: '先月比',
-            }}
+            title={kpiData.averageRevenuePerUser.label}
+            value={kpiData.averageRevenuePerUser.value.toString()}
+            subtitle={kpiData.averageRevenuePerUser.unit || ''}
+            trend={
+              kpiData.averageRevenuePerUser.change
+                ? {
+                    value: kpiData.averageRevenuePerUser.change,
+                    isPositive: kpiData.averageRevenuePerUser.changeType === 'increase',
+                    period: '先月比',
+                  }
+                : undefined
+            }
             icon={
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
                 />
               </svg>
             }
-            color="green"
+            color="purple"
           />
         </div>
       )}
