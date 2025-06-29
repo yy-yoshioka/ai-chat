@@ -8,7 +8,8 @@ import { WidgetCard } from '@/app/_components/feature/widgets/WidgetCard';
 
 export default function WidgetsPage({ params }: { params: Promise<{ orgId: string }> }) {
   const { orgId } = React.use(params);
-  const { widgets, loading, handleDeleteWidget, handleToggleActive, copyEmbedCode } = useWidgetsPage(orgId);
+  const { widgets, loading, handleDeleteWidget, handleToggleActive, copyEmbedCode } =
+    useWidgetsPage(orgId);
 
   if (loading) {
     return (

@@ -11,7 +11,13 @@ interface WidgetCardProps {
   onCopyEmbedCode: (widget: Widget) => void;
 }
 
-export function WidgetCard({ widget, orgId, onToggleActive, onDelete, onCopyEmbedCode }: WidgetCardProps) {
+export function WidgetCard({
+  widget,
+  orgId,
+  onToggleActive,
+  onDelete,
+  onCopyEmbedCode,
+}: WidgetCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="flex items-start justify-between mb-4">
