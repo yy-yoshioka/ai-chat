@@ -20,7 +20,9 @@ export function ActivitySummaryGrid({ activities }: ActivitySummaryGridProps) {
         <div key={index} className="bg-gray-50 rounded-lg p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-gray-600 text-sm">{activity.label}</span>
-            <div className={`w-8 h-8 ${activity.bgColor} rounded-lg flex items-center justify-center`}>
+            <div
+              className={`w-8 h-8 ${activity.bgColor} rounded-lg flex items-center justify-center`}
+            >
               {activity.icon}
             </div>
           </div>

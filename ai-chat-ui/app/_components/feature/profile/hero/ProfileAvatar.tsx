@@ -16,8 +16,12 @@ export function ProfileAvatar({ name, size = 'md' }: ProfileAvatarProps) {
   };
 
   return (
-    <div className={`${sizeClasses[size]} bg-white rounded-xl flex items-center justify-center shadow-lg`}>
-      <span className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${AVATAR_GRADIENT}`}>
+    <div
+      className={`${sizeClasses[size]} bg-white rounded-xl flex items-center justify-center shadow-lg`}
+    >
+      <span
+        className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${AVATAR_GRADIENT}`}
+      >
         {name.charAt(0).toUpperCase()}
       </span>
     </div>

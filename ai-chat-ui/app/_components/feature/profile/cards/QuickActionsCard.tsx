@@ -27,12 +27,12 @@ export function QuickActionsCard() {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
       <h2 className="text-xl font-bold text-gray-900 mb-6">クイックアクション</h2>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {QUICK_ACTIONS.map((action, index) => {
           const icon = iconMap[action.icon as keyof typeof iconMap];
           const colorClass = colorClasses[action.color as keyof typeof colorClasses];
-          
+
           return (
             <Link
               key={index}

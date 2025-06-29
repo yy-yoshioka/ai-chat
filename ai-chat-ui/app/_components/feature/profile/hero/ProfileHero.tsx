@@ -19,7 +19,7 @@ export function ProfileHero({ profile, daysActive }: ProfileHeroProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
             <ProfileAvatar name={profile.name} size="md" />
-            
+
             <div>
               <h1 className="text-3xl font-bold text-white mb-1">{profile.name}</h1>
               <p className="text-blue-100 mb-2">{profile.email}</p>

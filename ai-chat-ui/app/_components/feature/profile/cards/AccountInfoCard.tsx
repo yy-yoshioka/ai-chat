@@ -46,34 +46,24 @@ export function AccountInfoCard({ profile, daysActive }: AccountInfoCardProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
       <h2 className="text-xl font-bold text-gray-900 mb-6">アカウント情報</h2>
-      
+
       <div className="space-y-4 mb-8">
-        <ProfileInfoField
-          icon={ProfileIcons.email}
-          label="メールアドレス"
-          value={profile.email}
-        />
-        <ProfileInfoField
-          icon={ProfileIcons.user}
-          label="ユーザーID"
-          value={profile.id}
-        />
+        <ProfileInfoField icon={ProfileIcons.email} label="メールアドレス" value={profile.email} />
+        <ProfileInfoField icon={ProfileIcons.user} label="ユーザーID" value={profile.id} />
         <ProfileInfoField
           icon={ProfileIcons.shield}
           label="アカウントタイプ"
           value={
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              profile.isAdmin ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-800'
-            }`}>
+            <span
+              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                profile.isAdmin ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-800'
+              }`}
+            >
               {profile.isAdmin ? '管理者' : '一般ユーザー'}
             </span>
           }
         />
-        <ProfileInfoField
-          icon={ProfileIcons.calendar}
-          label="登録日"
-          value={formattedJoinDate}
-        />
+        <ProfileInfoField icon={ProfileIcons.calendar} label="登録日" value={formattedJoinDate} />
       </div>
 
       <div>

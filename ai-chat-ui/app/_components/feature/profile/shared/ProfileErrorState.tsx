@@ -6,7 +6,9 @@ interface ProfileErrorStateProps {
   message?: string;
 }
 
-export function ProfileErrorState({ message = 'Unable to load user profile.' }: ProfileErrorStateProps) {
+export function ProfileErrorState({
+  message = 'Unable to load user profile.',
+}: ProfileErrorStateProps) {
   return (
     <div className="flex items-center justify-center h-64">
       <div className="text-center">
