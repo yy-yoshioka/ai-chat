@@ -49,11 +49,7 @@ export function FAQView({
         onCategoryFilterChange={onCategoryFilterChange}
       />
 
-      <FAQList
-        faqs={faqs}
-        orgId={orgId}
-        onDeleteFAQ={onDeleteFAQ}
-      />
+      <FAQList faqs={faqs} orgId={orgId} onDeleteFAQ={onDeleteFAQ} />
     </div>
   );
 }

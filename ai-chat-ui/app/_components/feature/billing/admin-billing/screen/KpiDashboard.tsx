@@ -1,5 +1,4 @@
 import React from 'react';
-import { BillingKPI } from '@/app/_domains/billing';
 import KPICard from '@/app/_components/ui/billing/KPICard';
 import { useBillingKpi } from '@/app/_hooks/billing/useBillingKpi';
 
@@ -30,13 +29,6 @@ export default function BillingKPIDashboard({
     setLastUpdated(new Date());
   };
 
-  const formatCurrency = (amount: number): string => {
-    return `¥${Math.floor(amount).toLocaleString()}`;
-  };
-
-  const formatPercentage = (rate: number): string => {
-    return `${rate.toFixed(1)}%`;
-  };
 
   if (loading) {
     return (

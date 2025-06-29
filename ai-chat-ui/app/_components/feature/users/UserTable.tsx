@@ -48,9 +48,7 @@ export function UserTable({ users, onEditUser, onDeleteUser }: UserTableProps) {
                   <StatusBadge status={user.status} />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {user.lastLogin
-                    ? new Date(user.lastLogin).toLocaleString('ja-JP')
-                    : '未ログイン'}
+                  {user.lastLogin ? new Date(user.lastLogin).toLocaleString('ja-JP') : '未ログイン'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                   <button

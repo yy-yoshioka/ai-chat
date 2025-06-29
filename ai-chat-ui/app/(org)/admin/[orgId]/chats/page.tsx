@@ -11,7 +11,6 @@ export default function AdminChatsPage() {
   const {
     activeTab,
     setActiveTab,
-    chats,
     metrics,
     loading,
     selectedDate,
@@ -26,7 +25,6 @@ export default function AdminChatsPage() {
       <AdminChatsView
         activeTab={activeTab}
         onTabChange={setActiveTab}
-        chats={chats}
         metrics={metrics}
         loading={loading}
         selectedDate={selectedDate}

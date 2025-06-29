@@ -9,7 +9,6 @@ import { ChatSessionsTable } from './ChatSessionsTable';
 interface AdminChatsViewProps {
   activeTab: 'chat' | 'monitoring';
   onTabChange: (tab: 'chat' | 'monitoring') => void;
-  chats: ChatSession[];
   metrics: ChatMetrics | null;
   loading: boolean;
   selectedDate: string;
@@ -22,7 +21,6 @@ interface AdminChatsViewProps {
 export function AdminChatsView({
   activeTab,
   onTabChange,
-  chats,
   metrics,
   loading,
   selectedDate,

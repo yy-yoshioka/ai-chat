@@ -10,7 +10,13 @@ interface UsersViewProps {
   onDeleteUser: (userId: string) => void;
 }
 
-export function UsersView({ users, isLoading, onInviteUser, onEditUser, onDeleteUser }: UsersViewProps) {
+export function UsersView({
+  users,
+  isLoading,
+  onInviteUser,
+  onEditUser,
+  onDeleteUser,
+}: UsersViewProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -31,11 +37,7 @@ export function UsersView({ users, isLoading, onInviteUser, onEditUser, onDelete
         </button>
       </div>
 
-      <UserTable
-        users={users}
-        onEditUser={onEditUser}
-        onDeleteUser={onDeleteUser}
-      />
+      <UserTable users={users} onEditUser={onEditUser} onDeleteUser={onDeleteUser} />
     </div>
   );
 }

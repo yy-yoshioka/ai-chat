@@ -47,7 +47,7 @@ export const LoginForm: React.FC = () => {
       setSubmitting(true);
       const ok = await login(ADMIN_QUICK_CREDENTIALS.email, ADMIN_QUICK_CREDENTIALS.password);
       if (ok) router.push('/admin/org-selector');
-    } catch (err) {
+    } catch {
       setError('Admin ログイン失敗');
     } finally {
       setSubmitting(false);

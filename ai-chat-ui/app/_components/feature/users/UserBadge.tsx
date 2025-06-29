@@ -13,7 +13,9 @@ interface RoleBadgeProps {
 
 export function RoleBadge({ role }: RoleBadgeProps) {
   return (
-    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${USER_ROLE_STYLES[role]}`}>
+    <span
+      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${USER_ROLE_STYLES[role]}`}
+    >
       {USER_ROLE_LABELS[role]}
     </span>
   );
@@ -25,7 +27,9 @@ interface StatusBadgeProps {
 
 export function StatusBadge({ status }: StatusBadgeProps) {
   return (
-    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${USER_STATUS_STYLES[status]}`}>
+    <span
+      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${USER_STATUS_STYLES[status]}`}
+    >
       {USER_STATUS_LABELS[status]}
     </span>
   );

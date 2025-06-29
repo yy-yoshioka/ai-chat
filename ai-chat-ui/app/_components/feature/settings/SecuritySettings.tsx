@@ -4,7 +4,7 @@ interface SecuritySettingsProps {
   orgId: string;
 }
 
-export function SecuritySettings({ orgId }: SecuritySettingsProps) {
+export function SecuritySettings({}: SecuritySettingsProps) {
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
   const [ipRestriction, setIpRestriction] = useState(false);
   const [allowedIps, setAllowedIps] = useState('');

@@ -16,12 +16,7 @@ export function FAQList({ faqs, orgId, onDeleteFAQ }: FAQListProps) {
       </div>
       <div className="divide-y divide-gray-200">
         {faqs.map((faq) => (
-          <FAQItem
-            key={faq.id}
-            faq={faq}
-            orgId={orgId}
-            onDelete={onDeleteFAQ}
-          />
+          <FAQItem key={faq.id} faq={faq} orgId={orgId} onDelete={onDeleteFAQ} />
         ))}
       </div>
     </div>
