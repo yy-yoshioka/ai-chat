@@ -3,6 +3,23 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": ["error"],
+    "max-lines": ["warn", { "max": 300, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": ["warn", { "max": 50, "skipBlankLines": true, "skipComments": true }],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "@/app/_lib/api",
+            "message": "Use React Query hooks and BFF routes instead of direct API calls"
+          },
+          {
+            "name": "@/lib/api",
+            "message": "Use React Query hooks and BFF routes instead of direct API calls"
+          }
+        ]
+      }
+    ],
     "import/order": [
       "error",
       {

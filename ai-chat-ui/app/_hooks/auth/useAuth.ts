@@ -1,8 +1,15 @@
+// Re-export the new React Query based auth hook
+export { useAuth, useUser } from './useAuthQuery';
+export type { User } from '../../_schemas';
+
+// Legacy support - will be removed in next iteration
 import { useState, useEffect, useCallback } from 'react';
-import { api } from '../../_lib/api';
-import { User } from '../../_schemas';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { z } from 'zod';
+import { User, UserSchema } from '../../_schemas';
 import { Role } from '../../_domains/auth';
 import { hasPermission, hasRole } from '../../_utils/auth-utils';
+import { fetchGet, fetchPost } from '../../_utils/fetcher';
 
 // Auth state
 interface AuthState {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import FAQItem, { FAQItemProps } from './FAQItem';
-import { api } from '@/app/_lib/api';
+import { useFAQs } from '@/app/_hooks/faq/useFAQ';
 
 // Static FAQ data for AI Chat platform
 const staticFaqs: FAQItemProps[] = [
@@ -55,33 +55,22 @@ const staticFaqs: FAQItemProps[] = [
 ];
 
 export default function FAQList() {
-  const [faqs, setFaqs] = useState<FAQItemProps[]>(staticFaqs);
-  const [loading, setLoading] = useState(false);
+  const { data, isLoading, error } = useFAQs();
+  
+  // Use API data if available, otherwise fallback to static FAQs
+  const faqs = data?.faqs && data.faqs.length > 0 ? data.faqs : staticFaqs;
 
-  useEffect(() => {
-    const fetchFaqs = async () => {
-      try {
-        setLoading(true);
-        const { data } = await api.get<{ faqs: FAQItemProps[] }>('/faqs');
-        if (data?.faqs && data.faqs.length > 0) {
-          setFaqs(data.faqs);
-        }
-        // If API fails or returns no data, keep static FAQs
-      } catch {
-        console.log('Using static FAQ data as fallback');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFaqs();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center py-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
+  }
+  
+  // Log error but still show static FAQs
+  if (error) {
+    console.log('Using static FAQ data as fallback');
   }
 
   return (
