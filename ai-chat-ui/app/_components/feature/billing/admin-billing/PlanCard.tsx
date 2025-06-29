@@ -31,9 +31,7 @@ export function PlanCard({ plan, status, onSelect, loading = false }: PlanCardPr
         <div className="text-center mb-6">
           <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
           <div className="flex items-baseline justify-center">
-            <span className="text-4xl font-bold text-gray-900">
-              ¥{plan.price.toLocaleString()}
-            </span>
+            <span className="text-4xl font-bold text-gray-900">¥{plan.price.toLocaleString()}</span>
             <span className="text-gray-500 ml-1">/月</span>
           </div>
           <p className="text-sm text-gray-500 mt-1">税込価格</p>
@@ -44,9 +42,7 @@ export function PlanCard({ plan, status, onSelect, loading = false }: PlanCardPr
           <div className="text-center mb-4">
             <span
               className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
-                status === 'trial'
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-blue-100 text-blue-800'
+                status === 'trial' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
               }`}
             >
               {PLAN_STATUS_LABEL[status]}
@@ -88,17 +84,11 @@ export function PlanCard({ plan, status, onSelect, loading = false }: PlanCardPr
                 : 'bg-gray-900 text-white hover:bg-gray-800'
           }`}
         >
-          {loading
-            ? '処理中...'
-            : isCurrent
-              ? PLAN_STATUS_LABEL[status]
-              : `${plan.name}を選択`}
+          {loading ? '処理中...' : isCurrent ? PLAN_STATUS_LABEL[status] : `${plan.name}を選択`}
         </button>
 
         {plan.id === 'free' && (
-          <p className="text-xs text-gray-500 text-center mt-3">
-            クレジットカードの登録は不要です
-          </p>
+          <p className="text-xs text-gray-500 text-center mt-3">クレジットカードの登録は不要です</p>
         )}
       </div>
     </div>

@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { billingPlanSchema, UpdateBillingPlanSchema } from '@/app/_schemas/billing';
+import { EXPRESS_API } from '@/app/_config/api';
 import { z } from 'zod';
-import { BillingPlanSchema } from '@/app/_schemas/billing';
-
-const EXPRESS_API = process.env.EXPRESS_API || 'http://localhost:8000';
 
 // GET /api/bff/billing - Get billing plans
 export async function GET() {
@@ -33,7 +32,7 @@ export async function GET() {
     const json = await response.json();
 
     // Validate response with Zod schema
-    const parsed = z.array(BillingPlanSchema).safeParse(json);
+    const parsed = z.array(billingPlanSchema).safeParse(json);
     if (!parsed.success) {
       console.error('Invalid billing plans response:', parsed.error);
       return NextResponse.json({ error: 'Invalid response format' }, { status: 500 });
@@ -57,10 +56,11 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { planId } = body;
-
-    if (!planId) {
-      return NextResponse.json({ error: 'Plan ID is required' }, { status: 400 });
+    
+    // Validate request
+    const parsed = UpdateBillingPlanSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
 
     const response = await fetch(`${EXPRESS_API}/api/billing/subscribe`, {
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ planId }),
+      body: JSON.stringify(parsed.data),
     });
 
     if (!response.ok) {

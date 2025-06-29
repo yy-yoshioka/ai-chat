@@ -1,15 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { z } from 'zod';
-
-const EXPRESS_API = process.env.EXPRESS_API || 'http://localhost:8000';
-
-const UpdateFAQSchema = z.object({
-  question: z.string().min(1).optional(),
-  answer: z.string().min(1).optional(),
-  category: z.string().optional(),
-  isActive: z.boolean().optional(),
-});
+import { UpdateFAQSchema } from '@/app/_schemas/faq';
+import { EXPRESS_API } from '@/app/_config/api';
 
 interface RouteParams {
   params: Promise<{ id: string }>;

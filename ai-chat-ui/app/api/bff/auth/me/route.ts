@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { UserSchema } from '@/app/_schemas/auth';
-
-const EXPRESS_API = process.env.EXPRESS_API || 'http://localhost:8000';
+import { EXPRESS_API } from '@/app/_config/api';
 
 // GET /api/bff/auth/me - Get current user
 export async function GET() {

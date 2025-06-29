@@ -1,23 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { z } from 'zod';
 import { fetchGet } from '@/app/_utils/fetcher';
-
-// Invoice schema
-const InvoiceSchema = z.object({
-  id: z.string(),
-  invoiceNumber: z.string(),
-  amount: z.number(),
-  status: z.enum(['paid', 'pending', 'overdue']),
-  invoiceDate: z.string(),
-  dueDate: z.string(),
-  pdfUrl: z.string().optional(),
-});
-
-const InvoicesResponseSchema = z.object({
-  invoices: z.array(InvoiceSchema),
-});
-
-export type Invoice = z.infer<typeof InvoiceSchema>;
+import { InvoicesResponseSchema, Invoice } from '@/app/_schemas/billing';
 
 // Query keys
 const invoiceKeys = {

@@ -1,15 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { z } from 'zod';
-
-const EXPRESS_API = process.env.EXPRESS_API || 'http://localhost:8000';
-
-const CreateFAQSchema = z.object({
-  question: z.string().min(1),
-  answer: z.string().min(1),
-  category: z.string().optional(),
-  organizationId: z.string().optional(),
-});
+import { CreateFAQSchema } from '@/app/_schemas/faq';
+import { EXPRESS_API } from '@/app/_config/api';
 
 // GET /api/bff/faq - Get FAQs
 export async function GET(req: NextRequest) {

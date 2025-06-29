@@ -1,29 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { z } from 'zod';
-
-// KPI metric schema
-const KpiMetricSchema = z.object({
-  label: z.string(),
-  value: z.union([z.string(), z.number()]),
-  previousValue: z.union([z.string(), z.number()]).optional(),
-  change: z.number().optional(),
-  changeType: z.enum(['increase', 'decrease', 'neutral']).optional(),
-  unit: z.string().optional(),
-});
-
-// KPI data type
-export type BillingKpi = {
-  revenue: z.infer<typeof KpiMetricSchema>;
-  activeSubscriptions: z.infer<typeof KpiMetricSchema>;
-  churnRate: z.infer<typeof KpiMetricSchema>;
-  averageRevenuePerUser: z.infer<typeof KpiMetricSchema>;
-  chartData?: {
-    labels: string[];
-    revenue: number[];
-    subscriptions: number[];
-  };
-};
-export type KpiMetric = z.infer<typeof KpiMetricSchema>;
+import { BillingKpi, KpiMetric } from '@/app/_schemas/billing';
 
 // Query keys
 const kpiKeys = {

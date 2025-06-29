@@ -1,14 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { z } from 'zod';
 import { fetchPost } from '@/app/_utils/fetcher';
-
-// Response schema
-const ChatResponseSchema = z.object({
-  answer: z.string(),
-  timestamp: z.string().optional(),
-});
-
-type ChatResponse = z.infer<typeof ChatResponseSchema>;
+import { ChatResponseSchema, ChatResponse } from '@/app/_schemas/chat';
 
 /**
  * Hook to send chat messages

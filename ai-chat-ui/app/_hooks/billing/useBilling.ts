@@ -1,21 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
-import { BillingPlanSchema } from '@/app/_schemas/billing';
 import { fetchGet, fetchPost } from '@/app/_utils/fetcher';
-
-// Response schemas
-const UsageDataSchema = z.object({
-  messages: z.number(),
-  users: z.number(),
-  storage: z.number(),
-  apiCalls: z.number(),
-  limits: z.object({
-    messages: z.number(),
-    users: z.number(),
-    storage: z.number(),
-    apiCalls: z.number(),
-  }),
-});
+import { billingPlanSchema, SuccessResponseSchema, CancelResponseSchema } from '@/app/_schemas';
 
 // Query keys factory
 const billingKeys = {
@@ -31,7 +16,7 @@ const billingKeys = {
 export function useBillingPlans() {
   return useQuery({
     queryKey: billingKeys.plans(),
-    queryFn: () => fetchGet('/api/bff/billing', z.array(BillingPlanSchema)),
+    queryFn: () => fetchGet('/api/bff/billing', billingPlanSchema.array()),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 }
@@ -45,7 +30,7 @@ export function useBilling(orgId: string) {
     queryKey: billingKeys.current(orgId),
     queryFn: async () => {
       // Fetch plans from BFF
-      const plans = await fetchGet('/api/bff/billing', z.array(BillingPlanSchema));
+      const plans = await fetchGet('/api/bff/billing', billingPlanSchema.array());
 
       // TODO: Replace with actual BFF endpoint when ready
       // For now, return mock data structure matching the component expectations
@@ -85,8 +70,8 @@ export function useUpdateBillingPlan() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ planId, orgId }: { planId: string; orgId: string }) =>
-      fetchPost('/api/bff/billing', z.object({ success: z.boolean() }), { planId }),
+    mutationFn: ({ planId }: { planId: string; orgId: string }) =>
+      fetchPost('/api/bff/billing', SuccessResponseSchema, { planId }),
     onSuccess: (_, variables) => {
       // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: billingKeys.current(variables.orgId) });
@@ -103,7 +88,7 @@ export function useCancelSubscription() {
 
   return useMutation({
     mutationFn: (orgId: string) =>
-      fetchPost('/api/bff/billing/cancel', z.object({ success: z.boolean() }), { orgId }),
+      fetchPost('/api/bff/billing/cancel', CancelResponseSchema, { orgId }),
     onSuccess: (_, orgId) => {
       queryClient.invalidateQueries({ queryKey: billingKeys.current(orgId) });
     },

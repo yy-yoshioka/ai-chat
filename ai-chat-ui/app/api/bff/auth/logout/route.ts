@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-
-const EXPRESS_API = process.env.EXPRESS_API || 'http://localhost:8000';
+import { EXPRESS_API } from '@/app/_config/api';
 
 // POST /api/bff/auth/logout - Logout user
 export async function POST() {

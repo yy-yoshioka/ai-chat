@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { z } from 'zod';
-
-const EXPRESS_API = process.env.EXPRESS_API || 'http://localhost:8000';
-
-const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+import { LoginSchema } from '@/app/_schemas/auth';
+import { EXPRESS_API } from '@/app/_config/api';
 
 // POST /api/bff/auth/login - Login user
 export async function POST(req: NextRequest) {

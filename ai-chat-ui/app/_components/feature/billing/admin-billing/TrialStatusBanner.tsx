@@ -33,7 +33,9 @@ export function TrialStatusBanner({ currentSubscription }: TrialStatusBannerProp
           {nextBillingDate && (
             <>
               <br />
-              <span className="text-xs">次回請求日: {nextBillingDate.toLocaleDateString('ja-JP')}</span>
+              <span className="text-xs">
+                次回請求日: {nextBillingDate.toLocaleDateString('ja-JP')}
+              </span>
             </>
           )}
         </p>

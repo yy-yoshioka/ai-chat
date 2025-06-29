@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { z } from 'zod';
-
-const EXPRESS_API = process.env.EXPRESS_API || 'http://localhost:8000';
-
-const ChatRequestSchema = z.object({
-  message: z.string().min(1),
-});
+import { ChatRequestSchema } from '@/app/_schemas/chat';
+import { EXPRESS_API } from '@/app/_config/api';
 
 // POST /api/bff/chat - Send chat message
 export async function POST(req: NextRequest) {

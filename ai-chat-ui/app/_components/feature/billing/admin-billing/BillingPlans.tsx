@@ -31,7 +31,7 @@ export default function BillingPlans({
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">プラン選択</h1>
         <p className="text-xl text-gray-600 mb-8">あなたのビジネスに最適なプランをお選びください</p>
-        
+
         <TrialStatusBanner currentSubscription={currentSubscription} />
       </div>
 
@@ -54,9 +54,7 @@ export default function BillingPlans({
         <p className="text-sm text-gray-500">
           すべてのプランには30日間の無料トライアルが含まれています
         </p>
-        <p className="text-xs text-gray-400 mt-2">
-          料金は月額制で、いつでもキャンセル可能です
-        </p>
+        <p className="text-xs text-gray-400 mt-2">料金は月額制で、いつでもキャンセル可能です</p>
       </div>
     </div>
   );

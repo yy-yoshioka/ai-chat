@@ -1,6 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
-import { UserSchema } from '../../_schemas';
+import { AuthResponseSchema, LoginResponseSchema, LogoutResponseSchema } from '../../_schemas/auth';
 import { Role } from '../../_domains/auth';
 import { hasPermission, hasRole } from '../../_utils/auth-utils';
 import { fetchGet, fetchPost } from '../../_utils/fetcher';
@@ -12,15 +11,6 @@ const authKeys = {
   all: ['auth'] as const,
   user: () => [...authKeys.all, 'user'] as const,
 };
-
-// Response schemas
-const AuthResponseSchema = z.object({
-  user: UserSchema,
-});
-
-const LoginResponseSchema = z.object({
-  success: z.boolean(),
-});
 
 /**
  * Hook to get current authenticated user
@@ -76,7 +66,7 @@ export function useAuth() {
 
   // Logout mutation
   const logoutMutation = useMutation({
-    mutationFn: () => fetchPost('/api/bff/auth/logout', z.object({ success: z.boolean() })),
+    mutationFn: () => fetchPost('/api/bff/auth/logout', LogoutResponseSchema),
     onSuccess: () => {
       // Clear user data and redirect
       queryClient.setQueryData(authKeys.user(), null);

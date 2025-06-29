@@ -2,13 +2,8 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
-import { z } from 'zod';
 import { fetchPost } from '@/app/_utils/fetcher';
-
-// Response schema
-const CheckoutResponseSchema = z.object({
-  sessionUrl: z.string(),
-});
+import { CheckoutResponseSchema } from '@/app/_schemas/billing';
 
 // Request type
 type CheckoutRequest = {

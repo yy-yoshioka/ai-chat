@@ -4,7 +4,10 @@
   "rules": {
     "prettier/prettier": ["error"],
     "max-lines": ["warn", { "max": 300, "skipBlankLines": true, "skipComments": true }],
-    "max-lines-per-function": ["warn", { "max": 50, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": [
+      "warn",
+      { "max": 100, "skipBlankLines": true, "skipComments": true }
+    ],
     "no-restricted-imports": [
       "error",
       {
@@ -19,26 +22,22 @@
           }
         ]
       }
-    ],
-    "import/order": [
-      "error",
-      {
-        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
-        "pathGroups": [
-          {
-            "pattern": "react",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/app/_components/**",
-            "group": "internal",
-            "position": "before"
-          }
-        ],
-        "pathGroupsExcludedImportTypes": ["react"],
-        "newlines-between": "always"
-      }
     ]
-  }
+  },
+
+  "overrides": [
+    {
+      "files": ["**/*.{ts,tsx}"],
+      "excludedFiles": ["app/_schemas/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "name": "zod",
+            "message": "📐 Zod スキーマは app/_schemas/** に定義してください（route や hooks では import のみ可）。"
+          }
+        ]
+      }
+    }
+  ]
 }

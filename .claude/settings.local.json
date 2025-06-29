@@ -18,7 +18,8 @@
       "Bash(yarn lint)",
       "Bash(touch:*)",
       "Bash(wc:*)",
-      "Bash(yarn lint:*)"
+      "Bash(yarn lint:*)",
+      "Bash(rg:*)"
     ],
     "deny": []
   }
