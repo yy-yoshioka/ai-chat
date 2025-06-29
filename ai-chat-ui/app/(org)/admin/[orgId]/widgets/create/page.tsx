@@ -78,13 +78,18 @@ export default function CreateWidgetPage({ params }: { params: Promise<{ orgId: 
       if (keys.length === 1) {
         return { ...prev, [field]: value };
       } else if (keys.length === 2) {
-        return {
-          ...prev,
-          [keys[0]]: {
-            ...prev[keys[0] as keyof WidgetForm],
-            [keys[1]]: value,
-          },
-        };
+        const firstKey = keys[0] as keyof WidgetForm;
+        const prevValue = prev[firstKey];
+
+        if (typeof prevValue === 'object' && prevValue !== null) {
+          return {
+            ...prev,
+            [firstKey]: {
+              ...prevValue,
+              [keys[1]]: value,
+            },
+          };
+        }
       }
       return prev;
     });

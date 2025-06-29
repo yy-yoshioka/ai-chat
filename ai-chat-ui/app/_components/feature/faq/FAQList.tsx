@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import FAQItem, { FAQItemProps } from './FAQItem';
-import { api } from '@/lib/api';
+import { api } from '@/app/_lib/api';
 
 // Static FAQ data for AI Chat platform
 const staticFaqs: FAQItemProps[] = [

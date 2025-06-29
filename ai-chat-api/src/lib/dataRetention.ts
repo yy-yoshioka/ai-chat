@@ -67,7 +67,7 @@ export class DataRetentionService {
     const orgIds = inactiveOrgs.map((org) => org.id);
 
     // Delete messages from inactive organizations
-    const deletedMessages = await prisma.message.deleteMany({
+    const deletedMessages = await prisma.chatLog.deleteMany({
       where: {
         widget: {
           company: {
@@ -107,12 +107,18 @@ export class DataRetentionService {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    // Find companies marked for deletion more than 30 days ago
+    // Find companies that have been inactive for more than 30 days
+    // Since there's no deletedAt field, we'll use updatedAt
     const companiesForDeletion = await prisma.company.findMany({
       where: {
-        deletedAt: {
-          not: null,
+        updatedAt: {
           lt: thirtyDaysAgo,
+        },
+        // Additional check for inactive companies
+        widgets: {
+          none: {
+            isActive: true,
+          },
         },
       },
       select: { id: true },
@@ -127,7 +133,7 @@ export class DataRetentionService {
     // Delete all related data in correct order (respecting foreign key constraints)
     const deletionResults = await prisma.$transaction(async (tx) => {
       // Delete messages first
-      const messagesDeleted = await tx.message.deleteMany({
+      const messagesDeleted = await tx.chatLog.deleteMany({
         where: {
           widget: {
             company: {

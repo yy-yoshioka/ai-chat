@@ -1,7 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "Bash(claude update)"
+      "Bash(claude update)",
+      "Bash(git fetch:*)",
+      "Bash(git checkout:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(git add:*)",
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(docker compose:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

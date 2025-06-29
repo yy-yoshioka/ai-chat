@@ -139,15 +139,15 @@ async function processDocumentEmbedding(
         embeddings.length
     );
 
-    // データベースに保存
-    await prisma.document.update({
-      where: { id: jobData.id },
-      data: {
-        embedding: `[${avgEmbedding.join(',')}]`, // PostgreSQLのvector型として保存
-        status: 'completed',
-        wordCount: document.content.length,
-      },
-    });
+    // データベースに保存（embeddingフィールドは生のSQLで更新）
+    await prisma.$executeRaw`
+      UPDATE "documents" 
+      SET "embedding" = ${`[${avgEmbedding.join(',')}]`}::vector,
+          "status" = 'completed',
+          "wordCount" = ${document.content.length},
+          "updatedAt" = NOW()
+      WHERE "id" = ${jobData.id}
+    `;
 
     console.log(`Successfully processed document embedding: ${document.title}`);
   } catch (error) {
@@ -184,13 +184,13 @@ async function processFAQEmbedding(jobData: EmbeddingJobData): Promise<void> {
     const combinedText = `質問: ${faq.question}\n回答: ${faq.answer}`;
     const embedding = await generateEmbedding(combinedText);
 
-    // データベースに保存
-    await prisma.fAQ.update({
-      where: { id: jobData.id },
-      data: {
-        embedding: `[${embedding.join(',')}]`, // PostgreSQLのvector型として保存
-      },
-    });
+    // データベースに保存（embeddingフィールドは生のSQLで更新）
+    await prisma.$executeRaw`
+      UPDATE "faqs" 
+      SET "embedding" = ${`[${embedding.join(',')}]`}::vector,
+          "updatedAt" = NOW()
+      WHERE "id" = ${jobData.id}
+    `;
 
     console.log(`Successfully processed FAQ embedding: ${faq.question}`);
   } catch (error) {

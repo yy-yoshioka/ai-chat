@@ -2,7 +2,7 @@
 'use client';
 
 import { PLANS, PlanOption } from '@/app/_config/billing/plans';
-import { PlanCard } from '@/app/_components/feature/billing/PlanCard';
+import { PlanCard } from '@/app/_components/feature/billing/admin-billing/tab-plans/PlanCard';
 import { useCheckout } from '@/app/_hooks/billing/useCheckout';
 import { useRouter } from 'next/navigation';
 import React from 'react';

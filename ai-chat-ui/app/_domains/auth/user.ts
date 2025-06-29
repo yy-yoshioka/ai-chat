@@ -3,7 +3,7 @@ import type { OrgMembership } from './membership';
 
 export interface User {
   id: string;
-  name: string;
+  name?: string;
   email: string;
   role: 'user' | 'admin' | 'super_admin'; // Legacy field for backward compatibility
   roles?: Role[]; // New roles array

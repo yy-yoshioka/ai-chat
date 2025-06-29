@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import { useAuth } from '@/app/_hooks/auth/useAuth';
+import { api } from '@/app/_lib/api';
 
 export interface ChatMessageItem {
   role: 'user' | 'assistant';
