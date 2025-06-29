@@ -24,10 +24,7 @@ export const LoginForm: React.FC = () => {
         onSubmit={actions.handleSubmit}
       />
 
-      <LoginFormActions
-        submitting={state.submitting}
-        onQuickLogin={actions.handleQuickLogin}
-      />
+      <LoginFormActions submitting={state.submitting} onQuickLogin={actions.handleQuickLogin} />
     </>
   );
 };

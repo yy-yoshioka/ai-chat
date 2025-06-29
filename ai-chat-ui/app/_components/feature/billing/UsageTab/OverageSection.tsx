@@ -15,9 +15,7 @@ export function OverageSection({ overage }: OverageSectionProps) {
         {overage.messages > 0 && (
           <div className="flex justify-between text-sm">
             <span>メッセージ超過分</span>
-            <span className="font-medium">
-              {formatPrice(overage.messages, 'USD')}
-            </span>
+            <span className="font-medium">{formatPrice(overage.messages, 'USD')}</span>
           </div>
         )}
         {overage.users > 0 && (
@@ -35,9 +33,7 @@ export function OverageSection({ overage }: OverageSectionProps) {
         {overage.apiCalls > 0 && (
           <div className="flex justify-between text-sm">
             <span>API呼び出し超過分</span>
-            <span className="font-medium">
-              {formatPrice(overage.apiCalls, 'USD')}
-            </span>
+            <span className="font-medium">{formatPrice(overage.apiCalls, 'USD')}</span>
           </div>
         )}
         <div className="pt-2 border-t border-yellow-300">
