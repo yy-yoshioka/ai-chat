@@ -1,11 +1,13 @@
 'use client';
 
 import React from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useCheckout } from '@/app/_hooks/billing/useCheckout';
+import { MILLISECONDS_PER_DAY } from '@/app/_config/billing/constants';
 
 export function TrialAlert() {
   const pathname = usePathname();
-  const router = useRouter();
+  const { checkout, loading } = useCheckout();
 
   // Mock trial data - replace with actual trial data from your API/context
   const trialEndDate = new Date();
@@ -13,7 +15,7 @@ export function TrialAlert() {
 
   const today = new Date();
   const timeDiff = trialEndDate.getTime() - today.getTime();
-  const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  const daysLeft = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
 
   // Don't show alert if trial period is over or not in trial
   if (daysLeft <= 0) return null;
@@ -29,29 +31,7 @@ export function TrialAlert() {
       }
 
       // Use Pro plan as default upgrade option
-      const response = await fetch('/api/billing/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          priceId: 'price_pro_monthly',
-          organizationId: orgId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create checkout session');
-      }
-
-      const { url } = await response.json();
-
-      if (url) {
-        // Redirect to Stripe checkout
-        window.location.href = url;
-      } else {
-        throw new Error('No checkout URL received');
-      }
+      await checkout('price_pro_monthly', orgId);
     } catch (error) {
       console.error('Error during upgrade:', error);
       alert('アップグレード処理中にエラーが発生しました');
@@ -80,9 +60,10 @@ export function TrialAlert() {
         </div>
         <button
           onClick={handleUpgradeClick}
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          disabled={loading}
+          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          今すぐアップグレード
+          {loading ? '処理中...' : '今すぐアップグレード'}
         </button>
       </div>
     </div>

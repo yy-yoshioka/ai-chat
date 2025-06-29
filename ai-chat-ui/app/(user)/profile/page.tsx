@@ -7,7 +7,7 @@ import { ProfileHero } from '@/app/_components/feature/profile/hero/ProfileHero'
 import { AccountInfoCard } from '@/app/_components/feature/profile/cards/AccountInfoCard';
 import { QuickActionsCard } from '@/app/_components/feature/profile/cards/QuickActionsCard';
 import { AccountSettingsCard } from '@/app/_components/feature/profile/cards/AccountSettingsCard';
-import { useProfileData } from '@/app/_components/feature/profile/hooks/useProfileData';
+import { useProfileData } from '@/app/_hooks/profile/useProfileData';
 
 export default function ProfilePage() {
   const { userProfile, isLoading, error, handleLogout, daysActive } = useProfileData();

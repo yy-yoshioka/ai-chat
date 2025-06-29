@@ -6,13 +6,12 @@ import { StatsOverview } from '@/app/_components/feature/billing/StatsOverview';
 import { TabNavigation } from '@/app/_components/feature/billing/TabNavigation';
 import { PlansTab } from '@/app/_components/feature/billing/PlansTab';
 import { UsageTab } from '@/app/_components/feature/billing/UsageTab';
-import type { EnhancedBillingPlan, EnhancedUsageData, OverageAlert } from '@/app/_schemas/billing';
+import type { EnhancedBillingPlan, EnhancedUsageData } from '@/app/_schemas/billing';
 import { mockBillingPlans, createMockUsageData } from '@/app/_fixtures/billing.fixtures';
 
 export default function BillingPlansPage() {
   const [billingPlans, setBillingPlans] = useState<EnhancedBillingPlan[]>([]);
   const [usageData, setUsageData] = useState<EnhancedUsageData | null>(null);
-  const [overageAlerts, setOverageAlerts] = useState<OverageAlert[]>([]);
   const [activeTab, setActiveTab] = useState('plans');
   const [loading, setLoading] = useState(true);
 

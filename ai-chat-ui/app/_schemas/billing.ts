@@ -102,9 +102,63 @@ export const overageAlertSchema = z.object({
   notifications: z.array(z.string()), // email addresses
 });
 
+// Checkout Response Schema
+export const CheckoutResponseSchema = z.object({
+  sessionUrl: z.string(),
+});
+
+// Invoice Schema
+export const InvoiceSchema = z.object({
+  id: z.string(),
+  invoiceNumber: z.string(),
+  amount: z.number(),
+  status: z.enum(['paid', 'pending', 'overdue']),
+  invoiceDate: z.string(),
+  dueDate: z.string(),
+  pdfUrl: z.string().optional(),
+});
+
+export const InvoicesResponseSchema = z.object({
+  invoices: z.array(InvoiceSchema),
+});
+
 // Type exports
 export type BillingPlan = z.infer<typeof BillingPlan>;
 export type EnhancedBillingPlan = z.infer<typeof billingPlanSchema>;
 export type UsageData = z.infer<typeof UsageData>;
 export type EnhancedUsageData = z.infer<typeof usageDataSchema>;
 export type OverageAlert = z.infer<typeof overageAlertSchema>;
+// KPI Metric Schema
+export const KpiMetricSchema = z.object({
+  label: z.string(),
+  value: z.union([z.string(), z.number()]),
+  previousValue: z.union([z.string(), z.number()]).optional(),
+  change: z.number().optional(),
+  changeType: z.enum(['increase', 'decrease']).optional(),
+  unit: z.string().optional(),
+});
+
+export const BillingKpiSchema = z.object({
+  revenue: KpiMetricSchema,
+  activeSubscriptions: KpiMetricSchema,
+  churnRate: KpiMetricSchema,
+  averageRevenuePerUser: KpiMetricSchema,
+  chartData: z
+    .object({
+      labels: z.array(z.string()),
+      revenue: z.array(z.number()),
+      subscriptions: z.array(z.number()),
+    })
+    .optional(),
+});
+
+// Billing Request Schemas
+export const UpdateBillingPlanSchema = z.object({
+  planId: z.string(),
+});
+
+export type CheckoutResponse = z.infer<typeof CheckoutResponseSchema>;
+export type Invoice = z.infer<typeof InvoiceSchema>;
+export type KpiMetric = z.infer<typeof KpiMetricSchema>;
+export type BillingKpi = z.infer<typeof BillingKpiSchema>;
+export type UpdateBillingPlanRequest = z.infer<typeof UpdateBillingPlanSchema>;

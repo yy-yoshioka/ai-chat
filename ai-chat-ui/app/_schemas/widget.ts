@@ -63,6 +63,23 @@ export const createWidgetFormSchema = z.object({
   companyId: z.string().min(1, 'Company is required'),
 });
 
+// Widget form for create page
+export const widgetFormSchema = z.object({
+  name: z.string(),
+  theme: z.object({
+    primaryColor: z.string(),
+    secondaryColor: z.string(),
+    borderRadius: z.number(),
+    position: z.enum(['bottom-right', 'bottom-left', 'top-right', 'top-left']),
+  }),
+  settings: z.object({
+    welcomeMessage: z.string(),
+    placeholder: z.string(),
+    showAvatar: z.boolean(),
+    enableFileUpload: z.boolean(),
+  }),
+});
+
 // Widget creation request
 export const CreateWidgetRequest = z.object({
   name: z.string(),
@@ -98,5 +115,6 @@ export type Widget = z.infer<typeof Widget>;
 export type WidgetSettings = z.infer<typeof widgetSettingsSchema>;
 export type Company = z.infer<typeof companySchema>;
 export type CreateWidgetForm = z.infer<typeof createWidgetFormSchema>;
+export type WidgetForm = z.infer<typeof widgetFormSchema>;
 export type CreateWidgetRequest = z.infer<typeof CreateWidgetRequest>;
 export type UpdateWidgetRequest = z.infer<typeof UpdateWidgetRequest>;

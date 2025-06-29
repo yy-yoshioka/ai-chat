@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import { useAuth } from '@/app/_hooks/auth/useAuth';
-import { api } from '@/app/_lib/api';
+import { useSendMessage } from '@/app/_hooks/chat/useChat';
 
 export interface ChatMessageItem {
   role: 'user' | 'assistant';
@@ -12,9 +12,9 @@ export interface ChatMessageItem {
 
 export default function ChatContainer() {
   const [messages, setMessages] = useState<ChatMessageItem[]>([]);
-  const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+  const sendMessageMutation = useSendMessage();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -32,15 +32,14 @@ export default function ChatContainer() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    setLoading(true);
 
     try {
-      const { data } = await api.post<{ answer: string; timestamp?: string }>('/chat', { message });
+      const response = await sendMessageMutation.mutateAsync(message);
 
-      if (data?.answer) {
+      if (response?.answer) {
         const assistantMessage: ChatMessageItem = {
           role: 'assistant',
-          content: data.answer,
+          content: response.answer,
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, assistantMessage]);
@@ -53,8 +52,6 @@ export default function ChatContainer() {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -190,7 +187,7 @@ export default function ChatContainer() {
                   />
                 ))}
 
-                {loading && (
+                {sendMessageMutation.isPending && (
                   <div className="flex justify-start">
                     <div className="flex items-end gap-3 animate-fade-in">
                       <div className="flex-shrink-0">
@@ -239,7 +236,7 @@ export default function ChatContainer() {
           {/* Chat Input */}
           <div className="border-t border-gray-200 p-3 sm:p-4 flex-shrink-0 bg-white">
             <div className="max-w-4xl mx-auto">
-              <ChatInput onSend={sendMessage} disabled={loading} />
+              <ChatInput onSend={sendMessage} disabled={sendMessageMutation.isPending} />
             </div>
           </div>
         </div>

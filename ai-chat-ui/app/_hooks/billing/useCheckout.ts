@@ -1,38 +1,60 @@
 // app/_hooks/billing/useCheckout.ts
 'use client';
 
-import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { fetchPost } from '@/app/_utils/fetcher';
+import { CheckoutResponseSchema } from '@/app/_schemas/billing';
+
+// Request type
+type CheckoutRequest = {
+  priceId: string;
+  organizationId?: string;
+  planId?: string;
+};
 
 export interface CheckoutState {
   loading: boolean;
   processingId: string | null;
-  checkout: (priceId: string) => Promise<void>;
+  checkout: (priceId: string, orgId?: string) => Promise<void>;
 }
 
+/**
+ * Hook to create a checkout session for billing
+ */
 export const useCheckout = (): CheckoutState => {
-  const [processingId, setProcessingId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const mutation = useMutation({
+    mutationFn: (data: CheckoutRequest) =>
+      fetchPost('/api/billing/checkout', CheckoutResponseSchema, data),
+    onSuccess: (data) => {
+      // Redirect to Stripe checkout
+      window.location.href = data.sessionUrl;
+    },
+  });
 
-  const checkout = async (priceId: string) => {
-    // Free プランは page 内でハンドリングするため priceId === '' は呼ばない想定
-    setLoading(true);
-    setProcessingId(priceId);
-    try {
-      const orgId = localStorage.getItem('currentOrgId') ?? 'default-org';
-      const res = await fetch('/api/billing/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId, orgId }),
-      });
-      if (!res.ok) throw await res.json();
-
-      const { sessionUrl } = await res.json();
-      window.location.href = sessionUrl as string;
-    } finally {
-      setLoading(false);
-      setProcessingId(null);
-    }
+  const checkout = async (priceId: string, orgId?: string) => {
+    const organizationId = orgId || localStorage.getItem('currentOrgId') || 'default-org';
+    await mutation.mutateAsync({ priceId, organizationId });
   };
 
-  return { loading, processingId, checkout };
+  return {
+    loading: mutation.isPending,
+    processingId: mutation.variables?.priceId || null,
+    checkout,
+  };
+};
+
+/**
+ * Hook for plan selection checkout (used in PlanTab)
+ */
+export const usePlanCheckout = () => {
+  return useMutation({
+    mutationFn: ({ orgId, planId }: { orgId: string; planId: string }) =>
+      fetchPost('/api/billing/checkout', CheckoutResponseSchema, { orgId, planId }),
+    onSuccess: (data) => {
+      // Handle successful checkout creation
+      if (data.sessionUrl) {
+        window.location.href = data.sessionUrl;
+      }
+    },
+  });
 };

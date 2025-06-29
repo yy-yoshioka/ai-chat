@@ -3,25 +3,41 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": ["error"],
-    "import/order": [
+    "max-lines": ["warn", { "max": 300, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": [
+      "warn",
+      { "max": 100, "skipBlankLines": true, "skipComments": true }
+    ],
+    "no-restricted-imports": [
       "error",
       {
-        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
-        "pathGroups": [
+        "paths": [
           {
-            "pattern": "react",
-            "group": "external",
-            "position": "before"
+            "name": "@/app/_lib/api",
+            "message": "Use React Query hooks and BFF routes instead of direct API calls"
           },
           {
-            "pattern": "@/app/_components/**",
-            "group": "internal",
-            "position": "before"
+            "name": "@/lib/api",
+            "message": "Use React Query hooks and BFF routes instead of direct API calls"
           }
-        ],
-        "pathGroupsExcludedImportTypes": ["react"],
-        "newlines-between": "always"
+        ]
       }
     ]
-  }
+  },
+
+  "overrides": [
+    {
+      "files": ["**/*.{ts,tsx}"],
+      "excludedFiles": ["app/_schemas/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "name": "zod",
+            "message": "📐 Zod スキーマは app/_schemas/** に定義してください（route や hooks では import のみ可）。"
+          }
+        ]
+      }
+    }
+  ]
 }
