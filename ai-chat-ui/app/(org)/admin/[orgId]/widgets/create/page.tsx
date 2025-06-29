@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface WidgetForm {
@@ -22,7 +21,6 @@ interface WidgetForm {
 
 export default function CreateWidgetPage({ params }: { params: Promise<{ orgId: string }> }) {
   const { orgId } = React.use(params);
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<WidgetForm>({
     name: '',

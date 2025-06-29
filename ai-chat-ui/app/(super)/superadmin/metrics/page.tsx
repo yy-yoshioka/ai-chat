@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-interface SystemMetric {
+export interface SystemMetric {
   id: string;
   name: string;
   value: number;

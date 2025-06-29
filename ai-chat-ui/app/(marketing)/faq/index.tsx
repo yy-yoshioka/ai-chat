@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import FAQList from '@/app/_components/FAQ/FAQList';
+import FAQList from '@/app/_components/feature/faq/FAQList';
 
 export default function FAQPage() {
   return (

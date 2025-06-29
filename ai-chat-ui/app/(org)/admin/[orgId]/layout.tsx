@@ -3,8 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import OrgAdminGuard from '../../../_components/OrgAdminGuard';
-import { useAuth } from '../../../_hooks/useAuth';
+import { useAuth } from '../../../_hooks/auth/useAuth';
+import OrgAdminGuard from '@/app/_components/guard/OrgAdminGuard';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
