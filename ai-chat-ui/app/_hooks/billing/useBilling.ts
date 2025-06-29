@@ -17,7 +17,6 @@ const UsageDataSchema = z.object({
   }),
 });
 
-
 // Query keys factory
 const billingKeys = {
   all: ['billing'] as const,
