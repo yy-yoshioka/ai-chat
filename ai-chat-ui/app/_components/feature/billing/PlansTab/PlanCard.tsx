@@ -26,9 +26,7 @@ export function PlanCard({ plan, onUpgrade }: PlanCardProps) {
         <p className="text-3xl font-bold text-gray-900">
           {formatPrice(plan.pricing.basePrice, plan.pricing.currency)}
         </p>
-        <p className="text-sm text-gray-600">
-          /{plan.pricing.interval === 'month' ? '月' : '年'}
-        </p>
+        <p className="text-sm text-gray-600">/{plan.pricing.interval === 'month' ? '月' : '年'}</p>
       </div>
 
       <div className="space-y-3 mb-6">

@@ -53,16 +53,10 @@ export default function BillingPlansPage() {
       <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="mt-6">
-        {activeTab === 'plans' && (
-          <PlansTab plans={billingPlans} onUpgrade={handlePlanUpgrade} />
-        )}
+        {activeTab === 'plans' && <PlansTab plans={billingPlans} onUpgrade={handlePlanUpgrade} />}
         {activeTab === 'usage' && <UsageTab usageData={usageData} />}
-        {activeTab === 'overage' && (
-          <div className="text-gray-500">超過料金設定タブの実装予定</div>
-        )}
-        {activeTab === 'analytics' && (
-          <div className="text-gray-500">分析タブの実装予定</div>
-        )}
+        {activeTab === 'overage' && <div className="text-gray-500">超過料金設定タブの実装予定</div>}
+        {activeTab === 'analytics' && <div className="text-gray-500">分析タブの実装予定</div>}
       </div>
     </div>
   );

@@ -63,8 +63,8 @@ export function UsageTab({ usageData }: UsageTabProps) {
                       percentage >= 90
                         ? 'bg-red-500'
                         : percentage >= 80
-                        ? 'bg-yellow-500'
-                        : 'bg-green-500'
+                          ? 'bg-yellow-500'
+                          : 'bg-green-500'
                     }`}
                     style={{ width: `${Math.min(percentage, 100)}%` }}
                   />
@@ -83,7 +83,9 @@ export function UsageTab({ usageData }: UsageTabProps) {
             {usageData.overage.messages > 0 && (
               <div className="flex justify-between text-sm">
                 <span>メッセージ超過分</span>
-                <span className="font-medium">{formatPrice(usageData.overage.messages, 'USD')}</span>
+                <span className="font-medium">
+                  {formatPrice(usageData.overage.messages, 'USD')}
+                </span>
               </div>
             )}
             {usageData.overage.users > 0 && (
@@ -101,7 +103,9 @@ export function UsageTab({ usageData }: UsageTabProps) {
             {usageData.overage.apiCalls > 0 && (
               <div className="flex justify-between text-sm">
                 <span>API呼び出し超過分</span>
-                <span className="font-medium">{formatPrice(usageData.overage.apiCalls, 'USD')}</span>
+                <span className="font-medium">
+                  {formatPrice(usageData.overage.apiCalls, 'USD')}
+                </span>
               </div>
             )}
             <div className="pt-2 border-t border-yellow-300">

@@ -48,8 +48,8 @@ export function StatsOverview({ usageData }: StatsOverviewProps) {
                 stat.changeType === 'increase'
                   ? 'text-red-600'
                   : stat.changeType === 'warning'
-                  ? 'text-yellow-600'
-                  : 'text-green-600'
+                    ? 'text-yellow-600'
+                    : 'text-green-600'
               }`}
             >
               {stat.change}

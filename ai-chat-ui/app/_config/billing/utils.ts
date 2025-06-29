@@ -5,7 +5,7 @@ export function getTierColor(tier: keyof typeof TIER_COLORS): string {
 }
 
 export function formatPrice(amount: number, currency: string): string {
-  const currencyOption = CURRENCY_OPTIONS.find(opt => opt.value === currency);
+  const currencyOption = CURRENCY_OPTIONS.find((opt) => opt.value === currency);
   const symbol = currencyOption?.symbol || '$';
   return `${symbol}${amount.toFixed(2)}`;
 }

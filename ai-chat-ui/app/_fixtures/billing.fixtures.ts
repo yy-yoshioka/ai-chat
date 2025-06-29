@@ -90,7 +90,7 @@ export const mockBillingPlans: EnhancedBillingPlan[] = [
 export function createMockUsageData(organizationId: string, planName: string): EnhancedUsageData {
   const now = new Date();
   const nextMonth = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-  
+
   return {
     organizationId,
     currentPlan: planName,
