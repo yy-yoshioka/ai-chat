@@ -10,14 +10,12 @@ const CheckoutResponseSchema = z.object({
   sessionUrl: z.string(),
 });
 
-// Request schema
-const CheckoutRequestSchema = z.object({
-  priceId: z.string(),
-  organizationId: z.string().optional(),
-  planId: z.string().optional(),
-});
-
-type CheckoutRequest = z.infer<typeof CheckoutRequestSchema>;
+// Request type
+type CheckoutRequest = {
+  priceId: string;
+  organizationId?: string;
+  planId?: string;
+};
 
 export interface CheckoutState {
   loading: boolean;

@@ -3,7 +3,7 @@ import type { WidgetForm } from '@/_schemas/widget';
 
 interface AdvancedSettingsProps {
   form: WidgetForm;
-  updateForm: (field: string, value: any) => void;
+  updateForm: (field: string, value: unknown) => void;
 }
 
 export function AdvancedSettings({ form, updateForm }: AdvancedSettingsProps) {

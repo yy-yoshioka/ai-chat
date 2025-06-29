@@ -5,7 +5,7 @@ import { UserSchema } from '@/app/_schemas/auth';
 const EXPRESS_API = process.env.EXPRESS_API || 'http://localhost:8000';
 
 // GET /api/bff/auth/me - Get current user
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const cookieStore = await cookies();
     const authToken = cookieStore.get('auth-token')?.value;

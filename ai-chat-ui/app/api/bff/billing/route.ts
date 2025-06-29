@@ -6,7 +6,7 @@ import { BillingPlanSchema } from '@/app/_schemas/billing';
 const EXPRESS_API = process.env.EXPRESS_API || 'http://localhost:8000';
 
 // GET /api/bff/billing - Get billing plans
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const cookieStore = await cookies();
     const authToken = cookieStore.get('auth-token')?.value;

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
-import { BillingPlanSchema, type EnhancedBillingPlan } from '@/app/_schemas/billing';
+import { BillingPlanSchema } from '@/app/_schemas/billing';
 import { fetchGet, fetchPost } from '@/app/_utils/fetcher';
 
 // Response schemas
@@ -17,20 +17,6 @@ const UsageDataSchema = z.object({
   }),
 });
 
-const BillingDataSchema = z.object({
-  plan: BillingPlanSchema,
-  usage: UsageDataSchema,
-  subscription: z
-    .object({
-      id: z.string(),
-      status: z.enum(['active', 'trialing', 'past_due', 'canceled']),
-      currentPeriodEnd: z.string(),
-      cancelAtPeriodEnd: z.boolean(),
-    })
-    .optional(),
-});
-
-type BillingData = z.infer<typeof BillingDataSchema>;
 
 // Query keys factory
 const billingKeys = {

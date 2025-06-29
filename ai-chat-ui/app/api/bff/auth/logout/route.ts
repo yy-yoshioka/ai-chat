@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 const EXPRESS_API = process.env.EXPRESS_API || 'http://localhost:8000';
 
 // POST /api/bff/auth/logout - Logout user
-export async function POST(req: NextRequest) {
+export async function POST() {
   try {
     const cookieStore = await cookies();
     const authToken = cookieStore.get('auth-token')?.value;

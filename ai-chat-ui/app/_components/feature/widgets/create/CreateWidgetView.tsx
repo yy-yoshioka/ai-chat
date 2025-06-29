@@ -12,7 +12,7 @@ interface CreateWidgetViewProps {
   form: WidgetForm;
   loading: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  updateForm: (field: string, value: any) => void;
+  updateForm: (field: string, value: unknown) => void;
   embedCode: string;
 }
 

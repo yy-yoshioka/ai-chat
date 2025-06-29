@@ -51,7 +51,7 @@ export function useCreateWidget(orgId: string) {
     }
   };
 
-  const updateForm = (field: string, value: any) => {
+  const updateForm = (field: string, value: unknown) => {
     setForm((prev) => {
       const keys = field.split('.');
       if (keys.length === 1) {

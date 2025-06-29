@@ -4,7 +4,7 @@ import { WIDGET_POSITIONS, BORDER_RADIUS_MIN, BORDER_RADIUS_MAX } from '@/_confi
 
 interface ThemeSettingsProps {
   form: WidgetForm;
-  updateForm: (field: string, value: any) => void;
+  updateForm: (field: string, value: unknown) => void;
 }
 
 export function ThemeSettings({ form, updateForm }: ThemeSettingsProps) {

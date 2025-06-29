@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
-import { User, UserSchema } from '../../_schemas';
+import { UserSchema } from '../../_schemas';
 import { Role } from '../../_domains/auth';
 import { hasPermission, hasRole } from '../../_utils/auth-utils';
 import { fetchGet, fetchPost } from '../../_utils/fetcher';
