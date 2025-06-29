@@ -20,12 +20,14 @@ const UsageDataSchema = z.object({
 const BillingDataSchema = z.object({
   plan: BillingPlanSchema,
   usage: UsageDataSchema,
-  subscription: z.object({
-    id: z.string(),
-    status: z.enum(['active', 'trialing', 'past_due', 'canceled']),
-    currentPeriodEnd: z.string(),
-    cancelAtPeriodEnd: z.boolean(),
-  }).optional(),
+  subscription: z
+    .object({
+      id: z.string(),
+      status: z.enum(['active', 'trialing', 'past_due', 'canceled']),
+      currentPeriodEnd: z.string(),
+      cancelAtPeriodEnd: z.boolean(),
+    })
+    .optional(),
 });
 
 type BillingData = z.infer<typeof BillingDataSchema>;
@@ -59,11 +61,11 @@ export function useBilling(orgId: string) {
     queryFn: async () => {
       // Fetch plans from BFF
       const plans = await fetchGet('/api/bff/billing', z.array(BillingPlanSchema));
-      
+
       // TODO: Replace with actual BFF endpoint when ready
       // For now, return mock data structure matching the component expectations
-      const currentPlan = plans.find(p => p.tier === 'pro') || plans[0];
-      
+      const currentPlan = plans.find((p) => p.tier === 'pro') || plans[0];
+
       return {
         plan: currentPlan,
         usage: {
@@ -96,9 +98,9 @@ export function useBilling(orgId: string) {
  */
 export function useUpdateBillingPlan() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: ({ planId, orgId }: { planId: string; orgId: string }) => 
+    mutationFn: ({ planId, orgId }: { planId: string; orgId: string }) =>
       fetchPost('/api/bff/billing', z.object({ success: z.boolean() }), { planId }),
     onSuccess: (_, variables) => {
       // Invalidate related queries
@@ -113,9 +115,9 @@ export function useUpdateBillingPlan() {
  */
 export function useCancelSubscription() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: (orgId: string) => 
+    mutationFn: (orgId: string) =>
       fetchPost('/api/bff/billing/cancel', z.object({ success: z.boolean() }), { orgId }),
     onSuccess: (_, orgId) => {
       queryClient.invalidateQueries({ queryKey: billingKeys.current(orgId) });

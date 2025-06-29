@@ -14,14 +14,11 @@ const SignupSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    
+
     // Validate request body
     const parsed = SignupSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: 'Invalid request data' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
 
     const response = await fetch(`${EXPRESS_API}/api/signup`, {
@@ -41,7 +38,7 @@ export async function POST(req: NextRequest) {
     }
 
     const json = await response.json();
-    
+
     // Set auth cookie if token is returned
     if (json.token) {
       const cookieStore = await cookies();
@@ -56,9 +53,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('BFF auth/signup POST error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

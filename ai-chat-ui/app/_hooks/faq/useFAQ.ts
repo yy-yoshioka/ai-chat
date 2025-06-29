@@ -42,10 +42,9 @@ export function useFAQs(params?: { category?: string; active?: boolean }) {
  */
 export function useCreateFAQ() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: (data: Omit<FAQ, 'id'>) => 
-      fetchPost('/api/bff/faq', FAQSchema, data),
+    mutationFn: (data: Omit<FAQ, 'id'>) => fetchPost('/api/bff/faq', FAQSchema, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: faqKeys.lists() });
     },
@@ -57,9 +56,9 @@ export function useCreateFAQ() {
  */
 export function useUpdateFAQ() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: ({ id, ...data }: Partial<FAQ> & { id: string }) => 
+    mutationFn: ({ id, ...data }: Partial<FAQ> & { id: string }) =>
       fetchPut(`/api/bff/faq/${id}`, FAQSchema, data),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: faqKeys.lists() });

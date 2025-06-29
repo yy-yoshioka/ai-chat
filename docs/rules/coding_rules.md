@@ -174,4 +174,66 @@ import { userSchema } from "../../../../app/_schemas/auth";
 
 ---
 
-✅ **これで可読性とバグ耐性を両立する基盤が完成**。引き続き運用しながら改善していきましょ
+✅ **これで可読性とバグ耐性を両立する基盤が完成**。引き続き運用しながら改善していきましょう！
+
+### 13. API リクエスト & BFF レイヤ（2025‑07 改訂）
+
+#### 13‑1. アーキテクチャ
+
+```
+UI Component / page.tsx
+  ↳ useXxxQuery / useXxxMutation （TanStack Query）
+       ↳ app/_hooks/**/useXxx.ts       // queryFn = fetchJson()
+            ↳ fetch('/api/bff/...')    // same‑origin BFF
+                 ↳ app/api/bff/**/route.ts  // Zod で検証
+                       ↳ fetch(`${EXPRESS_API}/v1/...`) // Express API
+```
+
+* **UI / page.tsx から直接 fetch や API 呼び出しをすることを禁止**。
+* **api.ts などグローバル API クライアントは廃止**。共通処理は `app/_utils/fetcher.ts` のみ。
+
+#### 13‑2. 実装ガイド
+
+| 層              | ファイル例                          | 役割                                  |
+| --------------- | ----------------------------------- | ------------------------------------- |
+| **Hook**        | `_hooks/billing/useBillingPlans.ts` | キャッシュ・staleTime・エラー UI 決定 |
+| **BFF Route**   | `api/bff/billing/route.ts`          | JWT / Cookie 認可→Express；Zod 検証   |
+| **Express API** | `backend/routes/billing.ts`         | DB / 外部 API 呼出し                  |
+
+#### 13‑3. fetchJson ユーティリティ
+
+* `app/_utils/fetcher.ts` に配置。
+* Zod でレスポンス検証し、`FetchError` を throw。
+* `fetchGet / fetchPost / fetchPut / fetchDelete` の薄いラッパのみ提供。
+
+#### 13‑4. ESLint ルール
+
+```jsonc
+// .eslintrc.cjs
+{
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          { "name": "~/api", "message": "Use hooks + fetchJson" },
+          { "name": "axios", "message": "Use native fetch via fetchJson" }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "CallExpression[callee.name='fetch']",
+        "message": "Use fetchJson through hooks, not raw fetch in components/pages"
+      }
+    ]
+  }
+}
+```
+
+#### 13‑5. テスト指針
+
+* Hooks を `msw` でモック。page でネットワーク発生しないことを Jest で検証。
+
+> **備考**: 既存コードの直接 `fetch` / `api.xxx` は `refactor/bff-hooks` ブランチで段階的に削除する。

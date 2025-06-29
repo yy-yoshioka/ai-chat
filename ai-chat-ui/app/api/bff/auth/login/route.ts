@@ -13,14 +13,11 @@ const LoginSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    
+
     // Validate request body
     const parsed = LoginSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: 'Invalid request data' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
 
     const response = await fetch(`${EXPRESS_API}/api/login`, {
@@ -40,7 +37,7 @@ export async function POST(req: NextRequest) {
     }
 
     const json = await response.json();
-    
+
     // Set auth cookie
     const cookieStore = await cookies();
     cookieStore.set('auth-token', json.token, {
@@ -53,9 +50,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('BFF auth/login POST error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

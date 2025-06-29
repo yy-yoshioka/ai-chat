@@ -41,7 +41,7 @@ export function useAuth() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data, isLoading, error } = useUser();
-  
+
   const user = data?.user || null;
   const authenticated = !!user;
   const isAdmin = user?.role === 'admin';
@@ -140,7 +140,7 @@ export function useAuth() {
     error: error ? (error as Error).message : null,
     authenticated,
     isAdmin,
-    
+
     // Methods
     login,
     logout,
@@ -148,7 +148,7 @@ export function useAuth() {
     refreshUser,
     hasOrgPermission,
     hasOrgResourcePermission,
-    
+
     // Mutations (for advanced usage)
     loginMutation,
     logoutMutation,

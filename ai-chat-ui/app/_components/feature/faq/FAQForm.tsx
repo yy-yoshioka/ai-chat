@@ -26,7 +26,7 @@ export default function FAQForm({ initialValues, onSubmitSuccess, faqId }: FAQFo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       if (faqId) {
         await updateFAQ.mutateAsync({
@@ -67,12 +67,12 @@ export default function FAQForm({ initialValues, onSubmitSuccess, faqId }: FAQFo
           className="w-full border rounded p-2"
         />
       </div>
-      <button 
-        type="submit" 
+      <button
+        type="submit"
         className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
         disabled={createFAQ.isPending || updateFAQ.isPending}
       >
-        {(createFAQ.isPending || updateFAQ.isPending) ? 'Saving...' : 'Save'}
+        {createFAQ.isPending || updateFAQ.isPending ? 'Saving...' : 'Save'}
       </button>
     </form>
   );

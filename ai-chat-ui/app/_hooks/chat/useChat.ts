@@ -15,8 +15,7 @@ type ChatResponse = z.infer<typeof ChatResponseSchema>;
  */
 export function useSendMessage() {
   return useMutation({
-    mutationFn: (message: string) => 
-      fetchPost('/api/bff/chat', ChatResponseSchema, { message }),
+    mutationFn: (message: string) => fetchPost('/api/bff/chat', ChatResponseSchema, { message }),
   });
 }
 

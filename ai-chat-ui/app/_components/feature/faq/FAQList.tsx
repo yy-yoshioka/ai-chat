@@ -56,7 +56,7 @@ const staticFaqs: FAQItemProps[] = [
 
 export default function FAQList() {
   const { data, isLoading, error } = useFAQs();
-  
+
   // Use API data if available, otherwise fallback to static FAQs
   const faqs = data?.faqs && data.faqs.length > 0 ? data.faqs : staticFaqs;
 
@@ -67,7 +67,7 @@ export default function FAQList() {
       </div>
     );
   }
-  
+
   // Log error but still show static FAQs
   if (error) {
     console.log('Using static FAQ data as fallback');

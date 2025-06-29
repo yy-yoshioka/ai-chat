@@ -28,7 +28,7 @@ export async function fetchJson<T>(
   options?: FetchOptions
 ): Promise<T> {
   const { params, ...fetchOptions } = options || {};
-  
+
   // Add query parameters if provided
   let url = input;
   if (params) {
@@ -55,7 +55,7 @@ export async function fetchJson<T>(
     if (!response.ok) {
       let errorMessage = response.statusText;
       let errorData: unknown;
-      
+
       try {
         errorData = await response.json();
         if (typeof errorData === 'object' && errorData !== null && 'error' in errorData) {
@@ -72,16 +72,12 @@ export async function fetchJson<T>(
 
     // Parse response
     const data = await response.json();
-    
+
     // Validate with Zod schema
     const parsed = schema.safeParse(data);
     if (!parsed.success) {
       console.error('Response validation failed:', parsed.error);
-      throw new FetchError(
-        500,
-        'Invalid response format',
-        { zodError: parsed.error.flatten() }
-      );
+      throw new FetchError(500, 'Invalid response format', { zodError: parsed.error.flatten() });
     }
 
     return parsed.data;
@@ -90,12 +86,12 @@ export async function fetchJson<T>(
     if (error instanceof FetchError) {
       throw error;
     }
-    
+
     // Handle network errors
     if (error instanceof Error) {
       throw new FetchError(0, error.message);
     }
-    
+
     throw new FetchError(0, 'Unknown error occurred');
   }
 }

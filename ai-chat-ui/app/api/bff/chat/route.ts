@@ -19,20 +19,17 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    
+
     // Validate request
     const parsed = ChatRequestSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: 'Invalid request data' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
 
     const response = await fetch(`${EXPRESS_API}/api/chat`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${authToken}`,
+        Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(parsed.data),
@@ -49,9 +46,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(json);
   } catch (error) {
     console.error('BFF chat POST error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -27,40 +27,31 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     }
 
     const body = await req.json();
-    
+
     // Validate request
     const parsed = UpdateFAQSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: 'Invalid request data' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
 
     const response = await fetch(`${EXPRESS_API}/api/faqs/${id}`, {
       method: 'PUT',
       headers: {
-        'Authorization': `Bearer ${authToken}`,
+        Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(parsed.data),
     });
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: 'Failed to update FAQ' },
-        { status: response.status }
-      );
+      return NextResponse.json({ error: 'Failed to update FAQ' }, { status: response.status });
     }
 
     const faq = await response.json();
     return NextResponse.json(faq);
   } catch (error) {
     console.error('BFF FAQ PUT error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -78,24 +69,18 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     const response = await fetch(`${EXPRESS_API}/api/faqs/${id}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${authToken}`,
+        Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
     });
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: 'Failed to delete FAQ' },
-        { status: response.status }
-      );
+      return NextResponse.json({ error: 'Failed to delete FAQ' }, { status: response.status });
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('BFF FAQ DELETE error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
 
     const response = await fetch(`${EXPRESS_API}/api/billing/plans`, {
       headers: {
-        'Authorization': `Bearer ${authToken}`,
+        Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
       cache: 'no-store',
@@ -31,24 +31,18 @@ export async function GET(req: NextRequest) {
     }
 
     const json = await response.json();
-    
+
     // Validate response with Zod schema
     const parsed = z.array(BillingPlanSchema).safeParse(json);
     if (!parsed.success) {
       console.error('Invalid billing plans response:', parsed.error);
-      return NextResponse.json(
-        { error: 'Invalid response format' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Invalid response format' }, { status: 500 });
     }
 
     return NextResponse.json(parsed.data);
   } catch (error) {
     console.error('BFF billing GET error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -72,7 +66,7 @@ export async function POST(req: NextRequest) {
     const response = await fetch(`${EXPRESS_API}/api/billing/subscribe`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${authToken}`,
+        Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ planId }),
@@ -89,9 +83,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(json);
   } catch (error) {
     console.error('BFF billing POST error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

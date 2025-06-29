@@ -24,31 +24,22 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const queryString = searchParams.toString();
 
-    const response = await fetch(
-      `${EXPRESS_API}/api/faqs${queryString ? `?${queryString}` : ''}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await fetch(`${EXPRESS_API}/api/faqs${queryString ? `?${queryString}` : ''}`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: 'Failed to fetch FAQs' },
-        { status: response.status }
-      );
+      return NextResponse.json({ error: 'Failed to fetch FAQs' }, { status: response.status });
     }
 
     const faqs = await response.json();
     return NextResponse.json({ faqs });
   } catch (error) {
     console.error('BFF FAQ GET error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -63,39 +54,30 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    
+
     // Validate request
     const parsed = CreateFAQSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: 'Invalid request data' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
     }
 
     const response = await fetch(`${EXPRESS_API}/api/faqs`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${authToken}`,
+        Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(parsed.data),
     });
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: 'Failed to create FAQ' },
-        { status: response.status }
-      );
+      return NextResponse.json({ error: 'Failed to create FAQ' }, { status: response.status });
     }
 
     const faq = await response.json();
     return NextResponse.json(faq);
   } catch (error) {
     console.error('BFF FAQ POST error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
