@@ -1,6 +1,13 @@
 import { z } from 'zod';
 
-export const settingsTabSchema = z.enum(['branding', 'members', 'widgets', 'api', 'notifications', 'security']);
+export const settingsTabSchema = z.enum([
+  'branding',
+  'members',
+  'widgets',
+  'api',
+  'notifications',
+  'security',
+]);
 
 export const brandingSettingsSchema = z.object({
   organizationName: z.string(),

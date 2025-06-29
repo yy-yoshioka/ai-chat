@@ -18,11 +18,13 @@ const BillingKpiSchema = z.object({
   activeSubscriptions: KpiMetricSchema,
   churnRate: KpiMetricSchema,
   averageRevenuePerUser: KpiMetricSchema,
-  chartData: z.object({
-    labels: z.array(z.string()),
-    revenue: z.array(z.number()),
-    subscriptions: z.array(z.number()),
-  }).optional(),
+  chartData: z
+    .object({
+      labels: z.array(z.string()),
+      revenue: z.array(z.number()),
+      subscriptions: z.array(z.number()),
+    })
+    .optional(),
 });
 
 export type BillingKpi = z.infer<typeof BillingKpiSchema>;
@@ -44,7 +46,7 @@ export function useBillingKpi(organizationId?: string) {
       // TODO: Replace with actual API endpoint when ready
       // const endpoint = `/api/billing/kpi${organizationId ? `?orgId=${organizationId}` : ''}`;
       // return fetchGet(endpoint, BillingKpiSchema);
-      
+
       // Mock data for now
       return new Promise<BillingKpi>((resolve) => {
         setTimeout(() => {

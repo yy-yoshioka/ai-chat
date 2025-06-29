@@ -15,9 +15,7 @@ export function ThemeSettings({ form, updateForm }: ThemeSettingsProps) {
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              プライマリカラー
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">プライマリカラー</label>
             <div className="flex items-center space-x-3">
               <input
                 type="color"
@@ -35,9 +33,7 @@ export function ThemeSettings({ form, updateForm }: ThemeSettingsProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              セカンダリカラー
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">セカンダリカラー</label>
             <div className="flex items-center space-x-3">
               <input
                 type="color"

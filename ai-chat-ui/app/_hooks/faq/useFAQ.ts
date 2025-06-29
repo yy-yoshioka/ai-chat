@@ -1,68 +1,73 @@
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
-import { fetchGet, fetchPost, fetchPut } from '@/app/_utils/fetcher';
+import type { FAQ } from '@/_schemas/faq';
+import { FAQ_CONSTANTS } from '@/_config/faq/constants';
 
-// Schemas
-const FAQSchema = z.object({
-  id: z.string(),
-  question: z.string(),
-  answer: z.string(),
-  category: z.string().optional(),
-  weight: z.number().optional(),
-  isActive: z.boolean().optional(),
-});
+const mockFAQs: FAQ[] = [
+  {
+    id: '1',
+    question: 'サービスの料金プランについて教えてください',
+    answer: '当サービスでは、Freeプラン、Proプラン、Enterpriseプランをご用意しています。',
+    category: '料金',
+    isActive: true,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-10T00:00:00Z',
+  },
+  {
+    id: '2',
+    question: 'ログインできない場合の対処方法は？',
+    answer: 'パスワードリセット機能をご利用いただくか、サポートまでお問い合わせください。',
+    category: 'テクニカルサポート',
+    isActive: true,
+    createdAt: '2024-01-02T00:00:00Z',
+    updatedAt: '2024-01-12T00:00:00Z',
+  },
+  {
+    id: '3',
+    question: 'データの削除方法について',
+    answer: '設定画面からアカウント削除を行うことができます。',
+    category: 'アカウント',
+    isActive: false,
+    createdAt: '2024-01-03T00:00:00Z',
+    updatedAt: '2024-01-15T00:00:00Z',
+  },
+];
 
-const FAQListResponseSchema = z.object({
-  faqs: z.array(FAQSchema),
-});
-
-export type FAQ = z.infer<typeof FAQSchema>;
-
-// Query keys
-const faqKeys = {
-  all: ['faq'] as const,
-  lists: () => [...faqKeys.all, 'list'] as const,
-  list: (filters?: Record<string, unknown>) => [...faqKeys.lists(), filters] as const,
-  detail: (id: string) => [...faqKeys.all, 'detail', id] as const,
-};
-
-/**
- * Hook to fetch FAQs
- */
-export function useFAQs(params?: { category?: string; active?: boolean }) {
-  return useQuery({
-    queryKey: faqKeys.list(params),
-    queryFn: () => fetchGet('/api/bff/faq', FAQListResponseSchema, { params }),
-    staleTime: 2 * 60 * 1000, // 2 minutes
-  });
-}
-
-/**
- * Hook to create a new FAQ
- */
-export function useCreateFAQ() {
+export function useFAQ(orgId: string) {
   const queryClient = useQueryClient();
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
-  return useMutation({
-    mutationFn: (data: Omit<FAQ, 'id'>) => fetchPost('/api/bff/faq', FAQSchema, data),
+  const { data: faqs = [], isLoading } = useQuery({
+    queryKey: ['faqs', orgId],
+    queryFn: async () => {
+      // TODO: Replace with actual API call
+      await new Promise((resolve) => setTimeout(resolve, FAQ_CONSTANTS.LOADING_DELAY_MS));
+      return mockFAQs;
+    },
+  });
+
+  const deleteFAQ = useMutation({
+    mutationFn: async (faqId: string) => {
+      // TODO: Implement FAQ deletion
+      console.log('Deleting FAQ:', faqId);
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: faqKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: ['faqs', orgId] });
     },
   });
-}
 
-/**
- * Hook to update an existing FAQ
- */
-export function useUpdateFAQ() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, ...data }: Partial<FAQ> & { id: string }) =>
-      fetchPut(`/api/bff/faq/${id}`, FAQSchema, data),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: faqKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: faqKeys.detail(variables.id) });
-    },
+  const filteredFAQs = faqs.filter((faq) => {
+    return categoryFilter === 'all' || faq.category === categoryFilter;
   });
+
+  const categories = ['all', ...Array.from(new Set(faqs.map((faq) => faq.category)))];
+
+  return {
+    faqs: filteredFAQs,
+    isLoading,
+    categoryFilter,
+    setCategoryFilter,
+    categories,
+    deleteFAQ: deleteFAQ.mutate,
+  };
 }

@@ -37,7 +37,9 @@ export const dashboardWidgetSchema = z.object({
   type: z.enum(['stat', 'chart', 'activity', 'health']),
   title: z.string(),
   position: z.object({ x: z.number(), y: z.number(), w: z.number(), h: z.number() }),
-  data: z.optional(z.union([statDataSchema, chartDataSchema, activityDataSchema, healthDataSchema])),
+  data: z.optional(
+    z.union([statDataSchema, chartDataSchema, activityDataSchema, healthDataSchema])
+  ),
   config: z.optional(z.record(z.unknown())),
 });
 

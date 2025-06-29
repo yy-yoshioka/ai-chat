@@ -16,7 +16,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
     completed: '完了',
     error: 'エラー',
   };
-  
+
   return (
     <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${styles[status]}`}>
       {labels[status]}

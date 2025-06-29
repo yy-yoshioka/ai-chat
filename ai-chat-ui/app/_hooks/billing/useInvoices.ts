@@ -31,9 +31,10 @@ const invoiceKeys = {
 export function useInvoices(orgId: string) {
   return useQuery({
     queryKey: invoiceKeys.list(orgId),
-    queryFn: () => 
-      fetchGet(`/api/billing/usage?orgId=${orgId}&invoices=1`, InvoicesResponseSchema)
-        .then(data => data.invoices),
+    queryFn: () =>
+      fetchGet(`/api/billing/usage?orgId=${orgId}&invoices=1`, InvoicesResponseSchema).then(
+        (data) => data.invoices
+      ),
     staleTime: 5 * 60 * 1000, // 5 minutes
     enabled: !!orgId,
   });

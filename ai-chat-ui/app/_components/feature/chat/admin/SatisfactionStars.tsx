@@ -6,7 +6,7 @@ interface SatisfactionStarsProps {
 
 export function SatisfactionStars({ rating }: SatisfactionStarsProps) {
   if (!rating) return <span className="text-gray-400">未評価</span>;
-  
+
   return (
     <div className="flex items-center">
       {[1, 2, 3, 4, 5].map((star) => (

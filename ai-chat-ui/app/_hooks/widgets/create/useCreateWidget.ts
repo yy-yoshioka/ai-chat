@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { WidgetForm } from '@/_schemas/widget';
-import { DEFAULT_WIDGET_THEME, DEFAULT_WIDGET_SETTINGS, WIDGET_KEY_PREFIX, WIDGET_KEY_LENGTH } from '@/_config/widgets/create';
+import {
+  DEFAULT_WIDGET_THEME,
+  DEFAULT_WIDGET_SETTINGS,
+  WIDGET_KEY_PREFIX,
+  WIDGET_KEY_LENGTH,
+} from '@/_config/widgets/create';
 
 export function useCreateWidget(orgId: string) {
   const router = useRouter();

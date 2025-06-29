@@ -21,7 +21,7 @@ export default function BillingKPIDashboard({
       refetch();
       setLastUpdated(new Date());
     }, refreshInterval);
-    
+
     return () => clearInterval(interval);
   }, [refreshInterval, refetch]);
 

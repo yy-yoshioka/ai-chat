@@ -11,9 +11,7 @@ export function EmbedCode({ embedCode }: EmbedCodeProps) {
       <div className="bg-gray-900 rounded-lg p-4 text-white text-sm font-mono overflow-x-auto">
         {embedCode}
       </div>
-      <p className="text-sm text-gray-500 mt-2">
-        このコードをサイトのHTMLに貼り付けてください
-      </p>
+      <p className="text-sm text-gray-500 mt-2">このコードをサイトのHTMLに貼り付けてください</p>
     </div>
   );
 }

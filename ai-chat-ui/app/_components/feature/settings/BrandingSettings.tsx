@@ -41,7 +41,7 @@ export function BrandingSettings({ orgId }: BrandingSettingsProps) {
                 <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
                   <span className="text-2xl">🏢</span>
                 </div>
-                <button 
+                <button
                   onClick={handleLogoUpload}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >

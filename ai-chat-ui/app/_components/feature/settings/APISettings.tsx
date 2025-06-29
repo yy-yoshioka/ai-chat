@@ -13,7 +13,11 @@ export function APISettings({ orgId }: APISettingsProps) {
     console.log('Regenerating API key for org:', orgId);
     // TODO: Implement API key regeneration
     if (confirm('APIキーを再生成しますか？既存のキーは無効になります。')) {
-      const newKey = DEFAULT_API_KEY_PREFIX + Math.random().toString(36).substring(2, 2 + API_KEY_LENGTH);
+      const newKey =
+        DEFAULT_API_KEY_PREFIX +
+        Math.random()
+          .toString(36)
+          .substring(2, 2 + API_KEY_LENGTH);
       setApiKey(newKey);
       alert('新しいAPIキーが生成されました');
     }
@@ -34,7 +38,7 @@ export function APISettings({ orgId }: APISettingsProps) {
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50"
                 readOnly
               />
-              <button 
+              <button
                 onClick={regenerateApiKey}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
               >
