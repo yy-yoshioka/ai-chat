@@ -30,7 +30,9 @@
       "Bash(./scripts/slack-notify.sh:*)",
       "Bash(./slack-notify.sh:*)",
       "Bash(yarn test)",
-      "Bash(yarn test:*)"
+      "Bash(yarn test:*)",
+      "Bash(git remote:*)",
+      "Bash(# 依存関係チェック用の関数\ncheck_page_dependencies() {\n  local page_path=$1\n  echo \"Checking: $page_path\"\n  \n  if [ -f \"$page_path\" ]; then\n    # hooksのimportを確認\n    echo \"  Hooks used:\"\n    grep \"from '@/_hooks\" \"$page_path\" | sed 's/.*from/    -/' || echo \"    - None found\"\n    \n    # componentsのimportを確認\n    echo \"  Components used:\"\n    grep \"from '@/_components\" \"$page_path\" | sed 's/.*from/    -/' || echo \"    - None found\"\n    \n    # APIコールを確認\n    echo \"  API calls:\"\n    grep -E \"(fetchGet|fetchPost|fetchPut|fetchDelete)\" \"$page_path\" | sed 's/^/    - /' | head -5 || echo \"    - None found\"\n  else\n    echo \"  ❌ Page not found\"\n  fi\n  echo \"\"\n}\n\necho -e \"\\n=== Dependency Check ===\"\n# 主要ページの依存関係をチェック\ncheck_page_dependencies \"ai-chat-ui/app/(org)/admin/[orgId]/dashboard/page.tsx\"\ncheck_page_dependencies \"ai-chat-ui/app/(org)/admin/[orgId]/users/page.tsx\"\ncheck_page_dependencies \"ai-chat-ui/app/(org)/admin/[orgId]/reports/page.tsx\")"
     ],
     "deny": [],
     "autoConfirm": true
