@@ -48,6 +48,19 @@ async function main() {
   });
   console.log('✅ Created admin user:', adminUser.email);
 
+  // Create sample widget
+  const widget = await prisma.widget.upsert({
+    where: { widgetKey: 'demo-widget-key' },
+    update: {},
+    create: {
+      widgetKey: 'demo-widget-key',
+      name: 'Demo Widget',
+      companyId: company.id,
+      isActive: true,
+    },
+  });
+  console.log('✅ Created widget:', widget.name);
+
   // Create sample knowledge base
   const kb = await prisma.knowledgeBase.upsert({
     where: { id: 'kb-demo-1' },
@@ -55,92 +68,23 @@ async function main() {
     create: {
       id: 'kb-demo-1',
       organizationId: org.id,
-      title: 'AI Chat サポートガイド',
-      description:
-        'AI Chatプラットフォームの基本的な使い方やよくある質問をまとめたガイドです。',
-      isActive: true,
+      widgetId: widget.id,
+      name: 'AI Chat サポートガイド',
+      type: 'text',
+      source: 'manual-seed',
+      content: 'AI Chatプラットフォームの基本的な使い方やよくある質問をまとめたガイドです。',
+      status: 'completed',
+      chunks: 2,
+      metadata: {
+        description: 'AI Chatプラットフォームの基本的な使い方やよくある質問をまとめたガイドです。'
+      },
     },
   });
 
-  console.log('✅ Created knowledge base:', kb.title);
+  console.log('✅ Created knowledge base:', kb.name);
 
-  // Create sample documents
-  const documents = [
-    {
-      id: 'doc-1',
-      title: 'AI Chat 基本ガイド',
-      content: `
-# AI Chat 基本ガイド
-
-## 概要
-AI Chatは、最新のGPT-4技術を使用した革新的なカスタマーサポートソリューションです。
-
-## 主な機能
-- リアルタイムチャット対応
-- 多言語サポート（100言語以上）
-- カスタムブランディング
-- 詳細な分析レポート
-
-## セットアップ方法
-1. アカウントの作成
-2. ウィジェットのカスタマイズ
-3. ウェブサイトへのコード埋め込み
-4. テストと調整
-
-## よくある問題
-- レスポンスが遅い場合の対処法
-- カスタマイズが反映されない場合
-- 統計データが表示されない場合
-      `,
-      sourceType: 'manual' as const,
-    },
-    {
-      id: 'doc-2',
-      title: '料金プランと請求',
-      content: `
-# 料金プランと請求について
-
-## プラン種類
-### 無料プラン
-- 月間メッセージ数: 100通まで
-- 基本的なカスタマイズ
-- コミュニティサポート
-
-### プロプラン (月額$199)
-- 月間メッセージ数: 10,000通まで
-- 高度なカスタマイズ
-- 優先サポート
-- 詳細な分析機能
-
-### エンタープライズプラン
-- 無制限メッセージ
-- カスタム統合
-- 専任サポート
-- SLA保証
-
-## 請求について
-- 毎月1日に自動請求
-- クレジットカード、PayPal対応
-- 領収書はメールで自動送信
-      `,
-      sourceType: 'manual' as const,
-    },
-  ];
-
-  for (const doc of documents) {
-    await prisma.document.upsert({
-      where: { id: doc.id },
-      update: {},
-      create: {
-        ...doc,
-        knowledgeBaseId: kb.id,
-        status: 'completed',
-        wordCount: doc.content.split(' ').length,
-      },
-    });
-  }
-
-  console.log('✅ Created sample documents');
+  // Skip document creation as Document model no longer exists
+  /* Document model has been removed from schema */
 
   // Create sample FAQs
   const faqs = [
