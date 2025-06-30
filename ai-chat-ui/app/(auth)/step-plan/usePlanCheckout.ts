@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { fetchPost, FetchError } from '../../_utils/fetcher';
 
 interface PlanOption {
   id: string;
@@ -32,28 +33,20 @@ export function usePlanCheckout() {
     try {
       const orgId = localStorage.getItem('currentOrgId') || 'default-org';
 
-      const response = await fetch('/api/billing/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          priceId: plan.priceId,
-          orgId: orgId,
-        }),
+      const data = await fetchPost<{ sessionUrl: string }>('/api/billing/checkout', {
+        priceId: plan.priceId,
+        orgId: orgId,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        window.location.href = data.sessionUrl;
-      } else {
-        const error = await response.json();
-        console.error('Checkout failed:', error);
-        alert(`支払い処理の開始に失敗しました: ${error.error || 'エラーが発生しました'}`);
-      }
+      window.location.href = data.sessionUrl;
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('エラーが発生しました。もう一度お試しください。');
+      if (error instanceof FetchError) {
+        const errorData = error.data as { error?: string } | undefined;
+        alert(`支払い処理の開始に失敗しました: ${errorData?.error || 'エラーが発生しました'}`);
+      } else {
+        alert('エラーが発生しました。もう一度お試しください。');
+      }
     } finally {
       setIsLoading(false);
       setSelectedPlan('');

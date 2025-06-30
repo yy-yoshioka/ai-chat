@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { DEFAULT_WIDGET_FORM } from '@/app/_config/widgets/constants';
 import { useWidgetActions } from './useWidgetActions';
 import type { WidgetSettings, CreateWidgetForm } from '@/app/_schemas/widget';
+import { fetchGet, fetchPost, FetchError } from '@/app/_utils/fetcher';
 
 export function useWidgets(orgId: string) {
   const [widgets, setWidgets] = useState<WidgetSettings[]>([]);
@@ -17,16 +18,11 @@ export function useWidgets(orgId: string) {
     async (companyId: string) => {
       try {
         setIsLoading(true);
-        const response = await fetch(`/api/organizations/${orgId}/widgets?companyId=${companyId}`, {
-          credentials: 'include',
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setWidgets(data);
-        } else {
-          console.error('Failed to fetch widgets');
-        }
+        const data = await fetchGet<WidgetSettings[]>(
+          `/api/organizations/${orgId}/widgets?companyId=${companyId}`,
+          { credentials: 'include' }
+        );
+        setWidgets(data);
       } catch (error) {
         console.error('Error fetching widgets:', error);
       } finally {
@@ -42,27 +38,22 @@ export function useWidgets(orgId: string) {
       if (!formData.companyId) return;
 
       try {
-        const response = await fetch(`/api/organizations/${orgId}/widgets`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+        await fetchPost(`/api/organizations/${orgId}/widgets`, formData, {
           credentials: 'include',
-          body: JSON.stringify(formData),
         });
 
-        if (response.ok) {
-          setShowCreateForm(false);
-          setFormData(DEFAULT_WIDGET_FORM);
-          await fetchWidgets(formData.companyId);
-          alert('ウィジェットが作成されました');
-        } else {
-          const error = await response.json();
-          alert(`エラー: ${error.message || 'ウィジェットの作成に失敗しました'}`);
-        }
+        setShowCreateForm(false);
+        setFormData(DEFAULT_WIDGET_FORM);
+        await fetchWidgets(formData.companyId);
+        alert('ウィジェットが作成されました');
       } catch (error) {
         console.error('Error creating widget:', error);
-        alert('ウィジェットの作成中にエラーが発生しました');
+        if (error instanceof FetchError) {
+          const errorData = error.data as { message?: string } | undefined;
+          alert(`エラー: ${errorData?.message || 'ウィジェットの作成に失敗しました'}`);
+        } else {
+          alert('ウィジェットの作成中にエラーが発生しました');
+        }
       }
     },
     [formData, orgId, fetchWidgets]

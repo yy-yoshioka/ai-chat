@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useReports } from '@/_hooks/reports/useReports';
-import { ReportsView } from '@/_components/feature/reports/ReportsView';
+import { useReports } from '@/app/_hooks/reports/useReports';
+import { ReportsView } from '@/app/_components/feature/reports/ReportsView';
 
 export default function AdminReportsPage({ params }: { params: Promise<{ orgId: string }> }) {
   const { orgId } = React.use(params);

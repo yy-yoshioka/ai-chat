@@ -1,5 +1,5 @@
 import React from 'react';
-import type { DashboardWidget, StatData } from '@/_schemas/dashboard';
+import type { DashboardWidget, StatData } from '@/app/_schemas/dashboard';
 
 interface StatWidgetProps {
   widget: DashboardWidget;

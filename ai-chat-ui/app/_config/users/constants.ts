@@ -1,4 +1,4 @@
-import type { UserRole, UserStatus } from '@/_schemas/users';
+import type { UserRole, UserStatus } from '@/app/_schemas/users';
 
 export const USER_CONSTANTS = {
   LOADING_DELAY_MS: 1000,

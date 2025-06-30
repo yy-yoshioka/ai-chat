@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { User } from '@/_schemas/users';
-import { USER_CONSTANTS } from '@/_config/users/constants';
+import type { User } from '@/app/_schemas/users';
+import { USER_CONSTANTS } from '@/app/_config/users/constants';
 
 const mockUsers: User[] = [
   {

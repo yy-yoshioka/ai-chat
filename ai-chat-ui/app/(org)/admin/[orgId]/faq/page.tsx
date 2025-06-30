@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useFAQ } from '@/_hooks/faq/useFAQ';
-import { FAQView } from '@/_components/feature/faq/FAQView';
+import { useFAQ } from '@/app/_hooks/faq/useFAQ';
+import { FAQView } from '@/app/_components/feature/faq/FAQView';
 
 interface AdminFAQProps {
   params: Promise<{ orgId: string }>;

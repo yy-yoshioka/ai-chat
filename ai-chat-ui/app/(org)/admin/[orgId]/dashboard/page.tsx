@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useDashboard } from '@/_hooks/dashboard/useDashboard';
-import { DashboardView } from '@/_components/feature/dashboard';
+import { useDashboard } from '@/app/_hooks/dashboard/useDashboard';
+import { DashboardView } from '@/app/_components/feature/dashboard';
 
 export default function AdminDashboard({ params }: { params: Promise<{ orgId: string }> }) {
   const { orgId } = React.use(params);

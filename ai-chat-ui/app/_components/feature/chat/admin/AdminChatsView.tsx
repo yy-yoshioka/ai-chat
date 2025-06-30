@@ -1,6 +1,6 @@
 import React from 'react';
-import type { ChatSession, ChatMetrics } from '@/_schemas/chat';
-import ChatContainer from '@/_components/feature/chat/ChatContainer';
+import type { ChatSession, ChatMetrics } from '@/app/_schemas/chat';
+import ChatContainer from '@/app/_components/feature/chat/ChatContainer';
 import { MetricsCards } from './MetricsCards';
 import { ChatFilters } from './ChatFilters';
 import { TopTopics } from './TopTopics';

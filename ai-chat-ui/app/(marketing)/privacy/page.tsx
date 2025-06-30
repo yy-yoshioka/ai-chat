@@ -5,6 +5,19 @@ import DataRetentionSection from '@/app/_components/feature/privacy/DataRetentio
 import GdprRightsSection from '@/app/_components/feature/privacy/GdprRightsSection';
 import ContactSection from '@/app/_components/feature/privacy/ContactSection';
 
+interface ListItemProps {
+  title: string;
+  description: string;
+}
+
+function ListItem({ title, description }: ListItemProps) {
+  return (
+    <li>
+      <strong>{title}:</strong> {description}
+    </li>
+  );
+}
+
 const PrivacyPolicy: FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -25,18 +38,16 @@ const PrivacyPolicy: FC = () => {
                 5. Data Processing Legal Basis
               </h2>
               <ul className="list-disc pl-6 mb-4 space-y-2">
-                <li>
-                  <strong>Contract:</strong> Processing necessary for service delivery
-                </li>
-                <li>
-                  <strong>Legitimate Interest:</strong> Analytics and security improvements
-                </li>
-                <li>
-                  <strong>Consent:</strong> Marketing communications (opt-in only)
-                </li>
-                <li>
-                  <strong>Legal Obligation:</strong> Tax and accounting records
-                </li>
+                <ListItem
+                  title="Contract"
+                  description="Processing necessary for service delivery"
+                />
+                <ListItem
+                  title="Legitimate Interest"
+                  description="Analytics and security improvements"
+                />
+                <ListItem title="Consent" description="Marketing communications (opt-in only)" />
+                <ListItem title="Legal Obligation" description="Tax and accounting records" />
               </ul>
             </section>
 

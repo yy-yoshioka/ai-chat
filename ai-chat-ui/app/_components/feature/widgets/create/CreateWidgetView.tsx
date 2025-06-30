@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import type { WidgetForm } from '@/_schemas/widget';
+import type { WidgetForm } from '@/app/_schemas/widget';
 import { BasicSettings } from './BasicSettings';
 import { ThemeSettings } from './ThemeSettings';
 import { AdvancedSettings } from './AdvancedSettings';

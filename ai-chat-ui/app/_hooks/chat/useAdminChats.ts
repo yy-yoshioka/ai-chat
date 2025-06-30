@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import type { ChatSession, ChatMetrics } from '@/_schemas/chat';
+import type { ChatSession, ChatMetrics } from '@/app/_schemas/chat';
 
 const sampleChats: ChatSession[] = [
   {

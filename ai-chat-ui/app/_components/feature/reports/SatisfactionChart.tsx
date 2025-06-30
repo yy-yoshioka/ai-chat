@@ -1,6 +1,6 @@
 import React from 'react';
-import type { DailyStat } from '@/_schemas/reports';
-import { REPORT_CONSTANTS } from '@/_config/reports/constants';
+import type { DailyStat } from '@/app/_schemas/reports';
+import { REPORT_CONSTANTS } from '@/app/_config/reports/constants';
 
 interface SatisfactionChartProps {
   dailyStats: DailyStat[];

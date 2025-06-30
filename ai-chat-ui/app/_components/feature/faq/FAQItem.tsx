@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import type { FAQ } from '@/_schemas/faq';
+import type { FAQ } from '@/app/_schemas/faq';
 import { FAQStatusBadge } from './FAQStatusBadge';
 
 interface FAQItemProps {

@@ -1,8 +1,8 @@
 import React from 'react';
-import type { ChatSession } from '@/_schemas/chat';
+import type { ChatSession } from '@/app/_schemas/chat';
 import { StatusBadge } from './StatusBadge';
 import { SatisfactionStars } from './SatisfactionStars';
-import { formatDuration } from '@/_utils/chat/format';
+import { formatDuration } from '@/app/_utils/chat/format';
 
 interface ChatSessionsTableProps {
   sessions: ChatSession[];

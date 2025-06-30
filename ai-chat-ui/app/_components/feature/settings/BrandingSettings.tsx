@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DEFAULT_COLORS } from '@/_config/settings/tabs';
+import { DEFAULT_COLORS } from '@/app/_config/settings/tabs';
 
 interface BrandingSettingsProps {
   orgId: string;

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { User } from '@/_schemas/users';
+import type { User } from '@/app/_schemas/users';
 import { RoleBadge, StatusBadge } from './UserBadge';
 
 interface UserTableProps {

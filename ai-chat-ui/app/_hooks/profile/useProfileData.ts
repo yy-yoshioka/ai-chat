@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/_hooks/auth/useAuth';
 import type { UserProfile } from '@/app/_schemas/profile';
+import { fetchGet } from '@/app/_utils/fetcher';
 
 export function useProfileData() {
   const { user, loading: authLoading, logout } = useAuth();
@@ -26,17 +27,10 @@ export function useProfileData() {
   const fetchUserProfile = async () => {
     try {
       setError(null);
-      const response = await fetch('/api/me', {
+      const data = await fetchGet<{ user: UserProfile }>('/api/me', {
         credentials: 'include',
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUserProfile(data.user);
-      } else {
-        setError('Failed to fetch user profile');
-        console.error('Failed to fetch user profile');
-      }
+      setUserProfile(data.user);
     } catch (error) {
       setError('Error fetching user profile');
       console.error('Error fetching user profile:', error);

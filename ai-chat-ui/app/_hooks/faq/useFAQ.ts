@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { FAQ } from '@/_schemas/faq';
-import { FAQ_CONSTANTS } from '@/_config/faq/constants';
+import type { FAQ } from '@/app/_schemas/faq';
+import { FAQ_CONSTANTS } from '@/app/_config/faq/constants';
 
 const mockFAQs: FAQ[] = [
   {

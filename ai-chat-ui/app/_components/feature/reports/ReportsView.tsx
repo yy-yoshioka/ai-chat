@@ -1,10 +1,10 @@
 import React from 'react';
-import type { ReportData, DateRange } from '@/_schemas/reports';
+import type { ReportData, DateRange } from '@/app/_schemas/reports';
 import { ReportSummaryCard } from './ReportSummaryCard';
 import { DailyChatsChart } from './DailyChatsChart';
 import { SatisfactionChart } from './SatisfactionChart';
 import { ExportSection } from './ExportSection';
-import { REPORT_CONSTANTS, REPORT_ICONS, REPORT_COLORS } from '@/_config/reports/constants';
+import { REPORT_CONSTANTS, REPORT_ICONS, REPORT_COLORS } from '@/app/_config/reports/constants';
 
 interface ReportsViewProps {
   reportData: ReportData | undefined;

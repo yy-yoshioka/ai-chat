@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import type { ReportData, DateRange } from '@/_schemas/reports';
-import { REPORT_CONSTANTS } from '@/_config/reports/constants';
+import type { ReportData, DateRange } from '@/app/_schemas/reports';
+import { REPORT_CONSTANTS } from '@/app/_config/reports/constants';
 
 const mockReportData: ReportData = {
   totalUsers: 1250,
