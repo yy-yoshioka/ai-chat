@@ -20,6 +20,8 @@ import { translationRoutes } from './routes/translation';
 import { billingRoutes } from './routes/billing';
 import { companyRoutes } from './routes/companies';
 import usersRoutes from './routes/users';
+import dashboardRoutes from './routes/dashboard';
+import reportsRoutes from './routes/reports';
 
 // Load environment variables
 dotenv.config();
@@ -108,6 +110,8 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/translation', translationRoutes);
 app.use('/api/companies', companyRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // Legacy routes (backwards compatibility)
 app.use('/auth', authRoutes);
