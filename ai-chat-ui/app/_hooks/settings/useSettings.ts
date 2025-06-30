@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { SettingsTab } from '@/_schemas/settings';
+import type { SettingsTab } from '@/app/_schemas/settings';
 
 export function useSettings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('branding');

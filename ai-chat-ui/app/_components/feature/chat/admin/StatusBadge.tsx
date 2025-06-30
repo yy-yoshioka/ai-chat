@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ChatSession } from '@/_schemas/chat';
+import type { ChatSession } from '@/app/_schemas/chat';
 
 interface StatusBadgeProps {
   status: ChatSession['status'];

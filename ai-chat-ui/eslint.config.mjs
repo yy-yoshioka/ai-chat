@@ -39,9 +39,6 @@ const eslintConfig = [
 
       /* callback ネスト（then, setTimeout, コールバックなど） */
       'max-nested-callbacks': ['warn', 3], // 3 段まで
-
-      /* JSX ツリーのネスト段数（React ルール）*/
-      'react/jsx-max-depth': ['warn', { max: 5 }], // <div><span>… 最大 5
     },
   },
 

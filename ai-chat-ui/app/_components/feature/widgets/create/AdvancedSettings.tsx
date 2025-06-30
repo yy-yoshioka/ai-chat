@@ -1,5 +1,5 @@
 import React from 'react';
-import type { WidgetForm } from '@/_schemas/widget';
+import type { WidgetForm } from '@/app/_schemas/widget';
 
 interface AdvancedSettingsProps {
   form: WidgetForm;

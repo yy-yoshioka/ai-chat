@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ChatMetrics } from '@/_schemas/chat';
+import type { ChatMetrics } from '@/app/_schemas/chat';
 
 interface MetricsCardsProps {
   metrics: ChatMetrics;

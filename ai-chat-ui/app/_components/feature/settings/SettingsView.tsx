@@ -1,6 +1,6 @@
 import React from 'react';
-import type { SettingsTab } from '@/_schemas/settings';
-import { SETTINGS_TABS } from '@/_config/settings/tabs';
+import type { SettingsTab } from '@/app/_schemas/settings';
+import { SETTINGS_TABS } from '@/app/_config/settings/tabs';
 import { BrandingSettings } from './BrandingSettings';
 import { MembersSettings } from './MembersSettings';
 import { WidgetsSettings } from './WidgetsSettings';

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { DashboardWidget } from '@/_schemas/dashboard';
+import type { DashboardWidget } from '@/app/_schemas/dashboard';
 import { StatWidget } from './StatWidget';
 import { HealthWidget } from './HealthWidget';
 import { ActivityWidget } from './ActivityWidget';

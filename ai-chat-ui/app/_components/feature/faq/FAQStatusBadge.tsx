@@ -1,5 +1,5 @@
 import React from 'react';
-import { FAQ_STATUS_STYLES, FAQ_STATUS_LABELS } from '@/_config/faq/constants';
+import { FAQ_STATUS_STYLES, FAQ_STATUS_LABELS } from '@/app/_config/faq/constants';
 
 interface FAQStatusBadgeProps {
   isActive: boolean;

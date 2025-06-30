@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DEFAULT_API_KEY_PREFIX, API_KEY_LENGTH } from '@/_config/settings/tabs';
+import { DEFAULT_API_KEY_PREFIX, API_KEY_LENGTH } from '@/app/_config/settings/tabs';
 
 interface APISettingsProps {
   orgId: string;

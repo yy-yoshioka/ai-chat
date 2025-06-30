@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { billingPlanSchema, UpdateBillingPlanSchema } from '@/app/_schemas/billing';
+import { billingPlansArraySchema, UpdateBillingPlanSchema } from '@/app/_schemas/billing';
 import { EXPRESS_API } from '@/app/_config/api';
-import { z } from 'zod';
 
 // GET /api/bff/billing - Get billing plans
 export async function GET() {
@@ -32,7 +31,7 @@ export async function GET() {
     const json = await response.json();
 
     // Validate response with Zod schema
-    const parsed = z.array(billingPlanSchema).safeParse(json);
+    const parsed = billingPlansArraySchema.safeParse(json);
     if (!parsed.success) {
       console.error('Invalid billing plans response:', parsed.error);
       return NextResponse.json({ error: 'Invalid response format' }, { status: 500 });

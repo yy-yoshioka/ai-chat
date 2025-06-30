@@ -1,6 +1,10 @@
 import React from 'react';
-import type { WidgetForm } from '@/_schemas/widget';
-import { WIDGET_POSITIONS, BORDER_RADIUS_MIN, BORDER_RADIUS_MAX } from '@/_config/widgets/create';
+import type { WidgetForm } from '@/app/_schemas/widget';
+import {
+  WIDGET_POSITIONS,
+  BORDER_RADIUS_MIN,
+  BORDER_RADIUS_MAX,
+} from '@/app/_config/widgets/create';
 
 interface ThemeSettingsProps {
   form: WidgetForm;

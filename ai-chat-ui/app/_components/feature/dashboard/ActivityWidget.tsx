@@ -1,5 +1,5 @@
 import React from 'react';
-import type { DashboardWidget, ActivityData } from '@/_schemas/dashboard';
+import type { DashboardWidget, ActivityData } from '@/app/_schemas/dashboard';
 
 interface ActivityWidgetProps {
   widget: DashboardWidget;

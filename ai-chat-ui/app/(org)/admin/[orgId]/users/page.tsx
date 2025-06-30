@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useUsers } from '@/_hooks/users/useUsers';
-import { UsersView } from '@/_components/feature/users/UsersView';
+import { useUsers } from '@/app/_hooks/users/useUsers';
+import { UsersView } from '@/app/_components/feature/users/UsersView';
 
 export default function AdminUsersPage({ params }: { params: Promise<{ orgId: string }> }) {
   const { orgId } = React.use(params);

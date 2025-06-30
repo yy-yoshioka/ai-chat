@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { fetchPost } from '../../_utils/fetcher';
 
 export function BetaInviteSection() {
   const [betaEmail, setBetaEmail] = useState('');
@@ -14,26 +15,16 @@ export function BetaInviteSection() {
 
     try {
       // ベータ招待リクエストを送信
-      const response = await fetch('/api/beta-invite', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: betaEmail,
-          company: betaCompany,
-        }),
+      await fetchPost('/api/beta-invite', {
+        email: betaEmail,
+        company: betaCompany,
       });
 
-      if (response.ok) {
-        setSubmitMessage(
-          '🎉 ベータ招待リクエストを受け付けました！優先的にご案内させていただきます。'
-        );
-        setBetaEmail('');
-        setBetaCompany('');
-      } else {
-        setSubmitMessage('⚠️ エラーが発生しました。もう一度お試しください。');
-      }
+      setSubmitMessage(
+        '🎉 ベータ招待リクエストを受け付けました！優先的にご案内させていただきます。'
+      );
+      setBetaEmail('');
+      setBetaCompany('');
     } catch (error) {
       console.error('Beta invite submission error:', error);
       setSubmitMessage('⚠️ エラーが発生しました。もう一度お試しください。');

@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 export class FetchError extends Error {
   constructor(
     public status: number,
@@ -16,17 +14,12 @@ export interface FetchOptions extends RequestInit {
 }
 
 /**
- * Type-safe fetch wrapper with Zod schema validation
+ * Generic fetch wrapper
  * @param input - The URL or path to fetch
- * @param schema - Zod schema to validate the response
  * @param options - Fetch options
- * @returns Parsed and validated response data
+ * @returns Response data
  */
-export async function fetchJson<T>(
-  input: string,
-  schema: z.ZodType<T>,
-  options?: FetchOptions
-): Promise<T> {
+export async function fetchJson<T = unknown>(input: string, options?: FetchOptions): Promise<T> {
   const { params, ...fetchOptions } = options || {};
 
   // Add query parameters if provided
@@ -72,15 +65,7 @@ export async function fetchJson<T>(
 
     // Parse response
     const data = await response.json();
-
-    // Validate with Zod schema
-    const parsed = schema.safeParse(data);
-    if (!parsed.success) {
-      console.error('Response validation failed:', parsed.error);
-      throw new FetchError(500, 'Invalid response format', { zodError: parsed.error.flatten() });
-    }
-
-    return parsed.data;
+    return data as T;
   } catch (error) {
     // Re-throw FetchError as-is
     if (error instanceof FetchError) {
@@ -99,24 +84,22 @@ export async function fetchJson<T>(
 /**
  * Convenience method for GET requests
  */
-export function fetchGet<T>(
+export function fetchGet<T = unknown>(
   url: string,
-  schema: z.ZodType<T>,
   options?: Omit<FetchOptions, 'method' | 'body'>
 ): Promise<T> {
-  return fetchJson(url, schema, { ...options, method: 'GET' });
+  return fetchJson<T>(url, { ...options, method: 'GET' });
 }
 
 /**
  * Convenience method for POST requests
  */
-export function fetchPost<T>(
+export function fetchPost<T = unknown>(
   url: string,
-  schema: z.ZodType<T>,
   body?: unknown,
   options?: Omit<FetchOptions, 'method' | 'body'>
 ): Promise<T> {
-  return fetchJson(url, schema, {
+  return fetchJson<T>(url, {
     ...options,
     method: 'POST',
     body: body ? JSON.stringify(body) : undefined,
@@ -126,13 +109,12 @@ export function fetchPost<T>(
 /**
  * Convenience method for PUT requests
  */
-export function fetchPut<T>(
+export function fetchPut<T = unknown>(
   url: string,
-  schema: z.ZodType<T>,
   body?: unknown,
   options?: Omit<FetchOptions, 'method' | 'body'>
 ): Promise<T> {
-  return fetchJson(url, schema, {
+  return fetchJson<T>(url, {
     ...options,
     method: 'PUT',
     body: body ? JSON.stringify(body) : undefined,
@@ -142,10 +124,9 @@ export function fetchPut<T>(
 /**
  * Convenience method for DELETE requests
  */
-export function fetchDelete<T>(
+export function fetchDelete<T = unknown>(
   url: string,
-  schema: z.ZodType<T>,
   options?: Omit<FetchOptions, 'method'>
 ): Promise<T> {
-  return fetchJson(url, schema, { ...options, method: 'DELETE' });
+  return fetchJson<T>(url, { ...options, method: 'DELETE' });
 }

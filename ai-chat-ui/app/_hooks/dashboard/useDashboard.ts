@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import type { DashboardWidget, DashboardStats } from '@/_schemas/dashboard';
+import type { DashboardWidget, DashboardStats } from '@/app/_schemas/dashboard';
 
 const mockStats: DashboardStats = {
   totalUsers: 1250,

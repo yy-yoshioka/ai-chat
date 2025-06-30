@@ -1,5 +1,5 @@
 import React from 'react';
-import type { FAQ } from '@/_schemas/faq';
+import type { FAQ } from '@/app/_schemas/faq';
 import { FAQItem } from './FAQItem';
 
 interface FAQListProps {

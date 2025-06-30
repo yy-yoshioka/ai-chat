@@ -1,5 +1,5 @@
 import React from 'react';
-import { FAQ_FILTER_ALL_LABEL } from '@/_config/faq/constants';
+import { FAQ_FILTER_ALL_LABEL } from '@/app/_config/faq/constants';
 
 interface FAQFilterProps {
   categories: string[];

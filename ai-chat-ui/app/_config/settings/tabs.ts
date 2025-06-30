@@ -1,4 +1,4 @@
-import type { TabConfig } from '@/_schemas/settings';
+import type { TabConfig } from '@/app/_schemas/settings';
 
 export const SETTINGS_TABS: TabConfig[] = [
   { id: 'branding', label: 'ブランディング', icon: '🎨' },

@@ -107,6 +107,9 @@ export const CheckoutResponseSchema = z.object({
   sessionUrl: z.string(),
 });
 
+// Billing Plans Array Schema
+export const billingPlansArraySchema = z.array(billingPlanSchema);
+
 // Invoice Schema
 export const InvoiceSchema = z.object({
   id: z.string(),

@@ -1,11 +1,11 @@
 import React from 'react';
-import type { UserRole, UserStatus } from '@/_schemas/users';
+import type { UserRole, UserStatus } from '@/app/_schemas/users';
 import {
   USER_ROLE_LABELS,
   USER_ROLE_STYLES,
   USER_STATUS_LABELS,
   USER_STATUS_STYLES,
-} from '@/_config/users/constants';
+} from '@/app/_config/users/constants';
 
 interface RoleBadgeProps {
   role: UserRole;
