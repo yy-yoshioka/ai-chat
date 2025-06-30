@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { BillingKpi, KpiMetric } from '@/app/_schemas/billing';
+import { BillingKpi } from '@/app/_schemas/billing';
 
 // Query keys
 const kpiKeys = {

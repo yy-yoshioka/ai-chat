@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchGet } from '@/app/_utils/fetcher';
-import { InvoicesResponseSchema, Invoice } from '@/app/_schemas/billing';
+import { InvoicesResponseSchema } from '@/app/_schemas/billing';
 
 // Query keys
 const invoiceKeys = {
