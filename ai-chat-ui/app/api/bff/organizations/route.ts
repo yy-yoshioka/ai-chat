@@ -15,9 +15,8 @@ export async function GET(request: NextRequest) {
     }
 
     const searchParams = request.nextUrl.searchParams;
-    const endpoint = searchParams.get('stats') === 'true' 
-      ? '/api/organizations/stats' 
-      : '/api/organizations';
+    const endpoint =
+      searchParams.get('stats') === 'true' ? '/api/organizations/stats' : '/api/organizations';
 
     const data = await fetchGet(`${EXPRESS_API}${endpoint}`, {
       headers: {
@@ -38,19 +37,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     console.error('BFF organizations GET error:', error);
-    
+
     if (error instanceof Error && 'status' in error) {
       const fetchError = error as { status: number; message: string };
-      
+
       if (fetchError.status === 401) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
-      
+
       if (fetchError.status >= 500) {
         return NextResponse.json({ error: 'Service unavailable' }, { status: 502 });
       }
     }
-    
+
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -77,23 +76,23 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     console.error('BFF organizations PUT error:', error);
-    
+
     if (error instanceof Error && 'status' in error) {
       const fetchError = error as { status: number; message: string };
-      
+
       if (fetchError.status === 401) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
-      
+
       if (fetchError.status === 403) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
-      
+
       if (fetchError.status >= 500) {
         return NextResponse.json({ error: 'Service unavailable' }, { status: 502 });
       }
     }
-    
+
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
