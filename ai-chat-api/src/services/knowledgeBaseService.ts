@@ -44,7 +44,9 @@ export async function processKnowledgeBaseFile(
       })
     );
 
-    const fileBuffer = await streamToBuffer(s3Response.Body as NodeJS.ReadableStream);
+    const fileBuffer = await streamToBuffer(
+      s3Response.Body as NodeJS.ReadableStream
+    );
 
     // ドキュメント読み込みとチャンク分割
     let documents;

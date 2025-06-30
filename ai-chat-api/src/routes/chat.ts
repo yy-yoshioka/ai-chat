@@ -184,7 +184,11 @@ async function handleChatRequest(
     }
 
     // Knowledge Base検索
-    let kbResults: Array<{score: number; content: string; metadata: unknown}> = [];
+    let kbResults: Array<{
+      score: number;
+      content: string;
+      metadata: unknown;
+    }> = [];
     let kbContext = '';
     if (isWidgetRequest && req.widget) {
       try {

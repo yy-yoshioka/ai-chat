@@ -15,7 +15,7 @@ interface KnowledgeBaseStatusProps {
 export function KnowledgeBaseStatus({ stats }: KnowledgeBaseStatusProps) {
   const total = Object.values(stats).reduce((sum, count) => sum + (count || 0), 0);
   const completedPercentage = total > 0 ? ((stats.completed || 0) / total) * 100 : 0;
-  
+
   return (
     <div className="border border-gray-200 rounded-lg bg-white">
       <div className="p-6 border-b border-gray-200">
@@ -35,7 +35,7 @@ export function KnowledgeBaseStatus({ stats }: KnowledgeBaseStatusProps) {
               />
             </div>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
               <Loader className="h-5 w-5 text-yellow-500 animate-spin flex-shrink-0" />
@@ -44,7 +44,7 @@ export function KnowledgeBaseStatus({ stats }: KnowledgeBaseStatusProps) {
                 <p className="text-2xl font-bold text-gray-900">{stats.processing || 0}</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
               <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
               <div>
@@ -52,7 +52,7 @@ export function KnowledgeBaseStatus({ stats }: KnowledgeBaseStatusProps) {
                 <p className="text-2xl font-bold text-gray-900">{stats.completed || 0}</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
               <FileText className="h-5 w-5 text-gray-400 flex-shrink-0" />
               <div>
@@ -60,7 +60,7 @@ export function KnowledgeBaseStatus({ stats }: KnowledgeBaseStatusProps) {
                 <p className="text-2xl font-bold text-gray-900">{stats.pending || 0}</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
               <XCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
               <div>
