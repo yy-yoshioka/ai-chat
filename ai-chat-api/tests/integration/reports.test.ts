@@ -60,7 +60,7 @@ describe('Reports Routes', () => {
     // Create test chat logs
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    
+
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
 
@@ -157,7 +157,7 @@ describe('Reports Routes', () => {
       expect(response.body).toHaveProperty('data');
       expect(response.body.data).toBeInstanceOf(Array);
       expect(response.body.data.length).toBeGreaterThan(0);
-      
+
       response.body.data.forEach((item: any) => {
         expect(item).toHaveProperty('date');
         expect(item).toHaveProperty('count');
@@ -206,7 +206,7 @@ describe('Reports Routes', () => {
       expect(response.headers['content-type']).toContain('text/csv');
       expect(response.headers['content-disposition']).toContain('attachment');
       expect(response.headers['content-disposition']).toContain('chat-report');
-      
+
       // Check CSV content
       const csvLines = response.text.split('\n');
       expect(csvLines.length).toBeGreaterThan(1); // Header + data
@@ -218,7 +218,7 @@ describe('Reports Routes', () => {
     it('should include date range in filename', async () => {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - 7);
-      
+
       const response = await request(app)
         .get('/api/reports/csv')
         .set('Cookie', `auth-token=${authToken}`)
@@ -232,18 +232,18 @@ describe('Reports Routes', () => {
       // Query for future dates to get empty results
       const futureDate = new Date();
       futureDate.setFullYear(futureDate.getFullYear() + 1);
-      
+
       const response = await request(app)
         .get('/api/reports/csv')
         .set('Cookie', `auth-token=${authToken}`)
-        .query({ 
+        .query({
           startDate: futureDate.toISOString(),
           endDate: futureDate.toISOString(),
         });
 
       expect(response.status).toBe(200);
       expect(response.headers['content-type']).toContain('text/csv');
-      const csvLines = response.text.split('\n').filter(line => line.trim());
+      const csvLines = response.text.split('\n').filter((line) => line.trim());
       expect(csvLines.length).toBe(1); // Only header
     });
   });
@@ -251,17 +251,18 @@ describe('Reports Routes', () => {
   describe('Error handling', () => {
     it('should return 401 for unauthenticated requests', async () => {
       const endpoints = ['/summary', '/chart', '/csv'];
-      
+
       for (const endpoint of endpoints) {
-        const response = await request(app)
-          .get(`/api/reports${endpoint}`);
-        
+        const response = await request(app).get(`/api/reports${endpoint}`);
+
         expect(response.status).toBe(401);
       }
     });
 
     it('should handle database errors gracefully', async () => {
-      jest.spyOn(prisma.chatLog, 'count').mockRejectedValueOnce(new Error('DB Error'));
+      jest
+        .spyOn(prisma.chatLog, 'count')
+        .mockRejectedValueOnce(new Error('DB Error'));
 
       const response = await request(app)
         .get('/api/reports/summary')

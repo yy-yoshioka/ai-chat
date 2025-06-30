@@ -62,13 +62,15 @@ describe('Organizations Routes', () => {
         {
           widgetKey: 'widget1',
           name: 'Test Widget 1',
-          companyId: (await prisma.company.create({
-            data: {
-              name: 'Test Company',
-              email: 'company@example.com',
-              organizationId,
-            },
-          })).id,
+          companyId: (
+            await prisma.company.create({
+              data: {
+                name: 'Test Company',
+                email: 'company@example.com',
+                organizationId,
+              },
+            })
+          ).id,
         },
       ],
     });
@@ -184,7 +186,7 @@ describe('Organizations Routes', () => {
         .send({ settings: newSettings });
 
       expect(response.status).toBe(200);
-      
+
       // Verify settings were updated in database
       const updatedOrg = await prisma.organization.findUnique({
         where: { id: organizationId },
@@ -228,7 +230,9 @@ describe('Organizations Routes', () => {
     });
 
     it('should handle database errors gracefully', async () => {
-      jest.spyOn(prisma.organization, 'update').mockRejectedValueOnce(new Error('DB Error'));
+      jest
+        .spyOn(prisma.organization, 'update')
+        .mockRejectedValueOnce(new Error('DB Error'));
 
       const response = await request(app)
         .put('/api/organizations')
@@ -236,7 +240,10 @@ describe('Organizations Routes', () => {
         .send({ name: 'Test' });
 
       expect(response.status).toBe(500);
-      expect(response.body).toHaveProperty('error', 'Failed to update organization');
+      expect(response.body).toHaveProperty(
+        'error',
+        'Failed to update organization'
+      );
     });
   });
 });

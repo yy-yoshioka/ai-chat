@@ -32,7 +32,7 @@ test.describe('Dashboard', () => {
 
     // Wait for data to load
     await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
-    
+
     // Check timestamp updated
     const timestamp = await page.getByTestId('last-updated').textContent();
     expect(timestamp).toContain('Last updated:');
@@ -52,7 +52,7 @@ test.describe('Dashboard', () => {
 
     // Check error message
     await expect(page.getByText(/Failed to load dashboard/i)).toBeVisible();
-    
+
     // Check retry button
     await expect(page.getByRole('button', { name: /try again/i })).toBeVisible();
   });
@@ -64,7 +64,7 @@ test.describe('Dashboard', () => {
 
     // Go back to dashboard
     await page.goBack();
-    
+
     // Click on Reports link
     await page.getByRole('link', { name: /reports/i }).click();
     await expect(page).toHaveURL(/\/reports$/);

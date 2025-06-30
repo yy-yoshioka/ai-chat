@@ -89,14 +89,19 @@ describe('Dashboard Routes', () => {
 
     it('should handle database errors gracefully', async () => {
       // Mock prisma to throw error
-      jest.spyOn(prisma.chatLog, 'count').mockRejectedValueOnce(new Error('DB Error'));
+      jest
+        .spyOn(prisma.chatLog, 'count')
+        .mockRejectedValueOnce(new Error('DB Error'));
 
       const response = await request(app)
         .get('/api/dashboard')
         .set('Cookie', `auth-token=${authToken}`);
 
       expect(response.status).toBe(500);
-      expect(response.body).toHaveProperty('error', 'Failed to fetch dashboard data');
+      expect(response.body).toHaveProperty(
+        'error',
+        'Failed to fetch dashboard data'
+      );
     });
   });
 });

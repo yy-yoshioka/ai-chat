@@ -151,7 +151,10 @@ describe('Users Routes', () => {
         .set('Cookie', `auth-token=${adminToken}`);
 
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('message', 'User deleted successfully');
+      expect(response.body).toHaveProperty(
+        'message',
+        'User deleted successfully'
+      );
 
       const deletedUser = await prisma.user.findUnique({
         where: { id: userId },
@@ -165,7 +168,10 @@ describe('Users Routes', () => {
         .set('Cookie', `auth-token=${adminToken}`);
 
       expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty('error', 'Cannot delete your own account');
+      expect(response.body).toHaveProperty(
+        'error',
+        'Cannot delete your own account'
+      );
     });
   });
 
@@ -180,7 +186,10 @@ describe('Users Routes', () => {
         });
 
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('message', 'Invitation sent successfully');
+      expect(response.body).toHaveProperty(
+        'message',
+        'Invitation sent successfully'
+      );
     });
 
     it('should prevent duplicate invitations', async () => {

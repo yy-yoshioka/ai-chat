@@ -14,7 +14,7 @@ describe('JWT Utils', () => {
   describe('signToken', () => {
     it('should sign a token and set cookie', () => {
       const user = { id: '123', email: 'test@example.com', isAdmin: false };
-      
+
       const token = signToken(user, mockResponse as Response);
 
       expect(token).toBeDefined();
@@ -54,7 +54,10 @@ describe('JWT Utils', () => {
       delete process.env.JWT_SECRET;
 
       expect(() => {
-        signToken({ id: '123', email: 'test@example.com' }, mockResponse as Response);
+        signToken(
+          { id: '123', email: 'test@example.com' },
+          mockResponse as Response
+        );
       }).toThrow('JWT_SECRET is not defined');
 
       process.env.JWT_SECRET = originalSecret;

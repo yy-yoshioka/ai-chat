@@ -35,20 +35,28 @@ describe('Auth Middleware', () => {
 
   it('should authenticate valid token', async () => {
     const userId = 'test-user-id';
-    const token = jwt.sign({ id: userId, email: 'test@example.com' }, process.env.JWT_SECRET!, { expiresIn: '1d' });
-    
-    mockRequest.cookies = { 'token': token };
+    const token = jwt.sign(
+      { id: userId, email: 'test@example.com' },
+      process.env.JWT_SECRET!,
+      { expiresIn: '1d' }
+    );
+
+    mockRequest.cookies = { token: token };
     (prisma.user.findUnique as jest.Mock).mockResolvedValue({
       id: userId,
       email: 'test@example.com',
       roles: ['viewer'],
     });
 
-    await authMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
+    await authMiddleware(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
 
     expect(prisma.user.findUnique).toHaveBeenCalledWith({
       where: { id: userId },
-      select: { id: true, email: true, roles: true }
+      select: { id: true, email: true, roles: true },
     });
     expect(mockRequest.user).toEqual({
       id: userId,
@@ -59,7 +67,11 @@ describe('Auth Middleware', () => {
   });
 
   it('should reject request without token', async () => {
-    await authMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
+    await authMiddleware(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
 
     expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Unauthorized' });
@@ -67,9 +79,13 @@ describe('Auth Middleware', () => {
   });
 
   it('should reject invalid token', async () => {
-    mockRequest.cookies = { 'token': 'invalid-token' };
+    mockRequest.cookies = { token: 'invalid-token' };
 
-    await authMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
+    await authMiddleware(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
 
     expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Invalid token' });
@@ -83,13 +99,17 @@ describe('Auth Middleware', () => {
         const error = new Error('jwt expired');
         error.name = 'TokenExpiredError';
         throw error;
-      })
+      }),
     }));
-    
-    const token = 'expired-token';
-    mockRequest.cookies = { 'token': token };
 
-    await authMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
+    const token = 'expired-token';
+    mockRequest.cookies = { token: token };
+
+    await authMiddleware(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
 
     expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Token expired' });
@@ -97,12 +117,19 @@ describe('Auth Middleware', () => {
   });
 
   it('should reject token for non-existent user', async () => {
-    const token = jwt.sign({ id: 'non-existent', email: 'test@example.com' }, process.env.JWT_SECRET!);
-    
-    mockRequest.cookies = { 'token': token };
+    const token = jwt.sign(
+      { id: 'non-existent', email: 'test@example.com' },
+      process.env.JWT_SECRET!
+    );
+
+    mockRequest.cookies = { token: token };
     (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
 
-    await authMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
+    await authMiddleware(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
 
     expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.json).toHaveBeenCalledWith({ error: 'User not found' });
@@ -110,15 +137,26 @@ describe('Auth Middleware', () => {
   });
 
   it('should handle database errors', async () => {
-    const token = jwt.sign({ id: 'test-user-id', email: 'test@example.com' }, process.env.JWT_SECRET!);
-    
-    mockRequest.cookies = { 'token': token };
-    (prisma.user.findUnique as jest.Mock).mockRejectedValue(new Error('DB Error'));
+    const token = jwt.sign(
+      { id: 'test-user-id', email: 'test@example.com' },
+      process.env.JWT_SECRET!
+    );
 
-    await authMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
+    mockRequest.cookies = { token: token };
+    (prisma.user.findUnique as jest.Mock).mockRejectedValue(
+      new Error('DB Error')
+    );
+
+    await authMiddleware(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Internal server error' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      error: 'Internal server error',
+    });
     expect(mockNext).not.toHaveBeenCalled();
   });
 });

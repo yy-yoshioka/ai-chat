@@ -9,7 +9,7 @@ test.describe('Organizations Management', () => {
   test('should display organization details', async ({ page }) => {
     // Check organization info section
     await expect(page.getByText('Organization Details')).toBeVisible();
-    
+
     // Check fields displayed
     await expect(page.getByTestId('org-name')).toBeVisible();
     await expect(page.getByTestId('org-slug')).toBeVisible();
@@ -60,10 +60,10 @@ test.describe('Organizations Management', () => {
 
     // Add widget to dashboard
     await page.getByRole('button', { name: /add widget/i }).click();
-    
+
     // Select widget from dropdown
     await page.getByLabel('Select widget').selectOption('stats-widget');
-    
+
     // Save layout
     await page.getByRole('button', { name: /save layout/i }).click();
 
@@ -84,7 +84,7 @@ test.describe('Organizations Management', () => {
 
     // Enter invalid name (too short)
     await page.getByLabel('Organization Name').fill('ab');
-    
+
     // Check validation error
     await expect(page.getByText(/name must be at least 3 characters/i)).toBeVisible();
   });
@@ -111,10 +111,10 @@ test.describe('Organizations Management', () => {
     // Check upgrade prompt
     await expect(page.getByTestId('upgrade-prompt')).toBeVisible();
     await expect(page.getByText(/upgrade to pro/i)).toBeVisible();
-    
+
     // Click upgrade button
     await page.getByRole('button', { name: /upgrade now/i }).click();
-    
+
     // Should navigate to billing
     await expect(page).toHaveURL(/\/billing$/);
   });
@@ -161,7 +161,7 @@ test.describe('Organizations Management', () => {
 
     // Check activity timeline
     await expect(page.getByText('Recent Activity')).toBeVisible();
-    
+
     // Check if activities are displayed
     const activities = await page.getByTestId('activity-item').all();
     expect(activities.length).toBeGreaterThan(0);

@@ -56,13 +56,13 @@ test.describe('Reports', () => {
 
     // Check chart controls
     await expect(page.getByLabel('Group by')).toBeVisible();
-    
+
     // Change grouping
     await page.getByLabel('Group by').selectOption('hour');
-    
+
     // Wait for chart update
     await page.waitForLoadState('networkidle');
-    
+
     // Check chart updated
     await expect(page.getByTestId('chart-title')).toContainText('Hourly');
   });
@@ -133,7 +133,7 @@ test.describe('Reports', () => {
     await page.getByRole('button', { name: /bar chart/i }).click();
     await expect(page.getByTestId('bar-chart')).toBeVisible();
 
-    // Switch to pie chart  
+    // Switch to pie chart
     await page.getByRole('button', { name: /pie chart/i }).click();
     await expect(page.getByTestId('pie-chart')).toBeVisible();
   });

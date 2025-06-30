@@ -59,10 +59,10 @@ test.describe('Users Management', () => {
     const nextButton = page.getByRole('button', { name: /next/i });
     if (await nextButton.isEnabled()) {
       await nextButton.click();
-      
+
       // Check URL updated
       await expect(page).toHaveURL(/page=2/);
-      
+
       // Check page indicator
       await expect(page.getByText(/page 2/i)).toBeVisible();
     }
@@ -90,10 +90,13 @@ test.describe('Users Management', () => {
 
   test('should delete user', async ({ page }) => {
     // Count initial users
-    const initialCount = await page.getByRole('row').count() - 1; // Minus header
+    const initialCount = (await page.getByRole('row').count()) - 1; // Minus header
 
     // Click delete button on first user
-    await page.getByRole('button', { name: /delete/i }).first().click();
+    await page
+      .getByRole('button', { name: /delete/i })
+      .first()
+      .click();
 
     // Confirm deletion
     await expect(page.getByRole('dialog')).toBeVisible();
@@ -103,7 +106,7 @@ test.describe('Users Management', () => {
     await expect(page.getByText(/user deleted successfully/i)).toBeVisible();
 
     // Check user count decreased
-    const newCount = await page.getByRole('row').count() - 1;
+    const newCount = (await page.getByRole('row').count()) - 1;
     expect(newCount).toBe(initialCount - 1);
   });
 
@@ -135,7 +138,7 @@ test.describe('Users Management', () => {
 
     // Fill invalid email
     await page.getByLabel('Email').fill('invalid-email');
-    
+
     // Check email validation
     await expect(page.getByText(/invalid email format/i)).toBeVisible();
   });
