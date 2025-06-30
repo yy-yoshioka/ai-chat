@@ -41,6 +41,9 @@ export const verifyToken = (token: string): UserPayload => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET) as UserPayload;
     return decoded;
   } catch (error) {
+    if (error instanceof Error && error.name === 'TokenExpiredError') {
+      throw new Error('jwt expired');
+    }
     throw new Error('Invalid token');
   }
 };
