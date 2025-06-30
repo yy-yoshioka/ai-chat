@@ -11,7 +11,7 @@ router.use(metricsMiddleware);
 router.get('/', async (req: Request, res: Response) => {
   try {
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    
+
     const [totalChats, activeUsers, recentChats] = await Promise.all([
       prisma.chatLog.count(),
       prisma.user.count({
