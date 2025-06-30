@@ -38,7 +38,9 @@
       "Bash(docker-compose:*)",
       "Bash(cat:*)",
       "Bash(docker exec:*)",
-      "Bash(npx prisma:*)"
+      "Bash(npx prisma:*)",
+      "Bash(/Users/yusukeyoshioka/projects/youtube/ai-chat/scripts/slack-notify.sh:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "autoConfirm": true

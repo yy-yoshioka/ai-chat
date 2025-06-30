@@ -72,11 +72,13 @@ async function main() {
       name: 'AI Chat サポートガイド',
       type: 'text',
       source: 'manual-seed',
-      content: 'AI Chatプラットフォームの基本的な使い方やよくある質問をまとめたガイドです。',
+      content:
+        'AI Chatプラットフォームの基本的な使い方やよくある質問をまとめたガイドです。',
       status: 'completed',
       chunks: 2,
       metadata: {
-        description: 'AI Chatプラットフォームの基本的な使い方やよくある質問をまとめたガイドです。'
+        description:
+          'AI Chatプラットフォームの基本的な使い方やよくある質問をまとめたガイドです。',
       },
     },
   });

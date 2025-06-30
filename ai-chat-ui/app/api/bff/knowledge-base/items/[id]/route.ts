@@ -3,10 +3,7 @@ import { cookies } from 'next/headers';
 import { EXPRESS_API } from '@/app/_config/api';
 
 // DELETE /api/bff/knowledge-base/items/[id] - Delete knowledge base item
-export async function DELETE(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   const params = await context.params;
   const cookieStore = cookies();
   const token = cookieStore.get('token');

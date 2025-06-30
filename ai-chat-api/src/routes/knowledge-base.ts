@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { OpenAI } from 'openai';
+import { QdrantClient } from '@qdrant/js-client-rest';
 import { authMiddleware } from '../middleware/auth';
 import {
   requireOrganizationAccess,
   OrganizationRequest,
 } from '../middleware/organizationAccess';
 import { prisma } from '../lib/prisma';
+import { knowledgeBaseQueue } from '../jobs/knowledgeBaseQueue';
 
 const router = Router();
 const upload = multer({
@@ -33,6 +36,15 @@ const s3Client = new S3Client({
     secretAccessKey: process.env.S3_SECRET_KEY!,
   },
   forcePathStyle: true, // MinIO用
+});
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const qdrantClient = new QdrantClient({
+  url: process.env.QDRANT_URL,
+  apiKey: process.env.QDRANT_API_KEY,
 });
 
 // ファイルアップロード
@@ -137,6 +149,128 @@ router.delete(
       console.log('Knowledge base item deleted:', { kbId: id });
 
       res.json({ success: true });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 検索エンドポイント
+router.post(
+  '/knowledge-base/search',
+  authMiddleware,
+  requireOrganizationAccess,
+  async (req: OrganizationRequest, res, next) => {
+    try {
+      const { widgetId, query, limit = 5 } = req.body;
+
+      // クエリをベクトル化
+      const embedding = await openai.embeddings.create({
+        model: 'text-embedding-ada-002',
+        input: query,
+      });
+
+      const queryVector = embedding.data[0].embedding;
+
+      // 関連するKnowledge Baseを取得
+      const knowledgeBases = await prisma.knowledgeBase.findMany({
+        where: {
+          widgetId,
+          organizationId: req.organizationId!,
+          status: 'completed',
+        },
+      });
+
+      if (knowledgeBases.length === 0) {
+        return res.json({ results: [] });
+      }
+
+      const collectionName = `org_${knowledgeBases[0].id.substring(0, 8)}`;
+
+      // ベクトル検索
+      const searchResult = await qdrantClient.search(collectionName, {
+        vector: queryVector,
+        limit: limit,
+        with_payload: true,
+      });
+
+      const results = searchResult.map((result) => ({
+        score: result.score,
+        content: result.payload?.content,
+        metadata: result.payload?.metadata,
+      }));
+
+      res.json({ results });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 学習開始
+router.post(
+  '/knowledge-base/train',
+  authMiddleware,
+  requireOrganizationAccess,
+  async (req: OrganizationRequest, res, next) => {
+    try {
+      const { widgetId } = req.body;
+
+      // 未処理のアイテムを取得
+      const pendingItems = await prisma.knowledgeBase.findMany({
+        where: {
+          widgetId,
+          organizationId: req.organizationId!,
+          status: 'pending',
+        },
+      });
+
+      // 各アイテムの処理ジョブを投入
+      for (const item of pendingItems) {
+        await knowledgeBaseQueue.add('process-file', {
+          knowledgeBaseId: item.id,
+          s3Key: item.source,
+          mimeType: (item.metadata as { mimeType?: string })?.mimeType,
+        });
+      }
+
+      res.json({
+        message: 'Training started',
+        itemsQueued: pendingItems.length,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 学習状況
+router.get(
+  '/knowledge-base/status',
+  authMiddleware,
+  requireOrganizationAccess,
+  async (req: OrganizationRequest, res, next) => {
+    try {
+      const { widgetId } = req.query;
+
+      const stats = await prisma.knowledgeBase.groupBy({
+        by: ['status'],
+        where: {
+          organizationId: req.organizationId!,
+          ...(widgetId && { widgetId: widgetId as string }),
+        },
+        _count: true,
+      });
+
+      const formattedStats = stats.reduce(
+        (acc, stat) => {
+          acc[stat.status] = stat._count;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
+
+      res.json({ stats: formattedStats });
     } catch (error) {
       next(error);
     }
