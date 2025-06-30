@@ -22,8 +22,14 @@
       "Bash(rg:*)",
       "Bash(yarn format)",
       "Bash(yarn build)",
-      "Bash(*)"
+      "Bash(*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(scripts/slack-notify.sh:*)",
+      "Bash(source .env)",
+      "Bash(./scripts/slack-notify.sh:*)"
     ],
-    "deny": []
+    "deny": [],
+    "autoConfirm": true
   }
 }
