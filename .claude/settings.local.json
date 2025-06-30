@@ -40,7 +40,9 @@
       "Bash(docker exec:*)",
       "Bash(npx prisma:*)",
       "Bash(/Users/yusukeyoshioka/projects/youtube/ai-chat/scripts/slack-notify.sh:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh auth:*)"
     ],
     "deny": [],
     "autoConfirm": true
