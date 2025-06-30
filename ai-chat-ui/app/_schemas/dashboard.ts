@@ -61,3 +61,13 @@ export type ChartData = z.infer<typeof chartDataSchema>;
 export type ActivityData = z.infer<typeof activityDataSchema>;
 export type HealthData = z.infer<typeof healthDataSchema>;
 export type DashboardStats = z.infer<typeof dashboardStatsSchema>;
+
+export const dashboardResponseSchema = z.object({
+  totalChats: z.number().int().min(0),
+  activeUsers: z.number().int().min(0),
+  avgResponseTime: z.number().min(0),
+  errorRate: z.number().min(0).max(1),
+  timestamp: z.string().datetime(),
+});
+
+export type DashboardResponse = z.infer<typeof dashboardResponseSchema>;
