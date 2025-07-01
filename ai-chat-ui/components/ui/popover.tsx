@@ -55,10 +55,14 @@ interface PopoverContentProps {
   align?: 'start' | 'center' | 'end';
 }
 
-export function PopoverContent({ children, className = '', align = 'center' }: PopoverContentProps) {
+export function PopoverContent({
+  children,
+  className = '',
+  align = 'center',
+}: PopoverContentProps) {
   const context = useContext(PopoverContext);
   const contentRef = useRef<HTMLDivElement>(null);
-  
+
   if (!context) throw new Error('PopoverContent must be used within Popover');
 
   const { open, setOpen } = context;

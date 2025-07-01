@@ -14,7 +14,7 @@ export function useToast() {
     // For now, we'll just log it
     console.log('Toast:', toastData);
     setToasts((prev) => [...prev, toastData]);
-    
+
     // Auto-remove after 3 seconds
     setTimeout(() => {
       setToasts((prev) => prev.slice(1));
