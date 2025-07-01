@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
-import { useAPIKeys } from '@/_hooks/settings/useSettings';
+import { useAPIKeys } from '@/app/_hooks/settings/useSettings';
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
 
