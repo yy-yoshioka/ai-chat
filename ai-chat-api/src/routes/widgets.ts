@@ -1,242 +1,129 @@
-import { Router, Request, Response } from 'express';
-import { prisma } from '../lib/prisma';
-import { authMiddleware } from '../middleware/auth';
-import {
-  requireValidWidget,
-  WidgetRequest,
-} from '../middleware/requireValidWidget';
-import { generateWidgetKey } from '../utils/widgetKey';
-import { sanitizeHexColor } from '../utils/validateHexColor';
+import express from 'express';
+import { authMiddleware as requireAuth } from '../middleware/auth';
+import { orgAccessMiddleware as requireOrgAccess } from '../middleware/organizationAccess';
+import * as widgetService from '../services/widgetService';
 
-const router = Router();
+const router = express.Router();
 
-// Create a new widget (authenticated users only)
-router.post('/', authMiddleware, async (req: Request, res: Response) => {
+// Get widgets by organization
+router.get('/', requireAuth, requireOrgAccess, async (req, res) => {
   try {
-    const { name, accentColor, logoUrl, companyId } = req.body;
+    const { page, limit, search, status } = req.query;
 
-    if (!name || !companyId) {
-      return res.status(400).json({ error: 'Name and companyId are required' });
-    }
-
-    // Validate accent color if provided
-    let validColor = '#007bff'; // default
-    if (accentColor) {
-      const sanitized = sanitizeHexColor(accentColor);
-      if (!sanitized) {
-        return res.status(400).json({ error: 'Invalid accent color format' });
+    const result = await widgetService.getWidgetsByOrganization(
+      req.organizationId!,
+      {
+        page: page ? parseInt(page as string) : undefined,
+        limit: limit ? parseInt(limit as string) : undefined,
+        search: search as string,
+        status: status as 'active' | 'inactive' | 'all',
       }
-      validColor = sanitized;
-    }
+    );
 
-    // Check if company exists
-    const company = await prisma.company.findUnique({
-      where: { id: companyId },
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch widgets' });
+  }
+});
+
+// Create widget
+router.post('/', requireAuth, requireOrgAccess, async (req, res) => {
+  try {
+    const widget = await widgetService.createWidget({
+      ...req.body,
+      organizationId: req.organizationId!,
     });
-
-    if (!company) {
-      return res.status(404).json({ error: 'Company not found' });
-    }
-
-    const widget = await prisma.widget.create({
-      data: {
-        widgetKey: generateWidgetKey(),
-        name,
-        companyId,
-        accentColor: validColor,
-        logoUrl: logoUrl || null,
-        isActive: true,
-      },
-      include: {
-        company: {
-          select: {
-            id: true,
-            name: true,
-            plan: true,
-          },
-        },
-      },
-    });
-
     res.status(201).json(widget);
   } catch (error) {
-    console.error('Create widget error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    const message =
+      error instanceof Error ? error.message : 'Failed to create widget';
+    const status =
+      message.includes('not found') || message.includes('access denied')
+        ? 400
+        : 500;
+    res.status(status).json({ error: message });
   }
 });
 
-// List widgets for a company (authenticated users only)
-router.get('/', authMiddleware, async (req: Request, res: Response) => {
+// Get widget by ID
+router.get('/:id', requireAuth, requireOrgAccess, async (req, res) => {
   try {
-    const { companyId } = req.query;
-
-    if (!companyId) {
-      return res
-        .status(400)
-        .json({ error: 'companyId query parameter is required' });
-    }
-
-    const widgets = await prisma.widget.findMany({
-      where: {
-        companyId: companyId as string,
-        isActive: true,
-      },
-      include: {
-        company: {
-          select: {
-            id: true,
-            name: true,
-            plan: true,
-          },
-        },
-        _count: {
-          select: {
-            chatLogs: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
-
-    res.json(widgets);
+    const widget = await widgetService.getWidgetById(
+      req.params.id,
+      req.organizationId!
+    );
+    res.json(widget);
   } catch (error) {
-    console.error('List widgets error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    const message =
+      error instanceof Error ? error.message : 'Failed to fetch widget';
+    const status =
+      message.includes('not found') || message.includes('access denied')
+        ? 404
+        : 500;
+    res.status(status).json({ error: message });
   }
 });
 
-// Get public widget config (no authentication required)
+// Update widget
+router.put('/:id', requireAuth, requireOrgAccess, async (req, res) => {
+  try {
+    const widget = await widgetService.updateWidget(
+      req.params.id,
+      req.organizationId!,
+      req.body
+    );
+    res.json(widget);
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Failed to update widget';
+    const status =
+      message.includes('not found') || message.includes('access denied')
+        ? 404
+        : 500;
+    res.status(status).json({ error: message });
+  }
+});
+
+// Delete widget
+router.delete('/:id', requireAuth, requireOrgAccess, async (req, res) => {
+  try {
+    await widgetService.deleteWidget(req.params.id, req.organizationId!);
+    res.status(204).send();
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Failed to delete widget';
+    const status =
+      message.includes('not found') || message.includes('access denied')
+        ? 404
+        : 500;
+    res.status(status).json({ error: message });
+  }
+});
+
+// Get widget analytics
 router.get(
-  '/:widgetKey',
-  requireValidWidget,
-  async (req: WidgetRequest, res: Response) => {
+  '/:id/analytics',
+  requireAuth,
+  requireOrgAccess,
+  async (req, res) => {
     try {
-      const widget = req.widget!;
-
-      // Return only public configuration
-      const publicConfig = {
-        name: widget.name,
-        accentColor: widget.accentColor,
-        logoUrl: widget.logoUrl,
-        isActive: widget.isActive,
-      };
-
-      res.json(publicConfig);
+      const analytics = await widgetService.getWidgetAnalytics(
+        req.params.id,
+        req.organizationId!
+      );
+      res.json(analytics);
     } catch (error) {
-      console.error('Get widget config error:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Failed to fetch widget analytics';
+      const status =
+        message.includes('not found') || message.includes('access denied')
+          ? 404
+          : 500;
+      res.status(status).json({ error: message });
     }
   }
 );
 
-// Update widget (authenticated users only)
-router.put(
-  '/:widgetKey',
-  authMiddleware,
-  async (req: Request, res: Response) => {
-    try {
-      const { widgetKey } = req.params;
-      const { name, accentColor, logoUrl, isActive } = req.body;
-
-      // Validate accent color if provided
-      let validColor: string | undefined;
-      if (accentColor) {
-        const sanitized = sanitizeHexColor(accentColor);
-        if (!sanitized) {
-          return res.status(400).json({ error: 'Invalid accent color format' });
-        }
-        validColor = sanitized;
-      }
-
-      const widget = await prisma.widget.update({
-        where: { widgetKey },
-        data: {
-          ...(name && { name }),
-          ...(validColor && { accentColor: validColor }),
-          ...(logoUrl !== undefined && { logoUrl }),
-          ...(isActive !== undefined && { isActive }),
-          updatedAt: new Date(),
-        },
-        include: {
-          company: {
-            select: {
-              id: true,
-              name: true,
-              plan: true,
-            },
-          },
-        },
-      });
-
-      res.json(widget);
-    } catch (error) {
-      console.error('Update widget error:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  }
-);
-
-// Soft delete widget (authenticated users only)
-router.delete(
-  '/:widgetKey',
-  authMiddleware,
-  async (req: Request, res: Response) => {
-    try {
-      const { widgetKey } = req.params;
-
-      const widget = await prisma.widget.update({
-        where: { widgetKey },
-        data: {
-          isActive: false,
-          updatedAt: new Date(),
-        },
-      });
-
-      res.json({ message: 'Widget deactivated successfully', widget });
-    } catch (error) {
-      console.error('Delete widget error:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  }
-);
-
-// Get widget keys by company name (public endpoint for external integration)
-router.get('/keys/:companyName', async (req: Request, res: Response) => {
-  try {
-    const { companyName } = req.params;
-
-    const company = await prisma.company.findFirst({
-      where: {
-        name: companyName, // Exact match for simplicity
-      },
-    });
-
-    if (!company) {
-      return res.status(404).json({ error: 'Company not found' });
-    }
-
-    const widgets = await prisma.widget.findMany({
-      where: {
-        companyId: company.id,
-        isActive: true,
-      },
-      select: {
-        widgetKey: true,
-        name: true,
-        accentColor: true,
-      },
-    });
-
-    res.json({
-      companyName: company.name,
-      widgets: widgets,
-    });
-  } catch (error) {
-    console.error('Get widget keys error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-export { router as widgetRoutes };
+export default router;
