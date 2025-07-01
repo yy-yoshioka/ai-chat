@@ -42,7 +42,10 @@
       "Bash(/Users/yusukeyoshioka/projects/youtube/ai-chat/scripts/slack-notify.sh:*)",
       "Bash(npx tsc:*)",
       "Bash(gh pr create:*)",
-      "Bash(gh auth:*)"
+      "Bash(gh auth:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:password@localhost:5432/ai_chat_db?schema=public\" yarn prisma migrate dev --name add_message_feedback)",
+      "Bash(cp:*)",
+      "Bash(yarn prisma migrate:*)"
     ],
     "deny": [],
     "autoConfirm": true

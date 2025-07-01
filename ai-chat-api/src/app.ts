@@ -24,6 +24,7 @@ import usersRoutes from './routes/users';
 import dashboardRoutes from './routes/dashboard';
 import reportsRoutes from './routes/reports';
 import knowledgeBaseRoutes from './routes/knowledge-base';
+import trainingRoutes from './routes/training';
 
 // Load environment variables
 dotenv.config();
@@ -116,6 +117,7 @@ app.use('/api/users', usersRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api', knowledgeBaseRoutes);
+app.use('/api', trainingRoutes);
 
 // Legacy routes (backwards compatibility)
 app.use('/auth', authRoutes);
