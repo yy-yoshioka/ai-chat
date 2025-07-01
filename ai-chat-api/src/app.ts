@@ -26,6 +26,7 @@ import reportsRoutes from './routes/reports';
 import knowledgeBaseRoutes from './routes/knowledge-base';
 import trainingRoutes from './routes/training';
 import settingsRoutes from './routes/settings';
+import webhooksRoutes from './routes/webhooks';
 
 // Load environment variables
 dotenv.config();
@@ -120,6 +121,7 @@ app.use('/api/reports', reportsRoutes);
 app.use('/api', knowledgeBaseRoutes);
 app.use('/api', trainingRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/webhooks', webhooksRoutes);
 app.use('/v1/settings', settingsRoutes);
 app.use('/v1/organizations', organizationsRoutes);
 app.use('/v1/widgets', widgetsRoutes);

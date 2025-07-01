@@ -215,6 +215,7 @@ model Organization {
   apiKeys              APIKey[]
   notificationSettings NotificationSettings?
   notifications        Notification[]
+  webhooks             Webhook[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
@@ -406,6 +407,49 @@ model NotificationSettings {
   updatedAt      DateTime @updatedAt
   
   @@map("notification_settings")
+}
+
+// Section-11: Webhook Suite Models
+model Webhook {
+  id             String   @id @default(cuid())
+  name           String
+  url            String
+  secret         String
+  events         String[] // ['chat.created', 'user.created', 'widget.updated', etc.]
+  isActive       Boolean  @default(true)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  headers        Json?    // Optional custom headers
+  retryCount     Int      @default(3)
+  timeoutMs      Int      @default(30000) // 30 seconds
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  logs           WebhookLog[]
+  
+  @@index([organizationId])
+  @@index([isActive])
+  @@map("webhooks")
+}
+
+model WebhookLog {
+  id          String   @id @default(cuid())
+  webhookId   String
+  webhook     Webhook  @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  event       String
+  payload     Json
+  status      String   // 'success', 'failed', 'pending'
+  statusCode  Int?
+  response    String?  @db.Text
+  error       String?  @db.Text
+  attempts    Int      @default(1)
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+  
+  @@index([webhookId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("webhook_logs")
 }
 
 model Notification {

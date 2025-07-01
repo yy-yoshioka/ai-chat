@@ -47,6 +47,11 @@ export function createSidebarItems(orgId: string): SidebarItem[] {
       icon: '📋',
     },
     {
+      title: 'Webhook',
+      path: `/admin/${orgId}/webhooks`,
+      icon: '🔗',
+    },
+    {
       title: '設定',
       path: `/admin/${orgId}/settings`,
       icon: '⚙️',
@@ -63,6 +68,7 @@ export function getPageTitle(pathname: string): string {
   if (pathname.includes('/reports')) return 'レポート';
   if (pathname.includes('/billing')) return '請求・利用状況';
   if (pathname.includes('/logs')) return 'ログ監視';
+  if (pathname.includes('/webhooks')) return 'Webhook管理';
   if (pathname.includes('/settings')) return '設定';
   return '管理者パネル';
 }
@@ -76,6 +82,7 @@ export function getPageDescription(pathname: string): string {
   if (pathname.includes('/reports')) return '詳細なレポートと分析';
   if (pathname.includes('/billing')) return '請求情報と利用状況の確認';
   if (pathname.includes('/logs')) return 'システムログとエラー監視';
+  if (pathname.includes('/webhooks')) return 'Webhook設定と送信ログの管理';
   if (pathname.includes('/settings')) return '組織設定の管理';
   return 'AI Chatシステムの管理';
 }

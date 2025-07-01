@@ -28,6 +28,9 @@ export * from './api-keys';
 // System Health related types
 export * from './system-health';
 
+// Webhooks related types
+export * from './webhooks';
+
 // Common Response Schemas
 import { z } from 'zod';
 
