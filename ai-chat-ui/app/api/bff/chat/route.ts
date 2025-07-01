@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { ChatRequestSchema } from '@/app/_schemas/chat';
+import { ChatRequestSchema, type ChatRequest } from '@/app/_schemas/chat';
 import { EXPRESS_API } from '@/app/_config/api';
+import { validateRequest, createValidationErrorResponse } from '@/app/_utils/validation';
 
 // POST /api/bff/chat - Send chat message
 export async function POST(req: NextRequest) {
@@ -15,11 +16,13 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
 
-    // Validate request
-    const parsed = ChatRequestSchema.safeParse(body);
-    if (!parsed.success) {
-      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
+    // Validate request using new validation utility
+    const validation = validateRequest(ChatRequestSchema, body);
+    if (!validation.success) {
+      return createValidationErrorResponse(validation.error);
     }
+
+    const validatedData: ChatRequest = validation.data;
 
     const response = await fetch(`${EXPRESS_API}/api/chat`, {
       method: 'POST',
@@ -27,7 +30,7 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(parsed.data),
+      body: JSON.stringify(validatedData),
     });
 
     if (!response.ok) {
