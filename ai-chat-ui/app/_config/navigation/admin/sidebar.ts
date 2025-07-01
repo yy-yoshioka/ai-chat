@@ -14,4 +14,5 @@ export const ADMIN_SIDEBAR: NavItem[] = [
   { title: 'システム設定', path: '/admin/settings', icon: '⚙️' },
   { title: 'レポート', path: '/admin/reports', icon: '📈' },
   { title: 'ログ監視', path: '/admin/logs', icon: '📋' },
+  { title: 'システムヘルス', path: '/admin/system-health', icon: '🏥' },
 ] as const;

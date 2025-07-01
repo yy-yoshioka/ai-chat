@@ -471,3 +471,66 @@ model Notification {
   @@index([createdAt])
   @@map("notifications")
 }
+
+// Section-12: System Health Models
+model SystemMetric {
+  id            String   @id @default(cuid())
+  service       String   // 'api', 'database', 'redis', 'vector_db', 'external_api'
+  metricType    String   // 'response_time', 'cpu', 'memory', 'disk', 'connection_count'
+  value         Float
+  unit          String   // 'ms', 'percent', 'mb', 'count'
+  metadata      Json?    // Additional context data
+  timestamp     DateTime @default(now())
+  
+  @@index([service])
+  @@index([metricType])
+  @@index([timestamp])
+  @@map("system_metrics")
+}
+
+model HealthCheck {
+  id            String   @id @default(cuid())
+  service       String   // 'api', 'database', 'redis', 'vector_db', 'external_api'
+  status        String   // 'healthy', 'degraded', 'unhealthy'
+  responseTime  Int      // in milliseconds
+  message       String?
+  details       Json?    // Detailed check results
+  timestamp     DateTime @default(now())
+  
+  @@index([service])
+  @@index([status])
+  @@index([timestamp])
+  @@map("health_checks")
+}
+
+model Incident {
+  id            String   @id @default(cuid())
+  title         String
+  description   String   @db.Text
+  severity      String   // 'low', 'medium', 'high', 'critical'
+  status        String   // 'investigating', 'identified', 'monitoring', 'resolved'
+  affectedServices String[] // Array of affected service names
+  createdAt     DateTime @default(now())
+  resolvedAt    DateTime?
+  
+  updates       IncidentUpdate[]
+  
+  @@index([status])
+  @@index([severity])
+  @@index([createdAt])
+  @@map("incidents")
+}
+
+model IncidentUpdate {
+  id          String   @id @default(cuid())
+  incidentId  String
+  incident    Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  status      String   // New status
+  message     String   @db.Text
+  createdBy   String?  // User ID who created the update
+  createdAt   DateTime @default(now())
+  
+  @@index([incidentId])
+  @@index([createdAt])
+  @@map("incident_updates")
+}
