@@ -122,6 +122,7 @@ model User {
   company         Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
   chatLogs        ChatLog[]
   events          Event[]  // Event tracking
+  feedback        MessageFeedback[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -166,6 +167,7 @@ model ChatLog {
   question  String
   answer    String
   tokens    Int?     @default(0) // Usage tracking for billing
+  feedback  MessageFeedback[]
   createdAt DateTime @default(now())
 
   @@index([userId])
@@ -324,4 +326,22 @@ model UnansweredMessage {
   @@index([count])
   @@index([lastAskedAt])
   @@map("unanswered_messages")
+}
+
+// F-7: Message Feedback for training and improvement
+model MessageFeedback {
+  id        String   @id @default(cuid())
+  chatLogId String   // Reference to ChatLog instead of Message
+  helpful   Boolean
+  feedback  String?  @db.Text
+  userId    String
+  createdAt DateTime @default(now())
+  
+  chatLog   ChatLog  @relation(fields: [chatLogId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([chatLogId])
+  @@index([userId])
+  @@index([helpful])
+  @@map("message_feedback")
 }
