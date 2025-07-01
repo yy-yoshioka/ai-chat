@@ -6,6 +6,7 @@ import {
   WidgetRequest,
 } from '../middleware/requireValidWidget';
 import { rateLimiter } from '../utils/rateLimiter';
+import { searchKnowledgeBase } from '../services/knowledgeBaseService';
 import type { UserPayload } from '../utils/jwt';
 
 const router = Router();
@@ -35,7 +36,8 @@ interface OpenAIResponse {
 async function callChatGPT(
   userMessage: string,
   conversationHistory: OpenAIMessage[] = [],
-  faqs: { question: string; answer: string }[] = []
+  faqs: { question: string; answer: string }[] = [],
+  kbContext: string = ''
 ): Promise<string> {
   // Check if OpenAI API key is properly configured
   const apiKey = process.env.OPENAI_API_KEY;
@@ -58,6 +60,15 @@ async function callChatGPT(
 3. 分からないことは正直に「分からない」と答える
 4. 必要に応じて追加の質問や clarification を求める
 5. 回答は適度な長さで、読みやすく構造化する
+
+${
+  kbContext
+    ? `
+以下のナレッジベースの情報を参考にしてください：
+${kbContext}
+`
+    : ''
+}
 
 ${
   faqs.length > 0
@@ -172,6 +183,22 @@ async function handleChatRequest(
       }
     }
 
+    // Knowledge Base検索
+    let kbResults: Array<{
+      score: number;
+      content: string;
+      metadata: unknown;
+    }> = [];
+    let kbContext = '';
+    if (isWidgetRequest && req.widget) {
+      try {
+        kbResults = await searchKnowledgeBase(req.widget.id, message);
+        kbContext = kbResults.map((r) => r.content).join('\n\n');
+      } catch (error) {
+        console.log('Knowledge base search failed:', error);
+      }
+    }
+
     // 関連するFAQを検索（キーワードマッチング）
     const faqs = await prisma.fAQ.findMany({
       where: {
@@ -218,7 +245,12 @@ async function handleChatRequest(
       ]);
 
     // ChatGPT API呼び出し
-    const answer = await callChatGPT(message, conversationHistory, faqs);
+    const answer = await callChatGPT(
+      message,
+      conversationHistory,
+      faqs,
+      kbContext
+    );
 
     // チャットログを保存
     await prisma.chatLog.create({
@@ -233,6 +265,7 @@ async function handleChatRequest(
     res.json({
       answer,
       timestamp: new Date().toISOString(),
+      sources: kbResults.slice(0, 3), // 上位3件のソースを返す
     });
   } catch (error) {
     console.error('Chat error:', error);

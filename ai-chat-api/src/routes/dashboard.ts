@@ -39,7 +39,7 @@ router.get('/', async (req: Request, res: Response) => {
 
     const avgResponseTime = 250;
 
-    const totalMessages = recentChats.length;
+    const _totalMessages = recentChats.length;
     const errorRate = 0.02;
 
     res.json({
