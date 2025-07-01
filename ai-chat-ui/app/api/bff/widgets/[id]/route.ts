@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { widgetDetailSchema, widgetUpdateSchema } from '@/app/_schemas/widgets';
 import { EXPRESS_API } from '@/app/_config/api';
 import { fetchGet, fetchPut, fetchDelete } from '@/app/_utils/fetcher';
+import { validateResponse } from '@/app/_utils/validation';
 
 // GET /api/bff/widgets/[id] - Get widget by ID
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
@@ -21,13 +22,15 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       cache: 'no-store',
     });
 
-    const parsed = widgetDetailSchema.safeParse(data);
-    if (!parsed.success) {
-      console.error('Invalid widget response:', parsed.error);
-      return NextResponse.json({ error: 'Invalid response format' }, { status: 500 });
+    // Validate response data
+    try {
+      const validatedWidget = validateResponse(widgetDetailSchema, data);
+      return NextResponse.json(validatedWidget);
+    } catch (validationError) {
+      console.error('Response validation failed:', validationError);
+      // Return data anyway but log the validation error
+      return NextResponse.json(data);
     }
-
-    return NextResponse.json(parsed.data);
   } catch (error) {
     console.error('BFF widget GET error:', error);
 
