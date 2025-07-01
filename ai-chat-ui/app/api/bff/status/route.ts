@@ -7,7 +7,7 @@ import { EXPRESS_API } from '@/app/_config/api';
 export async function GET(request: NextRequest) {
   try {
     const response = await fetch(`${EXPRESS_API}/api/status/public`);
-    
+
     if (!response.ok) {
       throw new Error(`Status check failed: ${response.statusText}`);
     }

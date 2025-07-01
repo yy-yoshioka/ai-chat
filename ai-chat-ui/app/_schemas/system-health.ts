@@ -162,7 +162,12 @@ export const systemHealthSummarySchema = z.object({
 
 // Incident schemas for our implementation
 export const incidentSeveritySchema = z.enum(['low', 'medium', 'high', 'critical']);
-export const incidentStatusSchema = z.enum(['investigating', 'identified', 'monitoring', 'resolved']);
+export const incidentStatusSchema = z.enum([
+  'investigating',
+  'identified',
+  'monitoring',
+  'resolved',
+]);
 
 export const incidentUpdateSchema = z.object({
   id: z.string(),
@@ -199,23 +204,31 @@ export const updateIncidentSchema = z.object({
 
 // Public status schema
 export const publicStatusSchema = z.object({
-  status: z.record(z.object({
-    status: healthStatusEnum,
-    message: z.string().optional(),
-  })),
-  incidents: z.array(z.object({
-    id: z.string(),
-    title: z.string(),
-    severity: incidentSeveritySchema,
-    status: incidentStatusSchema,
-    affectedServices: z.array(z.string()),
-    createdAt: z.string().datetime(),
-    updates: z.array(z.object({
-      status: z.string(),
-      message: z.string(),
+  status: z.record(
+    z.object({
+      status: healthStatusEnum,
+      message: z.string().optional(),
+    })
+  ),
+  incidents: z.array(
+    z.object({
+      id: z.string(),
+      title: z.string(),
+      severity: incidentSeveritySchema,
+      status: incidentStatusSchema,
+      affectedServices: z.array(z.string()),
       createdAt: z.string().datetime(),
-    })).optional(),
-  })),
+      updates: z
+        .array(
+          z.object({
+            status: z.string(),
+            message: z.string(),
+            createdAt: z.string().datetime(),
+          })
+        )
+        .optional(),
+    })
+  ),
   sla: z.object({
     uptime: z.number(),
     avgResponseTime: z.number(),

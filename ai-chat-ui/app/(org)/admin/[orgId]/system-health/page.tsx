@@ -8,7 +8,7 @@ import { useMetrics, useHealthCheck } from '@/app/_hooks/status/useMetrics';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -29,10 +29,10 @@ export default function SystemHealthPage() {
   const endDate = new Date();
   const startDate = getStartDate(timeRange);
 
-  const { 
-    processedMetrics, 
-    isLoading: metricsLoading, 
-    refresh: refreshMetrics 
+  const {
+    processedMetrics,
+    isLoading: metricsLoading,
+    refresh: refreshMetrics,
   } = useMetrics({
     startDate,
     endDate,
@@ -50,18 +50,11 @@ export default function SystemHealthPage() {
         description="Monitor system performance, incidents, and service health"
         actions={
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => refreshMetrics()}
-            >
+            <Button variant="outline" size="sm" onClick={() => refreshMetrics()}>
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
-            <Button
-              size="sm"
-              onClick={() => setIncidentModalOpen(true)}
-            >
+            <Button size="sm" onClick={() => setIncidentModalOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Report Incident
             </Button>
@@ -101,9 +94,7 @@ export default function SystemHealthPage() {
             <CardContent>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm font-medium mb-1 block">
-                    Time Range
-                  </label>
+                  <label className="text-sm font-medium mb-1 block">Time Range</label>
                   <Select value={timeRange} onValueChange={setTimeRange}>
                     <SelectTrigger>
                       <SelectValue />
@@ -118,15 +109,13 @@ export default function SystemHealthPage() {
                   </Select>
                 </div>
                 <div className="flex-1">
-                  <label className="text-sm font-medium mb-1 block">
-                    Service
-                  </label>
+                  <label className="text-sm font-medium mb-1 block">Service</label>
                   <Select value={selectedService} onValueChange={setSelectedService}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {services.map(service => (
+                      {services.map((service) => (
                         <SelectItem key={service} value={service}>
                           {service === 'all' ? 'All Services' : formatServiceName(service)}
                         </SelectItem>
@@ -147,14 +136,15 @@ export default function SystemHealthPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {processedMetrics && Object.entries(processedMetrics).map(([key, data]) => (
-                <MetricsChart
-                  key={key}
-                  title={`${formatServiceName(data.service)} - ${formatMetricType(data.metricType)}`}
-                  metrics={data}
-                  color={getMetricColor(data.metricType)}
-                />
-              ))}
+              {processedMetrics &&
+                Object.entries(processedMetrics).map(([key, data]) => (
+                  <MetricsChart
+                    key={key}
+                    title={`${formatServiceName(data.service)} - ${formatMetricType(data.metricType)}`}
+                    metrics={data}
+                    color={getMetricColor(data.metricType)}
+                  />
+                ))}
             </div>
           )}
 
@@ -176,10 +166,7 @@ export default function SystemHealthPage() {
         </TabsContent>
       </Tabs>
 
-      <CreateIncidentModal
-        open={incidentModalOpen}
-        onOpenChange={setIncidentModalOpen}
-      />
+      <CreateIncidentModal open={incidentModalOpen} onOpenChange={setIncidentModalOpen} />
     </div>
   );
 }
@@ -205,14 +192,14 @@ function getStartDate(timeRange: string): Date {
 function formatServiceName(service: string): string {
   return service
     .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
 
 function formatMetricType(type: string): string {
   return type
     .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
 

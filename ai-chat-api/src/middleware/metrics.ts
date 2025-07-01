@@ -37,28 +37,31 @@ export function metricsMiddleware(
     recordMetric(customMetrics.activeConnections, -1);
 
     // Store metric in database for system health monitoring
-    if (responseTime > 100) { // Only store significant response times
-      prisma.systemMetric.create({
-        data: {
-          service: 'api',
-          metricType: 'response_time',
-          value: responseTime,
-          unit: 'ms',
-          metadata: {
-            method: req.method,
-            path: req.path,
-            statusCode: res.statusCode,
+    if (responseTime > 100) {
+      // Only store significant response times
+      prisma.systemMetric
+        .create({
+          data: {
+            service: 'api',
+            metricType: 'response_time',
+            value: responseTime,
+            unit: 'ms',
+            metadata: {
+              method: req.method,
+              path: req.path,
+              statusCode: res.statusCode,
+            },
           },
-        },
-      }).catch((error) => {
-        logger.error('Failed to store response time metric', error);
-      });
+        })
+        .catch((error) => {
+          logger.error('Failed to store response time metric', error);
+        });
     }
 
     // Record error if status code indicates error
     if (res.statusCode >= 400) {
       metricsCollector.recordError();
-      
+
       // Record error in OpenTelemetry
       recordMetric(customMetrics.errors, 1, {
         method: req.method,

@@ -11,13 +11,21 @@ const router = express.Router();
 router.get('/health', async (req, res) => {
   try {
     const status = await healthMonitorService.getLatestHealthStatus();
-    
+
     // Determine overall health
-    const allHealthy = Object.values(status).every(s => s.status === 'healthy');
-    const anyUnhealthy = Object.values(status).some(s => s.status === 'unhealthy');
-    
-    const overallStatus = anyUnhealthy ? 'unhealthy' : allHealthy ? 'healthy' : 'degraded';
-    
+    const allHealthy = Object.values(status).every(
+      (s) => s.status === 'healthy'
+    );
+    const anyUnhealthy = Object.values(status).some(
+      (s) => s.status === 'unhealthy'
+    );
+
+    const overallStatus = anyUnhealthy
+      ? 'unhealthy'
+      : allHealthy
+        ? 'healthy'
+        : 'degraded';
+
     res.status(overallStatus === 'unhealthy' ? 503 : 200).json({
       status: overallStatus,
       timestamp: new Date().toISOString(),
@@ -43,23 +51,26 @@ router.get('/public', async (req, res) => {
     ]);
 
     // Simplify health status for public view
-    const publicStatus = Object.entries(healthStatus).reduce((acc, [service, status]) => {
-      acc[service] = {
-        status: status.status,
-        message: status.message,
-      };
-      return acc;
-    }, {} as Record<string, any>);
+    const publicStatus = Object.entries(healthStatus).reduce(
+      (acc, [service, status]) => {
+        acc[service] = {
+          status: status.status,
+          message: status.message,
+        };
+        return acc;
+      },
+      {} as Record<string, any>
+    );
 
     // Simplify incidents for public view
-    const publicIncidents = activeIncidents.map(incident => ({
+    const publicIncidents = activeIncidents.map((incident) => ({
       id: incident.id,
       title: incident.title,
       severity: incident.severity,
       status: incident.status,
       affectedServices: incident.affectedServices,
       createdAt: incident.createdAt,
-      updates: incident.updates?.slice(0, 3).map(update => ({
+      updates: incident.updates?.slice(0, 3).map((update) => ({
         status: update.status,
         message: update.message,
         createdAt: update.createdAt,
@@ -82,7 +93,7 @@ router.get('/public', async (req, res) => {
 router.get('/metrics', requireAuth, async (req, res) => {
   try {
     const { service, metricType, startDate, endDate } = req.query;
-    
+
     const metrics = await healthMonitorService.getMetrics(
       service as string,
       metricType as string,
@@ -118,7 +129,8 @@ router.post('/incidents', requireAuth, async (req, res) => {
 
     if (!title || !description || !severity || !affectedServices) {
       return res.status(400).json({
-        error: 'Title, description, severity, and affected services are required',
+        error:
+          'Title, description, severity, and affected services are required',
       });
     }
 
@@ -217,11 +229,16 @@ async function calculateSLA(): Promise<{
 
   // Calculate uptime percentage
   const totalChecks = healthChecks.length;
-  const healthyChecks = healthChecks.filter(hc => hc.status === 'healthy').length;
+  const healthyChecks = healthChecks.filter(
+    (hc) => hc.status === 'healthy'
+  ).length;
   const uptime = (healthyChecks / totalChecks) * 100;
 
   // Calculate average response time
-  const totalResponseTime = healthChecks.reduce((sum, hc) => sum + hc.responseTime, 0);
+  const totalResponseTime = healthChecks.reduce(
+    (sum, hc) => sum + hc.responseTime,
+    0
+  );
   const avgResponseTime = Math.round(totalResponseTime / totalChecks);
 
   return {

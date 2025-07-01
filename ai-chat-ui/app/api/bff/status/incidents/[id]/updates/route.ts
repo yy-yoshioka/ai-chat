@@ -6,10 +6,7 @@ import { updateIncidentSchema } from '@/app/_schemas/system-health';
 import { validateRequest } from '@/app/_utils/validation';
 
 // POST /api/bff/status/incidents/[id]/updates - Add incident update
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const authToken = getAuthTokenFromCookie();
     if (!authToken) {

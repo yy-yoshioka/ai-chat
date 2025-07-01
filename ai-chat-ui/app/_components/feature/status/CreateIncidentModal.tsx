@@ -81,7 +81,8 @@ export function CreateIncidentModal({ open, onOpenChange }: CreateIncidentModalP
         <DialogHeader>
           <DialogTitle>Create Incident</DialogTitle>
           <DialogDescription>
-            Report a new incident affecting system services. This will be visible on the status page.
+            Report a new incident affecting system services. This will be visible on the status
+            page.
           </DialogDescription>
         </DialogHeader>
 
@@ -150,9 +151,7 @@ export function CreateIncidentModal({ open, onOpenChange }: CreateIncidentModalP
               render={() => (
                 <FormItem>
                   <FormLabel>Affected Services</FormLabel>
-                  <FormDescription>
-                    Select all services affected by this incident
-                  </FormDescription>
+                  <FormDescription>Select all services affected by this incident</FormDescription>
                   <div className="grid grid-cols-2 gap-3 mt-2">
                     {availableServices.map((service) => (
                       <FormField
