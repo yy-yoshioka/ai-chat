@@ -7,6 +7,7 @@ import {
 } from '../middleware/requireValidWidget';
 import { rateLimiter } from '../utils/rateLimiter';
 import { searchKnowledgeBase } from '../services/knowledgeBaseService';
+import { webhookService } from '../services/webhookService';
 import type { UserPayload } from '../utils/jwt';
 
 const router = Router();
@@ -253,7 +254,7 @@ async function handleChatRequest(
     );
 
     // チャットログを保存
-    await prisma.chatLog.create({
+    const chatLog = await prisma.chatLog.create({
       data: {
         question: message,
         answer,
@@ -261,6 +262,28 @@ async function handleChatRequest(
         widgetId: isWidgetRequest ? req.widget?.id : null,
       },
     });
+
+    // Trigger webhook for chat.created event
+    if (isWidgetRequest && req.widget) {
+      // Get organization ID from widget
+      const widget = await prisma.widget.findUnique({
+        where: { id: req.widget.id },
+        include: { company: true },
+      });
+
+      if (widget?.company?.organizationId) {
+        webhookService.triggerWebhook(widget.company.organizationId, 'chat.created', {
+          chatId: chatLog.id,
+          widgetId: req.widget.id,
+          widgetName: req.widget.name,
+          question: message,
+          answer,
+          timestamp: new Date().toISOString(),
+        }).catch((error) => {
+          console.error('Failed to trigger webhook:', error);
+        });
+      }
+    }
 
     res.json({
       answer,
