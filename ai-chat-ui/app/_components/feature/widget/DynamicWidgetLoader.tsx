@@ -1,7 +1,6 @@
 import React, { useState, useEffect, FC } from 'react';
 import Script from 'next/script';
 import { API_BASE_URL, COMPANY_NAME } from '@/app/_config';
-import { fetchGet, FetchError } from '@/app/_utils/fetcher';
 
 interface Widget {
   widgetKey: string;
@@ -25,9 +24,15 @@ const DynamicWidgetLoader: FC = () => {
     const fetchWidgets = async () => {
       try {
         setLoading(true);
-        const data = await fetchGet<WidgetResponse>(
+        const response = await fetch(
           `${API_BASE_URL}/api/widgets/keys/${encodeURIComponent(COMPANY_NAME)}`
         );
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch widgets: ${response.status}`);
+        }
+
+        const data: WidgetResponse = await response.json();
         setWidgets(data.widgets);
 
         // Automatically select the first widget (or legacy widget if available)
@@ -35,12 +40,7 @@ const DynamicWidgetLoader: FC = () => {
         const defaultWidget = legacyWidget || data.widgets[0];
         setSelectedWidget(defaultWidget);
       } catch (err) {
-        console.error('Error fetching widgets:', err);
-        if (err instanceof FetchError) {
-          setError(`Failed to fetch widgets: ${err.status}`);
-        } else {
-          setError(err instanceof Error ? err.message : 'Unknown error');
-        }
+        setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
         setLoading(false);
       }
