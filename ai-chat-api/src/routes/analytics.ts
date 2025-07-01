@@ -475,4 +475,183 @@ async function getDailyKPIStats(
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
+/**
+ * Get conversation flow analytics
+ */
+router.get(
+  '/conversation-flow',
+  authMiddleware,
+  requireOrganizationAccess,
+  async (req: OrganizationRequest, res: Response) => {
+    try {
+      const { widgetId, startDate, endDate } = req.query;
+
+      if (!widgetId) {
+        return res.status(400).json({ error: 'widgetId is required' });
+      }
+
+      // For simplified implementation, we'll get chat logs and analyze patterns
+      const chatLogs = await prisma.chatLog.findMany({
+        where: {
+          widgetId: widgetId as string,
+          createdAt: {
+            gte: startDate ? new Date(startDate as string) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+            lte: endDate ? new Date(endDate as string) : new Date()
+          }
+        },
+        select: {
+          question: true,
+          answer: true,
+        },
+        orderBy: {
+          createdAt: 'asc'
+        },
+        take: 1000 // Limit to prevent performance issues
+      });
+
+      // Create flow data for Sankey diagram
+      const flows = new Map<string, number>();
+      
+      // Group by question-answer pairs
+      chatLogs.forEach((log) => {
+        const question = log.question.substring(0, 50) + (log.question.length > 50 ? '...' : '');
+        const answer = log.answer.substring(0, 50) + (log.answer.length > 50 ? '...' : '');
+        const key = `${question}|||${answer}`;
+        
+        flows.set(key, (flows.get(key) || 0) + 1);
+      });
+
+      // Convert to nodes and links format
+      const nodes = new Set<string>();
+      const links: any[] = [];
+      
+      Array.from(flows.entries()).forEach(([key, value]) => {
+        const [source, target] = key.split('|||');
+        nodes.add(source);
+        nodes.add(target);
+        links.push({
+          source,
+          target,
+          value
+        });
+      });
+
+      // Sort links by value and take top 50
+      links.sort((a, b) => b.value - a.value);
+      const topLinks = links.slice(0, 50);
+
+      res.json({
+        nodes: Array.from(nodes).map((label, index) => ({ 
+          id: index, 
+          label 
+        })),
+        links: topLinks
+      });
+    } catch (error) {
+      console.error('Get conversation flow error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
+
+/**
+ * Get unresolved questions
+ */
+router.get(
+  '/unresolved',
+  authMiddleware,
+  requireOrganizationAccess,
+  async (req: OrganizationRequest, res: Response) => {
+    try {
+      const { widgetId, limit = 50 } = req.query;
+
+      if (!widgetId) {
+        return res.status(400).json({ error: 'widgetId is required' });
+      }
+
+      // Get chat logs with negative feedback or containing apology keywords
+      const unresolvedChats = await prisma.chatLog.findMany({
+        where: {
+          widgetId: widgetId as string,
+          OR: [
+            {
+              // Has negative feedback
+              feedback: {
+                some: { helpful: false }
+              }
+            },
+            {
+              // AI couldn't answer properly
+              answer: {
+                contains: 'お答えできません'
+              }
+            },
+            {
+              answer: {
+                contains: 'わかりません'
+              }
+            },
+            {
+              answer: {
+                contains: '申し訳ございません'
+              }
+            }
+          ]
+        },
+        include: {
+          feedback: {
+            where: { helpful: false },
+            select: {
+              feedback: true,
+              createdAt: true
+            }
+          }
+        },
+        orderBy: { createdAt: 'desc' },
+        take: Number(limit)
+      });
+
+      // Group similar questions
+      const groups = groupSimilarQuestions(unresolvedChats);
+
+      res.json({ 
+        questions: groups,
+        total: unresolvedChats.length
+      });
+    } catch (error) {
+      console.error('Get unresolved questions error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
+
+/**
+ * Group similar questions
+ */
+function groupSimilarQuestions(chatLogs: any[]) {
+  const groups: Map<string, any[]> = new Map();
+  
+  chatLogs.forEach(chat => {
+    // Simple grouping by first 20 characters
+    const key = chat.question.substring(0, 20).toLowerCase().trim();
+    
+    if (!groups.has(key)) {
+      groups.set(key, []);
+    }
+    
+    groups.get(key)!.push(chat);
+  });
+  
+  // Convert to array format
+  return Array.from(groups.entries())
+    .map(([key, chats]) => ({
+      pattern: chats[0].question,
+      count: chats.length,
+      examples: chats.slice(0, 3),
+      firstOccurrence: chats[chats.length - 1].createdAt,
+      lastOccurrence: chats[0].createdAt
+    }))
+    .sort((a, b) => b.count - a.count);
+}
+
 export { router as analyticsRoutes };
