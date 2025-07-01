@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { PageHeader } from '@/_components/common/PageHeader';
-import { NotificationSettings } from '@/_components/feature/settings/NotificationSettings';
+import { PageHeader } from '@/app/_components/common/PageHeader';
+import { NotificationSettings } from '@/app/_components/feature/settings/NotificationSettings';
 
 export default function NotificationSettingsPage() {
   const params = useParams();

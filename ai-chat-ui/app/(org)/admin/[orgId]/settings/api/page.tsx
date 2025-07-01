@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { PageHeader } from '@/_components/common/PageHeader';
-import { APIKeyManager } from '@/_components/feature/settings/APIKeyManager';
+import { PageHeader } from '@/app/_components/common/PageHeader';
+import { APIKeyManager } from '@/app/_components/feature/settings/APIKeyManager';
 
 export default function APISettingsPage() {
   const params = useParams();

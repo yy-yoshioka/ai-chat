@@ -5,7 +5,7 @@ import { Bell, AlertCircle, MessageSquare, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useNotifications } from '@/_hooks/notifications/useNotifications';
+import { useNotifications } from '@/app/_hooks/notifications/useNotifications';
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
 

@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { useNotificationSettings } from '@/_hooks/settings/useSettings';
+import { useNotificationSettings } from '@/app/_hooks/settings/useSettings';
 
 interface NotificationSettingsProps {
   orgId: string;
