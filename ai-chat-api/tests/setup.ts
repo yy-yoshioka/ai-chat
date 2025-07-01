@@ -36,10 +36,12 @@ jest.mock('openai', () => ({
     chat: {
       completions: {
         create: jest.fn().mockResolvedValue({
-          choices: [{
-            message: { content: 'Test response' },
-            finish_reason: 'stop',
-          }],
+          choices: [
+            {
+              message: { content: 'Test response' },
+              finish_reason: 'stop',
+            },
+          ],
         }),
       },
     },

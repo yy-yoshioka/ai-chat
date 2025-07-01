@@ -50,10 +50,12 @@ describe('Knowledge Base Routes', () => {
       next();
     });
 
-    (requireOrganizationAccess as jest.Mock).mockImplementation((req, res, next) => {
-      req.organizationId = testUser.organizationId;
-      next();
-    });
+    (requireOrganizationAccess as jest.Mock).mockImplementation(
+      (req, res, next) => {
+        req.organizationId = testUser.organizationId;
+        next();
+      }
+    );
 
     // Reset all mocks
     jest.clearAllMocks();
@@ -62,7 +64,9 @@ describe('Knowledge Base Routes', () => {
   describe('GET /api/knowledge-base/items', () => {
     it('should return knowledge base items for a widget', async () => {
       // Setup mock data
-      prismaMock.knowledgeBaseItem.findMany.mockResolvedValue([testKnowledgeBaseItem]);
+      prismaMock.knowledgeBaseItem.findMany.mockResolvedValue([
+        testKnowledgeBaseItem,
+      ]);
       prismaMock.knowledgeBaseItem.count.mockResolvedValue(1);
       prismaMock.widget.findUnique.mockResolvedValue(testWidget);
 
@@ -158,7 +162,8 @@ describe('Knowledge Base Routes', () => {
 
       expect(response.status).toBe(400);
       expect(response.body).toEqual({
-        error: 'Invalid file type. Only PDF, DOC, DOCX, TXT, and MD files are allowed.',
+        error:
+          'Invalid file type. Only PDF, DOC, DOCX, TXT, and MD files are allowed.',
       });
     });
 
@@ -185,7 +190,9 @@ describe('Knowledge Base Routes', () => {
         },
       } as any);
 
-      prismaMock.knowledgeBaseItem.delete.mockResolvedValue(testKnowledgeBaseItem);
+      prismaMock.knowledgeBaseItem.delete.mockResolvedValue(
+        testKnowledgeBaseItem
+      );
 
       const response = await request(app)
         .delete('/api/knowledge-base/items/kb-test-123')

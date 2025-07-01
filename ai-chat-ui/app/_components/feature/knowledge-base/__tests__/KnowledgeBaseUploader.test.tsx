@@ -69,7 +69,7 @@ describe('KnowledgeBaseUploader', () => {
     render(<KnowledgeBaseUploader {...defaultProps} />);
 
     const file = new File(['test content'], 'test.pdf', { type: 'application/pdf' });
-    
+
     // Trigger file drop
     await mockOnDrop([file]);
 
@@ -88,16 +88,19 @@ describe('KnowledgeBaseUploader', () => {
     expect(formData.get('widgetId')).toBe('widget-123');
 
     // Wait for callback
-    await waitFor(() => {
-      expect(mockOnUploadComplete).toHaveBeenCalled();
-    }, { timeout: 2000 });
+    await waitFor(
+      () => {
+        expect(mockOnUploadComplete).toHaveBeenCalled();
+      },
+      { timeout: 2000 }
+    );
   });
 
   it('shows upload progress', async () => {
     render(<KnowledgeBaseUploader {...defaultProps} />);
 
     const file = new File(['test content'], 'test.pdf', { type: 'application/pdf' });
-    
+
     // Trigger file drop
     mockOnDrop([file]);
 
@@ -116,7 +119,7 @@ describe('KnowledgeBaseUploader', () => {
     render(<KnowledgeBaseUploader {...defaultProps} />);
 
     const file = new File(['test content'], 'test.pdf', { type: 'application/pdf' });
-    
+
     // Trigger file drop
     await mockOnDrop([file]);
 
@@ -134,7 +137,7 @@ describe('KnowledgeBaseUploader', () => {
     render(<KnowledgeBaseUploader {...defaultProps} />);
 
     const file = new File(['test content'], 'test.pdf', { type: 'application/pdf' });
-    
+
     // Trigger file drop
     await mockOnDrop([file]);
 
@@ -147,7 +150,7 @@ describe('KnowledgeBaseUploader', () => {
   it('disables dropzone while uploading', async () => {
     const { useDropzone } = require('react-dropzone');
     let capturedConfig: any;
-    
+
     useDropzone.mockImplementation((config: any) => {
       capturedConfig = config;
       mockOnDrop = config.onDrop;
@@ -163,13 +166,13 @@ describe('KnowledgeBaseUploader', () => {
     expect(capturedConfig.disabled).toBe(false);
 
     const file = new File(['test content'], 'test.pdf', { type: 'application/pdf' });
-    
+
     // Start upload
     mockOnDrop([file]);
 
     // Re-render to check disabled state
     const { rerender } = render(<KnowledgeBaseUploader {...defaultProps} />);
-    
+
     // During upload, dropzone should be disabled
     await waitFor(() => {
       expect(capturedConfig.disabled).toBe(true);
@@ -179,7 +182,7 @@ describe('KnowledgeBaseUploader', () => {
   it('accepts only specified file types', () => {
     const { useDropzone } = require('react-dropzone');
     let capturedConfig: any;
-    
+
     useDropzone.mockImplementation((config: any) => {
       capturedConfig = config;
       return {
@@ -204,7 +207,7 @@ describe('KnowledgeBaseUploader', () => {
 
     const file1 = new File(['content1'], 'test1.pdf', { type: 'application/pdf' });
     const file2 = new File(['content2'], 'test2.pdf', { type: 'application/pdf' });
-    
+
     // Trigger multiple file drop
     await mockOnDrop([file1, file2]);
 
@@ -217,24 +220,25 @@ describe('KnowledgeBaseUploader', () => {
     const calls = (global.fetch as jest.Mock).mock.calls;
     const formData1 = calls[0][1].body as FormData;
     const formData2 = calls[1][1].body as FormData;
-    
+
     expect(formData1.get('file')).toBe(file1);
     expect(formData2.get('file')).toBe(file2);
   });
 
   it('shows progress bar with correct width', async () => {
     jest.useFakeTimers();
-    
+
     render(<KnowledgeBaseUploader {...defaultProps} />);
 
     const file = new File(['test content'], 'test.pdf', { type: 'application/pdf' });
-    
+
     // Trigger file drop
     mockOnDrop([file]);
 
     // Wait for progress bar to appear
     await waitFor(() => {
-      const progressBar = screen.getByText(/アップロード中\.\.\./).previousElementSibling?.firstElementChild;
+      const progressBar =
+        screen.getByText(/アップロード中\.\.\./).previousElementSibling?.firstElementChild;
       expect(progressBar).toBeInTheDocument();
     });
 
@@ -258,7 +262,7 @@ describe('KnowledgeBaseUploader', () => {
     render(<KnowledgeBaseUploader {...defaultProps} />);
 
     const file1 = new File(['content1'], 'test1.pdf', { type: 'application/pdf' });
-    
+
     // First upload
     await mockOnDrop([file1]);
 
@@ -274,7 +278,7 @@ describe('KnowledgeBaseUploader', () => {
     });
 
     const file2 = new File(['content2'], 'test2.pdf', { type: 'application/pdf' });
-    
+
     // Second upload
     await mockOnDrop([file2]);
 

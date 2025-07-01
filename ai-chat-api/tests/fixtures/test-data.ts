@@ -1,4 +1,10 @@
-import { Organization, User, Widget, Company, KnowledgeBaseItem } from '@prisma/client';
+import {
+  Organization,
+  User,
+  Widget,
+  Company,
+  KnowledgeBaseItem,
+} from '@prisma/client';
 
 export const testOrganization: Organization = {
   id: 'org-test-123',
@@ -68,7 +74,8 @@ export const testKnowledgeBaseItem: KnowledgeBaseItem = {
   updatedAt: new Date('2024-01-01'),
 };
 
-export const mockAuthToken = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLXRlc3QtMTIzIiwib3JnYW5pemF0aW9uSWQiOiJvcmctdGVzdC0xMjMiLCJpYXQiOjE3MDQwNjcyMDAsImV4cCI6OTk5OTk5OTk5OX0.mock';
+export const mockAuthToken =
+  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLXRlc3QtMTIzIiwib3JnYW5pemF0aW9uSWQiOiJvcmctdGVzdC0xMjMiLCJpYXQiOjE3MDQwNjcyMDAsImV4cCI6OTk5OTk5OTk5OX0.mock';
 
 export const mockPrismaKnowledgeBase = {
   findMany: jest.fn(),

@@ -1,5 +1,5 @@
 // Learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -11,36 +11,36 @@ jest.mock('next/navigation', () => ({
       back: jest.fn(),
       forward: jest.fn(),
       prefetch: jest.fn(),
-    }
+    };
   },
   useSearchParams() {
-    return new URLSearchParams()
+    return new URLSearchParams();
   },
   usePathname() {
-    return ''
+    return '';
   },
   useParams() {
-    return {}
+    return {};
   },
-}))
+}));
 
 // Mock next/image
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props) => {
     // eslint-disable-next-line jsx-a11y/alt-text
-    return <img {...props} />
+    return <img {...props} />;
   },
-}))
+}));
 
 // Mock environment variables
-process.env.NEXT_PUBLIC_EXPRESS_API = 'http://localhost:3001'
-process.env.NEXT_PUBLIC_SITE_URL = 'http://localhost:3000'
+process.env.NEXT_PUBLIC_EXPRESS_API = 'http://localhost:3001';
+process.env.NEXT_PUBLIC_SITE_URL = 'http://localhost:3000';
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
+  value: jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -50,7 +50,7 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
-})
+});
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
@@ -58,7 +58,7 @@ global.IntersectionObserver = class IntersectionObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-}
+};
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -66,22 +66,19 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-}
+};
 
 // Suppress console errors in tests (optional)
-const originalError = console.error
+const originalError = console.error;
 beforeAll(() => {
   console.error = (...args) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('Warning: ReactDOM.render')
-    ) {
-      return
+    if (typeof args[0] === 'string' && args[0].includes('Warning: ReactDOM.render')) {
+      return;
     }
-    originalError.call(console, ...args)
-  }
-})
+    originalError.call(console, ...args);
+  };
+});
 
 afterAll(() => {
-  console.error = originalError
-})
+  console.error = originalError;
+});

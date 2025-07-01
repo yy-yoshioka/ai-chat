@@ -6,7 +6,7 @@ import { Button } from '../button';
 describe('Button', () => {
   it('renders with default props', () => {
     render(<Button>Click me</Button>);
-    
+
     const button = screen.getByRole('button', { name: 'Click me' });
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('bg-blue-600', 'text-white', 'h-10', 'px-4', 'py-2');
@@ -14,7 +14,7 @@ describe('Button', () => {
 
   it('renders different variants', () => {
     const { rerender } = render(<Button variant="destructive">Delete</Button>);
-    
+
     let button = screen.getByRole('button');
     expect(button).toHaveClass('bg-red-600', 'text-white');
 
@@ -37,7 +37,7 @@ describe('Button', () => {
 
   it('renders different sizes', () => {
     const { rerender } = render(<Button size="sm">Small</Button>);
-    
+
     let button = screen.getByRole('button');
     expect(button).toHaveClass('h-9', 'px-3');
 
@@ -52,7 +52,7 @@ describe('Button', () => {
 
   it('applies custom className', () => {
     render(<Button className="custom-class">Custom</Button>);
-    
+
     const button = screen.getByRole('button');
     expect(button).toHaveClass('custom-class');
   });
@@ -60,16 +60,16 @@ describe('Button', () => {
   it('handles click events', async () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     const button = screen.getByRole('button');
     await userEvent.click(button);
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it('can be disabled', () => {
     render(<Button disabled>Disabled</Button>);
-    
+
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
     expect(button).toHaveClass('disabled:pointer-events-none', 'disabled:opacity-50');
@@ -78,7 +78,7 @@ describe('Button', () => {
   it('forwards ref', () => {
     const ref = React.createRef<HTMLButtonElement>();
     render(<Button ref={ref}>Ref Button</Button>);
-    
+
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
     expect(ref.current?.textContent).toBe('Ref Button');
   });
@@ -89,14 +89,14 @@ describe('Button', () => {
         Props Button
       </Button>
     );
-    
+
     const button = screen.getByRole('button', { name: 'Custom label' });
     expect(button).toHaveAttribute('data-testid', 'custom-button');
   });
 
   it('has focus styles', () => {
     render(<Button>Focus Button</Button>);
-    
+
     const button = screen.getByRole('button');
     expect(button).toHaveClass(
       'focus-visible:outline-none',
@@ -109,13 +109,13 @@ describe('Button', () => {
   it('supports keyboard interaction', async () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick}>Keyboard Button</Button>);
-    
+
     const button = screen.getByRole('button');
     button.focus();
-    
+
     fireEvent.keyDown(button, { key: 'Enter' });
     expect(handleClick).toHaveBeenCalledTimes(1);
-    
+
     fireEvent.keyDown(button, { key: ' ' });
     expect(handleClick).toHaveBeenCalledTimes(2);
   });

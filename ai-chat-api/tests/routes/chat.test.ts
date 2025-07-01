@@ -4,11 +4,7 @@ import { prisma } from '../../src/lib/prisma';
 import chatRouter from '../../src/routes/chat';
 import { authMiddleware } from '../../src/middleware/auth';
 import { requireValidWidget } from '../../src/middleware/requireValidWidget';
-import {
-  testUser,
-  testWidget,
-  mockAuthToken,
-} from '../fixtures/test-data';
+import { testUser, testWidget, mockAuthToken } from '../fixtures/test-data';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { PrismaClient } from '@prisma/client';
 
@@ -389,7 +385,9 @@ describe('Chat Routes', () => {
     });
 
     it('should handle database errors', async () => {
-      prismaMock.chatLog.findMany.mockRejectedValue(new Error('Database error'));
+      prismaMock.chatLog.findMany.mockRejectedValue(
+        new Error('Database error')
+      );
 
       const response = await request(app)
         .get('/api/chat/history')
@@ -434,7 +432,8 @@ describe('Chat Routes', () => {
           choices: [
             {
               message: {
-                content: 'Based on the FAQ, you can reset your password by clicking the forgot password link.',
+                content:
+                  'Based on the FAQ, you can reset your password by clicking the forgot password link.',
               },
             },
           ],
@@ -515,7 +514,7 @@ describe('Chat Routes', () => {
         .send({ message: 'Follow up question' });
 
       expect(response.status).toBe(200);
-      
+
       // Verify conversation history was included in OpenAI request
       expect(capturedRequestBody.messages).toContainEqual(
         expect.objectContaining({

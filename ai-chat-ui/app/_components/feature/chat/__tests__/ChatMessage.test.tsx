@@ -54,13 +54,7 @@ describe('ChatMessage', () => {
   });
 
   it('renders user avatar with profile image', () => {
-    render(
-      <ChatMessage
-        role="user"
-        content="Test message"
-        user={mockUser}
-      />
-    );
+    render(<ChatMessage role="user" content="Test message" user={mockUser} />);
 
     const avatar = screen.getByAltText('Test User');
     expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg');
@@ -69,78 +63,44 @@ describe('ChatMessage', () => {
 
   it('renders user initials when no profile image', () => {
     const userWithoutImage = { ...mockUser, profileImage: undefined };
-    
-    render(
-      <ChatMessage
-        role="user"
-        content="Test message"
-        user={userWithoutImage}
-      />
-    );
+
+    render(<ChatMessage role="user" content="Test message" user={userWithoutImage} />);
 
     expect(screen.getByText('TU')).toBeInTheDocument();
   });
 
   it('renders single initial for single name', () => {
     const userWithSingleName = { ...mockUser, name: 'John', profileImage: undefined };
-    
-    render(
-      <ChatMessage
-        role="user"
-        content="Test message"
-        user={userWithSingleName}
-      />
-    );
+
+    render(<ChatMessage role="user" content="Test message" user={userWithSingleName} />);
 
     expect(screen.getByText('J')).toBeInTheDocument();
   });
 
   it('renders default initial when no user name', () => {
     const userWithoutName = { ...mockUser, name: undefined, profileImage: undefined };
-    
-    render(
-      <ChatMessage
-        role="user"
-        content="Test message"
-        user={userWithoutName}
-      />
-    );
+
+    render(<ChatMessage role="user" content="Test message" user={userWithoutName} />);
 
     expect(screen.getByText('U')).toBeInTheDocument();
   });
 
   it('renders assistant avatar with icon', () => {
-    render(
-      <ChatMessage
-        role="assistant"
-        content="Test message"
-      />
-    );
+    render(<ChatMessage role="assistant" content="Test message" />);
 
     const svg = screen.getByRole('img', { hidden: true });
     expect(svg).toHaveClass('w-5', 'h-5', 'text-gray-600');
   });
 
   it('applies correct styling for user messages', () => {
-    render(
-      <ChatMessage
-        role="user"
-        content="User message"
-        user={mockUser}
-      />
-    );
+    render(<ChatMessage role="user" content="User message" user={mockUser} />);
 
     const messageContainer = screen.getByText('User message').parentElement;
     expect(messageContainer).toHaveClass('bg-blue-600', 'text-white', 'rounded-br-md');
   });
 
   it('applies correct styling for assistant messages', () => {
-    render(
-      <ChatMessage
-        role="assistant"
-        content="Assistant message"
-      />
-    );
+    render(<ChatMessage role="assistant" content="Assistant message" />);
 
     const messageContainer = screen.getByText('Assistant message').parentElement;
     expect(messageContainer).toHaveClass('bg-gray-100', 'text-gray-900', 'rounded-bl-md');
@@ -148,27 +108,15 @@ describe('ChatMessage', () => {
 
   it('handles multiline content', () => {
     const multilineContent = 'Line 1\nLine 2\nLine 3';
-    
-    render(
-      <ChatMessage
-        role="user"
-        content={multilineContent}
-        user={mockUser}
-      />
-    );
+
+    render(<ChatMessage role="user" content={multilineContent} user={mockUser} />);
 
     const contentElement = screen.getByText('Line 1 Line 2 Line 3');
     expect(contentElement).toHaveClass('whitespace-pre-wrap', 'break-words');
   });
 
   it('renders without timestamp', () => {
-    render(
-      <ChatMessage
-        role="user"
-        content="No timestamp"
-        user={mockUser}
-      />
-    );
+    render(<ChatMessage role="user" content="No timestamp" user={mockUser} />);
 
     expect(screen.getByText('No timestamp')).toBeInTheDocument();
     expect(screen.queryByText(/\d{2}:\d{2}/)).not.toBeInTheDocument();
@@ -176,15 +124,8 @@ describe('ChatMessage', () => {
 
   it('handles Japanese time format', () => {
     const timestamp = new Date('2024-01-01T15:45:00');
-    
-    render(
-      <ChatMessage
-        role="user"
-        content="Test"
-        timestamp={timestamp}
-        user={mockUser}
-      />
-    );
+
+    render(<ChatMessage role="user" content="Test" timestamp={timestamp} user={mockUser} />);
 
     // The time should be formatted in Japanese locale
     expect(screen.getByText('15:45')).toBeInTheDocument();
@@ -192,11 +133,7 @@ describe('ChatMessage', () => {
 
   it('applies fade-in animation', () => {
     const { container } = render(
-      <ChatMessage
-        role="user"
-        content="Animated message"
-        user={mockUser}
-      />
+      <ChatMessage role="user" content="Animated message" user={mockUser} />
     );
 
     const messageDiv = container.firstChild;
@@ -204,12 +141,7 @@ describe('ChatMessage', () => {
   });
 
   it('handles missing user prop for user messages', () => {
-    render(
-      <ChatMessage
-        role="user"
-        content="No user provided"
-      />
-    );
+    render(<ChatMessage role="user" content="No user provided" />);
 
     expect(screen.getByText('No user provided')).toBeInTheDocument();
     expect(screen.getByText('U')).toBeInTheDocument(); // Default initial
@@ -217,11 +149,7 @@ describe('ChatMessage', () => {
 
   it('correctly reverses layout for user messages', () => {
     const { container } = render(
-      <ChatMessage
-        role="user"
-        content="User message"
-        user={mockUser}
-      />
+      <ChatMessage role="user" content="User message" user={mockUser} />
     );
 
     const messageDiv = container.firstChild;
@@ -229,12 +157,7 @@ describe('ChatMessage', () => {
   });
 
   it('does not reverse layout for assistant messages', () => {
-    const { container } = render(
-      <ChatMessage
-        role="assistant"
-        content="Assistant message"
-      />
-    );
+    const { container } = render(<ChatMessage role="assistant" content="Assistant message" />);
 
     const messageDiv = container.firstChild;
     expect(messageDiv).not.toHaveClass('flex-row-reverse');
