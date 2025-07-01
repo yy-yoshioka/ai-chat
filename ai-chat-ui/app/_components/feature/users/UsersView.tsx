@@ -4,6 +4,7 @@ import { UserTable } from './UserTable';
 
 interface UsersViewProps {
   users: User[];
+  orgId: string;
   isLoading: boolean;
   onInviteUser: () => void;
   onEditUser: (userId: string) => void;

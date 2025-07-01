@@ -32,8 +32,8 @@ interface SankeyNodeWithCoords extends SankeyNode {
 
 interface SankeyLinkWithCoords extends SankeyLink {
   width?: number;
-  source: any;
-  target: any;
+  source: SankeyNodeExtended;
+  target: SankeyNodeExtended;
 }
 
 export function ConversationFlowChart({ widgetId, dateRange }: ConversationFlowChartProps) {

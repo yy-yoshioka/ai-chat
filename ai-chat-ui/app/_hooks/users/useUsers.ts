@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import useSWR from 'swr';
 import type { User } from '@/app/_schemas/users';
 import { USER_CONSTANTS } from '@/app/_config/users/constants';
+import { fetchGet } from '@/app/_utils/fetcher';
 
 const mockUsers: User[] = [
   {
@@ -74,5 +76,24 @@ export function useUsers(orgId: string) {
     editUser: editUser.mutate,
     deleteUser: deleteUser.mutate,
     inviteUser,
+  };
+}
+
+// Hook for individual user data
+export function useUser(userId: string) {
+  const {
+    data: user,
+    error,
+    mutate,
+  } = useSWR<User & { permissions?: string[] }>(
+    userId ? `/api/bff/users/${userId}` : null,
+    fetchGet
+  );
+
+  return {
+    user,
+    isLoading: !user && !error,
+    isError: error,
+    mutate,
   };
 }

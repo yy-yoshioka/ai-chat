@@ -1,14 +1,16 @@
 import React from 'react';
+import Link from 'next/link';
 import type { User } from '@/app/_schemas/users';
 import { RoleBadge, StatusBadge } from './UserBadge';
 
 interface UserTableProps {
   users: User[];
+  orgId: string;
   onEditUser: (userId: string) => void;
   onDeleteUser: (userId: string) => void;
 }
 
-export function UserTable({ users, onEditUser, onDeleteUser }: UserTableProps) {
+export function UserTable({ users, orgId, onEditUser, onDeleteUser }: UserTableProps) {
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="overflow-x-auto">
@@ -36,10 +38,12 @@ export function UserTable({ users, onEditUser, onDeleteUser }: UserTableProps) {
             {users.map((user) => (
               <tr key={user.id}>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div>
-                    <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                    <div className="text-sm text-gray-500">{user.email}</div>
-                  </div>
+                  <Link href={`/admin/${orgId}/users/${user.id}`} className="hover:opacity-75">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                      <div className="text-sm text-gray-500">{user.email}</div>
+                    </div>
+                  </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <RoleBadge role={user.role} />

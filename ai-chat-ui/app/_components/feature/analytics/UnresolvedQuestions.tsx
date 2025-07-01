@@ -24,13 +24,11 @@ interface QuestionGroup {
 
 function QuestionGroupItem({
   group,
-  index,
   expanded,
   onToggle,
   onAddToFAQ,
 }: {
   group: QuestionGroup;
-  index: number;
   expanded: boolean;
   onToggle: () => void;
   onAddToFAQ: () => void;
@@ -167,7 +165,6 @@ export function UnresolvedQuestions({ widgetId }: UnresolvedQuestionsProps) {
               <QuestionGroupItem
                 key={index}
                 group={group}
-                index={index}
                 expanded={expandedGroups.has(index)}
                 onToggle={() => toggleExpanded(index)}
                 onAddToFAQ={() => addToFAQ(group.pattern)}
