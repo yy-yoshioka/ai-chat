@@ -1,0 +1,11 @@
+Feature,Page,BFF API,Express API,Hook,Component,Schema
+Dashboard,✅,✅,✅,✅,✅,✅
+Users List,✅,✅,✅,✅,✅,✅
+User Detail,❌,✅,✅,✅,❌,✅
+User Invite,❌,✅,✅,✅,❌,✅
+Reports,✅,✅,✅,✅,✅,✅
+Organizations,❌,✅,✅,✅,❌,✅
+Settings,✅,❌,❌,✅,✅,✅
+Notifications,❌,❌,❌,❌,❌,❌
+Analytics,❌,❌,✅,❌,❌,❌
+Logs,✅,❌,❌,✅,✅,✅

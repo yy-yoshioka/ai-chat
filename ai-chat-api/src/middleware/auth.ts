@@ -1,15 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken, UserPayload } from '../utils/jwt';
+import { prisma } from '../lib/prisma';
 
 // Extend Express Request type to include user
 declare module 'express' {
   interface Request {
-    user?: UserPayload;
+    user?: UserPayload & { roles?: string[] };
   }
 }
 
 // Authentication middleware
-export const authMiddleware = (
+export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -29,16 +30,34 @@ export const authMiddleware = (
     }
 
     if (!token) {
-      return res.status(401).json({ message: 'Not authenticated' });
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
     // Verify token and attach user to request
-    const user = verifyToken(token);
-    req.user = user;
+    let user;
+    try {
+      user = verifyToken(token);
+    } catch (error) {
+      if (error instanceof Error && error.message === 'jwt expired') {
+        return res.status(401).json({ error: 'Token expired' });
+      }
+      return res.status(401).json({ error: 'Invalid token' });
+    }
 
+    // Check if user still exists
+    const dbUser = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { id: true, email: true, roles: true },
+    });
+
+    if (!dbUser) {
+      return res.status(401).json({ error: 'User not found' });
+    }
+
+    req.user = { ...user, roles: dbUser.roles };
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);
-    return res.status(401).json({ message: 'Not authenticated' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };

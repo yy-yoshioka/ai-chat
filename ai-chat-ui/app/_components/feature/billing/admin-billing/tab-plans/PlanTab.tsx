@@ -4,6 +4,7 @@ import React from 'react';
 import { PLANS } from '@/app/_config/billing/plans';
 import PlanGrid from './PlanGrid';
 import { UsageData, BillingPlan } from '@/app/_schemas';
+import { usePlanCheckout } from '@/app/_hooks/billing/useCheckout';
 
 interface Props {
   billing: {
@@ -14,23 +15,10 @@ interface Props {
 }
 
 export default function PlanTab({ billing, orgId }: Props) {
-  const [loading, setLoading] = React.useState(false);
+  const { mutate: selectPlan, isPending } = usePlanCheckout();
 
   const handleSelect = async (planId: string) => {
-    setLoading(true);
-    // ここで checkout API など呼び出し
-    try {
-      const res = await fetch('/api/billing/checkout', {
-        method: 'POST',
-        body: JSON.stringify({ orgId, planId }),
-      });
-      if (res.ok) {
-        const { sessionUrl } = await res.json();
-        window.location.href = sessionUrl;
-      }
-    } finally {
-      setLoading(false);
-    }
+    selectPlan({ orgId, planId });
   };
 
   return (
@@ -40,7 +28,7 @@ export default function PlanTab({ billing, orgId }: Props) {
         plans={PLANS}
         currentId={billing.plans[0].id}
         onSelect={handleSelect}
-        loading={loading}
+        loading={isPending}
       />
     </div>
   );
