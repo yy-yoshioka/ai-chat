@@ -109,7 +109,9 @@ export function ConversationFlowChart({ widgetId, dateRange }: ConversationFlowC
       .selectAll('text')
       .data(nodes)
       .join('text')
-      .attr('x', (d: SankeyNodeWithCoords) => ((d.x0 || 0) < width / 2 ? (d.x1 || 0) + 6 : (d.x0 || 0) - 6))
+      .attr('x', (d: SankeyNodeWithCoords) =>
+        (d.x0 || 0) < width / 2 ? (d.x1 || 0) + 6 : (d.x0 || 0) - 6
+      )
       .attr('y', (d: SankeyNodeWithCoords) => ((d.y1 || 0) + (d.y0 || 0)) / 2)
       .attr('dy', '0.35em')
       .attr('text-anchor', (d: SankeyNodeWithCoords) => ((d.x0 || 0) < width / 2 ? 'start' : 'end'))

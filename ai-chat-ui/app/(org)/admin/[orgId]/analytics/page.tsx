@@ -24,8 +24,8 @@ export default function AnalyticsPage() {
       <PageHeader title="高度な分析" description="会話パターンと改善ポイントの分析" />
 
       <div className="flex items-center gap-4 mt-6 mb-4">
-        <select 
-          value={selectedWidgetId} 
+        <select
+          value={selectedWidgetId}
           onChange={(e) => setSelectedWidgetId(e.target.value)}
           className="w-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
@@ -96,9 +96,7 @@ export default function AnalyticsPage() {
             {activeTab === 'flow' && (
               <ConversationFlowChart widgetId={selectedWidgetId} dateRange={dateRange} />
             )}
-            {activeTab === 'unresolved' && (
-              <UnresolvedQuestions widgetId={selectedWidgetId} />
-            )}
+            {activeTab === 'unresolved' && <UnresolvedQuestions widgetId={selectedWidgetId} />}
           </div>
         </div>
       )}

@@ -22,12 +22,12 @@ interface QuestionGroup {
   lastOccurrence: string;
 }
 
-function QuestionGroupItem({ 
-  group, 
-  index, 
-  expanded, 
-  onToggle, 
-  onAddToFAQ 
+function QuestionGroupItem({
+  group,
+  index,
+  expanded,
+  onToggle,
+  onAddToFAQ,
 }: {
   group: QuestionGroup;
   index: number;
@@ -75,15 +75,15 @@ function QuestionGroupItem({
 
         <div className="flex items-center gap-2 ml-4">
           {group.count > 1 && (
-            <button 
-              className="px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded" 
+            <button
+              className="px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded"
               onClick={onToggle}
             >
               {expanded ? '閉じる' : '詳細'}
             </button>
           )}
-          <button 
-            className="px-3 py-1 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded" 
+          <button
+            className="px-3 py-1 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded"
             onClick={onAddToFAQ}
           >
             FAQに追加
@@ -97,7 +97,10 @@ function QuestionGroupItem({
 export function UnresolvedQuestions({ widgetId }: UnresolvedQuestionsProps) {
   const { questions, isLoading, mutate } = useUnresolvedQuestions(widgetId);
   const [expandedGroups, setExpandedGroups] = useState<Set<number>>(new Set());
-  const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [toastMessage, setToastMessage] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
 
   const toggleExpanded = (index: number) => {
     const newExpanded = new Set(expandedGroups);
@@ -141,9 +144,11 @@ export function UnresolvedQuestions({ widgetId }: UnresolvedQuestionsProps) {
   return (
     <div className="bg-white rounded-lg shadow">
       {toastMessage && (
-        <div className={`fixed top-4 right-4 px-4 py-2 rounded-md text-white z-50 ${
-          toastMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        }`}>
+        <div
+          className={`fixed top-4 right-4 px-4 py-2 rounded-md text-white z-50 ${
+            toastMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+          }`}
+        >
           {toastMessage.message}
         </div>
       )}

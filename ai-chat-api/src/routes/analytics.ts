@@ -495,36 +495,41 @@ router.get(
         where: {
           widgetId: widgetId as string,
           createdAt: {
-            gte: startDate ? new Date(startDate as string) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-            lte: endDate ? new Date(endDate as string) : new Date()
-          }
+            gte: startDate
+              ? new Date(startDate as string)
+              : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+            lte: endDate ? new Date(endDate as string) : new Date(),
+          },
         },
         select: {
           question: true,
           answer: true,
         },
         orderBy: {
-          createdAt: 'asc'
+          createdAt: 'asc',
         },
-        take: 1000 // Limit to prevent performance issues
+        take: 1000, // Limit to prevent performance issues
       });
 
       // Create flow data for Sankey diagram
       const flows = new Map<string, number>();
-      
+
       // Group by question-answer pairs
       chatLogs.forEach((log) => {
-        const question = log.question.substring(0, 50) + (log.question.length > 50 ? '...' : '');
-        const answer = log.answer.substring(0, 50) + (log.answer.length > 50 ? '...' : '');
+        const question =
+          log.question.substring(0, 50) +
+          (log.question.length > 50 ? '...' : '');
+        const answer =
+          log.answer.substring(0, 50) + (log.answer.length > 50 ? '...' : '');
         const key = `${question}|||${answer}`;
-        
+
         flows.set(key, (flows.get(key) || 0) + 1);
       });
 
       // Convert to nodes and links format
       const nodes = new Set<string>();
       const links: any[] = [];
-      
+
       Array.from(flows.entries()).forEach(([key, value]) => {
         const [source, target] = key.split('|||');
         nodes.add(source);
@@ -532,7 +537,7 @@ router.get(
         links.push({
           source,
           target,
-          value
+          value,
         });
       });
 
@@ -541,11 +546,11 @@ router.get(
       const topLinks = links.slice(0, 50);
 
       res.json({
-        nodes: Array.from(nodes).map((label, index) => ({ 
-          id: index, 
-          label 
+        nodes: Array.from(nodes).map((label, index) => ({
+          id: index,
+          label,
         })),
-        links: topLinks
+        links: topLinks,
       });
     } catch (error) {
       console.error('Get conversation flow error:', error);
@@ -577,46 +582,46 @@ router.get(
             {
               // Has negative feedback
               feedback: {
-                some: { helpful: false }
-              }
+                some: { helpful: false },
+              },
             },
             {
               // AI couldn't answer properly
               answer: {
-                contains: 'お答えできません'
-              }
+                contains: 'お答えできません',
+              },
             },
             {
               answer: {
-                contains: 'わかりません'
-              }
+                contains: 'わかりません',
+              },
             },
             {
               answer: {
-                contains: '申し訳ございません'
-              }
-            }
-          ]
+                contains: '申し訳ございません',
+              },
+            },
+          ],
         },
         include: {
           feedback: {
             where: { helpful: false },
             select: {
               feedback: true,
-              createdAt: true
-            }
-          }
+              createdAt: true,
+            },
+          },
         },
         orderBy: { createdAt: 'desc' },
-        take: Number(limit)
+        take: Number(limit),
       });
 
       // Group similar questions
       const groups = groupSimilarQuestions(unresolvedChats);
 
-      res.json({ 
+      res.json({
         questions: groups,
-        total: unresolvedChats.length
+        total: unresolvedChats.length,
       });
     } catch (error) {
       console.error('Get unresolved questions error:', error);
@@ -630,18 +635,18 @@ router.get(
  */
 function groupSimilarQuestions(chatLogs: any[]) {
   const groups: Map<string, any[]> = new Map();
-  
-  chatLogs.forEach(chat => {
+
+  chatLogs.forEach((chat) => {
     // Simple grouping by first 20 characters
     const key = chat.question.substring(0, 20).toLowerCase().trim();
-    
+
     if (!groups.has(key)) {
       groups.set(key, []);
     }
-    
+
     groups.get(key)!.push(chat);
   });
-  
+
   // Convert to array format
   return Array.from(groups.entries())
     .map(([key, chats]) => ({
@@ -649,7 +654,7 @@ function groupSimilarQuestions(chatLogs: any[]) {
       count: chats.length,
       examples: chats.slice(0, 3),
       firstOccurrence: chats[chats.length - 1].createdAt,
-      lastOccurrence: chats[0].createdAt
+      lastOccurrence: chats[0].createdAt,
     }))
     .sort((a, b) => b.count - a.count);
 }
