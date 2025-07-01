@@ -570,7 +570,7 @@ export const passwordResetTemplate = (resetUrl: string) => ({
     
     このリンクは24時間有効です。
     心当たりがない場合は、このメールを無視してください。
-  `
+  `,
 });
 
 // Section-5: Email Verification Template
@@ -600,5 +600,5 @@ export const emailVerificationTemplate = (verifyUrl: string) => ({
     ${verifyUrl}
     
     このリンクは72時間有効です。
-  `
+  `,
 });

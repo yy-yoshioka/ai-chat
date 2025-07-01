@@ -24,7 +24,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to fetch user' }, { status: 500 });
   }
 }
@@ -56,7 +56,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
   }
 }

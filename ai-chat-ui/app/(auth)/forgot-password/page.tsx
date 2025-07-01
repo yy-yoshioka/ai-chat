@@ -7,34 +7,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
+import { fetchPost } from '@/app/_utils/fetcher';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
-      const response = await fetch('/api/bff/auth/forgot-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to send reset email');
-      }
-      
+      await fetchPost('/api/bff/auth/forgot-password', { email });
+
       setIsSubmitted(true);
       toast({
         title: '送信完了',
         description: 'パスワードリセットのメールを送信しました',
       });
-    } catch (error) {
+    } catch {
       toast({
         title: 'エラー',
         description: 'メールの送信に失敗しました',
@@ -44,16 +37,14 @@ export default function ForgotPasswordPage() {
       setIsSubmitting(false);
     }
   };
-  
+
   if (isSubmitted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>メールを確認してください</CardTitle>
-            <CardDescription>
-              {email} にパスワードリセットの手順を送信しました
-            </CardDescription>
+            <CardDescription>{email} にパスワードリセットの手順を送信しました</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-600 mb-4">
@@ -70,7 +61,7 @@ export default function ForgotPasswordPage() {
       </div>
     );
   }
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Card className="w-full max-w-md">
@@ -83,9 +74,7 @@ export default function ForgotPasswordPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">
-                メールアドレス
-              </label>
+              <label className="block text-sm font-medium mb-2">メールアドレス</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
@@ -98,16 +87,12 @@ export default function ForgotPasswordPage() {
                 />
               </div>
             </div>
-            
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isSubmitting}
-            >
+
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? '送信中...' : 'リセットメールを送信'}
             </Button>
           </form>
-          
+
           <div className="mt-4 text-center">
             <Link href="/login" className="text-sm text-blue-600 hover:underline">
               ログインページに戻る

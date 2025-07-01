@@ -58,7 +58,7 @@ export function InviteUserModal({ orgId, onSuccess, onCancel }: InviteUserModalP
       });
 
       onSuccess();
-    } catch (error) {
+    } catch {
       toast({
         title: 'エラー',
         description: '招待の送信に失敗しました',
