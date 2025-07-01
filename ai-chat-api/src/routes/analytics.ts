@@ -528,7 +528,7 @@ router.get(
 
       // Convert to nodes and links format
       const nodes = new Set<string>();
-      const links: any[] = [];
+      const links: { source: string; target: string; value: number }[] = [];
 
       Array.from(flows.entries()).forEach(([key, value]) => {
         const [source, target] = key.split('|||');
@@ -633,8 +633,13 @@ router.get(
 /**
  * Group similar questions
  */
-function groupSimilarQuestions(chatLogs: any[]) {
-  const groups: Map<string, any[]> = new Map();
+interface ChatLogData {
+  question: string;
+  createdAt: Date;
+}
+
+function groupSimilarQuestions(chatLogs: ChatLogData[]) {
+  const groups: Map<string, ChatLogData[]> = new Map();
 
   chatLogs.forEach((chat) => {
     // Simple grouping by first 20 characters
@@ -649,7 +654,7 @@ function groupSimilarQuestions(chatLogs: any[]) {
 
   // Convert to array format
   return Array.from(groups.entries())
-    .map(([key, chats]) => ({
+    .map(([_key, chats]) => ({
       pattern: chats[0].question,
       count: chats.length,
       examples: chats.slice(0, 3),

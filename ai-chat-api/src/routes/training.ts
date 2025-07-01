@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authMiddleware } from '../middleware/auth';
+import { authMiddleware, AuthRequest } from '../middleware/auth';
 import { prisma } from '../lib/prisma';
 import { trainingQueue } from '../jobs/trainingQueue';
 import { logger } from '../lib/logger';
@@ -43,14 +43,14 @@ router.post('/training/feedback', authMiddleware, async (req, res, next) => {
         chatLogId: messageId,
         helpful,
         feedback,
-        userId: (req as any).userId!,
+        userId: (req as AuthRequest).user.id,
       },
     });
 
     logger.info('Feedback received', {
       messageId,
       helpful,
-      userId: (req as any).userId,
+      userId: (req as AuthRequest).user.id,
     });
 
     // 否定的フィードバックの場合、改善ジョブを投入
@@ -82,7 +82,16 @@ router.get(
     try {
       const { widgetId, startDate, endDate } = req.query;
 
-      const where: Record<string, any> = {};
+      interface WhereClause {
+        chatLog?: {
+          widgetId: string;
+        };
+        createdAt?: {
+          gte?: Date;
+          lte?: Date;
+        };
+      }
+      const where: WhereClause = {};
 
       if (widgetId) {
         where.chatLog = {
