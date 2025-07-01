@@ -5,7 +5,7 @@ import { EXPRESS_API } from '@/app/_config/api';
 import { fetchGet } from '@/app/_utils/fetcher';
 
 // GET /api/bff/organizations - Get user's organizations
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const cookieStore = await cookies();
     const authToken = cookieStore.get('auth-token')?.value;

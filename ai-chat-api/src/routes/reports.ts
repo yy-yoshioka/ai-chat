@@ -4,6 +4,7 @@ import { metricsMiddleware } from '../middleware/metrics';
 import { prisma } from '../lib/prisma';
 import { parse } from 'json2csv';
 import { Prisma } from '@prisma/client';
+import { exportReports } from '../services/reportService';
 
 const router = Router();
 
@@ -218,6 +219,86 @@ router.get('/csv', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Reports CSV error:', error);
     res.status(500).json({ error: 'Failed to generate CSV' });
+  }
+});
+
+// POST /reports/export - Export multiple report types
+router.post('/export', async (req: Request, res: Response) => {
+  try {
+    const { format, reportTypes, startDate, endDate } = req.body;
+
+    // Validate input
+    if (!format || !['csv', 'pdf'].includes(format)) {
+      return res
+        .status(400)
+        .json({ error: 'Invalid format. Must be csv or pdf' });
+    }
+
+    if (
+      !reportTypes ||
+      !Array.isArray(reportTypes) ||
+      reportTypes.length === 0
+    ) {
+      return res
+        .status(400)
+        .json({ error: 'At least one report type must be selected' });
+    }
+
+    const validReportTypes = [
+      'chat_sessions',
+      'user_analytics',
+      'satisfaction',
+      'unresolved',
+      'usage_summary',
+    ];
+    const invalidTypes = reportTypes.filter(
+      (type) => !validReportTypes.includes(type)
+    );
+    if (invalidTypes.length > 0) {
+      return res
+        .status(400)
+        .json({ error: `Invalid report types: ${invalidTypes.join(', ')}` });
+    }
+
+    // Get user's organization
+    const user = await prisma.user.findUnique({
+      where: { id: req.user!.id },
+      select: { organizationId: true },
+    });
+
+    if (!user?.organizationId) {
+      return res
+        .status(403)
+        .json({ error: 'User must belong to an organization' });
+    }
+
+    // Generate the report
+    const buffer = await exportReports({
+      format,
+      reportTypes,
+      startDate: startDate ? new Date(startDate) : undefined,
+      endDate: endDate ? new Date(endDate) : undefined,
+      organizationId: user.organizationId,
+    });
+
+    // Set appropriate headers
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename = `report-export-${timestamp}.${format}`;
+
+    if (format === 'csv') {
+      res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    } else {
+      res.setHeader('Content-Type', 'application/pdf');
+    }
+
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Length', buffer.length.toString());
+
+    // Send the file
+    res.send(buffer);
+  } catch (error) {
+    console.error('Report export error:', error);
+    res.status(500).json({ error: 'Failed to export reports' });
   }
 });
 

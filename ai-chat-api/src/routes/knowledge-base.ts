@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, RequestHandler } from 'express';
 import multer from 'multer';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { OpenAI } from 'openai';
@@ -52,7 +52,7 @@ router.post(
   '/knowledge-base/upload',
   authMiddleware,
   requireOrganizationAccess,
-  upload.single('file') as any,
+  upload.single('file') as RequestHandler,
   async (req: OrganizationRequest, res, next) => {
     try {
       const { widgetId, description } = req.body;
