@@ -5,7 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import type { CreateWebhookInput, UpdateWebhookInput, WebhookEventType } from '@/app/_schemas/webhooks';
+import type {
+  CreateWebhookInput,
+  UpdateWebhookInput,
+  WebhookEventType,
+} from '@/app/_schemas/webhooks';
 import { webhookEventTypes } from '@/app/_schemas/webhooks';
 
 interface WebhookFormProps {
@@ -100,10 +104,7 @@ export function WebhookForm({ initialData, onSubmit, onCancel, isLoading }: Webh
               <p className="text-sm font-medium text-gray-700 mb-2">{groupName}</p>
               <div className="space-y-2">
                 {events.map((event) => (
-                  <label
-                    key={event}
-                    className="flex items-center space-x-2 cursor-pointer"
-                  >
+                  <label key={event} className="flex items-center space-x-2 cursor-pointer">
                     <Checkbox
                       checked={selectedEvents.has(event)}
                       onCheckedChange={() => toggleEvent(event)}
@@ -151,10 +152,7 @@ export function WebhookForm({ initialData, onSubmit, onCancel, isLoading }: Webh
         <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
           キャンセル
         </Button>
-        <Button 
-          type="submit" 
-          disabled={isLoading || selectedEvents.size === 0}
-        >
+        <Button type="submit" disabled={isLoading || selectedEvents.size === 0}>
           {isLoading ? '保存中...' : '保存'}
         </Button>
       </div>

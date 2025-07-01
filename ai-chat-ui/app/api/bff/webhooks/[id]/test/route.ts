@@ -4,10 +4,7 @@ import { getAuthTokenFromCookie } from '@/app/_utils/auth-utils';
 import { EXPRESS_API } from '@/app/_config/api';
 
 // POST /api/bff/webhooks/[id]/test - Test webhook
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const authToken = getAuthTokenFromCookie();
     if (!authToken) {

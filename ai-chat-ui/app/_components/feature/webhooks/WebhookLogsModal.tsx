@@ -16,11 +16,11 @@ interface WebhookLogsModalProps {
   onClose: () => void;
 }
 
-export function WebhookLogsModal({ 
-  webhookId, 
+export function WebhookLogsModal({
+  webhookId,
   webhookName,
-  isOpen, 
-  onClose 
+  isOpen,
+  onClose,
 }: WebhookLogsModalProps) {
   const [statusFilter, setStatusFilter] = useState<WebhookLogStatus | undefined>();
   const { logs, isLoading, refetch } = useWebhookLogs(webhookId, { status: statusFilter });
@@ -51,19 +51,12 @@ export function WebhookLogsModal({
       pending: '保留中',
     };
 
-    return (
-      <Badge variant={variants[status]}>
-        {labels[status]}
-      </Badge>
-    );
+    return <Badge variant={variants[status]}>{labels[status]}</Badge>;
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div 
-        className="absolute inset-0 bg-black bg-opacity-50"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose} />
       <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden m-4">
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
           <div>
@@ -71,11 +64,7 @@ export function WebhookLogsModal({
             <p className="text-sm text-gray-600">{webhookName}</p>
           </div>
           <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => refetch()}
-            >
+            <Button variant="outline" size="sm" onClick={() => refetch()}>
               <RefreshCw className="h-4 w-4 mr-2" />
               更新
             </Button>
@@ -125,9 +114,7 @@ export function WebhookLogsModal({
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
             </div>
           ) : logs.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              ログがありません
-            </div>
+            <div className="text-center py-8 text-gray-500">ログがありません</div>
           ) : (
             <div className="space-y-4 max-h-[60vh] overflow-y-auto">
               {logs.map((log) => (
@@ -139,23 +126,19 @@ export function WebhookLogsModal({
                       {getStatusBadge(log.status)}
                     </div>
                     <span className="text-sm text-gray-500">
-                      {formatDistanceToNow(new Date(log.createdAt), { 
+                      {formatDistanceToNow(new Date(log.createdAt), {
                         addSuffix: true,
-                        locale: ja 
+                        locale: ja,
                       })}
                     </span>
                   </div>
 
                   {log.statusCode && (
-                    <p className="text-sm text-gray-600 mb-2">
-                      ステータスコード: {log.statusCode}
-                    </p>
+                    <p className="text-sm text-gray-600 mb-2">ステータスコード: {log.statusCode}</p>
                   )}
 
                   {log.attempts > 1 && (
-                    <p className="text-sm text-gray-600 mb-2">
-                      試行回数: {log.attempts}
-                    </p>
+                    <p className="text-sm text-gray-600 mb-2">試行回数: {log.attempts}</p>
                   )}
 
                   {log.error && (
@@ -173,7 +156,7 @@ export function WebhookLogsModal({
                       <pre className="text-xs bg-gray-50 p-2 rounded overflow-x-auto">
                         {JSON.stringify(log.payload, null, 2)}
                       </pre>
-                      
+
                       {log.response && (
                         <>
                           <p className="text-xs text-gray-600 mb-1 mt-2">レスポンス:</p>

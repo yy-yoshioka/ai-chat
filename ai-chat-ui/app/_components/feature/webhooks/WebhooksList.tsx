@@ -14,15 +14,9 @@ export function WebhooksList() {
   const [selectedWebhook, setSelectedWebhook] = useState<string | null>(null);
   const [selectedWebhookName, setSelectedWebhookName] = useState('');
   const [showLogsModal, setShowLogsModal] = useState(false);
-  
-  const { 
-    webhooks, 
-    isLoading, 
-    createWebhook, 
-    updateWebhook, 
-    deleteWebhook,
-    testWebhook 
-  } = useWebhooks();
+
+  const { webhooks, isLoading, createWebhook, updateWebhook, deleteWebhook, testWebhook } =
+    useWebhooks();
 
   const handleEdit = (webhookId: string) => {
     // TODO: Implement edit modal
@@ -59,9 +53,7 @@ export function WebhooksList() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold">Webhook管理</h2>
-            <p className="text-gray-600 mt-1">
-              イベント発生時に外部サービスへ通知を送信します
-            </p>
+            <p className="text-gray-600 mt-1">イベント発生時に外部サービスへ通知を送信します</p>
           </div>
           <Button onClick={() => setShowCreateModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
@@ -74,9 +66,7 @@ export function WebhooksList() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
               <Webhook className="h-8 w-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Webhookが登録されていません
-            </h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Webhookが登録されていません</h3>
             <p className="text-gray-600 mb-4">
               Webhookを作成して、イベントを外部サービスに通知しましょう
             </p>

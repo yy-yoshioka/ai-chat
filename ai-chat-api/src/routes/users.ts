@@ -265,24 +265,26 @@ router.put('/:id', async (req: Request, res: Response) => {
     }
 
     // Trigger webhook for user.updated event
-    webhookService.triggerWebhook(requestingUser.organizationId, 'user.updated', {
-      userId: updatedUser.id,
-      email: updatedUser.email,
-      name: updatedUser.name,
-      role: responseRole,
-      updatedBy: {
-        id: userId,
-        email: req.user!.email,
-      },
-      changes: {
-        name: name !== undefined,
-        email: email !== undefined,
-        role: role !== undefined,
-      },
-      timestamp: new Date().toISOString(),
-    }).catch((error) => {
-      console.error('Failed to trigger webhook:', error);
-    });
+    webhookService
+      .triggerWebhook(requestingUser.organizationId, 'user.updated', {
+        userId: updatedUser.id,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        role: responseRole,
+        updatedBy: {
+          id: userId,
+          email: req.user!.email,
+        },
+        changes: {
+          name: name !== undefined,
+          email: email !== undefined,
+          role: role !== undefined,
+        },
+        timestamp: new Date().toISOString(),
+      })
+      .catch((error) => {
+        console.error('Failed to trigger webhook:', error);
+      });
 
     res.json({
       id: updatedUser.id,
@@ -431,19 +433,21 @@ router.post('/invite', async (req: Request, res: Response) => {
     // 3. Handle the invite acceptance flow
 
     // Trigger webhook for user.created event
-    webhookService.triggerWebhook(requestingUser.organizationId, 'user.created', {
-      userId: newUser.id,
-      email: newUser.email,
-      name: name || null,
-      role: role,
-      invitedBy: {
-        id: userId,
-        email: requestingUser.email || req.user!.email,
-      },
-      timestamp: new Date().toISOString(),
-    }).catch((error) => {
-      console.error('Failed to trigger webhook:', error);
-    });
+    webhookService
+      .triggerWebhook(requestingUser.organizationId, 'user.created', {
+        userId: newUser.id,
+        email: newUser.email,
+        name: name || null,
+        role: role,
+        invitedBy: {
+          id: userId,
+          email: requestingUser.email || req.user!.email,
+        },
+        timestamp: new Date().toISOString(),
+      })
+      .catch((error) => {
+        console.error('Failed to trigger webhook:', error);
+      });
 
     res.json({
       success: true,

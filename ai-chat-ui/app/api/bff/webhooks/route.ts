@@ -33,21 +33,14 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    
+
     // Validate request body
     const validation = validateRequest(createWebhookSchema, body);
     if (!validation.success) {
-      return NextResponse.json(
-        { error: validation.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
-    const data = await posterWithAuth(
-      `${EXPRESS_API}/api/webhooks`,
-      validation.data,
-      authToken
-    );
+    const data = await posterWithAuth(`${EXPRESS_API}/api/webhooks`, validation.data, authToken);
 
     return NextResponse.json(data, { status: 201 });
   } catch (error: any) {

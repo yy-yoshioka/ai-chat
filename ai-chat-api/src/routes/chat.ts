@@ -272,16 +272,18 @@ async function handleChatRequest(
       });
 
       if (widget?.company?.organizationId) {
-        webhookService.triggerWebhook(widget.company.organizationId, 'chat.created', {
-          chatId: chatLog.id,
-          widgetId: req.widget.id,
-          widgetName: req.widget.name,
-          question: message,
-          answer,
-          timestamp: new Date().toISOString(),
-        }).catch((error) => {
-          console.error('Failed to trigger webhook:', error);
-        });
+        webhookService
+          .triggerWebhook(widget.company.organizationId, 'chat.created', {
+            chatId: chatLog.id,
+            widgetId: req.widget.id,
+            widgetName: req.widget.name,
+            question: message,
+            answer,
+            timestamp: new Date().toISOString(),
+          })
+          .catch((error) => {
+            console.error('Failed to trigger webhook:', error);
+          });
       }
     }
 

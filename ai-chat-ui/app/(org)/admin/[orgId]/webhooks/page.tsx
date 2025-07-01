@@ -3,11 +3,7 @@ import OrgAdminGuard from '@/app/_components/guard/OrgAdminGuard';
 import { PageHeader } from '@/app/_components/common/PageHeader';
 import { WebhooksList } from '@/app/_components/feature/webhooks/WebhooksList';
 
-export default async function WebhooksPage({
-  params,
-}: {
-  params: { orgId: string };
-}) {
+export default async function WebhooksPage({ params }: { params: { orgId: string } }) {
   return (
     <OrgAdminGuard>
       <AdminLayout organizationSlug={params.orgId}>

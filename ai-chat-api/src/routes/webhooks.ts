@@ -66,7 +66,9 @@ router.post('/', requireAuth, requireOrgAccess, async (req, res) => {
       'knowledge_base.deleted',
     ];
 
-    const invalidEvents = events.filter((e: string) => !validEvents.includes(e));
+    const invalidEvents = events.filter(
+      (e: string) => !validEvents.includes(e)
+    );
     if (invalidEvents.length > 0) {
       return res.status(400).json({
         error: `Invalid events: ${invalidEvents.join(', ')}`,
@@ -125,59 +127,49 @@ router.delete('/:id', requireAuth, requireOrgAccess, async (req, res) => {
 });
 
 // Get webhook logs
-router.get(
-  '/:id/logs',
-  requireAuth,
-  requireOrgAccess,
-  async (req, res) => {
-    try {
-      const { status, event, startDate, endDate, limit } = req.query;
+router.get('/:id/logs', requireAuth, requireOrgAccess, async (req, res) => {
+  try {
+    const { status, event, startDate, endDate, limit } = req.query;
 
-      const logs = await webhookService.getWebhookLogs(
-        req.params.id,
-        req.organizationId!,
-        {
-          status: status as string,
-          event: event as string,
-          startDate: startDate ? new Date(startDate as string) : undefined,
-          endDate: endDate ? new Date(endDate as string) : undefined,
-          limit: limit ? parseInt(limit as string) : undefined,
-        }
-      );
-
-      res.json(logs);
-    } catch (error: any) {
-      if (error.message === 'Webhook not found or access denied') {
-        res.status(404).json({ error: 'Webhook not found' });
-      } else {
-        logger.error('Failed to fetch webhook logs', error);
-        res.status(500).json({ error: 'Failed to fetch webhook logs' });
+    const logs = await webhookService.getWebhookLogs(
+      req.params.id,
+      req.organizationId!,
+      {
+        status: status as string,
+        event: event as string,
+        startDate: startDate ? new Date(startDate as string) : undefined,
+        endDate: endDate ? new Date(endDate as string) : undefined,
+        limit: limit ? parseInt(limit as string) : undefined,
       }
+    );
+
+    res.json(logs);
+  } catch (error: any) {
+    if (error.message === 'Webhook not found or access denied') {
+      res.status(404).json({ error: 'Webhook not found' });
+    } else {
+      logger.error('Failed to fetch webhook logs', error);
+      res.status(500).json({ error: 'Failed to fetch webhook logs' });
     }
   }
-);
+});
 
 // Test webhook
-router.post(
-  '/:id/test',
-  requireAuth,
-  requireOrgAccess,
-  async (req, res) => {
-    try {
-      const log = await webhookService.testWebhook(
-        req.params.id,
-        req.organizationId!
-      );
-      res.json(log);
-    } catch (error: any) {
-      if (error.message === 'Webhook not found') {
-        res.status(404).json({ error: 'Webhook not found' });
-      } else {
-        logger.error('Failed to test webhook', error);
-        res.status(500).json({ error: 'Failed to test webhook' });
-      }
+router.post('/:id/test', requireAuth, requireOrgAccess, async (req, res) => {
+  try {
+    const log = await webhookService.testWebhook(
+      req.params.id,
+      req.organizationId!
+    );
+    res.json(log);
+  } catch (error: any) {
+    if (error.message === 'Webhook not found') {
+      res.status(404).json({ error: 'Webhook not found' });
+    } else {
+      logger.error('Failed to test webhook', error);
+      res.status(500).json({ error: 'Failed to test webhook' });
     }
   }
-);
+});
 
 export default router;

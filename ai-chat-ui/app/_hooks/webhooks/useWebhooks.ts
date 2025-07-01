@@ -8,11 +8,7 @@ import {
   deleterWithAuth,
 } from '@/app/_utils/fetcher';
 import { getAuthTokenFromCookie } from '@/app/_utils/auth-utils';
-import type {
-  Webhook,
-  CreateWebhookInput,
-  UpdateWebhookInput,
-} from '@/app/_schemas/webhooks';
+import type { Webhook, CreateWebhookInput, UpdateWebhookInput } from '@/app/_schemas/webhooks';
 
 export function useWebhooks() {
   const { toast } = useToast();
@@ -23,19 +19,14 @@ export function useWebhooks() {
     error,
     isLoading,
     mutate,
-  } = useSWR<Webhook[]>(
-    authToken ? '/api/bff/webhooks' : null,
-    (url) => fetcherWithAuth(url, authToken!)
+  } = useSWR<Webhook[]>(authToken ? '/api/bff/webhooks' : null, (url) =>
+    fetcherWithAuth(url, authToken!)
   );
 
   const createWebhook = useCallback(
     async (data: CreateWebhookInput) => {
       try {
-        const newWebhook = await posterWithAuth(
-          '/api/bff/webhooks',
-          data,
-          authToken!
-        );
+        const newWebhook = await posterWithAuth('/api/bff/webhooks', data, authToken!);
 
         await mutate();
 
@@ -60,11 +51,7 @@ export function useWebhooks() {
   const updateWebhook = useCallback(
     async (id: string, data: UpdateWebhookInput) => {
       try {
-        const updatedWebhook = await updaterWithAuth(
-          `/api/bff/webhooks/${id}`,
-          data,
-          authToken!
-        );
+        const updatedWebhook = await updaterWithAuth(`/api/bff/webhooks/${id}`, data, authToken!);
 
         await mutate();
 
@@ -112,17 +99,14 @@ export function useWebhooks() {
   const testWebhook = useCallback(
     async (id: string) => {
       try {
-        const result = await posterWithAuth(
-          `/api/bff/webhooks/${id}/test`,
-          {},
-          authToken!
-        );
+        const result = await posterWithAuth(`/api/bff/webhooks/${id}/test`, {}, authToken!);
 
         toast({
           title: 'テストWebhookを送信しました',
-          description: result.status === 'success' 
-            ? 'Webhookが正常に送信されました' 
-            : 'Webhookの送信に失敗しました',
+          description:
+            result.status === 'success'
+              ? 'Webhookが正常に送信されました'
+              : 'Webhookの送信に失敗しました',
           variant: result.status === 'success' ? 'default' : 'destructive',
         });
 

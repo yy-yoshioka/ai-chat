@@ -1,29 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  fetcherWithAuth,
-  updaterWithAuth,
-  deleterWithAuth,
-} from '@/app/_utils/fetcher';
+import { fetcherWithAuth, updaterWithAuth, deleterWithAuth } from '@/app/_utils/fetcher';
 import { getAuthTokenFromCookie } from '@/app/_utils/auth-utils';
 import { EXPRESS_API } from '@/app/_config/api';
 import { updateWebhookSchema } from '@/app/_schemas/webhooks';
 import { validateRequest } from '@/app/_utils/validation';
 
 // GET /api/bff/webhooks/[id] - Get single webhook
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const authToken = getAuthTokenFromCookie();
     if (!authToken) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const data = await fetcherWithAuth(
-      `${EXPRESS_API}/api/webhooks/${params.id}`,
-      authToken
-    );
+    const data = await fetcherWithAuth(`${EXPRESS_API}/api/webhooks/${params.id}`, authToken);
     return NextResponse.json(data);
   } catch (error: any) {
     console.error('Failed to fetch webhook:', error);
@@ -35,10 +25,7 @@ export async function GET(
 }
 
 // PUT /api/bff/webhooks/[id] - Update webhook
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const authToken = getAuthTokenFromCookie();
     if (!authToken) {
@@ -46,14 +33,11 @@ export async function PUT(
     }
 
     const body = await request.json();
-    
+
     // Validate request body
     const validation = validateRequest(updateWebhookSchema, body);
     if (!validation.success) {
-      return NextResponse.json(
-        { error: validation.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
     const data = await updaterWithAuth(
@@ -73,20 +57,14 @@ export async function PUT(
 }
 
 // DELETE /api/bff/webhooks/[id] - Delete webhook
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const authToken = getAuthTokenFromCookie();
     if (!authToken) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    await deleterWithAuth(
-      `${EXPRESS_API}/api/webhooks/${params.id}`,
-      authToken
-    );
+    await deleterWithAuth(`${EXPRESS_API}/api/webhooks/${params.id}`, authToken);
 
     return new NextResponse(null, { status: 204 });
   } catch (error: any) {

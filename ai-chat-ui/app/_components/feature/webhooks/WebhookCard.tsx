@@ -5,16 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { 
-  Webhook, 
-  Send, 
-  Clock, 
+import {
+  Webhook,
+  Send,
+  Clock,
   AlertCircle,
   MoreVertical,
   Edit,
   Trash2,
   TestTube,
-  Activity
+  Activity,
 } from 'lucide-react';
 import type { Webhook as WebhookType } from '@/app/_schemas/webhooks';
 import { formatDistanceToNow } from 'date-fns';
@@ -54,7 +54,7 @@ export function WebhookCard({
               </Badge>
             </div>
             <p className="text-sm text-gray-600 mt-1">{webhook.url}</p>
-            
+
             <div className="flex flex-wrap gap-2 mt-3">
               {webhook.events.map((event) => (
                 <Badge key={event} variant="outline" className="text-xs">
@@ -75,9 +75,10 @@ export function WebhookCard({
             </div>
 
             <p className="text-xs text-gray-400 mt-2">
-              作成日: {formatDistanceToNow(new Date(webhook.createdAt), { 
+              作成日:{' '}
+              {formatDistanceToNow(new Date(webhook.createdAt), {
                 addSuffix: true,
-                locale: ja 
+                locale: ja,
               })}
             </p>
           </div>
@@ -89,22 +90,15 @@ export function WebhookCard({
             onCheckedChange={onToggle}
             aria-label="Webhookの有効/無効を切り替え"
           />
-          
+
           <div className="relative">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowMenu(!showMenu)}
-            >
+            <Button variant="ghost" size="icon" onClick={() => setShowMenu(!showMenu)}>
               <MoreVertical className="h-4 w-4" />
             </Button>
 
             {showMenu && (
               <>
-                <div
-                  className="fixed inset-0"
-                  onClick={() => setShowMenu(false)}
-                />
+                <div className="fixed inset-0" onClick={() => setShowMenu(false)} />
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border">
                   <button
                     onClick={() => {
