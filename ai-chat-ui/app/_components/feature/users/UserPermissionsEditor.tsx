@@ -93,7 +93,7 @@ export function UserPermissionsEditor({
       });
 
       onUpdate();
-    } catch (error) {
+    } catch {
       toast({
         title: 'エラー',
         description: '権限の更新に失敗しました',

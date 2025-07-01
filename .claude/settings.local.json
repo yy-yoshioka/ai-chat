@@ -45,7 +45,9 @@
       "Bash(gh auth:*)",
       "Bash(DATABASE_URL=\"postgresql://postgres:password@localhost:5432/ai_chat_db?schema=public\" yarn prisma migrate dev --name add_message_feedback)",
       "Bash(cp:*)",
-      "Bash(yarn prisma migrate:*)"
+      "Bash(yarn prisma migrate:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:postgres@localhost:5432/ai_chat_db?schema=public\" yarn prisma migrate dev --name add_auth_tokens)",
+      "Bash(bash:*)"
     ],
     "deny": [],
     "autoConfirm": true

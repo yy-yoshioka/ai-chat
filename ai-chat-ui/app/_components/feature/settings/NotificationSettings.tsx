@@ -1,93 +1,155 @@
+'use client';
+
 import React, { useState } from 'react';
+import { Bell, Mail, MessageSquare, AlertCircle, TrendingUp } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+import { useNotificationSettings } from '@/_hooks/settings/useSettings';
 
 interface NotificationSettingsProps {
   orgId: string;
 }
 
+const NOTIFICATION_TYPES = [
+  {
+    id: 'new_chat',
+    name: '新しいチャット',
+    description: '新しいチャットセッションが開始されたとき',
+    icon: MessageSquare,
+    category: 'activity',
+  },
+  {
+    id: 'unresolved_question',
+    name: '未解決の質問',
+    description: 'AIが回答できない質問があったとき',
+    icon: AlertCircle,
+    category: 'alerts',
+  },
+  {
+    id: 'usage_limit',
+    name: '使用量の上限',
+    description: '月間使用量が上限に近づいたとき',
+    icon: TrendingUp,
+    category: 'billing',
+  },
+  {
+    id: 'weekly_report',
+    name: '週次レポート',
+    description: '毎週月曜日にサマリーレポートを送信',
+    icon: Mail,
+    category: 'reports',
+  },
+];
+
 export function NotificationSettings({ orgId }: NotificationSettingsProps) {
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const [slackNotifications, setSlackNotifications] = useState(false);
-  const [slackWebhook, setSlackWebhook] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { settings, isLoading, updateSettings } = useNotificationSettings(orgId);
+  const [localSettings, setLocalSettings] = useState(settings || {});
+  const [isSaving, setIsSaving] = useState(false);
+  const { toast } = useToast();
 
-  const testSlackWebhook = async () => {
-    if (!slackWebhook) {
-      alert('Slack Webhook URLを入力してください');
-      return;
-    }
-
-    console.log('Testing Slack webhook for org:', orgId);
-    // TODO: Implement Slack webhook test
-    alert('Slack Webhook test functionality will be implemented');
+  const toggleNotification = (notificationId: string, channel: 'email' | 'app') => {
+    setLocalSettings((prev) => ({
+      ...prev,
+      [notificationId]: {
+        ...prev[notificationId],
+        [channel]: !prev[notificationId]?.[channel],
+      },
+    }));
   };
 
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await updateSettings(localSettings);
+      toast({
+        title: '設定を保存しました',
+      });
+    } catch {
+      toast({
+        title: 'エラー',
+        description: '設定の保存に失敗しました',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // カテゴリ別にグループ化
+  const notificationsByCategory = NOTIFICATION_TYPES.reduce(
+    (acc, notif) => {
+      if (!acc[notif.category]) {
+        acc[notif.category] = [];
+      }
+      acc[notif.category].push(notif);
+      return acc;
+    },
+    {} as Record<string, typeof NOTIFICATION_TYPES>
+  );
+
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-sm border p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">通知設定</h3>
-
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Bell className="h-5 w-5" />
+            通知設定
+          </div>
+          <Button size="sm" onClick={handleSave} disabled={isSaving}>
+            保存
+          </Button>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
         <div className="space-y-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-sm font-medium text-gray-900">メール通知</h4>
-                <p className="text-sm text-gray-500">新しいチャットやエラーの通知</p>
+          {Object.entries(notificationsByCategory).map(([category, notifications]) => (
+            <div key={category}>
+              <h3 className="text-sm font-medium text-gray-700 mb-3 capitalize">
+                {category === 'activity' && 'アクティビティ'}
+                {category === 'alerts' && 'アラート'}
+                {category === 'billing' && '請求'}
+                {category === 'reports' && 'レポート'}
+              </h3>
+              <div className="space-y-4">
+                {notifications.map((notification) => {
+                  const Icon = notification.icon;
+                  return (
+                    <div
+                      key={notification.id}
+                      className="flex items-start gap-4 p-3 border rounded-lg"
+                    >
+                      <Icon className="h-5 w-5 text-gray-400 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="font-medium">{notification.name}</p>
+                        <p className="text-sm text-gray-500">{notification.description}</p>
+                        <div className="flex items-center gap-6 mt-2">
+                          <label className="flex items-center gap-2">
+                            <Switch
+                              checked={localSettings[notification.id]?.email || false}
+                              onCheckedChange={() => toggleNotification(notification.id, 'email')}
+                            />
+                            <span className="text-sm">メール</span>
+                          </label>
+                          <label className="flex items-center gap-2">
+                            <Switch
+                              checked={localSettings[notification.id]?.app || false}
+                              onCheckedChange={() => toggleNotification(notification.id, 'app')}
+                            />
+                            <span className="text-sm">アプリ内</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={emailNotifications}
-                  onChange={(e) => setEmailNotifications(e.target.checked)}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
             </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-sm font-medium text-gray-900">Slack通知</h4>
-                <p className="text-sm text-gray-500">Slackチャンネルへの通知</p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={slackNotifications}
-                  onChange={(e) => setSlackNotifications(e.target.checked)}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Slack Webhook URL
-            </label>
-            <div className="flex items-center space-x-3">
-              <input
-                type="url"
-                value={slackWebhook}
-                onChange={(e) => setSlackWebhook(e.target.value)}
-                placeholder="https://hooks.slack.com/services/..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-              <button
-                onClick={testSlackWebhook}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                テスト
-              </button>
-            </div>
-          </div>
-
-          <div className="flex justify-end">
-            <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-              保存
-            </button>
-          </div>
+          ))}
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

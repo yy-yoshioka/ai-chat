@@ -540,3 +540,65 @@ AI Chat チーム
     `,
   };
 }
+
+// Section-5: Password Reset Template
+export const passwordResetTemplate = (resetUrl: string) => ({
+  subject: 'パスワードリセットのご案内',
+  html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2>パスワードリセット</h2>
+      <p>パスワードリセットのリクエストを受け付けました。</p>
+      <p>以下のボタンをクリックして、新しいパスワードを設定してください：</p>
+      <div style="margin: 30px 0;">
+        <a href="${resetUrl}" 
+           style="background-color: #4F46E5; color: white; padding: 12px 24px; 
+                  text-decoration: none; border-radius: 6px; display: inline-block;">
+          パスワードをリセット
+        </a>
+      </div>
+      <p>このリンクは24時間有効です。</p>
+      <p>心当たりがない場合は、このメールを無視してください。</p>
+    </div>
+  `,
+  text: `
+    パスワードリセット
+    
+    パスワードリセットのリクエストを受け付けました。
+    以下のURLから新しいパスワードを設定してください：
+    
+    ${resetUrl}
+    
+    このリンクは24時間有効です。
+    心当たりがない場合は、このメールを無視してください。
+  `,
+});
+
+// Section-5: Email Verification Template
+export const emailVerificationTemplate = (verifyUrl: string) => ({
+  subject: 'メールアドレスの確認',
+  html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2>メールアドレスの確認</h2>
+      <p>ご登録ありがとうございます。</p>
+      <p>以下のボタンをクリックして、メールアドレスを確認してください：</p>
+      <div style="margin: 30px 0;">
+        <a href="${verifyUrl}" 
+           style="background-color: #4F46E5; color: white; padding: 12px 24px; 
+                  text-decoration: none; border-radius: 6px; display: inline-block;">
+          メールアドレスを確認
+        </a>
+      </div>
+      <p>このリンクは72時間有効です。</p>
+    </div>
+  `,
+  text: `
+    メールアドレスの確認
+    
+    ご登録ありがとうございます。
+    以下のURLからメールアドレスを確認してください：
+    
+    ${verifyUrl}
+    
+    このリンクは72時間有効です。
+  `,
+});

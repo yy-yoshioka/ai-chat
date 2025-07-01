@@ -123,6 +123,8 @@ model User {
   chatLogs        ChatLog[]
   events          Event[]  // Event tracking
   messageFeedback MessageFeedback[]
+  passwordResets  PasswordReset[]
+  emailVerifications EmailVerification[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -345,4 +347,33 @@ model MessageFeedback {
   @@index([userId])
   @@index([helpful])
   @@map("message_feedback")
+}
+
+// Section-5: Authentication Flow Models
+model PasswordReset {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([token])
+  @@map("password_resets")
+}
+
+model EmailVerification {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([token])
+  @@map("email_verifications")
 }
