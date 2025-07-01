@@ -19,7 +19,7 @@ export function StatusDashboard() {
 
   // Calculate overall system status
   const overallStatus = calculateOverallStatus(status);
-  const activeIncidents = incidents.filter(i => i.status !== 'resolved');
+  const activeIncidents = incidents.filter((i) => i.status !== 'resolved');
 
   return (
     <div className="space-y-6">
@@ -29,9 +29,7 @@ export function StatusDashboard() {
           <div className="flex items-center space-x-3">
             {getStatusIcon(overallStatus)}
             <div>
-              <h2 className="text-lg font-semibold">
-                {getStatusMessage(overallStatus)}
-              </h2>
+              <h2 className="text-lg font-semibold">{getStatusMessage(overallStatus)}</h2>
               <p className="text-sm opacity-90">
                 {activeIncidents.length > 0
                   ? `${activeIncidents.length} active incident${activeIncidents.length > 1 ? 's' : ''}`
@@ -73,9 +71,9 @@ export function StatusDashboard() {
       {incidents.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold mb-4">Incident History</h3>
-          <IncidentList 
-            incidents={incidents.filter(i => i.status === 'resolved').slice(0, 5)} 
-            showResolved 
+          <IncidentList
+            incidents={incidents.filter((i) => i.status === 'resolved').slice(0, 5)}
+            showResolved
           />
         </div>
       )}
@@ -104,8 +102,8 @@ function StatusDashboardSkeleton() {
 function calculateOverallStatus(status: any): string {
   if (!status) return 'unknown';
   const statuses = Object.values(status).map((s: any) => s.status);
-  if (statuses.some(s => s === 'unhealthy')) return 'unhealthy';
-  if (statuses.some(s => s === 'degraded')) return 'degraded';
+  if (statuses.some((s) => s === 'unhealthy')) return 'unhealthy';
+  if (statuses.some((s) => s === 'degraded')) return 'degraded';
   return 'healthy';
 }
 

@@ -6,14 +6,10 @@ import { PublicStatus } from '@/app/_schemas/system-health';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export const useStatus = () => {
-  const { data, error, mutate } = useSWR<PublicStatus>(
-    '/api/bff/status',
-    fetcher,
-    {
-      refreshInterval: 30000, // Refresh every 30 seconds
-      revalidateOnFocus: true,
-    }
-  );
+  const { data, error, mutate } = useSWR<PublicStatus>('/api/bff/status', fetcher, {
+    refreshInterval: 30000, // Refresh every 30 seconds
+    revalidateOnFocus: true,
+  });
 
   return {
     status: data?.status,

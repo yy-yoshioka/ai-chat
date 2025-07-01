@@ -33,23 +33,28 @@ initializeWebSocket(httpServer);
 const server = httpServer.listen(PORT, HOST, () => {
   console.log(`🚀 Server is running at http://localhost:${PORT}`);
   console.log(`🔌 WebSocket server initialized`);
-  
+
   // Initialize telemetry
   initializeTelemetry();
-  
+
   // Start health monitoring
-  const healthCheckInterval = parseInt(process.env.HEALTH_CHECK_INTERVAL || '30000');
+  const healthCheckInterval = parseInt(
+    process.env.HEALTH_CHECK_INTERVAL || '30000'
+  );
   healthMonitorService.startMonitoring(healthCheckInterval);
   alertService.startMonitoring(60000); // Check alerts every minute
-  
+
   logger.info('System health monitoring started', { healthCheckInterval });
-  
+
   // Schedule cleanup of old metrics data
-  setInterval(() => {
-    healthMonitorService.cleanupOldData(7).catch((error) => {
-      logger.error('Failed to cleanup old metrics data', error);
-    });
-  }, 24 * 60 * 60 * 1000); // Run daily
+  setInterval(
+    () => {
+      healthMonitorService.cleanupOldData(7).catch((error) => {
+        logger.error('Failed to cleanup old metrics data', error);
+      });
+    },
+    24 * 60 * 60 * 1000
+  ); // Run daily
 });
 
 server.on('error', (error) => {
@@ -59,11 +64,11 @@ server.on('error', (error) => {
 // Graceful shutdown
 process.on('SIGTERM', () => {
   logger.info('SIGTERM signal received: closing HTTP server');
-  
+
   // Stop monitoring
   healthMonitorService.stopMonitoring();
   alertService.stopMonitoring();
-  
+
   server.close(() => {
     logger.info('HTTP server closed');
     process.exit(0);

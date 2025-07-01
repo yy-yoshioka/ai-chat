@@ -5,7 +5,7 @@ import { EXPRESS_API } from '@/app/_config/api';
 export async function GET(request: NextRequest) {
   try {
     const response = await fetch(`${EXPRESS_API}/api/status/health`);
-    
+
     if (!response.ok && response.status !== 503) {
       throw new Error(`Health check failed: ${response.statusText}`);
     }
@@ -15,10 +15,10 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error('Health check failed:', error);
     return NextResponse.json(
-      { 
+      {
         status: 'unhealthy',
         timestamp: new Date().toISOString(),
-        error: error.message || 'Health check failed' 
+        error: error.message || 'Health check failed',
       },
       { status: 503 }
     );

@@ -4,14 +4,11 @@ import { getAuthTokenFromCookie } from '@/app/_utils/auth-utils';
 import { EXPRESS_API } from '@/app/_config/api';
 
 // GET /api/bff/status/incidents/[id] - Get specific incident
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // This endpoint is public, no auth required
     const response = await fetch(`${EXPRESS_API}/api/status/incidents/${params.id}`);
-    
+
     if (!response.ok) {
       throw new Error(`Failed to fetch incident: ${response.statusText}`);
     }

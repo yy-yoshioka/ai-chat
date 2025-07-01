@@ -38,18 +38,14 @@ export function IncidentList({ incidents, showResolved = false }: IncidentListPr
                 </div>
               </div>
               <div className="flex gap-2">
-                <Badge variant={getStatusVariant(incident.status)}>
-                  {incident.status}
-                </Badge>
-                <Badge variant="outline">
-                  {incident.severity}
-                </Badge>
+                <Badge variant={getStatusVariant(incident.status)}>{incident.status}</Badge>
+                <Badge variant="outline">{incident.severity}</Badge>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <p className="text-sm mb-3">{incident.description}</p>
-            
+
             {incident.affectedServices.length > 0 && (
               <div className="mb-3">
                 <span className="text-xs font-medium">Affected Services: </span>
@@ -71,9 +67,7 @@ export function IncidentList({ incidents, showResolved = false }: IncidentListPr
                         <Badge variant="outline" className="text-xs py-0">
                           {update.status}
                         </Badge>
-                        <span>
-                          {format(new Date(update.createdAt), 'MMM d, HH:mm')}
-                        </span>
+                        <span>{format(new Date(update.createdAt), 'MMM d, HH:mm')}</span>
                       </div>
                       <p className="mt-1">{update.message}</p>
                     </div>
@@ -110,7 +104,7 @@ function getSeverityBorder(severity: string): string {
 }
 
 function getSeverityIcon(severity: string) {
-  const className = "h-5 w-5 flex-shrink-0";
+  const className = 'h-5 w-5 flex-shrink-0';
   switch (severity) {
     case 'critical':
       return <AlertCircle className={`${className} text-red-600`} />;

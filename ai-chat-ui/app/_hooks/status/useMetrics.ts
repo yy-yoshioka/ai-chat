@@ -14,14 +14,14 @@ interface MetricsQuery {
 
 export const useMetrics = (query: MetricsQuery = {}) => {
   const authToken = getAuthTokenFromCookie();
-  
+
   // Build query string
   const params = new URLSearchParams();
   if (query.service) params.append('service', query.service);
   if (query.metricType) params.append('metricType', query.metricType);
   if (query.startDate) params.append('startDate', query.startDate.toISOString());
   if (query.endDate) params.append('endDate', query.endDate.toISOString());
-  
+
   const queryString = params.toString();
   const url = `/api/bff/status/metrics${queryString ? `?${queryString}` : ''}`;
 
@@ -47,27 +47,30 @@ export const useMetrics = (query: MetricsQuery = {}) => {
 
 function processMetricsForChart(metrics: SystemMetric[]) {
   // Group metrics by service and type
-  const grouped = metrics.reduce((acc, metric) => {
-    const key = `${metric.service}-${metric.metricType}`;
-    if (!acc[key]) {
-      acc[key] = {
-        service: metric.service,
-        metricType: metric.metricType,
-        unit: metric.unit,
-        data: [],
-      };
-    }
-    acc[key].data.push({
-      timestamp: metric.timestamp,
-      value: metric.value,
-    });
-    return acc;
-  }, {} as Record<string, any>);
+  const grouped = metrics.reduce(
+    (acc, metric) => {
+      const key = `${metric.service}-${metric.metricType}`;
+      if (!acc[key]) {
+        acc[key] = {
+          service: metric.service,
+          metricType: metric.metricType,
+          unit: metric.unit,
+          data: [],
+        };
+      }
+      acc[key].data.push({
+        timestamp: metric.timestamp,
+        value: metric.value,
+      });
+      return acc;
+    },
+    {} as Record<string, any>
+  );
 
   // Sort data points by timestamp
   Object.values(grouped).forEach((group: any) => {
-    group.data.sort((a: any, b: any) => 
-      new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    group.data.sort(
+      (a: any, b: any) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
   });
 

@@ -12,7 +12,9 @@ export function initializeTelemetry(): NodeSDK | null {
     const metricsEndpoint = process.env.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT;
 
     if (!metricsEndpoint) {
-      logger.info('OpenTelemetry metrics endpoint not configured, skipping initialization');
+      logger.info(
+        'OpenTelemetry metrics endpoint not configured, skipping initialization'
+      );
       return null;
     }
 
@@ -31,8 +33,10 @@ export function initializeTelemetry(): NodeSDK | null {
     // Configure resource
     const resource = new Resource({
       [SemanticResourceAttributes.SERVICE_NAME]: serviceName,
-      [SemanticResourceAttributes.SERVICE_VERSION]: process.env.npm_package_version || '1.0.0',
-      [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: process.env.NODE_ENV || 'development',
+      [SemanticResourceAttributes.SERVICE_VERSION]:
+        process.env.npm_package_version || '1.0.0',
+      [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]:
+        process.env.NODE_ENV || 'development',
     });
 
     // Initialize SDK
@@ -74,9 +78,12 @@ export function initializeTelemetry(): NodeSDK | null {
 
     // Handle graceful shutdown
     process.on('SIGTERM', () => {
-      sdk.shutdown()
+      sdk
+        .shutdown()
         .then(() => logger.info('OpenTelemetry terminated'))
-        .catch((error) => logger.error('Error shutting down OpenTelemetry', error));
+        .catch((error) =>
+          logger.error('Error shutting down OpenTelemetry', error)
+        );
     });
 
     return sdk;
@@ -149,6 +156,11 @@ export function recordMetric(
       metric.record(value, attributes);
     }
   } catch (error) {
-    logger.error('Failed to record metric', { error, metric, value, attributes });
+    logger.error('Failed to record metric', {
+      error,
+      metric,
+      value,
+      attributes,
+    });
   }
 }

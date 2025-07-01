@@ -11,11 +11,11 @@ interface ServiceStatusCardProps {
   responseTime?: number;
 }
 
-export function ServiceStatusCard({ 
-  service, 
-  status, 
+export function ServiceStatusCard({
+  service,
+  status,
   message,
-  responseTime 
+  responseTime,
 }: ServiceStatusCardProps) {
   return (
     <Card className={`border-l-4 ${getBorderColor(status)}`}>
@@ -32,15 +32,9 @@ export function ServiceStatusCard({
           <Badge variant={getStatusVariant(status)} className="capitalize">
             {status}
           </Badge>
-          {responseTime && (
-            <span className="text-xs text-muted-foreground">
-              {responseTime}ms
-            </span>
-          )}
+          {responseTime && <span className="text-xs text-muted-foreground">{responseTime}ms</span>}
         </div>
-        {message && (
-          <p className="text-xs text-muted-foreground">{message}</p>
-        )}
+        {message && <p className="text-xs text-muted-foreground">{message}</p>}
       </CardContent>
     </Card>
   );
@@ -49,7 +43,7 @@ export function ServiceStatusCard({
 function formatServiceName(service: string): string {
   return service
     .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
 
@@ -67,7 +61,7 @@ function getBorderColor(status: string): string {
 }
 
 function getStatusIcon(status: string) {
-  const className = "h-5 w-5";
+  const className = 'h-5 w-5';
   switch (status) {
     case 'healthy':
       return <CheckCircle className={`${className} text-green-500`} />;

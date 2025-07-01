@@ -25,7 +25,9 @@ export class AlertService {
 
   private constructor() {
     this.thresholds = {
-      responseTime: parseInt(process.env.ALERT_THRESHOLD_RESPONSE_TIME || '5000'),
+      responseTime: parseInt(
+        process.env.ALERT_THRESHOLD_RESPONSE_TIME || '5000'
+      ),
       memoryUsage: parseInt(process.env.ALERT_THRESHOLD_MEMORY_MB || '1024'),
       cpuUsage: parseInt(process.env.ALERT_THRESHOLD_CPU_PERCENT || '80'),
       errorRate: parseInt(process.env.ALERT_THRESHOLD_ERROR_RATE || '5'),
@@ -40,7 +42,10 @@ export class AlertService {
   }
 
   startMonitoring(intervalMs: number = 60000): void {
-    logger.info('Starting alert monitoring', { intervalMs, thresholds: this.thresholds });
+    logger.info('Starting alert monitoring', {
+      intervalMs,
+      thresholds: this.thresholds,
+    });
 
     this.alertCheckInterval = setInterval(() => {
       this.checkAlertConditions().catch((error) => {
@@ -61,7 +66,7 @@ export class AlertService {
 
   private async checkAlertConditions(): Promise<void> {
     const conditions = await this.evaluateConditions();
-    
+
     for (const condition of conditions) {
       if (this.shouldTriggerAlert(condition)) {
         await this.createOrUpdateIncident(condition);
@@ -85,15 +90,23 @@ export class AlertService {
       orderBy: { timestamp: 'desc' },
     });
 
-    const serviceResponseTimes = this.aggregateByService(healthChecks, 'responseTime');
-    for (const [service, avgResponseTime] of Object.entries(serviceResponseTimes)) {
+    const serviceResponseTimes = this.aggregateByService(
+      healthChecks,
+      'responseTime'
+    );
+    for (const [service, avgResponseTime] of Object.entries(
+      serviceResponseTimes
+    )) {
       if (avgResponseTime > this.thresholds.responseTime) {
         conditions.push({
           service,
           metricType: 'response_time',
           threshold: this.thresholds.responseTime,
           currentValue: avgResponseTime,
-          severity: this.calculateSeverity(avgResponseTime, this.thresholds.responseTime),
+          severity: this.calculateSeverity(
+            avgResponseTime,
+            this.thresholds.responseTime
+          ),
         });
       }
     }
@@ -107,23 +120,29 @@ export class AlertService {
       orderBy: { timestamp: 'desc' },
     });
 
-    const avgMemory = this.calculateAverage(memoryMetrics.map(m => m.value));
+    const avgMemory = this.calculateAverage(memoryMetrics.map((m) => m.value));
     if (avgMemory > this.thresholds.memoryUsage) {
       conditions.push({
         service: 'api',
         metricType: 'memory',
         threshold: this.thresholds.memoryUsage,
         currentValue: avgMemory,
-        severity: this.calculateSeverity(avgMemory, this.thresholds.memoryUsage),
+        severity: this.calculateSeverity(
+          avgMemory,
+          this.thresholds.memoryUsage
+        ),
       });
     }
 
     // Check service health status
-    const unhealthyServices = healthChecks.filter(hc => hc.status === 'unhealthy');
+    const unhealthyServices = healthChecks.filter(
+      (hc) => hc.status === 'unhealthy'
+    );
     const serviceGroups = this.groupBy(unhealthyServices, 'service');
-    
+
     for (const [service, checks] of Object.entries(serviceGroups)) {
-      if (checks.length >= 3) { // 3 consecutive unhealthy checks
+      if (checks.length >= 3) {
+        // 3 consecutive unhealthy checks
         conditions.push({
           service,
           metricType: 'health_status',
@@ -143,7 +162,9 @@ export class AlertService {
     return true;
   }
 
-  private async createOrUpdateIncident(condition: AlertCondition): Promise<void> {
+  private async createOrUpdateIncident(
+    condition: AlertCondition
+  ): Promise<void> {
     // Check if there's an existing open incident for this condition
     const existingIncident = await prisma.incident.findFirst({
       where: {
@@ -204,7 +225,7 @@ export class AlertService {
     // Update incident status
     await prisma.incident.update({
       where: { id: incidentId },
-      data: { 
+      data: {
         status,
         resolvedAt: status === 'resolved' ? new Date() : undefined,
       },
@@ -255,7 +276,7 @@ export class AlertService {
     });
 
     // All recent checks should be healthy
-    return healthChecks.every(check => check.status === 'healthy');
+    return healthChecks.every((check) => check.status === 'healthy');
   }
 
   private calculateSeverity(
@@ -277,7 +298,7 @@ export class AlertService {
     const result: Record<string, number> = {};
 
     for (const [service, checks] of Object.entries(grouped)) {
-      const values = checks.map(c => c[field]);
+      const values = checks.map((c) => c[field]);
       result[service] = this.calculateAverage(values);
     }
 
@@ -285,14 +306,17 @@ export class AlertService {
   }
 
   private groupBy<T>(array: T[], key: keyof T): Record<string, T[]> {
-    return array.reduce((acc, item) => {
-      const groupKey = String(item[key]);
-      if (!acc[groupKey]) {
-        acc[groupKey] = [];
-      }
-      acc[groupKey].push(item);
-      return acc;
-    }, {} as Record<string, T[]>);
+    return array.reduce(
+      (acc, item) => {
+        const groupKey = String(item[key]);
+        if (!acc[groupKey]) {
+          acc[groupKey] = [];
+        }
+        acc[groupKey].push(item);
+        return acc;
+      },
+      {} as Record<string, T[]>
+    );
   }
 
   private calculateAverage(values: number[]): number {

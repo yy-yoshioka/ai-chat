@@ -89,7 +89,8 @@ export function getPageDescription(pathname: string): string {
   if (pathname.includes('/billing')) return '請求情報と利用状況の確認';
   if (pathname.includes('/logs')) return 'システムログとエラー監視';
   if (pathname.includes('/webhooks')) return 'Webhook設定と送信ログの管理';
-  if (pathname.includes('/system-health')) return 'システムパフォーマンス、インシデント、サービスヘルスの監視';
+  if (pathname.includes('/system-health'))
+    return 'システムパフォーマンス、インシデント、サービスヘルスの監視';
   if (pathname.includes('/settings')) return '組織設定の管理';
   return 'AI Chatシステムの管理';
 }

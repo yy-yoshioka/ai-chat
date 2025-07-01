@@ -94,7 +94,10 @@ export class HealthMonitorService {
     await Promise.all(
       results.map((result) =>
         this.storeHealthCheck(result).catch((error) => {
-          logger.error('Failed to store health check', { service: result.service, error });
+          logger.error('Failed to store health check', {
+            service: result.service,
+            error,
+          });
         })
       )
     );
@@ -105,7 +108,7 @@ export class HealthMonitorService {
     try {
       await prisma.$queryRaw`SELECT 1`;
       const responseTime = Date.now() - start;
-      
+
       return {
         service: 'database',
         status: responseTime < 1000 ? 'healthy' : 'degraded',
@@ -126,13 +129,13 @@ export class HealthMonitorService {
   private async checkRedis(): Promise<ServiceHealth> {
     const start = Date.now();
     const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
-    
+
     try {
       const redis = new Redis(redisUrl);
       await redis.ping();
       const responseTime = Date.now() - start;
       redis.disconnect();
-      
+
       return {
         service: 'redis',
         status: responseTime < 100 ? 'healthy' : 'degraded',
@@ -158,10 +161,12 @@ export class HealthMonitorService {
 
     try {
       await pgClient.connect();
-      await pgClient.query("SELECT 1 FROM information_schema.tables WHERE table_name = 'embeddings'");
+      await pgClient.query(
+        "SELECT 1 FROM information_schema.tables WHERE table_name = 'embeddings'"
+      );
       const responseTime = Date.now() - start;
       await pgClient.end();
-      
+
       return {
         service: 'vector_db',
         status: responseTime < 500 ? 'healthy' : 'degraded',
@@ -182,17 +187,17 @@ export class HealthMonitorService {
   private async checkExternalAPI(): Promise<ServiceHealth> {
     const start = Date.now();
     const openaiUrl = 'https://api.openai.com/v1/models';
-    
+
     try {
       const response = await fetch(openaiUrl, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
       });
-      
+
       const responseTime = Date.now() - start;
-      
+
       return {
         service: 'external_api',
         status: response.ok && responseTime < 2000 ? 'healthy' : 'degraded',
@@ -308,7 +313,7 @@ export class HealthMonitorService {
     endDate?: Date
   ): Promise<SystemMetric[]> {
     const where: any = {};
-    
+
     if (service) where.service = service;
     if (metricType) where.metricType = metricType;
     if (startDate || endDate) {

@@ -23,9 +23,7 @@ export function SLAOverview({ sla }: SLAOverviewProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{sla.uptime.toFixed(2)}%</div>
-          <p className="text-xs text-muted-foreground mt-1">
-            {getUptimeStatus(sla.uptime)}
-          </p>
+          <p className="text-xs text-muted-foreground mt-1">{getUptimeStatus(sla.uptime)}</p>
         </CardContent>
       </Card>
 
