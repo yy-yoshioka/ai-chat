@@ -125,6 +125,7 @@ model User {
   messageFeedback MessageFeedback[]
   passwordResets  PasswordReset[]
   emailVerifications EmailVerification[]
+  notifications   Notification[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -211,6 +212,9 @@ model Organization {
   faqs            FAQ[]
   linkRules       LinkRule[]
   unansweredMessages UnansweredMessage[]
+  apiKeys              APIKey[]
+  notificationSettings NotificationSettings?
+  notifications        Notification[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
@@ -376,4 +380,50 @@ model EmailVerification {
   @@index([userId])
   @@index([token])
   @@map("email_verifications")
+}
+
+// Section-6: Settings Suite Models
+model APIKey {
+  id          String   @id @default(cuid())
+  name        String
+  key         String   @unique
+  organizationId String
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  lastUsed    DateTime?
+  createdAt   DateTime @default(now())
+  
+  @@index([organizationId])
+  @@index([key])
+  @@map("api_keys")
+}
+
+model NotificationSettings {
+  id             String   @id @default(cuid())
+  organizationId String   @unique
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  settings       Json     @default("{}")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@map("notification_settings")
+}
+
+model Notification {
+  id             String   @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  type           String   // 'chat', 'alert', 'usage', 'report'
+  title          String
+  message        String   @db.Text
+  read           Boolean  @default(false)
+  data           Json?    // Additional context data
+  createdAt      DateTime @default(now())
+  
+  @@index([organizationId])
+  @@index([userId])
+  @@index([read])
+  @@index([createdAt])
+  @@map("notifications")
 }

@@ -47,7 +47,8 @@
       "Bash(cp:*)",
       "Bash(yarn prisma migrate:*)",
       "Bash(DATABASE_URL=\"postgresql://postgres:postgres@localhost:5432/ai_chat_db?schema=public\" yarn prisma migrate dev --name add_auth_tokens)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(yarn prettier:*)"
     ],
     "deny": [],
     "autoConfirm": true
