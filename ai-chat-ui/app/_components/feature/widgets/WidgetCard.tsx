@@ -1,89 +1,104 @@
+'use client';
+
 import React from 'react';
-import { Eye, Trash2, Edit3, Copy } from 'lucide-react';
 import Link from 'next/link';
-import type { Widget } from '@/app/_hooks/widgets/useWidgetsPage';
+import { WIDGET_STATUS_COLORS } from '@/app/_config/widgets/constants';
+import type { WidgetSettings } from '@/app/_schemas/widget';
 
 interface WidgetCardProps {
-  widget: Widget;
+  widget: WidgetSettings;
   orgId: string;
-  onToggleActive: (id: string) => void;
-  onDelete: (id: string) => void;
-  onCopyEmbedCode: (widget: Widget) => void;
+  onToggleActive: (widgetId: string, isActive: boolean) => void;
+  onCopyEmbed: (widgetKey: string) => void;
+  onCopyId: (widgetId: string) => void;
 }
 
 export function WidgetCard({
   widget,
   orgId,
   onToggleActive,
-  onDelete,
-  onCopyEmbedCode,
+  onCopyEmbed,
+  onCopyId,
 }: WidgetCardProps) {
+  const statusColor = widget.isActive ? WIDGET_STATUS_COLORS.active : WIDGET_STATUS_COLORS.inactive;
+
   return (
-    <div className="bg-white rounded-lg shadow-sm border p-6">
+    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
       <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">{widget.name}</h3>
-          <p className="text-sm text-gray-500">Key: {widget.embedKey}</p>
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">{widget.name}</h3>
+          <p className="text-sm text-gray-500 mt-1">
+            会社: {widget.company?.name} ({widget.company?.plan})
+          </p>
         </div>
-        <div
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            widget.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-          }`}
-        >
+        <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColor}`}>
           {widget.isActive ? 'アクティブ' : '非アクティブ'}
-        </div>
+        </span>
       </div>
 
-      {/* Widget Preview */}
-      <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-        <div className="flex items-center space-x-2 mb-2">
-          <div
-            className="w-4 h-4 rounded-full"
-            style={{ backgroundColor: widget.theme.primaryColor }}
-          />
-          <span className="text-sm text-gray-600">プライマリカラー</span>
-        </div>
-        <div className="text-sm text-gray-700">位置: {widget.theme.position}</div>
-        <div className="text-sm text-gray-700">角丸: {widget.theme.borderRadius}px</div>
-      </div>
-
-      {/* Actions */}
-      <div className="flex items-center justify-between">
-        <div className="flex space-x-2">
-          <Link
-            href={`/admin/${orgId}/widgets/${widget.id}`}
-            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-            title="編集"
+      <div className="space-y-2 mb-4">
+        <div className="flex items-center space-x-2">
+          <span className="text-sm text-gray-500">ウィジェットキー:</span>
+          <code className="text-xs bg-gray-100 px-2 py-1 rounded">{widget.widgetKey}</code>
+          <button
+            onClick={() => onCopyId(widget.widgetKey)}
+            className="text-blue-600 hover:text-blue-800"
+            title="ウィジェットキーをコピー"
           >
-            <Edit3 className="w-4 h-4" />
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <span className="text-sm text-gray-500">チャット数:</span>
+          <span className="text-sm font-medium text-gray-900">
+            {widget._count?.chatLogs || 0} 件
+          </span>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <span className="text-sm text-gray-500">アクセントカラー:</span>
+          <div
+            className="w-5 h-5 rounded border border-gray-300"
+            style={{ backgroundColor: widget.accentColor }}
+          />
+          <span className="text-sm text-gray-600">{widget.accentColor}</span>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+        <div className="flex items-center space-x-2">
+          <Link
+            href={`/admin/${orgId}/widgets/create?widgetId=${widget.id}`}
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          >
+            編集
           </Link>
           <button
-            onClick={() => onCopyEmbedCode(widget)}
-            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-            title="埋め込みコードをコピー"
+            onClick={() => onCopyEmbed(widget.widgetKey)}
+            className="text-gray-600 hover:text-gray-800 text-sm font-medium"
           >
-            <Copy className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => onToggleActive(widget.id)}
-            className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
-            title={widget.isActive ? '無効化' : '有効化'}
-          >
-            <Eye className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => onDelete(widget.id)}
-            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-            title="削除"
-          >
-            <Trash2 className="w-4 h-4" />
+            埋め込みコード
           </button>
         </div>
-      </div>
 
-      {/* Embed Code Preview */}
-      <div className="mt-4 p-3 bg-gray-900 rounded text-white text-xs font-mono overflow-x-auto">
-        {widget.script}
+        <button
+          onClick={() => onToggleActive(widget.id, !widget.isActive)}
+          className={`px-3 py-1 text-sm font-medium rounded-md ${
+            widget.isActive
+              ? 'text-red-600 bg-red-50 hover:bg-red-100'
+              : 'text-green-600 bg-green-50 hover:bg-green-100'
+          }`}
+        >
+          {widget.isActive ? '無効化' : '有効化'}
+        </button>
       </div>
     </div>
   );

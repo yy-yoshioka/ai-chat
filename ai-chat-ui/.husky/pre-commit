@@ -1,13 +1,2 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
-# 1) ステージされたファイルの中から zod 直 import を検出（_schemas を除く）
-git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx)$' | \
-  grep -v '^app/_schemas/' | \
-  xargs grep -n "import .*\\b{[^}]*\\bz\\b[^}]*}.*from 'zod'" && {
-    echo "❌  Zod は app/_schemas/** で定義し、他では import だけにしてください。" >&2
-    exit 1
-  }
-
-# 2) そのほかのリント・テスト
-yarn lint && yarn test
+yarn lint-staged

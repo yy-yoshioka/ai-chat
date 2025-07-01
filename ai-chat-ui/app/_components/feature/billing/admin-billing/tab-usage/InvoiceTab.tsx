@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { formatCurrencyJP, formatDateJP } from '@/app/_utils/formatters';
-import { useInvoices } from '@/app/_hooks/billing/useInvoices';
 
 export interface Invoice {
   id: string;
@@ -17,7 +16,15 @@ interface Props {
 }
 
 export default function InvoiceTab({ orgId }: Props) {
-  const { data: invoices = [], isLoading, error } = useInvoices(orgId);
+  // モック or SWR で取得
+  const [invoices, setInvoices] = React.useState<Invoice[]>([]);
+
+  React.useEffect(() => {
+    fetch(`/api/billing/usage?orgId=${orgId}&invoices=1`)
+      .then((r) => r.json())
+      .then((d) => setInvoices(d.invoices ?? []))
+      .catch(() => setInvoices([]));
+  }, [orgId]);
 
   const pill = (st: Invoice['status']) => {
     const map = {
@@ -27,23 +34,6 @@ export default function InvoiceTab({ orgId }: Props) {
     } as const;
     return map[st];
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-2 text-gray-600">読み込み中...</span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
-        請求書の読み込みに失敗しました
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">

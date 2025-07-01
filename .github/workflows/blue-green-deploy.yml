@@ -1,253 +1,253 @@
-# name: Blue-Green Deployment
+name: Blue-Green Deployment
 
-# on:
-#   push:
-#     branches: [main]
-#   workflow_dispatch:
-#     inputs:
-#       promote_to_production:
-#         description: "Promote staging to production"
-#         required: false
-#         default: false
-#         type: boolean
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      promote_to_production:
+        description: "Promote staging to production"
+        required: false
+        default: false
+        type: boolean
 
-# env:
-#   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-#   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-# jobs:
-#   # Stage 1: Deploy to staging environment (Green)
-#   deploy-staging:
-#     name: Deploy to Staging (Green)
-#     runs-on: ubuntu-latest
-#     outputs:
-#       preview-url: ${{ steps.deploy.outputs.preview-url }}
-#       deployment-id: ${{ steps.deploy.outputs.deployment-id }}
+jobs:
+  # Stage 1: Deploy to staging environment (Green)
+  deploy-staging:
+    name: Deploy to Staging (Green)
+    runs-on: ubuntu-latest
+    outputs:
+      preview-url: ${{ steps.deploy.outputs.preview-url }}
+      deployment-id: ${{ steps.deploy.outputs.deployment-id }}
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: "20"
-#           cache: "yarn"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "yarn"
 
-#       - name: Install Vercel CLI
-#         run: npm install --global vercel@latest
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
 
-#       - name: Pull Vercel Environment Information
-#         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
-#       - name: Install dependencies
-#         run: |
-#           yarn install --frozen-lockfile
-#           cd ai-chat-api && yarn install --frozen-lockfile
-#           cd ../ai-chat-ui && yarn install --frozen-lockfile
+      - name: Install dependencies
+        run: |
+          yarn install --frozen-lockfile
+          cd ai-chat-api && yarn install --frozen-lockfile
+          cd ../ai-chat-ui && yarn install --frozen-lockfile
 
-#       - name: Run tests
-#         run: |
-#           cd ai-chat-api && yarn test
-#           cd ../ai-chat-ui && yarn test:e2e
+      - name: Run tests
+        run: |
+          cd ai-chat-api && yarn test
+          cd ../ai-chat-ui && yarn test:e2e
 
-#       - name: Build and Deploy to Staging
-#         id: deploy
-#         run: |
-#           cd ai-chat-ui
-#           vercel build --token=${{ secrets.VERCEL_TOKEN }}
-#           DEPLOYMENT_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
-#           echo "preview-url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+      - name: Build and Deploy to Staging
+        id: deploy
+        run: |
+          cd ai-chat-ui
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          DEPLOYMENT_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "preview-url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
 
-#           # Get deployment ID for later promotion
-#           DEPLOYMENT_ID=$(vercel ls --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} | grep $DEPLOYMENT_URL | awk '{print $1}')
-#           echo "deployment-id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+          # Get deployment ID for later promotion
+          DEPLOYMENT_ID=$(vercel ls --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} | grep $DEPLOYMENT_URL | awk '{print $1}')
+          echo "deployment-id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
 
-#       - name: Run smoke tests on staging
-#         env:
-#           STAGING_URL: ${{ steps.deploy.outputs.preview-url }}
-#         run: |
-#           cd ai-chat-ui
-#           E2E_BASE_URL=$STAGING_URL yarn test:e2e --project=chromium
+      - name: Run smoke tests on staging
+        env:
+          STAGING_URL: ${{ steps.deploy.outputs.preview-url }}
+        run: |
+          cd ai-chat-ui
+          E2E_BASE_URL=$STAGING_URL yarn test:e2e --project=chromium
 
-#   # Stage 2: Health checks and validation
-#   validate-staging:
-#     name: Validate Staging Environment
-#     runs-on: ubuntu-latest
-#     needs: deploy-staging
+  # Stage 2: Health checks and validation
+  validate-staging:
+    name: Validate Staging Environment
+    runs-on: ubuntu-latest
+    needs: deploy-staging
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-#       - name: Health check
-#         run: |
-#           curl -f "${{ needs.deploy-staging.outputs.preview-url }}/health" || exit 1
+      - name: Health check
+        run: |
+          curl -f "${{ needs.deploy-staging.outputs.preview-url }}/health" || exit 1
 
-#       - name: Performance test
-#         run: |
-#           # Use curl to test response time
-#           RESPONSE_TIME=$(curl -o /dev/null -s -w '%{time_total}' "${{ needs.deploy-staging.outputs.preview-url }}")
-#           echo "Response time: ${RESPONSE_TIME}s"
+      - name: Performance test
+        run: |
+          # Use curl to test response time
+          RESPONSE_TIME=$(curl -o /dev/null -s -w '%{time_total}' "${{ needs.deploy-staging.outputs.preview-url }}")
+          echo "Response time: ${RESPONSE_TIME}s"
 
-#           # Fail if response time > 2 seconds
-#           if (( $(echo "$RESPONSE_TIME > 2.0" | bc -l) )); then
-#             echo "Performance test failed: Response time too slow"
-#             exit 1
-#           fi
+          # Fail if response time > 2 seconds
+          if (( $(echo "$RESPONSE_TIME > 2.0" | bc -l) )); then
+            echo "Performance test failed: Response time too slow"
+            exit 1
+          fi
 
-#       - name: Security scan
-#         run: |
-#           # Basic security headers check
-#           curl -I "${{ needs.deploy-staging.outputs.preview-url }}" | grep -i "x-frame-options\|x-content-type-options\|x-xss-protection" || exit 1
+      - name: Security scan
+        run: |
+          # Basic security headers check
+          curl -I "${{ needs.deploy-staging.outputs.preview-url }}" | grep -i "x-frame-options\|x-content-type-options\|x-xss-protection" || exit 1
 
-#       - name: Notify Slack - Staging Ready
-#         if: success()
-#         env:
-#           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-#         run: |
-#           curl -X POST -H 'Content-type: application/json' \
-#             --data '{
-#               "text": "🟢 Staging deployment ready for promotion",
-#               "blocks": [
-#                 {
-#                   "type": "section",
-#                   "text": {
-#                     "type": "mrkdwn",
-#                     "text": "*🟢 Staging Environment Ready*\n\nDeployment has passed all validation checks and is ready for promotion to production."
-#                   }
-#                 },
-#                 {
-#                   "type": "section",
-#                   "fields": [
-#                     {
-#                       "type": "mrkdwn",
-#                       "text": "*Staging URL:*\n${{ needs.deploy-staging.outputs.preview-url }}"
-#                     },
-#                     {
-#                       "type": "mrkdwn",
-#                       "text": "*Commit:*\n${{ github.sha }}"
-#                     }
-#                   ]
-#                 },
-#                 {
-#                   "type": "actions",
-#                   "elements": [
-#                     {
-#                       "type": "button",
-#                       "text": {
-#                         "type": "plain_text",
-#                         "text": "Promote to Production"
-#                       },
-#                       "url": "https://github.com/${{ github.repository }}/actions/workflows/blue-green-deploy.yml",
-#                       "action_id": "promote_to_prod"
-#                     }
-#                   ]
-#                 }
-#               ]
-#             }' \
-#             $SLACK_WEBHOOK_URL
+      - name: Notify Slack - Staging Ready
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{
+              "text": "🟢 Staging deployment ready for promotion",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*🟢 Staging Environment Ready*\n\nDeployment has passed all validation checks and is ready for promotion to production."
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Staging URL:*\n${{ needs.deploy-staging.outputs.preview-url }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:*\n${{ github.sha }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Promote to Production"
+                      },
+                      "url": "https://github.com/${{ github.repository }}/actions/workflows/blue-green-deploy.yml",
+                      "action_id": "promote_to_prod"
+                    }
+                  ]
+                }
+              ]
+            }' \
+            $SLACK_WEBHOOK_URL
 
-#   # Stage 3: Promote to production (Blue environment)
-#   promote-production:
-#     name: Promote to Production (Blue)
-#     runs-on: ubuntu-latest
-#     needs: [deploy-staging, validate-staging]
-#     if: github.event.inputs.promote_to_production == 'true' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
-#     environment:
-#       name: production
-#       url: ${{ steps.promote.outputs.production-url }}
+  # Stage 3: Promote to production (Blue environment)
+  promote-production:
+    name: Promote to Production (Blue)
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, validate-staging]
+    if: github.event.inputs.promote_to_production == 'true' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    environment:
+      name: production
+      url: ${{ steps.promote.outputs.production-url }}
 
-#     steps:
-#       - name: Install Vercel CLI
-#         run: npm install --global vercel@latest
+    steps:
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
 
-#       - name: Promote to Production
-#         id: promote
-#         run: |
-#           # Promote the staging deployment to production
-#           vercel promote "${{ needs.deploy-staging.outputs.preview-url }}" --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
+      - name: Promote to Production
+        id: promote
+        run: |
+          # Promote the staging deployment to production
+          vercel promote "${{ needs.deploy-staging.outputs.preview-url }}" --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
 
-#           # Get production URL
-#           PROD_URL=$(vercel ls --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} | grep "production" | head -1 | awk '{print $2}')
-#           echo "production-url=https://$PROD_URL" >> $GITHUB_OUTPUT
+          # Get production URL
+          PROD_URL=$(vercel ls --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} | grep "production" | head -1 | awk '{print $2}')
+          echo "production-url=https://$PROD_URL" >> $GITHUB_OUTPUT
 
-#       - name: Production smoke test
-#         run: |
-#           sleep 30  # Wait for DNS propagation
-#           curl -f "${{ steps.promote.outputs.production-url }}/health" || exit 1
+      - name: Production smoke test
+        run: |
+          sleep 30  # Wait for DNS propagation
+          curl -f "${{ steps.promote.outputs.production-url }}/health" || exit 1
 
-#       - name: Notify Slack - Production Deployed
-#         env:
-#           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-#         run: |
-#           curl -X POST -H 'Content-type: application/json' \
-#             --data '{
-#               "text": "🚀 Production deployment successful",
-#               "blocks": [
-#                 {
-#                   "type": "section",
-#                   "text": {
-#                     "type": "mrkdwn",
-#                     "text": "*🚀 Production Deployment Complete*\n\nThe application has been successfully deployed to production."
-#                   }
-#                 },
-#                 {
-#                   "type": "section",
-#                   "fields": [
-#                     {
-#                       "type": "mrkdwn",
-#                       "text": "*Production URL:*\n${{ steps.promote.outputs.production-url }}"
-#                     },
-#                     {
-#                       "type": "mrkdwn",
-#                       "text": "*Commit:*\n${{ github.sha }}"
-#                     }
-#                   ]
-#                 }
-#               ]
-#             }' \
-#             $SLACK_WEBHOOK_URL
+      - name: Notify Slack - Production Deployed
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{
+              "text": "🚀 Production deployment successful",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*🚀 Production Deployment Complete*\n\nThe application has been successfully deployed to production."
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Production URL:*\n${{ steps.promote.outputs.production-url }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:*\n${{ github.sha }}"
+                    }
+                  ]
+                }
+              ]
+            }' \
+            $SLACK_WEBHOOK_URL
 
-#   # Rollback capability
-#   rollback:
-#     name: Rollback Production
-#     runs-on: ubuntu-latest
-#     if: failure() && needs.promote-production.result == 'failure'
-#     needs: [promote-production]
+  # Rollback capability
+  rollback:
+    name: Rollback Production
+    runs-on: ubuntu-latest
+    if: failure() && needs.promote-production.result == 'failure'
+    needs: [promote-production]
 
-#     steps:
-#       - name: Install Vercel CLI
-#         run: npm install --global vercel@latest
+    steps:
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
 
-#       - name: Rollback to previous version
-#         run: |
-#           # Get the previous production deployment
-#           PREVIOUS_DEPLOYMENT=$(vercel ls --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} | grep "production" | sed -n '2p' | awk '{print $1}')
+      - name: Rollback to previous version
+        run: |
+          # Get the previous production deployment
+          PREVIOUS_DEPLOYMENT=$(vercel ls --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} | grep "production" | sed -n '2p' | awk '{print $1}')
 
-#           if [ -n "$PREVIOUS_DEPLOYMENT" ]; then
-#             vercel promote $PREVIOUS_DEPLOYMENT --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
-#             echo "Rolled back to previous deployment: $PREVIOUS_DEPLOYMENT"
-#           else
-#             echo "No previous deployment found for rollback"
-#             exit 1
-#           fi
+          if [ -n "$PREVIOUS_DEPLOYMENT" ]; then
+            vercel promote $PREVIOUS_DEPLOYMENT --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
+            echo "Rolled back to previous deployment: $PREVIOUS_DEPLOYMENT"
+          else
+            echo "No previous deployment found for rollback"
+            exit 1
+          fi
 
-#       - name: Notify Slack - Rollback
-#         env:
-#           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-#         run: |
-#           curl -X POST -H 'Content-type: application/json' \
-#             --data '{
-#               "text": "⚠️ Production rollback executed",
-#               "blocks": [
-#                 {
-#                   "type": "section",
-#                   "text": {
-#                     "type": "mrkdwn",
-#                     "text": "*⚠️ Production Rollback Executed*\n\nThe deployment failed validation and has been rolled back to the previous version."
-#                   }
-#                 }
-#               ]
-#             }' \
-#             $SLACK_WEBHOOK_URL
+      - name: Notify Slack - Rollback
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{
+              "text": "⚠️ Production rollback executed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*⚠️ Production Rollback Executed*\n\nThe deployment failed validation and has been rolled back to the previous version."
+                  }
+                }
+              ]
+            }' \
+            $SLACK_WEBHOOK_URL

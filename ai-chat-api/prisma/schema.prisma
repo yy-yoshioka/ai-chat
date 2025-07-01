@@ -92,7 +92,6 @@ model Widget {
   
   chatLogs      ChatLog[]
   events        Event[]   // Event tracking
-  knowledgeBases KnowledgeBase[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -252,30 +251,53 @@ model Event {
 // F-1: Knowledge Base Models
 
 model KnowledgeBase {
-  id             String   @id @default(cuid())
-  widgetId       String
+  id             String       @id @default(uuid())
   organizationId String
-  name           String
-  type           String   // file, url, text
-  source         String   // S3 path or URL
-  content        String?  @db.Text
-  status         String   // pending, processing, completed, failed
-  chunks         Int      @default(0)
-  vectors        Json?    // Vector IDs array
-  metadata       Json?
-  error          String?
-  createdAt      DateTime @default(now())
-  processedAt    DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title          String
+  description    String?
+  isActive       Boolean      @default(true)
   
-  widget         Widget       @relation(fields: [widgetId], references: [id])
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  
-  @@index([widgetId])
+  documents      Document[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
   @@index([organizationId])
-  @@index([status])
+  @@index([isActive])
   @@map("knowledge_bases")
 }
 
+model Document {
+  id                String             @id @default(uuid())
+  knowledgeBaseId   String
+  knowledgeBase     KnowledgeBase      @relation(fields: [knowledgeBaseId], references: [id], onDelete: Cascade)
+  sourceType        DocumentSourceType
+  url               String?            // Source URL (for url, zendesk, intercom types)
+  title             String
+  content           String             @db.Text
+  summary           String?            @db.Text
+  
+  // Vector embedding for RAG
+  embedding         Unsupported("vector(1536)")?  // OpenAI embedding dimension
+  
+  // Processing status
+  status            DocumentStatus     @default(pending)
+  errorMessage      String?
+  
+  // Metadata
+  wordCount         Int?
+  lastCrawledAt     DateTime?
+  sourceMetadata    Json?              // Additional metadata from source
+  
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([knowledgeBaseId])
+  @@index([sourceType])
+  @@index([status])
+  @@index([lastCrawledAt])
+  @@map("documents")
+}
 
 model LinkRule {
   id             String       @id @default(uuid())

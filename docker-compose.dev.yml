@@ -72,7 +72,7 @@ services:
     restart: unless-stopped
     networks:
       - chat-dev-network
-    command: sh -c "npx prisma migrate deploy && yarn dev"
+    command: sh -c "npx prisma migrate deploy && yarn db:seed && yarn dev"
 
   ai-chat-ui:
     build:

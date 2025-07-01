@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { MOCK_ORGANIZATIONS } from '@/app/_mocks/organization';
-import { fetchGet } from '@/app/_utils/fetcher';
 
 interface Organization {
   id: string;
@@ -18,12 +17,10 @@ export const useOrganizations = () => {
       try {
         // ─── 本番用 API ───────────────────────────────
         if (process.env.NEXT_PUBLIC_USE_MOCKS !== 'true') {
-          try {
-            const data = await fetchGet<Organization[]>('/api/organizations');
-            setOrgs(data);
+          const res = await fetch('/api/organizations');
+          if (res.ok) {
+            setOrgs(await res.json());
             return;
-          } catch {
-            // API 失敗時はモックにフォールバック
           }
         }
         // ─── 開発 or API 失敗 → モック ────────────────

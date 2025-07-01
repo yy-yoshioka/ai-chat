@@ -56,7 +56,7 @@ export const OrganizationSchema = z.object({
   id: z.string(),
   name: z.string(),
   slug: z.string(),
-  settings: z.record(z.unknown()).optional(), // Json 型
+  settings: z.any().optional(), // Json 型
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
 });
@@ -74,41 +74,3 @@ export const JWTPayloadSchema = z.object({
   iat: z.number(),
 });
 export type JWTPayload = z.infer<typeof JWTPayloadSchema>;
-
-/* -------------------------------------------------
- * 5. Auth Request Schemas
- * ------------------------------------------------*/
-
-export const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
-export const SignupSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  name: z.string().optional(),
-});
-
-export type LoginRequest = z.infer<typeof LoginSchema>;
-export type SignupRequest = z.infer<typeof SignupSchema>;
-
-/* -------------------------------------------------
- * 6. Auth Response Schemas
- * ------------------------------------------------*/
-
-export const AuthResponseSchema = z.object({
-  user: UserSchema,
-});
-
-export const LoginResponseSchema = z.object({
-  success: z.boolean(),
-});
-
-export const LogoutResponseSchema = z.object({
-  success: z.boolean(),
-});
-
-export type AuthResponse = z.infer<typeof AuthResponseSchema>;
-export type LoginResponse = z.infer<typeof LoginResponseSchema>;
-export type LogoutResponse = z.infer<typeof LogoutResponseSchema>;
