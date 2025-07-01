@@ -64,7 +64,7 @@ export function useNegativeFeedback(widgetId?: string, limit = 50) {
       setError(null);
       const params = new URLSearchParams({ limit: limit.toString() });
       if (widgetId) params.append('widgetId', widgetId);
-      
+
       const url = `/api/bff/training/feedback/negative?${params.toString()}`;
       const data = await fetchGet<{ feedbacks: NegativeFeedback[] }>(url);
       setFeedbacks(data.feedbacks);
