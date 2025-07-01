@@ -1,52 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { MOCK_INCIDENT, MOCK_SYSTEM, MOCK_UPTIME } from '@/app/_config/status/mock';
+import useSWR from 'swr';
+import { PublicStatus } from '@/app/_schemas/system-health';
 
-export interface SystemStatus {
-  /* ← type alias でも可 */ component: string;
-  status: 'operational' | 'degraded' | 'partial_outage' | 'major_outage';
-  description: string;
-  lastUpdated: string;
-}
-export interface Incident {
-  id: string;
-  title: string;
-  status: 'investigating' | 'monitoring' | 'resolved' | 'identified';
-  impact: 'minor' | 'major' | 'critical';
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  updates: Array<{
-    timestamp: string;
-    status: string;
-    message: string;
-  }>;
-}
-export interface UptimeStat {
-  period: string;
-  percentage: number;
-}
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export const useStatus = () => {
-  const [system, setSystem] = useState<SystemStatus[]>([]);
-  const [incidents, setIncidents] = useState<Incident[]>([]);
-  const [uptime, setUptime] = useState<UptimeStat[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, error, mutate } = useSWR<PublicStatus>(
+    '/api/bff/status',
+    fetcher,
+    {
+      refreshInterval: 30000, // Refresh every 30 seconds
+      revalidateOnFocus: true,
+    }
+  );
 
-  const fetchData = async () => {
-    // ▸ 本番: fetch('/api/status')
-    setSystem(MOCK_SYSTEM);
-    setIncidents(MOCK_INCIDENT);
-    setUptime(MOCK_UPTIME);
-    setLoading(false);
+  return {
+    status: data?.status,
+    incidents: data?.incidents || [],
+    sla: data?.sla,
+    lastUpdated: data?.lastUpdated,
+    isLoading: !error && !data,
+    isError: error,
+    refresh: mutate,
   };
-
-  useEffect(() => {
-    fetchData();
-    const t = setInterval(fetchData, 30_000);
-    return () => clearInterval(t);
-  }, []);
-
-  return { system, incidents, uptime, loading };
 };

@@ -160,6 +160,81 @@ export const systemHealthSummarySchema = z.object({
   recommendations: z.array(z.string()).optional(),
 });
 
+// Incident schemas for our implementation
+export const incidentSeveritySchema = z.enum(['low', 'medium', 'high', 'critical']);
+export const incidentStatusSchema = z.enum(['investigating', 'identified', 'monitoring', 'resolved']);
+
+export const incidentUpdateSchema = z.object({
+  id: z.string(),
+  incidentId: z.string(),
+  status: z.string(),
+  message: z.string(),
+  createdBy: z.string().optional(),
+  createdAt: z.string().datetime(),
+});
+
+export const incidentSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  severity: incidentSeveritySchema,
+  status: incidentStatusSchema,
+  affectedServices: z.array(z.string()),
+  createdAt: z.string().datetime(),
+  resolvedAt: z.string().datetime().optional(),
+  updates: z.array(incidentUpdateSchema).optional(),
+});
+
+export const createIncidentSchema = z.object({
+  title: z.string().min(1).max(200),
+  description: z.string().min(1),
+  severity: incidentSeveritySchema,
+  affectedServices: z.array(z.string()).min(1),
+});
+
+export const updateIncidentSchema = z.object({
+  status: incidentStatusSchema,
+  message: z.string().min(1),
+});
+
+// Public status schema
+export const publicStatusSchema = z.object({
+  status: z.record(z.object({
+    status: healthStatusEnum,
+    message: z.string().optional(),
+  })),
+  incidents: z.array(z.object({
+    id: z.string(),
+    title: z.string(),
+    severity: incidentSeveritySchema,
+    status: incidentStatusSchema,
+    affectedServices: z.array(z.string()),
+    createdAt: z.string().datetime(),
+    updates: z.array(z.object({
+      status: z.string(),
+      message: z.string(),
+      createdAt: z.string().datetime(),
+    })).optional(),
+  })),
+  sla: z.object({
+    uptime: z.number(),
+    avgResponseTime: z.number(),
+    period: z.string(),
+  }),
+  lastUpdated: z.string().datetime(),
+});
+
+// System metric schema for database
+export const systemMetricSchema = z.object({
+  id: z.string(),
+  service: z.string(),
+  metricType: z.string(),
+  value: z.number(),
+  unit: z.string(),
+  metadata: z.any().optional(),
+  timestamp: z.string().datetime(),
+});
+
 // Type exports
 export type HealthStatus = z.infer<typeof healthStatusEnum>;
 export type ServiceStatus = z.infer<typeof serviceStatusSchema>;
@@ -172,3 +247,9 @@ export type HealthCheckResponse = z.infer<typeof healthCheckResponseSchema>;
 export type PerformanceMetrics = z.infer<typeof performanceMetricsSchema>;
 export type SystemAlert = z.infer<typeof systemAlertSchema>;
 export type SystemHealthSummary = z.infer<typeof systemHealthSummarySchema>;
+export type Incident = z.infer<typeof incidentSchema>;
+export type IncidentUpdate = z.infer<typeof incidentUpdateSchema>;
+export type CreateIncidentInput = z.infer<typeof createIncidentSchema>;
+export type UpdateIncidentInput = z.infer<typeof updateIncidentSchema>;
+export type PublicStatus = z.infer<typeof publicStatusSchema>;
+export type SystemMetric = z.infer<typeof systemMetricSchema>;
