@@ -11,7 +11,7 @@ import authRoutes from './routes/auth';
 import faqRoutes from './routes/faqs';
 import chatRoutes from './routes/chat';
 import adminRoutes from './routes/admin';
-import { widgetRoutes } from './routes/widgets';
+import widgetsRoutes from './routes/widgets';
 import { widgetLoaderRoutes } from './routes/widgetLoader';
 import { prisma } from './lib/prisma';
 import { embedRoutes } from './routes/embed';
@@ -107,7 +107,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/faqs', faqRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/widgets', widgetRoutes);
+app.use('/api/widgets', widgetsRoutes);
 app.use('/api/billing', billingRoutes);
 app.use('/api/embed', embedRoutes);
 app.use('/api/analytics', analyticsRoutes);
@@ -121,6 +121,8 @@ app.use('/api', knowledgeBaseRoutes);
 app.use('/api', trainingRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/v1/settings', settingsRoutes);
+app.use('/v1/organizations', organizationsRoutes);
+app.use('/v1/widgets', widgetsRoutes);
 
 // Legacy routes (backwards compatibility)
 app.use('/auth', authRoutes);

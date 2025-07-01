@@ -9,6 +9,26 @@ export const organizationSchema = z.object({
   plan: z.enum(['free', 'pro', 'enterprise']).default('free'),
   userCount: z.number().int().min(0),
   widgetCount: z.number().int().min(0),
+  _count: z
+    .object({
+      users: z.number().int().min(0),
+      companies: z.number().int().min(0),
+    })
+    .optional(),
+  companies: z
+    .array(
+      z.object({
+        id: z.string().uuid(),
+        name: z.string(),
+        plan: z.enum(['free', 'pro', 'enterprise']),
+        createdAt: z.string().datetime(),
+        updatedAt: z.string().datetime(),
+        _count: z.object({
+          widgets: z.number().int().min(0),
+        }),
+      })
+    )
+    .optional(),
 });
 
 export const organizationStatsSchema = z.object({
