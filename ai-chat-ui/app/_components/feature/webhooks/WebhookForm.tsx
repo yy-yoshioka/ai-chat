@@ -10,7 +10,6 @@ import type {
   UpdateWebhookInput,
   WebhookEventType,
 } from '@/app/_schemas/webhooks';
-import { webhookEventTypes } from '@/app/_schemas/webhooks';
 
 interface WebhookFormProps {
   initialData?: {

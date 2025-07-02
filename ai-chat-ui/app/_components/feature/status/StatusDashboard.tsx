@@ -5,7 +5,6 @@ import { useIncidents } from '@/app/_hooks/status/useIncidents';
 import { ServiceStatusCard } from './ServiceStatusCard';
 import { SLAOverview } from './SLAOverview';
 import { IncidentList } from './IncidentList';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle, CheckCircle, AlertTriangle } from 'lucide-react';
 

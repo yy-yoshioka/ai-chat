@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { PageHeader } from '@/_components/common/PageHeader';
 import { DataRetentionSettings } from '@/_components/feature/settings/DataRetentionSettings';

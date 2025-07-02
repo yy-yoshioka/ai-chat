@@ -33,7 +33,7 @@ export function DataRetentionSettings({ orgId }: DataRetentionSettingsProps) {
       toast({
         title: '設定を保存しました',
       });
-    } catch (error) {
+    } catch {
       toast({
         title: 'エラー',
         description: '設定の保存に失敗しました',
@@ -62,7 +62,7 @@ export function DataRetentionSettings({ orgId }: DataRetentionSettingsProps) {
         title: 'クリーンアップを開始しました',
         description: 'バックグラウンドで処理が実行されています',
       });
-    } catch (error) {
+    } catch {
       toast({
         title: 'エラー',
         description: 'クリーンアップの開始に失敗しました',

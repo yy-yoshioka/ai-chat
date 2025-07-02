@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { z, ZodError, ZodSchema } from 'zod';
+import { ZodError, ZodSchema } from 'zod';
 
 /**
  * Validation error response format

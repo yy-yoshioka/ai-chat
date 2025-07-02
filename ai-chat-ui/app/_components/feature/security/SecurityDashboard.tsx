@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useSecurityReport } from '@/app/_hooks/security/useSecurityReport';
 import { Card, CardHeader, CardTitle, CardContent } from '@/app/_components/ui/card';
 import { format, subDays } from 'date-fns';
@@ -11,10 +10,10 @@ interface SecurityDashboardProps {
 }
 
 export function SecurityDashboard({ orgId }: SecurityDashboardProps) {
-  const [dateRange, setDateRange] = useState({
+  const dateRange = {
     startDate: format(subDays(new Date(), 30), 'yyyy-MM-dd'),
     endDate: format(new Date(), 'yyyy-MM-dd'),
-  });
+  };
 
   const { report, isLoading } = useSecurityReport(dateRange.startDate, dateRange.endDate, orgId);
 

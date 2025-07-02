@@ -8,10 +8,9 @@ import { AlertCircle, AlertTriangle, Info, Shield } from 'lucide-react';
 
 interface IncidentListProps {
   incidents: Incident[];
-  showResolved?: boolean;
 }
 
-export function IncidentList({ incidents, showResolved = false }: IncidentListProps) {
+export function IncidentList({ incidents }: IncidentListProps) {
   if (incidents.length === 0) {
     return (
       <Card>
@@ -49,7 +48,7 @@ export function IncidentList({ incidents, showResolved = false }: IncidentListPr
             {incident.affectedServices.length > 0 && (
               <div className="mb-3">
                 <span className="text-xs font-medium">Affected Services: </span>
-                {incident.affectedServices.map((service, i) => (
+                {incident.affectedServices.map((service) => (
                   <Badge key={service} variant="secondary" className="ml-1 text-xs">
                     {service}
                   </Badge>

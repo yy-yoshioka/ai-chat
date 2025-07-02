@@ -3,7 +3,6 @@
 import useSWR from 'swr';
 import { useCallback } from 'react';
 import { Incident, CreateIncidentInput, UpdateIncidentInput } from '@/app/_schemas/system-health';
-import { posterWithAuth } from '@/app/_utils/fetcher';
 import { toast } from '@/components/ui/use-toast';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());

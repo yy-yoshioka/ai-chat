@@ -7,7 +7,6 @@ import { useWebhooks } from '@/app/_hooks/webhooks/useWebhooks';
 import { WebhookCard } from './WebhookCard';
 import { CreateWebhookModal } from './CreateWebhookModal';
 import { WebhookLogsModal } from './WebhookLogsModal';
-import type { UpdateWebhookInput } from '@/app/_schemas/webhooks';
 
 export function WebhooksList() {
   const [showCreateModal, setShowCreateModal] = useState(false);

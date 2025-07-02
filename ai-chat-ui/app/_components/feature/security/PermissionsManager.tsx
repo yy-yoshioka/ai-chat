@@ -108,9 +108,6 @@ export function PermissionsManager({ orgId }: PermissionsManagerProps) {
                       const hasPermission = selectedUser.permissions.includes(
                         permission as Permission
                       );
-                      const isOverridden = selectedUser.permissionOverrides.some(
-                        (o) => o.permission === permission
-                      );
 
                       return (
                         <div

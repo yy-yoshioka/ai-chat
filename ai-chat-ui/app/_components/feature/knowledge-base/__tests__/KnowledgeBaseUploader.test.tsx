@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, waitFor } from '@testing-library/react';
 import { KnowledgeBaseUploader } from '../KnowledgeBaseUploader';
 
 // Mock react-dropzone
@@ -171,7 +170,7 @@ describe('KnowledgeBaseUploader', () => {
     mockOnDrop([file]);
 
     // Re-render to check disabled state
-    const { rerender } = render(<KnowledgeBaseUploader {...defaultProps} />);
+    render(<KnowledgeBaseUploader {...defaultProps} />);
 
     // During upload, dropzone should be disabled
     await waitFor(() => {

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { organizationSchema } from '@/app/_schemas/organizations';
 import { EXPRESS_API } from '@/app/_config/api';
