@@ -14,26 +14,26 @@ class Redis {
 
   async set(key: string, value: any, ...args: any[]): Promise<'OK'> {
     this.store.set(key, value);
-    
+
     // Handle TTL if provided
     if (args[0] === 'EX' && args[1]) {
       this.ttls.set(key, Date.now() + args[1] * 1000);
     }
-    
+
     return 'OK';
   }
 
   async del(key: string | string[]): Promise<number> {
     const keys = Array.isArray(key) ? key : [key];
     let count = 0;
-    
+
     for (const k of keys) {
       if (this.store.delete(k)) {
         this.ttls.delete(k);
         count++;
       }
     }
-    
+
     return count;
   }
 
@@ -52,7 +52,7 @@ class Redis {
   async ttl(key: string): Promise<number> {
     const expiry = this.ttls.get(key);
     if (!expiry) return -1;
-    
+
     const ttl = Math.floor((expiry - Date.now()) / 1000);
     return ttl > 0 ? ttl : -2;
   }
@@ -71,9 +71,13 @@ class Redis {
     return newValue;
   }
 
-  async hset(key: string, field: string | Record<string, any>, value?: any): Promise<number> {
+  async hset(
+    key: string,
+    field: string | Record<string, any>,
+    value?: any
+  ): Promise<number> {
     let hash = this.store.get(key) || {};
-    
+
     if (typeof field === 'object') {
       hash = { ...hash, ...field };
       this.store.set(key, hash);
@@ -94,7 +98,7 @@ class Redis {
   async hgetall(key: string): Promise<Record<string, string>> {
     const hash = this.store.get(key);
     if (!hash) return {};
-    
+
     const result: Record<string, string> = {};
     for (const [field, value] of Object.entries(hash)) {
       result[field] = String(value);
@@ -105,14 +109,14 @@ class Redis {
   async sadd(key: string, ...members: string[]): Promise<number> {
     const set = this.store.get(key) || new Set();
     let added = 0;
-    
+
     for (const member of members) {
       if (!set.has(member)) {
         set.add(member);
         added++;
       }
     }
-    
+
     this.store.set(key, set);
     return added;
   }
@@ -125,14 +129,14 @@ class Redis {
   async srem(key: string, ...members: string[]): Promise<number> {
     const set = this.store.get(key);
     if (!set) return 0;
-    
+
     let removed = 0;
     for (const member of members) {
       if (set.delete(member)) {
         removed++;
       }
     }
-    
+
     return removed;
   }
 
@@ -144,11 +148,11 @@ class Redis {
 
   async keys(pattern: string): Promise<string[]> {
     const regex = new RegExp(pattern.replace(/\*/g, '.*'));
-    return Array.from(this.store.keys()).filter(key => regex.test(key));
+    return Array.from(this.store.keys()).filter((key) => regex.test(key));
   }
 
   async mget(...keys: string[]): Promise<(string | null)[]> {
-    return keys.map(key => {
+    return keys.map((key) => {
       const value = this.store.get(key);
       return value !== undefined ? String(value) : null;
     });

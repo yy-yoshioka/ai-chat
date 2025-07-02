@@ -26,52 +26,52 @@ export const prisma = {
   organization: createMockModel(),
   company: createMockModel(),
   widget: createMockModel(),
-  
+
   // Chat and FAQ models
   chatLog: createMockModel(),
   fAQ: createMockModel(),
   unansweredMessage: createMockModel(),
   messageFeedback: createMockModel(),
-  
+
   // Knowledge base models
   knowledgeBase: createMockModel(),
   linkRule: createMockModel(),
-  
+
   // Usage and billing
   usage: createMockModel(),
-  
+
   // Events and analytics
   event: createMockModel(),
-  
+
   // Auth models
   passwordReset: createMockModel(),
   emailVerification: createMockModel(),
   aPIKey: createMockModel(),
-  
+
   // Notification models
   notificationSettings: createMockModel(),
   notification: createMockModel(),
-  
+
   // Webhook models
   webhook: createMockModel(),
   webhookLog: createMockModel(),
-  
+
   // System monitoring
   systemMetric: createMockModel(),
   healthCheck: createMockModel(),
   incident: createMockModel(),
   incidentUpdate: createMockModel(),
-  
+
   // Data retention
   dataRetentionPolicy: createMockModel(),
   dataRetentionJob: createMockModel(),
-  
+
   // Security and permissions
   rolePermission: createMockModel(),
   userPermissionOverride: createMockModel(),
   securityAuditLog: createMockModel(),
   dataAccessLog: createMockModel(),
-  
+
   // Transaction methods
   $transaction: jest.fn((fn) => {
     if (typeof fn === 'function') {

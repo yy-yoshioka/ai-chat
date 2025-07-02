@@ -1,4 +1,9 @@
-import { PlanType, Role, DocumentStatus, DocumentSourceType } from '@prisma/client';
+import {
+  PlanType,
+  Role,
+  DocumentStatus,
+  DocumentSourceType,
+} from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -71,7 +76,8 @@ export const testChatLog = {
 export const testFAQ = {
   id: 'faq-test-123',
   question: 'How do I reset my password?',
-  answer: 'You can reset your password by clicking the "Forgot Password" link on the login page.',
+  answer:
+    'You can reset your password by clicking the "Forgot Password" link on the login page.',
   category: 'Account',
   isPublished: true,
   organizationId: 'org-test-123',
@@ -154,7 +160,11 @@ export const testAPIKey = {
 };
 
 // JWT test tokens
-export const generateTestToken = (userId: string, organizationId: string, expiresIn = '1h') => {
+export const generateTestToken = (
+  userId: string,
+  organizationId: string,
+  expiresIn = '1h'
+) => {
   return jwt.sign(
     { userId, organizationId },
     process.env.JWT_SECRET || 'test-secret',
@@ -162,7 +172,10 @@ export const generateTestToken = (userId: string, organizationId: string, expire
   );
 };
 
-export const generateExpiredToken = (userId: string, organizationId: string) => {
+export const generateExpiredToken = (
+  userId: string,
+  organizationId: string
+) => {
   return jwt.sign(
     { userId, organizationId },
     process.env.JWT_SECRET || 'test-secret',
@@ -171,7 +184,10 @@ export const generateExpiredToken = (userId: string, organizationId: string) => 
 };
 
 // Mock authentication header
-export const mockAuthHeader = (userId = 'user-test-123', organizationId = 'org-test-123') => ({
+export const mockAuthHeader = (
+  userId = 'user-test-123',
+  organizationId = 'org-test-123'
+) => ({
   authorization: `Bearer ${generateTestToken(userId, organizationId)}`,
 });
 

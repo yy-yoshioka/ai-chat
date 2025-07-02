@@ -95,12 +95,19 @@ jest.mock('stripe', () => ({
     },
     checkout: {
       sessions: {
-        create: jest.fn().mockResolvedValue({ id: 'cs_test', url: 'https://checkout.stripe.com/test' }),
+        create: jest
+          .fn()
+          .mockResolvedValue({
+            id: 'cs_test',
+            url: 'https://checkout.stripe.com/test',
+          }),
       },
     },
     billingPortal: {
       sessions: {
-        create: jest.fn().mockResolvedValue({ url: 'https://billing.stripe.com/test' }),
+        create: jest
+          .fn()
+          .mockResolvedValue({ url: 'https://billing.stripe.com/test' }),
       },
     },
     webhookEndpoints: {
@@ -155,7 +162,7 @@ jest.mock('socket.io', () => {
     leave: jest.fn(),
     disconnect: jest.fn(),
   };
-  
+
   const mockIo = {
     on: jest.fn((event, handler) => {
       if (event === 'connection') {
@@ -170,7 +177,7 @@ jest.mock('socket.io', () => {
       sockets: new Map([[mockSocket.id, mockSocket]]),
     },
   };
-  
+
   return {
     Server: jest.fn(() => mockIo),
   };
