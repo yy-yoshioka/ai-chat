@@ -1,13 +1,15 @@
 'use client';
 
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 import { PublicStatus } from '@/app/_schemas/system-health';
 import { fetchGet } from '@/app/_utils/fetcher';
 
 export const useStatus = () => {
-  const { data, error, mutate } = useSWR<PublicStatus>('/api/bff/status', fetchGet, {
-    refreshInterval: 30000, // Refresh every 30 seconds
-    revalidateOnFocus: true,
+  const { data, error, isLoading, refetch } = useQuery<PublicStatus>({
+    queryKey: ['status'],
+    queryFn: () => fetchGet('/api/bff/status'),
+    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchOnWindowFocus: true,
   });
 
   return {
@@ -15,8 +17,8 @@ export const useStatus = () => {
     incidents: data?.incidents || [],
     sla: data?.sla,
     lastUpdated: data?.lastUpdated,
-    isLoading: !error && !data,
-    isError: error,
-    refresh: mutate,
+    isLoading,
+    isError: !!error,
+    refresh: refetch,
   };
 };

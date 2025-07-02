@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 import { fetcherWithAuth } from '@/app/_utils/fetcher';
 import { getAuthTokenFromCookie } from '@/app/_utils/auth-utils';
 import type { WebhookLog, WebhookLogsQuery } from '@/app/_schemas/webhooks';
@@ -19,18 +19,21 @@ export function useWebhookLogs(webhookId: string | null, query?: WebhookLogsQuer
     data: logs,
     error,
     isLoading,
-    mutate,
-  } = useSWR<WebhookLog[]>(
-    authToken && webhookId
-      ? `/api/bff/webhooks/${webhookId}/logs${queryString ? `?${queryString}` : ''}`
-      : null,
-    (url) => fetcherWithAuth(url, authToken!)
-  );
+    refetch,
+  } = useQuery<WebhookLog[]>({
+    queryKey: ['webhook-logs', webhookId, query],
+    queryFn: () =>
+      fetcherWithAuth(
+        `/api/bff/webhooks/${webhookId}/logs${queryString ? `?${queryString}` : ''}`,
+        authToken!
+      ),
+    enabled: !!authToken && !!webhookId,
+  });
 
   return {
     logs: logs || [],
     isLoading,
     error,
-    refetch: mutate,
+    refetch,
   };
 }

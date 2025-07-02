@@ -1,81 +1,72 @@
 'use client';
 
-import useSWR from 'swr';
-import { useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Incident, CreateIncidentInput, UpdateIncidentInput } from '@/app/_schemas/system-health';
 import { toast } from '@/components/ui/use-toast';
 import { fetchGet, fetchPost, fetcher } from '@/app/_utils/fetcher';
 
 export const useIncidents = (days: number = 30) => {
-  const { data, error, mutate } = useSWR<Incident[]>(
-    `/api/bff/status/incidents?days=${days}`,
-    fetchGet,
-    {
-      refreshInterval: 60000, // Refresh every minute
-    }
-  );
+  const queryClient = useQueryClient();
 
-  const createIncident = useCallback(
-    async (input: CreateIncidentInput) => {
-      try {
-        const newIncident = await fetchPost('/api/bff/status/incidents', input);
-        mutate();
-        toast({ title: 'Incident created successfully' });
-        return newIncident;
-      } catch (error) {
-        toast({
-          title: 'Failed to create incident',
-          description: error instanceof Error ? error.message : 'Unknown error',
-          variant: 'destructive',
-        });
-        throw error;
-      }
-    },
-    [mutate]
-  );
+  const { data, error, isLoading, refetch } = useQuery<Incident[]>({
+    queryKey: ['incidents', days],
+    queryFn: () => fetchGet(`/api/bff/status/incidents?days=${days}`),
+    refetchInterval: 60000, // Refresh every minute
+  });
 
-  const updateIncident = useCallback(
-    async (incidentId: string, update: UpdateIncidentInput) => {
-      try {
-        const updatedIncident = await fetchPost(
-          `/api/bff/status/incidents/${incidentId}/updates`,
-          update
-        );
-        mutate();
-        toast({ title: 'Incident updated successfully' });
-        return updatedIncident;
-      } catch (error) {
-        toast({
-          title: 'Failed to update incident',
-          description: error instanceof Error ? error.message : 'Unknown error',
-          variant: 'destructive',
-        });
-        throw error;
-      }
+  const createIncidentMutation = useMutation({
+    mutationFn: (input: CreateIncidentInput) => fetchPost('/api/bff/status/incidents', input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['incidents'] });
+      toast({ title: 'Incident created successfully' });
     },
-    [mutate]
-  );
+    onError: (error) => {
+      toast({
+        title: 'Failed to create incident',
+        description: error instanceof Error ? error.message : 'Unknown error',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const updateIncidentMutation = useMutation({
+    mutationFn: ({ incidentId, update }: { incidentId: string; update: UpdateIncidentInput }) =>
+      fetchPost(`/api/bff/status/incidents/${incidentId}/updates`, update),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['incidents'] });
+      toast({ title: 'Incident updated successfully' });
+    },
+    onError: (error) => {
+      toast({
+        title: 'Failed to update incident',
+        description: error instanceof Error ? error.message : 'Unknown error',
+        variant: 'destructive',
+      });
+    },
+  });
 
   return {
     incidents: data || [],
-    isLoading: !error && !data,
-    isError: error,
-    createIncident,
-    updateIncident,
-    refresh: mutate,
+    isLoading,
+    isError: !!error,
+    createIncident: createIncidentMutation.mutateAsync,
+    updateIncident: (incidentId: string, update: UpdateIncidentInput) =>
+      updateIncidentMutation.mutateAsync({ incidentId, update }),
+    refresh: refetch,
   };
 };
 
 export const useIncident = (incidentId: string) => {
-  const { data, error, mutate } = useSWR<Incident>(
-    incidentId ? `/api/bff/status/incidents/${incidentId}` : null,
-    fetcher
-  );
+  const { data, error, isLoading, refetch } = useQuery<Incident>({
+    queryKey: ['incident', incidentId],
+    queryFn: () => fetcher(`/api/bff/status/incidents/${incidentId}`),
+    enabled: !!incidentId,
+  });
 
   return {
     incident: data,
-    isLoading: !error && !data,
-    isError: error,
-    refresh: mutate,
+    isLoading,
+    isError: !!error,
+    refresh: refetch,
   };
 };

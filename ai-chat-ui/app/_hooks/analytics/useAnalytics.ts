@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 import { fetchGet } from '@/app/_utils/fetcher';
 
 export function useConversationFlow(widgetId: string, dateRange: { start: Date; end: Date }) {
@@ -8,26 +8,29 @@ export function useConversationFlow(widgetId: string, dateRange: { start: Date; 
     endDate: dateRange.end.toISOString(),
   });
 
-  const { data, error } = useSWR(`/api/bff/analytics/conversation-flow?${params}`, fetchGet);
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['conversation-flow', widgetId, dateRange],
+    queryFn: () => fetchGet(`/api/bff/analytics/conversation-flow?${params}`),
+  });
 
   return {
     data,
-    isLoading: !error && !data,
-    isError: error,
+    isLoading,
+    isError: !!error,
   };
 }
 
 export function useUnresolvedQuestions(widgetId: string, limit = 50) {
-  const { data, error, mutate } = useSWR(
-    `/api/bff/analytics/unresolved?widgetId=${widgetId}&limit=${limit}`,
-    fetchGet
-  );
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ['unresolved-questions', widgetId, limit],
+    queryFn: () => fetchGet(`/api/bff/analytics/unresolved?widgetId=${widgetId}&limit=${limit}`),
+  });
 
   return {
     questions: data?.questions || [],
     total: data?.total || 0,
-    isLoading: !error && !data,
-    isError: error,
-    mutate,
+    isLoading,
+    isError: !!error,
+    mutate: refetch,
   };
 }

@@ -1,22 +1,27 @@
-import useSWR from 'swr';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchGet, fetchDelete } from '@/app/_utils/fetcher';
 
 export function useKnowledgeBase(widgetId: string) {
-  const { data, error, mutate } = useSWR(
-    `/api/bff/knowledge-base/items?widgetId=${widgetId}`,
-    fetchGet
-  );
+  const queryClient = useQueryClient();
 
-  const deleteItem = async (itemId: string) => {
-    await fetchDelete(`/api/bff/knowledge-base/items/${itemId}`);
-    await mutate();
-  };
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ['knowledge-base', widgetId],
+    queryFn: () => fetchGet(`/api/bff/knowledge-base/items?widgetId=${widgetId}`),
+    enabled: !!widgetId,
+  });
+
+  const deleteItemMutation = useMutation({
+    mutationFn: (itemId: string) => fetchDelete(`/api/bff/knowledge-base/items/${itemId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['knowledge-base', widgetId] });
+    },
+  });
 
   return {
     items: data?.items || [],
-    isLoading: !error && !data,
-    isError: error,
-    deleteItem,
-    mutate,
+    isLoading,
+    isError: !!error,
+    deleteItem: deleteItemMutation.mutateAsync,
+    mutate: refetch,
   };
 }

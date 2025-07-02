@@ -1,6 +1,6 @@
 'use client';
 
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 import { SystemMetric } from '@/app/_schemas/system-health';
 import { fetcherWithAuth, fetchGet } from '@/app/_utils/fetcher';
 import { getAuthTokenFromCookie } from '@/app/_utils/auth-utils';
@@ -25,13 +25,12 @@ export const useMetrics = (query: MetricsQuery = {}) => {
   const queryString = params.toString();
   const url = `/api/bff/status/metrics${queryString ? `?${queryString}` : ''}`;
 
-  const { data, error, mutate } = useSWR<SystemMetric[]>(
-    authToken ? [url, authToken] : null,
-    ([url, token]) => fetcherWithAuth(url, token),
-    {
-      refreshInterval: 30000, // Refresh every 30 seconds
-    }
-  );
+  const { data, error, isLoading, refetch } = useQuery<SystemMetric[]>({
+    queryKey: ['metrics', query],
+    queryFn: () => fetcherWithAuth(url, authToken!),
+    enabled: !!authToken,
+    refetchInterval: 30000, // Refresh every 30 seconds
+  });
 
   // Process metrics for charting
   const processedMetrics = data ? processMetricsForChart(data) : null;
@@ -39,9 +38,9 @@ export const useMetrics = (query: MetricsQuery = {}) => {
   return {
     metrics: data || [],
     processedMetrics,
-    isLoading: !error && !data,
-    isError: error,
-    refresh: mutate,
+    isLoading,
+    isError: !!error,
+    refresh: refetch,
   };
 };
 
@@ -84,21 +83,19 @@ function processMetricsForChart(metrics: SystemMetric[]) {
 }
 
 export const useHealthCheck = () => {
-  const { data, error } = useSWR<{ status: string; timestamp: string }>(
-    '/api/bff/status/health',
-    fetchGet,
-    {
-      refreshInterval: 10000, // Check every 10 seconds
-      revalidateOnFocus: false,
-    }
-  );
+  const { data, error, isLoading } = useQuery<{ status: string; timestamp: string }>({
+    queryKey: ['health-check'],
+    queryFn: () => fetchGet('/api/bff/status/health'),
+    refetchInterval: 10000, // Check every 10 seconds
+    refetchOnWindowFocus: false,
+  });
 
   return {
     health: data,
     isHealthy: data?.status === 'healthy',
     isDegraded: data?.status === 'degraded',
     isUnhealthy: data?.status === 'unhealthy',
-    isLoading: !error && !data,
-    isError: error,
+    isLoading,
+    isError: !!error,
   };
 };
