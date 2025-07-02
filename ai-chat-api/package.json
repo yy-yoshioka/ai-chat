@@ -86,6 +86,7 @@
     "eslint-plugin-prettier": "^5.4.0",
     "husky": "^9.1.7",
     "jest": "^30.0.3",
+    "jest-mock-extended": "^4.0.0",
     "lint-staged": "^16.0.0",
     "prettier": "^3.5.3",
     "prisma": "^6.8.2",
