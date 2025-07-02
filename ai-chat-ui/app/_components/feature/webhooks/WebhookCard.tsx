@@ -7,7 +7,6 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import {
   Webhook,
-  Send,
   Clock,
   AlertCircle,
   MoreVertical,

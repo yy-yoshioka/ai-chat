@@ -17,11 +17,11 @@ export async function GET(request: NextRequest) {
 
     const data = await fetcherWithAuth(url, authToken);
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to fetch metrics:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch metrics' },
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Failed to fetch metrics' },
+      { status: 500 }
     );
   }
 }

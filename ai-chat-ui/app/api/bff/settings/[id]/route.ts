@@ -30,7 +30,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     });
 
     return NextResponse.json({}, { status: 204 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to delete' }, { status: 500 });
   }
 }
@@ -58,7 +58,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     }
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to update' }, { status: 500 });
   }
 }

@@ -10,7 +10,7 @@ export function useWebhookLogs(webhookId: string | null, query?: WebhookLogsQuer
   const queryString = query
     ? new URLSearchParams(
         Object.entries(query)
-          .filter(([_, v]) => v !== undefined)
+          .filter(([, v]) => v !== undefined)
           .map(([k, v]) => [k, String(v)])
       ).toString()
     : '';

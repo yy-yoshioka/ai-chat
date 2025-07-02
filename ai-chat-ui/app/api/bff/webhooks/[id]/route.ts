@@ -15,11 +15,11 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
     const data = await fetcherWithAuth(`${EXPRESS_API}/api/webhooks/${params.id}`, authToken);
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to fetch webhook:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch webhook' },
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Failed to fetch webhook' },
+      { status: 500 }
     );
   }
 }
@@ -47,11 +47,11 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     );
 
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to update webhook:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to update webhook' },
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Failed to update webhook' },
+      { status: 500 }
     );
   }
 }
@@ -67,11 +67,11 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     await deleterWithAuth(`${EXPRESS_API}/api/webhooks/${params.id}`, authToken);
 
     return new NextResponse(null, { status: 204 });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to delete webhook:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to delete webhook' },
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Failed to delete webhook' },
+      { status: 500 }
     );
   }
 }

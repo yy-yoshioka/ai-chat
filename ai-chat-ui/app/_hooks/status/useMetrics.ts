@@ -2,7 +2,7 @@
 
 import useSWR from 'swr';
 import { SystemMetric } from '@/app/_schemas/system-health';
-import { fetcherWithAuth } from '@/app/_utils/fetcher';
+import { fetcherWithAuth, fetchGet } from '@/app/_utils/fetcher';
 import { getAuthTokenFromCookie } from '@/app/_utils/auth-utils';
 
 interface MetricsQuery {
@@ -64,23 +64,29 @@ function processMetricsForChart(metrics: SystemMetric[]) {
       });
       return acc;
     },
-    {} as Record<string, any>
+    {} as Record<
+      string,
+      {
+        service: string;
+        metricType: string;
+        unit: string;
+        data: Array<{ timestamp: string; value: number }>;
+      }
+    >
   );
 
   // Sort data points by timestamp
-  Object.values(grouped).forEach((group: any) => {
-    group.data.sort(
-      (a: any, b: any) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-    );
+  Object.values(grouped).forEach((group) => {
+    group.data.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
   });
 
   return grouped;
 }
 
 export const useHealthCheck = () => {
-  const { data, error } = useSWR<any>(
+  const { data, error } = useSWR<{ status: string; timestamp: string }>(
     '/api/bff/status/health',
-    (url: string) => fetch(url).then((res) => res.json()),
+    fetchGet,
     {
       refreshInterval: 10000, // Check every 10 seconds
       revalidateOnFocus: false,

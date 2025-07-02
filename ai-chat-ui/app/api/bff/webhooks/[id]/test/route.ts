@@ -18,11 +18,11 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     );
 
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to test webhook:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to test webhook' },
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Failed to test webhook' },
+      { status: 500 }
     );
   }
 }

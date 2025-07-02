@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useWebhookLogs } from '@/app/_hooks/webhooks/useWebhookLogs';
 import type { WebhookLogStatus } from '@/app/_schemas/webhooks';
-import { formatDistanceToNow, format } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
 
 interface WebhookLogsModalProps {

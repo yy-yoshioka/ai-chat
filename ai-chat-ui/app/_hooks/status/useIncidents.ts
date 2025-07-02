@@ -3,15 +3,13 @@
 import useSWR from 'swr';
 import { useCallback } from 'react';
 import { Incident, CreateIncidentInput, UpdateIncidentInput } from '@/app/_schemas/system-health';
-import { posterWithAuth } from '@/app/_utils/fetcher';
 import { toast } from '@/components/ui/use-toast';
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetchGet, fetchPost, fetcher } from '@/app/_utils/fetcher';
 
 export const useIncidents = (days: number = 30) => {
   const { data, error, mutate } = useSWR<Incident[]>(
     `/api/bff/status/incidents?days=${days}`,
-    fetcher,
+    fetchGet,
     {
       refreshInterval: 60000, // Refresh every minute
     }
@@ -20,17 +18,7 @@ export const useIncidents = (days: number = 30) => {
   const createIncident = useCallback(
     async (input: CreateIncidentInput) => {
       try {
-        const response = await fetch('/api/bff/status/incidents', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(input),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to create incident');
-        }
-
-        const newIncident = await response.json();
+        const newIncident = await fetchPost('/api/bff/status/incidents', input);
         mutate();
         toast({ title: 'Incident created successfully' });
         return newIncident;
@@ -49,17 +37,10 @@ export const useIncidents = (days: number = 30) => {
   const updateIncident = useCallback(
     async (incidentId: string, update: UpdateIncidentInput) => {
       try {
-        const response = await fetch(`/api/bff/status/incidents/${incidentId}/updates`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(update),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to update incident');
-        }
-
-        const updatedIncident = await response.json();
+        const updatedIncident = await fetchPost(
+          `/api/bff/status/incidents/${incidentId}/updates`,
+          update
+        );
         mutate();
         toast({ title: 'Incident updated successfully' });
         return updatedIncident;

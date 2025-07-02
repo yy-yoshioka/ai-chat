@@ -5,7 +5,6 @@ import { useIncidents } from '@/app/_hooks/status/useIncidents';
 import { ServiceStatusCard } from './ServiceStatusCard';
 import { SLAOverview } from './SLAOverview';
 import { IncidentList } from './IncidentList';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle, CheckCircle, AlertTriangle } from 'lucide-react';
 
@@ -99,9 +98,9 @@ function StatusDashboardSkeleton() {
   );
 }
 
-function calculateOverallStatus(status: any): string {
+function calculateOverallStatus(status: Record<string, { status: string }>): string {
   if (!status) return 'unknown';
-  const statuses = Object.values(status).map((s: any) => s.status);
+  const statuses = Object.values(status).map((s) => s.status);
   if (statuses.some((s) => s === 'unhealthy')) return 'unhealthy';
   if (statuses.some((s) => s === 'degraded')) return 'degraded';
   return 'healthy';

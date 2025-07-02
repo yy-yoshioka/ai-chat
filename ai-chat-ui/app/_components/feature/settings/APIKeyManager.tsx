@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Key, Copy, Eye, EyeOff, Trash2, Plus } from 'lucide-react';
+import { Key, Copy, Eye, EyeOff, Trash2, Plus, BookOpen, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useAPIKeys } from '@/app/_hooks/settings/useSettings';
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
+import Link from 'next/link';
 
 interface APIKeyManagerProps {
   orgId: string;
@@ -75,7 +76,6 @@ export function APIKeyManager({ orgId }: APIKeyManagerProps) {
 
   const handleDeleteKey = async (keyId: string) => {
     if (!confirm('このAPIキーを削除してもよろしいですか？')) return;
-
     try {
       await deleteKey(keyId);
       toast({

@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, waitFor } from '@testing-library/react';
 import { KnowledgeBaseUploader } from '../KnowledgeBaseUploader';
 
 // Mock react-dropzone
@@ -28,15 +27,22 @@ describe('KnowledgeBaseUploader', () => {
     mockGetInputProps = jest.fn(() => ({}));
     mockOnDrop = jest.fn();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useDropzone } = require('react-dropzone');
-    useDropzone.mockImplementation((config: any) => {
-      mockOnDrop = config.onDrop;
-      return {
-        getRootProps: mockGetRootProps,
-        getInputProps: mockGetInputProps,
-        isDragActive: false,
-      };
-    });
+    useDropzone.mockImplementation(
+      (config: {
+        onDrop: typeof mockOnDrop;
+        disabled?: boolean;
+        accept?: Record<string, string[]>;
+      }) => {
+        mockOnDrop = config.onDrop;
+        return {
+          getRootProps: mockGetRootProps,
+          getInputProps: mockGetInputProps,
+          isDragActive: false,
+        };
+      }
+    );
 
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
@@ -53,6 +59,7 @@ describe('KnowledgeBaseUploader', () => {
   });
 
   it('shows drag active state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useDropzone } = require('react-dropzone');
     useDropzone.mockImplementation(() => ({
       getRootProps: mockGetRootProps,
@@ -148,18 +155,25 @@ describe('KnowledgeBaseUploader', () => {
   });
 
   it('disables dropzone while uploading', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useDropzone } = require('react-dropzone');
-    let capturedConfig: any;
+    let capturedConfig: { disabled?: boolean; accept?: Record<string, string[]> };
 
-    useDropzone.mockImplementation((config: any) => {
-      capturedConfig = config;
-      mockOnDrop = config.onDrop;
-      return {
-        getRootProps: mockGetRootProps,
-        getInputProps: mockGetInputProps,
-        isDragActive: false,
-      };
-    });
+    useDropzone.mockImplementation(
+      (config: {
+        onDrop: typeof mockOnDrop;
+        disabled?: boolean;
+        accept?: Record<string, string[]>;
+      }) => {
+        capturedConfig = config;
+        mockOnDrop = config.onDrop;
+        return {
+          getRootProps: mockGetRootProps,
+          getInputProps: mockGetInputProps,
+          isDragActive: false,
+        };
+      }
+    );
 
     render(<KnowledgeBaseUploader {...defaultProps} />);
 
@@ -171,7 +185,7 @@ describe('KnowledgeBaseUploader', () => {
     mockOnDrop([file]);
 
     // Re-render to check disabled state
-    const { rerender } = render(<KnowledgeBaseUploader {...defaultProps} />);
+    render(<KnowledgeBaseUploader {...defaultProps} />);
 
     // During upload, dropzone should be disabled
     await waitFor(() => {
@@ -180,17 +194,24 @@ describe('KnowledgeBaseUploader', () => {
   });
 
   it('accepts only specified file types', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useDropzone } = require('react-dropzone');
-    let capturedConfig: any;
+    let capturedConfig: { disabled?: boolean; accept?: Record<string, string[]> };
 
-    useDropzone.mockImplementation((config: any) => {
-      capturedConfig = config;
-      return {
-        getRootProps: mockGetRootProps,
-        getInputProps: mockGetInputProps,
-        isDragActive: false,
-      };
-    });
+    useDropzone.mockImplementation(
+      (config: {
+        onDrop: typeof mockOnDrop;
+        disabled?: boolean;
+        accept?: Record<string, string[]>;
+      }) => {
+        capturedConfig = config;
+        return {
+          getRootProps: mockGetRootProps,
+          getInputProps: mockGetInputProps,
+          isDragActive: false,
+        };
+      }
+    );
 
     render(<KnowledgeBaseUploader {...defaultProps} />);
 

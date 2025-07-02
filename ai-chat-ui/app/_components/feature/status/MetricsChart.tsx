@@ -9,9 +9,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
 } from 'recharts';
-import { SystemMetric } from '@/app/_schemas/system-health';
 import { format } from 'date-fns';
 
 interface MetricsChartProps {
