@@ -53,7 +53,8 @@
       "Bash(yarn:*)",
       "Bash(chmod:*)",
       "Bash(node:*)",
-      "Bash(npx storybook@latest init:*)"
+      "Bash(npx storybook@latest init:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:postgres@localhost:5432/ai_chat_db?schema=public\" yarn prisma migrate dev --name add_data_retention)"
     ],
     "deny": [],
     "autoConfirm": true

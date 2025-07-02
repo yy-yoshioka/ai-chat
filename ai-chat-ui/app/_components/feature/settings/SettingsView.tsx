@@ -7,6 +7,7 @@ import { WidgetsSettings } from './WidgetsSettings';
 import { APISettings } from './APISettings';
 import { NotificationSettings } from './NotificationSettings';
 import { SecuritySettings } from './SecuritySettings';
+import { DataRetentionSettings } from './DataRetentionSettings';
 
 interface SettingsViewProps {
   orgId: string;
@@ -29,6 +30,8 @@ export function SettingsView({ orgId, activeTab, onTabChange }: SettingsViewProp
         return <NotificationSettings orgId={orgId} />;
       case 'security':
         return <SecuritySettings orgId={orgId} />;
+      case 'data-retention':
+        return <DataRetentionSettings orgId={orgId} />;
       default:
         return <BrandingSettings orgId={orgId} />;
     }

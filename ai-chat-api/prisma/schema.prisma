@@ -216,6 +216,8 @@ model Organization {
   notificationSettings NotificationSettings?
   notifications        Notification[]
   webhooks             Webhook[]
+  dataRetentionPolicy  DataRetentionPolicy?
+  dataRetentionJobs    DataRetentionJob[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
@@ -444,6 +446,7 @@ model WebhookLog {
   error       String?  @db.Text
   attempts    Int      @default(1)
   createdAt   DateTime @default(now())
+  executedAt  DateTime @default(now()) // Added for data retention cleanup
   completedAt DateTime?
   
   @@index([webhookId])
@@ -495,11 +498,11 @@ model HealthCheck {
   responseTime  Int      // in milliseconds
   message       String?
   details       Json?    // Detailed check results
-  timestamp     DateTime @default(now())
+  checkedAt     DateTime @default(now())
   
   @@index([service])
   @@index([status])
-  @@index([timestamp])
+  @@index([checkedAt])
   @@map("health_checks")
 }
 
@@ -533,4 +536,54 @@ model IncidentUpdate {
   @@index([incidentId])
   @@index([createdAt])
   @@map("incident_updates")
+}
+
+// Section-15: Data Retention Models
+model DataRetentionPolicy {
+  id             String   @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Retention periods (in days)
+  chatLogs       Int      @default(365)    // 1 year
+  messageFeedback Int     @default(730)    // 2 years
+  systemMetrics  Int      @default(90)     // 3 months
+  webhookLogs    Int      @default(30)     // 1 month
+  healthChecks   Int      @default(7)      // 1 week
+  auditLogs      Int      @default(2555)   // 7 years (compliance)
+  
+  // Auto-deletion settings
+  autoDelete     Boolean  @default(true)
+  anonymizeData  Boolean  @default(false)  // Anonymize instead of delete
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@unique([organizationId])
+  @@map("data_retention_policies")
+}
+
+model DataRetentionJob {
+  id             String   @id @default(cuid())
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  jobType        String   // 'chat_logs', 'metrics', 'webhooks', etc.
+  status         String   // 'pending', 'running', 'completed', 'failed'
+  itemsProcessed Int      @default(0)
+  itemsDeleted   Int      @default(0)
+  itemsAnonymized Int     @default(0)
+  
+  startedAt      DateTime?
+  completedAt    DateTime?
+  error          String?
+  metadata       Json?    // Additional job context
+  
+  createdAt      DateTime @default(now())
+  
+  @@index([organizationId])
+  @@index([jobType])
+  @@index([status])
+  @@index([createdAt])
+  @@map("data_retention_jobs")
 }

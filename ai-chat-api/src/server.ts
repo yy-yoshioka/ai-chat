@@ -9,6 +9,7 @@ import { initializeTelemetry } from './lib/telemetry';
 import { healthMonitorService } from './services/healthMonitorService';
 import { alertService } from './services/alertService';
 import { logger } from './lib/logger';
+import { startDataRetentionCron } from './jobs/dataRetentionCron';
 
 const PORT = Number(process.env.PORT) || 3001;
 const HOST = '0.0.0.0'; // Allow external connections in Docker
@@ -45,6 +46,9 @@ const server = httpServer.listen(PORT, HOST, () => {
   alertService.startMonitoring(60000); // Check alerts every minute
 
   logger.info('System health monitoring started', { healthCheckInterval });
+
+  // Start data retention cron jobs
+  startDataRetentionCron();
 
   // Schedule cleanup of old metrics data
   setInterval(

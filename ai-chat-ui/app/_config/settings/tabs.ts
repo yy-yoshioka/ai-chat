@@ -7,6 +7,7 @@ export const SETTINGS_TABS: TabConfig[] = [
   { id: 'api', label: 'API/Webhooks', icon: '🔑' },
   { id: 'notifications', label: '通知', icon: '🔔' },
   { id: 'security', label: 'セキュリティ', icon: '🔒' },
+  { id: 'data-retention', label: 'データ保持', icon: '🗄️' },
 ];
 
 export const DEFAULT_COLORS = {
