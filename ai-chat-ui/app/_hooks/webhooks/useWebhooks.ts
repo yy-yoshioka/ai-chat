@@ -14,7 +14,12 @@ export function useWebhooks() {
   const authToken = getAuthTokenFromCookie();
   const queryClient = useQueryClient();
 
-  const { data: webhooks, error, isLoading, refetch } = useQuery<Webhook[]>({
+  const {
+    data: webhooks,
+    error,
+    isLoading,
+    refetch,
+  } = useQuery<Webhook[]>({
     queryKey: ['webhooks'],
     queryFn: () => fetcherWithAuth('/api/bff/webhooks', authToken!),
     enabled: !!authToken,

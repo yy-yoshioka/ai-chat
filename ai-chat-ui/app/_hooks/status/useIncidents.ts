@@ -7,7 +7,7 @@ import { fetchGet, fetchPost, fetcher } from '@/app/_utils/fetcher';
 
 export const useIncidents = (days: number = 30) => {
   const queryClient = useQueryClient();
-  
+
   const { data, error, isLoading, refetch } = useQuery<Incident[]>({
     queryKey: ['incidents', days],
     queryFn: () => fetchGet(`/api/bff/status/incidents?days=${days}`),

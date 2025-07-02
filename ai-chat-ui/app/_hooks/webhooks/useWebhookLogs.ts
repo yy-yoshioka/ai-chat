@@ -15,7 +15,12 @@ export function useWebhookLogs(webhookId: string | null, query?: WebhookLogsQuer
       ).toString()
     : '';
 
-  const { data: logs, error, isLoading, refetch } = useQuery<WebhookLog[]>({
+  const {
+    data: logs,
+    error,
+    isLoading,
+    refetch,
+  } = useQuery<WebhookLog[]>({
     queryKey: ['webhook-logs', webhookId, query],
     queryFn: () =>
       fetcherWithAuth(

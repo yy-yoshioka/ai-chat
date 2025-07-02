@@ -80,7 +80,12 @@ export function useUsers(orgId: string) {
 
 // Hook for individual user data
 export function useUser(userId: string) {
-  const { data: user, error, isLoading, refetch } = useQuery<User & { permissions?: string[] }>({
+  const {
+    data: user,
+    error,
+    isLoading,
+    refetch,
+  } = useQuery<User & { permissions?: string[] }>({
     queryKey: ['user', userId],
     queryFn: () => fetchGet(`/api/bff/users/${userId}`),
     enabled: !!userId,
