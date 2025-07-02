@@ -1,0 +1,12 @@
+{
+  "entryPoints": ["./app/_components", "./components"],
+  "out": "./docs/components",
+  "theme": "default",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true,
+  "readme": "./README.md",
+  "name": "AI Chat UI Components",
+  "tsconfig": "./tsconfig.json"
+}

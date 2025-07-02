@@ -52,7 +52,8 @@
       "Bash(yarn type-check)",
       "Bash(yarn:*)",
       "Bash(chmod:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npx storybook@latest init:*)"
     ],
     "deny": [],
     "autoConfirm": true
