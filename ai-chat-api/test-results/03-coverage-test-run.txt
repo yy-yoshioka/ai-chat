@@ -1,0 +1,937 @@
+yarn run v1.22.22
+$ jest --coverage
+PASS tests/unit/sample.test.ts (5.514 s)
+  Sample Test
+    ✓ should pass a simple test (3 ms)
+    ✓ should have environment variables set
+
+  console.error
+    Auth middleware error: Error: DB Error
+        at /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/tests/unit/middleware/auth.test.ts:146:7
+        at Generator.next (<anonymous>)
+        at /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/tests/unit/middleware/auth.test.ts:8:71
+        at new Promise (<anonymous>)
+        at __awaiter (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/tests/unit/middleware/auth.test.ts:4:12)
+        at Object.<anonymous> (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/tests/unit/middleware/auth.test.ts:138:50)
+        at Promise.finally.completed (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+        at _callCircusTest (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at _runTest (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:949:3)
+        at _runTestsForDescribeBlock (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+        at _runTestsForDescribeBlock (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+        at run (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:757:3)
+        at runAndTransformResultsToJestFormat (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:1920:21)
+        at jestAdapter (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/runner.js:101:19)
+        at runTestInternal (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-runner/build/testWorker.js:272:16)
+        at runTest (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-runner/build/testWorker.js:340:7)
+        at Object.worker (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-runner/build/testWorker.js:494:12)
+
+      58 |     next();
+      59 |   } catch (error) {
+    > 60 |     console.error('Auth middleware error:', error);
+         |             ^
+      61 |     return res.status(500).json({ error: 'Internal server error' });
+      62 |   }
+      63 | };
+
+      at error (src/middleware/auth.ts:60:13)
+          at Generator.throw (<anonymous>)
+      at rejected (src/middleware/auth.ts:1243:32)
+
+PASS tests/unit/middleware/auth.test.ts (5.567 s)
+  Auth Middleware
+    ✓ should authenticate valid token (11 ms)
+    ✓ should reject request without token (1 ms)
+    ✓ should reject invalid token
+    ✓ should reject expired token (1 ms)
+    ✓ should reject token for non-existent user (1 ms)
+    ✓ should handle database errors (39 ms)
+
+PASS tests/unit/utils/jwt.test.ts (5.66 s)
+  JWT Utils
+    signToken
+      ✓ should sign a token and set cookie (5 ms)
+      ✓ should set secure cookie in production (2 ms)
+      ✓ should throw error if JWT_SECRET is not defined (12 ms)
+    verifyToken
+      ✓ should verify a valid token (1 ms)
+      ✓ should throw error for invalid token (1 ms)
+      ✓ should throw error for expired token (1 ms)
+      ✓ should throw error if JWT_SECRET is not defined
+
+FAIL tests/routes/webhooks.test.ts
+  ● Test suite failed to run
+
+    [96msrc/middleware/organizationAccess.ts[0m:[93m8[0m:[93m30[0m - [91merror[0m[90m TS2339: [0mProperty 'organizationId' does not exist on type 'UserPayload & { roles?: string[] | undefined; }'.
+
+    [7m8[0m   if (!req.user || !req.user.organizationId) {
+    [7m [0m [91m                             ~~~~~~~~~~~~~~[0m
+
+FAIL tests/routes/dashboard.test.ts
+  ● Test suite failed to run
+
+    [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+    [7m34[0m     const resource = new Resource({
+    [7m  [0m [91m                         ~~~~~~~~[0m
+
+FAIL tests/routes/organizations.test.ts
+  ● Test suite failed to run
+
+    [96mtests/fixtures/test-data.ts[0m:[93m168[0m:[93m10[0m - [91merror[0m[90m TS2769: [0mNo overload matches this call.
+      Overload 1 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: null, options?: (SignOptions & { algorithm: "none"; }) | undefined): string', gave the following error.
+        Argument of type 'string' is not assignable to parameter of type 'null'.
+      Overload 2 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, options?: SignOptions | undefined): string', gave the following error.
+        Type 'string' is not assignable to type 'number | StringValue | undefined'.
+      Overload 3 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, callback: SignCallback): void', gave the following error.
+        Object literal may only specify known properties, and 'expiresIn' does not exist in type 'SignCallback'.
+
+    [7m168[0m   return jwt.sign({ id: userId, organizationId }, process.env.JWT_SECRET!, {
+    [7m   [0m [91m         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m169[0m     expiresIn,
+    [7m   [0m [91m~~~~~~~~~~~~~~[0m
+    [7m170[0m   });
+    [7m   [0m [91m~~~~[0m
+
+FAIL tests/routes/users.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/users.test.ts[0m:[93m7[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"../../src/middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+
+    [7m7[0m import { requireOrganizationAccess } from '../../src/middleware/organizationAccess';
+    [7m [0m [91m         ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+FAIL tests/routes/widgets.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/widgets.test.ts[0m:[93m48[0m:[93m68[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ widgets: { id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }[]; total: number; page: number; limit: number; }' is not assignable to parameter of type '{ widgets: ({ company: { name: string; id: string; plan: PlanType; }; _count: { chatLogs: number; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; ... 10 more ...; fontFamily: string; })[]; pagination: { ...; }; } | Promise<...>'.
+      Property 'pagination' is missing in type '{ widgets: { id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }[]; total: number; page: number; limit: number; }' but required in type '{ widgets: ({ company: { name: string; id: string; plan: $Enums.PlanType; }; _count: { chatLogs: number; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; ... 10 more ...; fontFamily: string; })[]; pagination: { ...; }; }'.
+
+    [7m48[0m       widgetServiceMock.getWidgetsByOrganization.mockResolvedValue(mockResult);
+    [7m  [0m [91m                                                                   ~~~~~~~~~~[0m
+
+      [96msrc/services/widgetService.ts[0m:[93m60[0m:[93m5[0m
+        [7m 60[0m     pagination: {
+        [7m   [0m [96m    ~~~~~~~~~~~~~[0m
+        [7m 61[0m       page,
+        [7m   [0m [96m~~~~~~~~~~~[0m
+        [7m...[0m 
+        [7m 64[0m       totalPages: Math.ceil(total / limit),
+        [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        [7m 65[0m     },
+        [7m   [0m [96m~~~~~[0m
+        'pagination' is declared here.
+    [96mtests/routes/widgets.test.ts[0m:[93m76[0m:[93m68[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ widgets: { id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }[]; total: number; page: number; limit: number; }' is not assignable to parameter of type '{ widgets: ({ company: { name: string; id: string; plan: PlanType; }; _count: { chatLogs: number; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; ... 10 more ...; fontFamily: string; })[]; pagination: { ...; }; } | Promise<...>'.
+      Property 'pagination' is missing in type '{ widgets: { id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }[]; total: number; page: number; limit: number; }' but required in type '{ widgets: ({ company: { name: string; id: string; plan: $Enums.PlanType; }; _count: { chatLogs: number; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; ... 10 more ...; fontFamily: string; })[]; pagination: { ...; }; }'.
+
+    [7m76[0m       widgetServiceMock.getWidgetsByOrganization.mockResolvedValue(mockResult);
+    [7m  [0m [91m                                                                   ~~~~~~~~~~[0m
+
+      [96msrc/services/widgetService.ts[0m:[93m60[0m:[93m5[0m
+        [7m 60[0m     pagination: {
+        [7m   [0m [96m    ~~~~~~~~~~~~~[0m
+        [7m 61[0m       page,
+        [7m   [0m [96m~~~~~~~~~~~[0m
+        [7m...[0m 
+        [7m 64[0m       totalPages: Math.ceil(total / limit),
+        [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        [7m 65[0m     },
+        [7m   [0m [96m~~~~~[0m
+        'pagination' is declared here.
+    [96mtests/routes/widgets.test.ts[0m:[93m140[0m:[93m56[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ id: string; name: string; companyId: string; themeColor: string; welcomeMessage: string; placeholderText: string; widgetKey: string; status: string; settings: {}; createdAt: Date; updatedAt: Date; }' is not assignable to parameter of type '({ company: { name: string; id: string; plan: PlanType; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; companyId: string; isActive: boolean; ... 8 more ...; fontFamily: string; }) | Promise<...>'.
+      Type '{ id: string; name: string; companyId: string; themeColor: string; welcomeMessage: string; placeholderText: string; widgetKey: string; status: string; settings: {}; createdAt: Date; updatedAt: Date; }' is not assignable to type '{ company: { name: string; id: string; plan: PlanType; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; companyId: string; isActive: boolean; ... 8 more ...; fontFamily: string; }'.
+        Property 'company' is missing in type '{ id: string; name: string; companyId: string; themeColor: string; welcomeMessage: string; placeholderText: string; widgetKey: string; status: string; settings: {}; createdAt: Date; updatedAt: Date; }' but required in type '{ company: { name: string; id: string; plan: PlanType; }; }'.
+
+    [7m140[0m       widgetServiceMock.createWidget.mockResolvedValue(createdWidget);
+    [7m   [0m [91m                                                       ~~~~~~~~~~~~~[0m
+    [96mtests/routes/widgets.test.ts[0m:[93m193[0m:[93m57[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }' is not assignable to parameter of type '({ company: { name: string; id: string; plan: PlanType; organizationId: string | null; }; knowledgeBases: { name: string; id: string; createdAt: Date; status: string; chunks: number; }[]; _count: { ...; }; } & { ...; }) | Promise<...>'.
+      Type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }' is not assignable to type '{ company: { name: string; id: string; plan: PlanType; organizationId: string | null; }; knowledgeBases: { name: string; id: string; createdAt: Date; status: string; chunks: number; }[]; _count: { ...; }; } & { ...; }'.
+        Type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }' is missing the following properties from type '{ company: { name: string; id: string; plan: PlanType; organizationId: string | null; }; knowledgeBases: { name: string; id: string; createdAt: Date; status: string; chunks: number; }[]; _count: { ...; }; }': company, knowledgeBases, _count
+
+    [7m193[0m       widgetServiceMock.getWidgetById.mockResolvedValue(testWidget);
+    [7m   [0m [91m                                                        ~~~~~~~~~~[0m
+    [96mtests/routes/widgets.test.ts[0m:[93m249[0m:[93m56[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ updatedAt: Date; name: string; themeColor: string; status: "inactive"; id: string; widgetKey: string; welcomeMessage: string; placeholderText: string; settings: {}; companyId: string; createdAt: Date; }' is not assignable to parameter of type '({ company: { name: string; id: string; plan: PlanType; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; companyId: string; isActive: boolean; ... 8 more ...; fontFamily: string; }) | Promise<...>'.
+      Type '{ updatedAt: Date; name: string; themeColor: string; status: "inactive"; id: string; widgetKey: string; welcomeMessage: string; placeholderText: string; settings: {}; companyId: string; createdAt: Date; }' is not assignable to type '{ company: { name: string; id: string; plan: PlanType; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; companyId: string; isActive: boolean; ... 8 more ...; fontFamily: string; }'.
+        Property 'company' is missing in type '{ updatedAt: Date; name: string; themeColor: string; status: "inactive"; id: string; widgetKey: string; welcomeMessage: string; placeholderText: string; settings: {}; companyId: string; createdAt: Date; }' but required in type '{ company: { name: string; id: string; plan: PlanType; }; }'.
+
+    [7m249[0m       widgetServiceMock.updateWidget.mockResolvedValue(updatedWidget);
+    [7m   [0m [91m                                                       ~~~~~~~~~~~~~[0m
+    [96mtests/routes/widgets.test.ts[0m:[93m297[0m:[93m56[0m - [91merror[0m[90m TS2345: [0mArgument of type 'undefined' is not assignable to parameter of type '{ name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; companyId: string; isActive: boolean; accentColor: string; logoUrl: string | null; theme: string; ... 5 more ...; fontFamily: string; } | Promise<...>'.
+
+    [7m297[0m       widgetServiceMock.deleteWidget.mockResolvedValue(undefined);
+    [7m   [0m [91m                                                       ~~~~~~~~~[0m
+    [96mtests/routes/widgets.test.ts[0m:[93m356[0m:[93m62[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ totalChats: number; uniqueUsers: number; avgResponseTime: number; satisfactionRate: number; topQuestions: { question: string; count: number; }[]; chatsByDay: { date: string; count: number; }[]; }' is not assignable to parameter of type '{ totalChats: number; monthlyChats: number; avgSatisfaction: any; topQuestions: { question: string; count: number; }[]; } | Promise<{ totalChats: number; monthlyChats: number; avgSatisfaction: any; topQuestions: { ...; }[]; }>'.
+      Type '{ totalChats: number; uniqueUsers: number; avgResponseTime: number; satisfactionRate: number; topQuestions: { question: string; count: number; }[]; chatsByDay: { date: string; count: number; }[]; }' is missing the following properties from type '{ totalChats: number; monthlyChats: number; avgSatisfaction: any; topQuestions: { question: string; count: number; }[]; }': monthlyChats, avgSatisfaction
+
+    [7m356[0m       widgetServiceMock.getWidgetAnalytics.mockResolvedValue(mockAnalytics);
+    [7m   [0m [91m                                                             ~~~~~~~~~~~~~[0m
+
+FAIL tests/routes/knowledge-base.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/knowledge-base.test.ts[0m:[93m268[0m:[93m25[0m - [91merror[0m[90m TS2551: [0mProperty 'company' does not exist on type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }'. Did you mean 'companyId'?
+
+    [7m268[0m           ...testWidget.company,
+    [7m   [0m [91m                        ~~~~~~~[0m
+
+      [96mtests/fixtures/test-data.ts[0m:[93m59[0m:[93m3[0m
+        [7m59[0m   companyId: 'company-test-123',
+        [7m  [0m [96m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        'companyId' is declared here.
+    [96mtests/routes/knowledge-base.test.ts[0m:[93m629[0m:[93m25[0m - [91merror[0m[90m TS2551: [0mProperty 'company' does not exist on type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }'. Did you mean 'companyId'?
+
+    [7m629[0m           ...testWidget.company,
+    [7m   [0m [91m                        ~~~~~~~[0m
+
+      [96mtests/fixtures/test-data.ts[0m:[93m59[0m:[93m3[0m
+        [7m59[0m   companyId: 'company-test-123',
+        [7m  [0m [96m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        'companyId' is declared here.
+    [96mtests/routes/knowledge-base.test.ts[0m:[93m711[0m:[93m27[0m - [91merror[0m[90m TS2551: [0mProperty 'company' does not exist on type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }'. Did you mean 'companyId'?
+
+    [7m711[0m             ...testWidget.company,
+    [7m   [0m [91m                          ~~~~~~~[0m
+
+      [96mtests/fixtures/test-data.ts[0m:[93m59[0m:[93m3[0m
+        [7m59[0m   companyId: 'company-test-123',
+        [7m  [0m [96m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        'companyId' is declared here.
+    [96mtests/routes/knowledge-base.test.ts[0m:[93m918[0m:[93m27[0m - [91merror[0m[90m TS2551: [0mProperty 'company' does not exist on type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }'. Did you mean 'companyId'?
+
+    [7m918[0m             ...testWidget.company,
+    [7m   [0m [91m                          ~~~~~~~[0m
+
+      [96mtests/fixtures/test-data.ts[0m:[93m59[0m:[93m3[0m
+        [7m59[0m   companyId: 'company-test-123',
+        [7m  [0m [96m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        'companyId' is declared here.
+
+FAIL tests/routes/auth.test.ts
+  ● Test suite failed to run
+
+    [96mtests/fixtures/test-data.ts[0m:[93m168[0m:[93m10[0m - [91merror[0m[90m TS2769: [0mNo overload matches this call.
+      Overload 1 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: null, options?: (SignOptions & { algorithm: "none"; }) | undefined): string', gave the following error.
+        Argument of type 'string' is not assignable to parameter of type 'null'.
+      Overload 2 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, options?: SignOptions | undefined): string', gave the following error.
+        Type 'string' is not assignable to type 'number | StringValue | undefined'.
+      Overload 3 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, callback: SignCallback): void', gave the following error.
+        Object literal may only specify known properties, and 'expiresIn' does not exist in type 'SignCallback'.
+
+    [7m168[0m   return jwt.sign({ id: userId, organizationId }, process.env.JWT_SECRET!, {
+    [7m   [0m [91m         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m169[0m     expiresIn,
+    [7m   [0m [91m~~~~~~~~~~~~~~[0m
+    [7m170[0m   });
+    [7m   [0m [91m~~~~[0m
+
+FAIL tests/routes/billing.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/billing.test.ts[0m:[93m4[0m:[93m8[0m - [91merror[0m[90m TS1192: [0mModule '"/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/billing"' has no default export.
+
+    [7m4[0m import billingRouter from '../../src/routes/billing';
+    [7m [0m [91m       ~~~~~~~~~~~~~[0m
+
+FAIL tests/routes/admin.test.ts
+  ● Test suite failed to run
+
+    [96mtests/fixtures/test-data.ts[0m:[93m168[0m:[93m10[0m - [91merror[0m[90m TS2769: [0mNo overload matches this call.
+      Overload 1 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: null, options?: (SignOptions & { algorithm: "none"; }) | undefined): string', gave the following error.
+        Argument of type 'string' is not assignable to parameter of type 'null'.
+      Overload 2 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, options?: SignOptions | undefined): string', gave the following error.
+        Type 'string' is not assignable to type 'number | StringValue | undefined'.
+      Overload 3 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, callback: SignCallback): void', gave the following error.
+        Object literal may only specify known properties, and 'expiresIn' does not exist in type 'SignCallback'.
+
+    [7m168[0m   return jwt.sign({ id: userId, organizationId }, process.env.JWT_SECRET!, {
+    [7m   [0m [91m         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m169[0m     expiresIn,
+    [7m   [0m [91m~~~~~~~~~~~~~~[0m
+    [7m170[0m   });
+    [7m   [0m [91m~~~~[0m
+
+FAIL tests/routes/analytics.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/analytics.test.ts[0m:[93m4[0m:[93m8[0m - [91merror[0m[90m TS1192: [0mModule '"/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/analytics"' has no default export.
+
+    [7m4[0m import analyticsRouter from '../../src/routes/analytics';
+    [7m [0m [91m       ~~~~~~~~~~~~~~~[0m
+
+FAIL tests/integration/users.test.ts
+  ● Test suite failed to run
+
+    [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+    [7m34[0m     const resource = new Resource({
+    [7m  [0m [91m                         ~~~~~~~~[0m
+
+FAIL tests/integration/reports.test.ts
+  ● Test suite failed to run
+
+    [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+    [7m34[0m     const resource = new Resource({
+    [7m  [0m [91m                         ~~~~~~~~[0m
+
+FAIL tests/integration/organizations.test.ts
+  ● Test suite failed to run
+
+    [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+    [7m34[0m     const resource = new Resource({
+    [7m  [0m [91m                         ~~~~~~~~[0m
+
+FAIL tests/integration/dashboard.test.ts
+  ● Test suite failed to run
+
+    [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+    [7m34[0m     const resource = new Resource({
+    [7m  [0m [91m                         ~~~~~~~~[0m
+
+FAIL tests/routes/chat.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/chat.test.ts[0m:[93m362[0m:[93m14[0m - [91merror[0m[90m TS2454: [0mVariable 'capturedMessages' is used before being assigned.
+
+    [7m362[0m       expect(capturedMessages).toContainEqual(
+    [7m   [0m [91m             ~~~~~~~~~~~~~~~~[0m
+    [96mtests/routes/chat.test.ts[0m:[93m368[0m:[93m14[0m - [91merror[0m[90m TS2454: [0mVariable 'capturedMessages' is used before being assigned.
+
+    [7m368[0m       expect(capturedMessages).toContainEqual(
+    [7m   [0m [91m             ~~~~~~~~~~~~~~~~[0m
+    [96mtests/routes/chat.test.ts[0m:[93m497[0m:[93m38[0m - [91merror[0m[90m TS2551: [0mProperty 'company' does not exist on type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }'. Did you mean 'companyId'?
+
+    [7m497[0m           organizationId: testWidget.company.organizationId,
+    [7m   [0m [91m                                     ~~~~~~~[0m
+
+      [96mtests/fixtures/test-data.ts[0m:[93m59[0m:[93m3[0m
+        [7m59[0m   companyId: 'company-test-123',
+        [7m  [0m [96m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        'companyId' is declared here.
+
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/jobs/embeddingCron.ts
+ERROR: [96msrc/jobs/embeddingCron.ts[0m:[93m40[0m:[93m44[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m40[0m     const externalDocuments = await prisma.document.findMany({
+[7m  [0m [91m                                           ~~~~~~~~[0m
+[96msrc/jobs/embeddingCron.ts[0m:[93m84[0m:[93m24[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m84[0m           await prisma.document.update({
+[7m  [0m [91m                       ~~~~~~~~[0m
+[96msrc/jobs/embeddingCron.ts[0m:[93m96[0m:[93m24[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m96[0m           await prisma.document.update({
+[7m  [0m [91m                       ~~~~~~~~[0m
+[96msrc/jobs/embeddingCron.ts[0m:[93m107[0m:[93m22[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m107[0m         await prisma.document.update({
+[7m   [0m [91m                     ~~~~~~~~[0m
+[96msrc/jobs/embeddingCron.ts[0m:[93m277[0m:[93m5[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'scheduled' does not exist in type 'TaskOptions'.
+
+[7m277[0m     scheduled: true,
+[7m   [0m [91m    ~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/jobs/dataRetentionCron.ts
+ERROR: [96msrc/jobs/dataRetentionCron.ts[0m:[93m91[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'null' is not assignable to type '(Without<WebhookScalarRelationFilter, WebhookWhereInput> & WebhookWhereInput) | (Without<WebhookWhereInput, WebhookScalarRelationFilter> & WebhookScalarRelationFilter) | undefined'.
+
+[7m91[0m       webhook: null,
+[7m  [0m [91m      ~~~~~~~[0m
+[96msrc/jobs/dataRetentionCron.ts[0m:[93m98[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'null' is not assignable to type '(Without<ChatLogScalarRelationFilter, ChatLogWhereInput> & ChatLogWhereInput) | (Without<ChatLogWhereInput, ChatLogScalarRelationFilter> & ChatLogScalarRelationFilter) | undefined'.
+
+[7m98[0m       chatLog: null,
+[7m  [0m [91m      ~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/organizationAccess.ts
+ERROR: [96msrc/middleware/organizationAccess.ts[0m:[93m8[0m:[93m30[0m - [91merror[0m[90m TS2339: [0mProperty 'organizationId' does not exist on type 'UserPayload & { roles?: string[] | undefined; }'.
+
+[7m8[0m   if (!req.user || !req.user.organizationId) {
+[7m [0m [91m                             ~~~~~~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/lib/telemetry.ts
+ERROR: [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+[7m34[0m     const resource = new Resource({
+[7m  [0m [91m                         ~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/security.ts
+ERROR: [96msrc/middleware/security.ts[0m:[93m183[0m:[93m40[0m - [91merror[0m[90m TS2339: [0mProperty 'ipAllowlist' does not exist on type 'string | number | boolean | JsonObject | JsonArray'.
+  Property 'ipAllowlist' does not exist on type 'string'.
+
+[7m183[0m     const ipAllowlist = org?.settings?.ipAllowlist as string[] | undefined;
+[7m   [0m [91m                                       ~~~~~~~~~~~[0m
+[96msrc/middleware/security.ts[0m:[93m188[0m:[93m42[0m - [91merror[0m[90m TS18048: [0m'clientIP' is possibly 'undefined'.
+
+[7m188[0m         return clientIP === allowedIP || clientIP.startsWith(allowedIP);
+[7m   [0m [91m                                         ~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/docs.ts
+ERROR: [96msrc/routes/docs.ts[0m:[93m2[0m:[93m23[0m - [91merror[0m[90m TS2307: [0mCannot find module 'swagger-ui-express' or its corresponding type declarations.
+
+[7m2[0m import swaggerUi from 'swagger-ui-express';
+[7m [0m [91m                      ~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/routes/docs.ts[0m:[93m3[0m:[93m18[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'js-yaml'. '/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/js-yaml/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/js-yaml` if it exists or add a new declaration (.d.ts) file containing `declare module 'js-yaml';`
+
+[7m3[0m import yaml from 'js-yaml';
+[7m [0m [91m                 ~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/analytics.ts
+ERROR: [96msrc/routes/analytics.ts[0m:[93m4[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+
+[7m4[0m   requireOrganizationAccess,
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/routes/analytics.ts[0m:[93m5[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'OrganizationRequest'.
+
+[7m5[0m   OrganizationRequest,
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/billing.ts
+ERROR: [96msrc/routes/billing.ts[0m:[93m4[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+
+[7m4[0m   requireOrganizationAccess,
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/routes/billing.ts[0m:[93m5[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'OrganizationRequest'.
+
+[7m5[0m   OrganizationRequest,
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/embed.ts
+ERROR: [96msrc/routes/embed.ts[0m:[93m4[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+
+[7m4[0m   requireOrganizationAccess,
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/routes/embed.ts[0m:[93m5[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'OrganizationRequest'.
+
+[7m5[0m   OrganizationRequest,
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/status.ts
+ERROR: [96msrc/routes/status.ts[0m:[93m73[0m:[93m25[0m - [91merror[0m[90m TS2339: [0mProperty 'updates' does not exist on type '{ id: string; createdAt: Date; status: string; description: string; title: string; severity: string; affectedServices: string[]; resolvedAt: Date | null; }'.
+
+[7m73[0m       updates: incident.updates?.slice(0, 3).map((update) => ({
+[7m  [0m [91m                        ~~~~~~~[0m
+[96msrc/routes/status.ts[0m:[93m73[0m:[93m51[0m - [91merror[0m[90m TS7006: [0mParameter 'update' implicitly has an 'any' type.
+
+[7m73[0m       updates: incident.updates?.slice(0, 3).map((update) => ({
+[7m  [0m [91m                                                  ~~~~~~[0m
+[96msrc/routes/status.ts[0m:[93m222[0m:[93m7[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckWhereInput'.
+
+[7m222[0m       timestamp: { gte: thirtyDaysAgo },
+[7m   [0m [91m      ~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/training.ts
+ERROR: [96msrc/routes/training.ts[0m:[93m2[0m:[93m26[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/auth"' has no exported member 'AuthRequest'.
+
+[7m2[0m import { authMiddleware, AuthRequest } from '../middleware/auth';
+[7m [0m [91m                         ~~~~~~~~~~~[0m
+[96msrc/routes/training.ts[0m:[93m98[0m:[93m11[0m - [91merror[0m[90m TS2322: [0mType 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+
+[7m98[0m           widgetId,
+[7m  [0m [91m          ~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/translation.ts
+ERROR: [96msrc/routes/translation.ts[0m:[93m4[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+
+[7m4[0m   requireOrganizationAccess,
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/routes/translation.ts[0m:[93m5[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'OrganizationRequest'.
+
+[7m5[0m   OrganizationRequest,
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/knowledge-base.ts
+ERROR: [96msrc/routes/knowledge-base.ts[0m:[93m8[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+
+[7m8[0m   requireOrganizationAccess,
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/routes/knowledge-base.ts[0m:[93m9[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'OrganizationRequest'.
+
+[7m9[0m   OrganizationRequest,
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/routes/knowledge-base.ts[0m:[93m55[0m:[93m3[0m - [91merror[0m[90m TS2352: [0mConversion of type 'import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/multer/node_modules/@types/express/index").RequestHandler<import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/multer/node_modules/@types/express-serve-static-core/index").ParamsDictionary, any, a...' to type 'import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/express/index").RequestHandler<import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/express-serve-static-core/index").ParamsDictionary, any, any, qs.ParsedQs, Record<...>>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/express-serve-static-core/index").Request<import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/express-serve-static-core/index").ParamsDictionary, any, any, qs.ParsedQs, Record<...>>' is not comparable to type 'import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/multer/node_modules/@types/express-serve-static-core/index").Request<import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/multer/node_modules/@types/express-serve-static-core/index").ParamsDiction...'.
+      The types of 'app.router' are incompatible between these types.
+        Type 'string' is not comparable to type 'Router'.
+
+[7m55[0m   upload.single('file') as RequestHandler,
+[7m  [0m [91m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/users.ts
+ERROR: [96msrc/routes/users.ts[0m:[93m5[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+
+[7m5[0m import { requireOrganizationAccess } from '../middleware/organizationAccess';
+[7m [0m [91m         ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/routes/users.ts[0m:[93m444[0m:[93m33[0m - [91merror[0m[90m TS2339: [0mProperty 'email' does not exist on type '{ organizationId: string | null; roles: Role[]; }'.
+
+[7m444[0m           email: requestingUser.email || req.user!.email,
+[7m   [0m [91m                                ~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/alertService.ts
+ERROR: [96msrc/services/alertService.ts[0m:[93m87[0m:[93m9[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckWhereInput'.
+
+[7m87[0m         timestamp: { gte: fiveMinutesAgo },
+[7m  [0m [91m        ~~~~~~~~~[0m
+[96msrc/services/alertService.ts[0m:[93m89[0m:[93m18[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckOrderByWithRelationInput | HealthCheckOrderByWithRelationInput[]'.
+
+[7m89[0m       orderBy: { timestamp: 'desc' },
+[7m  [0m [91m                 ~~~~~~~~~[0m
+[96msrc/services/alertService.ts[0m:[93m272[0m:[93m9[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckWhereInput'.
+
+[7m272[0m         timestamp: { gte: tenMinutesAgo },
+[7m   [0m [91m        ~~~~~~~~~[0m
+[96msrc/services/alertService.ts[0m:[93m274[0m:[93m18[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckOrderByWithRelationInput | HealthCheckOrderByWithRelationInput[]'.
+
+[7m274[0m       orderBy: { timestamp: 'desc' },
+[7m   [0m [91m                 ~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/embeddingWorker.ts
+ERROR: [96msrc/services/embeddingWorker.ts[0m:[93m96[0m:[93m35[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m96[0m     const document = await prisma.document.findUnique({
+[7m  [0m [91m                                  ~~~~~~~~[0m
+[96msrc/services/embeddingWorker.ts[0m:[93m106[0m:[93m18[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m106[0m     await prisma.document.update({
+[7m   [0m [91m                 ~~~~~~~~[0m
+[96msrc/services/embeddingWorker.ts[0m:[93m157[0m:[93m18[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m157[0m     await prisma.document.update({
+[7m   [0m [91m                 ~~~~~~~~[0m
+[96msrc/services/embeddingWorker.ts[0m:[93m258[0m:[93m33[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m258[0m   const document = await prisma.document.findUnique({
+[7m   [0m [91m                                ~~~~~~~~[0m
+[96msrc/services/embeddingWorker.ts[0m:[93m309[0m:[93m34[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m309[0m   const documents = await prisma.document.findMany({
+[7m   [0m [91m                                 ~~~~~~~~[0m
+[96msrc/services/embeddingWorker.ts[0m:[93m328[0m:[93m23[0m - [91merror[0m[90m TS7006: [0mParameter 'doc' implicitly has an 'any' type.
+
+[7m328[0m     ...documents.map((doc) => ({
+[7m   [0m [91m                      ~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/healthMonitorService.ts
+ERROR: [96msrc/services/healthMonitorService.ts[0m:[93m276[0m:[93m22[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckOrderByWithRelationInput | HealthCheckOrderByWithRelationInput[]'.
+
+[7m276[0m           orderBy: { timestamp: 'desc' },
+[7m   [0m [91m                     ~~~~~~~~~[0m
+[96msrc/services/healthMonitorService.ts[0m:[93m341[0m:[93m18[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckWhereInput'.
+
+[7m341[0m         where: { timestamp: { lt: cutoffDate } },
+[7m   [0m [91m                 ~~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/ragService.ts
+ERROR: [96msrc/services/ragService.ts[0m:[93m422[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m422[0m       prisma.document.count({
+[7m   [0m [91m             ~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/settingsService.ts
+ERROR: [96msrc/services/settingsService.ts[0m:[93m8[0m:[93m17[0m - [91merror[0m[90m TS2551: [0mProperty 'apiKey' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'aPIKey'?
+
+[7m8[0m   return prisma.apiKey.create({
+[7m [0m [91m                ~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m533[0m:[93m7[0m
+    [7m533[0m   get aPIKey(): Prisma.APIKeyDelegate<ExtArgs, ClientOptions>;
+    [7m   [0m [96m      ~~~~~~[0m
+    'aPIKey' is declared here.
+[96msrc/services/settingsService.ts[0m:[93m18[0m:[93m17[0m - [91merror[0m[90m TS2551: [0mProperty 'apiKey' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'aPIKey'?
+
+[7m18[0m   return prisma.apiKey.findMany({
+[7m  [0m [91m                ~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m533[0m:[93m7[0m
+    [7m533[0m   get aPIKey(): Prisma.APIKeyDelegate<ExtArgs, ClientOptions>;
+    [7m   [0m [96m      ~~~~~~[0m
+    'aPIKey' is declared here.
+[96msrc/services/settingsService.ts[0m:[93m32[0m:[93m17[0m - [91merror[0m[90m TS2551: [0mProperty 'apiKey' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'aPIKey'?
+
+[7m32[0m   return prisma.apiKey.delete({
+[7m  [0m [91m                ~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m533[0m:[93m7[0m
+    [7m533[0m   get aPIKey(): Prisma.APIKeyDelegate<ExtArgs, ClientOptions>;
+    [7m   [0m [96m      ~~~~~~[0m
+    'aPIKey' is declared here.
+[96msrc/services/settingsService.ts[0m:[93m41[0m:[93m31[0m - [91merror[0m[90m TS2551: [0mProperty 'apiKey' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'aPIKey'?
+
+[7m41[0m   const apiKey = await prisma.apiKey.findUnique({
+[7m  [0m [91m                              ~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m533[0m:[93m7[0m
+    [7m533[0m   get aPIKey(): Prisma.APIKeyDelegate<ExtArgs, ClientOptions>;
+    [7m   [0m [96m      ~~~~~~[0m
+    'aPIKey' is declared here.
+[96msrc/services/settingsService.ts[0m:[93m48[0m:[93m18[0m - [91merror[0m[90m TS2551: [0mProperty 'apiKey' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'aPIKey'?
+
+[7m48[0m     await prisma.apiKey.update({
+[7m  [0m [91m                 ~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m533[0m:[93m7[0m
+    [7m533[0m   get aPIKey(): Prisma.APIKeyDelegate<ExtArgs, ClientOptions>;
+    [7m   [0m [96m      ~~~~~~[0m
+    'aPIKey' is declared here.
+[96msrc/services/settingsService.ts[0m:[93m102[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType '{ organizationId: string; userId?: string | undefined; type: string; title: string; message: string; data?: Record<string, unknown> | undefined; }' is not assignable to type '(Without<NotificationCreateInput, NotificationUncheckedCreateInput> & NotificationUncheckedCreateInput) | (Without<...> & NotificationCreateInput)'.
+  Type '{ organizationId: string; userId?: string | undefined; type: string; title: string; message: string; data?: Record<string, unknown> | undefined; }' is not assignable to type 'Without<NotificationCreateInput, NotificationUncheckedCreateInput> & NotificationUncheckedCreateInput'.
+    Type '{ organizationId: string; userId?: string | undefined; type: string; title: string; message: string; data?: Record<string, unknown> | undefined; }' is not assignable to type 'NotificationUncheckedCreateInput'.
+      Types of property 'data' are incompatible.
+        Type 'Record<string, unknown> | undefined' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+          Type 'Record<string, unknown>' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+            Type 'Record<string, unknown>' is missing the following properties from type 'readonly (InputJsonValue | null)[]': length, concat, join, slice, and 20 more.
+
+[7m102[0m     data,
+[7m   [0m [91m    ~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m26374[0m:[93m5[0m
+    [7m26374[0m     data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+    [7m     [0m [96m    ~~~~[0m
+    The expected type comes from property 'data' which is declared here on type '{ select?: NotificationSelect<DefaultArgs> | null | undefined; omit?: NotificationOmit<DefaultArgs> | null | undefined; include?: NotificationInclude<...> | ... 1 more ... | undefined; data: (Without<...> & NotificationUncheckedCreateInput) | (Without<...> & NotificationCreateInput); }'
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/reportService.ts
+ERROR: [96msrc/services/reportService.ts[0m:[93m55[0m:[93m7[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'messages' does not exist in type 'ChatLogInclude<DefaultArgs>'.
+
+[7m55[0m       messages: {
+[7m  [0m [91m      ~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m67[0m:[93m25[0m - [91merror[0m[90m TS2551: [0mProperty 'widget' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'. Did you mean 'widgetId'?
+
+[7m67[0m     widgetName: session.widget.name,
+[7m  [0m [91m                        ~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m68[0m:[93m26[0m - [91merror[0m[90m TS2551: [0mProperty 'widget' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'. Did you mean 'widgetId'?
+
+[7m68[0m     companyName: session.widget.company.name,
+[7m  [0m [91m                         ~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m69[0m:[93m24[0m - [91merror[0m[90m TS2339: [0mProperty 'userAgent' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'.
+
+[7m69[0m     userAgent: session.userAgent,
+[7m  [0m [91m                       ~~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m71[0m:[93m21[0m - [91merror[0m[90m TS2339: [0mProperty 'messages' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'.
+
+[7m71[0m     answer: session.messages[0]?.content || '',
+[7m  [0m [91m                    ~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m72[0m:[93m27[0m - [91merror[0m[90m TS2339: [0mProperty 'messages' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'.
+
+[7m72[0m     satisfaction: session.messages[0]?.feedbacks[0]?.helpful
+[7m  [0m [91m                          ~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m90[0m:[93m7[0m - [91merror[0m[90m TS2561: [0mObject literal may only specify known properties, but 'organizations' does not exist in type 'UserInclude<DefaultArgs>'. Did you mean to write 'organization'?
+
+[7m90[0m       organizations: true,
+[7m  [0m [91m      ~~~~~~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m133[0m:[93m32[0m - [91merror[0m[90m TS2551: [0mProperty 'organizations' does not exist on type '{ name: string | null; id: string; email: string; organizationId: string | null; createdAt: Date; updatedAt: Date; companyId: string | null; password: string; isAdmin: boolean; roles: Role[]; }'. Did you mean 'organizationId'?
+
+[7m133[0m         organizationName: user.organizations[0]?.name || 'N/A',
+[7m   [0m [91m                               ~~~~~~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m135[0m:[93m25[0m - [91merror[0m[90m TS2339: [0mProperty '_count' does not exist on type '{ name: string | null; id: string; email: string; organizationId: string | null; createdAt: Date; updatedAt: Date; companyId: string | null; password: string; isAdmin: boolean; roles: Role[]; }'.
+
+[7m135[0m         chatCount: user._count.chatLogs,
+[7m   [0m [91m                        ~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m170[0m:[93m11[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'messages' does not exist in type 'ChatLogInclude<DefaultArgs>'.
+
+[7m170[0m           messages: {
+[7m   [0m [91m          ~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m180[0m:[93m13[0m - [91merror[0m[90m TS2339: [0mProperty 'messages' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'.
+
+[7m180[0m         log.messages.some((msg) => msg.feedbacks.length > 0)
+[7m   [0m [91m            ~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m180[0m:[93m28[0m - [91merror[0m[90m TS7006: [0mParameter 'msg' implicitly has an 'any' type.
+
+[7m180[0m         log.messages.some((msg) => msg.feedbacks.length > 0)
+[7m   [0m [91m                           ~~~[0m
+[96msrc/services/reportService.ts[0m:[93m184[0m:[93m13[0m - [91merror[0m[90m TS2339: [0mProperty 'messages' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'.
+
+[7m184[0m         log.messages.some((msg) =>
+[7m   [0m [91m            ~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m184[0m:[93m28[0m - [91merror[0m[90m TS7006: [0mParameter 'msg' implicitly has an 'any' type.
+
+[7m184[0m         log.messages.some((msg) =>
+[7m   [0m [91m                           ~~~[0m
+[96msrc/services/reportService.ts[0m:[93m185[0m:[93m31[0m - [91merror[0m[90m TS7006: [0mParameter 'feedback' implicitly has an 'any' type.
+
+[7m185[0m           msg.feedbacks.some((feedback) => feedback.helpful)
+[7m   [0m [91m                              ~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m230[0m:[93m7[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'messages' does not exist in type 'ChatLogWhereInput'.
+
+[7m230[0m       messages: {
+[7m   [0m [91m      ~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m242[0m:[93m7[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'messages' does not exist in type 'ChatLogInclude<DefaultArgs>'.
+
+[7m242[0m       messages: {
+[7m   [0m [91m      ~~~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m268[0m:[93m34[0m - [91merror[0m[90m TS2551: [0mProperty 'widget' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'. Did you mean 'widgetId'?
+
+[7m268[0m     existing.widgetNames.add(log.widget.name);
+[7m   [0m [91m                                 ~~~~~~[0m
+[96msrc/services/reportService.ts[0m:[93m426[0m:[93m43[0m - [91merror[0m[90m TS2322: [0mType '{ label: string; value: string; }[] | { label: string; value: string; }[] | { label: string; value: string; }[] | { label: string; value: string; }[] | { label: string; value: string; }[]' is not assignable to type 'string[] | undefined'.
+  Type '{ label: string; value: string; }[]' is not assignable to type 'string[]'.
+    Type '{ label: string; value: string; }' is not assignable to type 'string'.
+
+[7m426[0m         csvContent += exportToCSV(data, { fields });
+[7m   [0m [91m                                          ~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/thirdPartyConnectors.ts
+ERROR: [96msrc/services/thirdPartyConnectors.ts[0m:[93m167[0m:[93m42[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m167[0m         const existingDoc = await prisma.document.findFirst({
+[7m   [0m [91m                                         ~~~~~~~~[0m
+[96msrc/services/thirdPartyConnectors.ts[0m:[93m178[0m:[93m26[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m178[0m             await prisma.document.update({
+[7m   [0m [91m                         ~~~~~~~~[0m
+[96msrc/services/thirdPartyConnectors.ts[0m:[93m195[0m:[93m39[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m195[0m           const newDoc = await prisma.document.create({
+[7m   [0m [91m                                      ~~~~~~~~[0m
+[96msrc/services/thirdPartyConnectors.ts[0m:[93m272[0m:[93m42[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m272[0m         const existingDoc = await prisma.document.findFirst({
+[7m   [0m [91m                                         ~~~~~~~~[0m
+[96msrc/services/thirdPartyConnectors.ts[0m:[93m285[0m:[93m26[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m285[0m             await prisma.document.update({
+[7m   [0m [91m                         ~~~~~~~~[0m
+[96msrc/services/thirdPartyConnectors.ts[0m:[93m301[0m:[93m39[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m301[0m           const newDoc = await prisma.document.create({
+[7m   [0m [91m                                      ~~~~~~~~[0m
+[96msrc/services/thirdPartyConnectors.ts[0m:[93m396[0m:[93m37[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m396[0m         const newDoc = await prisma.document.create({
+[7m   [0m [91m                                    ~~~~~~~~[0m
+[96msrc/services/thirdPartyConnectors.ts[0m:[93m451[0m:[93m37[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m451[0m         const newDoc = await prisma.document.create({
+[7m   [0m [91m                                    ~~~~~~~~[0m
+[96msrc/services/thirdPartyConnectors.ts[0m:[93m547[0m:[93m38[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m547[0m     const lastSyncDoc = await prisma.document.findFirst({
+[7m   [0m [91m                                     ~~~~~~~~[0m
+[96msrc/services/thirdPartyConnectors.ts[0m:[93m585[0m:[93m32[0m - [91merror[0m[90m TS2339: [0mProperty 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+[7m585[0m     const stats = await prisma.document.groupBy({
+[7m   [0m [91m                               ~~~~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/webhookService.ts
+ERROR: [96msrc/services/webhookService.ts[0m:[93m198[0m:[93m9[0m - [91merror[0m[90m TS2322: [0mType 'WebhookPayload' is not assignable to type 'JsonNull | InputJsonValue'.
+  Type 'WebhookPayload' is not assignable to type 'InputJsonObject'.
+    Index signature for type 'string' is missing in type 'WebhookPayload'.
+
+[7m198[0m         payload,
+[7m   [0m [91m        ~~~~~~~[0m
+
+  [96mnode_modules/.prisma/client/index.d.ts[0m:[93m42187[0m:[93m5[0m
+    [7m42187[0m     payload: JsonNullValueInput | InputJsonValue
+    [7m     [0m [96m    ~~~~~~~[0m
+    The expected type comes from property 'payload' which is declared here on type '(Without<WebhookLogCreateInput, WebhookLogUncheckedCreateInput> & WebhookLogUncheckedCreateInput) | (Without<...> & WebhookLogCreateInput)'
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/utils/pdfGenerator.ts
+ERROR: [96msrc/utils/pdfGenerator.ts[0m:[93m2[0m:[93m15[0m - [91merror[0m[90m TS2305: [0mModule '"pdfkit"' has no exported member 'PDFDocument'.
+
+[7m2[0m import type { PDFDocument as PDFDocumentType } from 'pdfkit';
+[7m [0m [91m              ~~~~~~~~~~~[0m
+[96msrc/utils/pdfGenerator.ts[0m:[93m189[0m:[93m28[0m - [91merror[0m[90m TS7006: [0mParameter 'chunk' implicitly has an 'any' type.
+
+[7m189[0m       this.doc.on('data', (chunk) => chunks.push(chunk));
+[7m   [0m [91m                           ~~~~~[0m
+STACK: 
+Failed to collect coverage from /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/widgetService.ts
+ERROR: [96msrc/services/widgetService.ts[0m:[93m264[0m:[93m9[0m - [91merror[0m[90m TS2322: [0mType '{ helpful: true; }' is not assignable to type 'never'.
+
+[7m264[0m         _avg: { helpful: true },
+[7m   [0m [91m        ~~~~[0m
+
+  [96msrc/services/widgetService.ts[0m:[93m264[0m:[93m9[0m
+    [7m264[0m         _avg: { helpful: true },
+    [7m   [0m [96m        ~~~~~~~~~~~~~~~~~~~~~~~[0m
+    The expected type comes from property '_avg' which is declared here on type 'Subset<{ where: { chatLog: { widgetId: string; }; helpful: true; }; _avg: { helpful: boolean; }; }, MessageFeedbackAggregateArgs<DefaultArgs>>'
+[96msrc/services/widgetService.ts[0m:[93m281[0m:[93m38[0m - [91merror[0m[90m TS2339: [0mProperty '_avg' does not exist on type 'GetMessageFeedbackAggregateType<{ where: { chatLog: { widgetId: string; }; helpful: true; }; _avg: { helpful: boolean; }; }>'.
+
+[7m281[0m     avgSatisfaction: avgSatisfaction._avg.helpful || 0,
+[7m   [0m [91m                                     ~~~~[0m
+STACK: 
+--------------------------|---------|----------|---------|---------|-------------------
+File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+--------------------------|---------|----------|---------|---------|-------------------
+All files                 |     2.1 |     2.41 |    1.03 |    2.09 |                   
+ jobs                     |       0 |        0 |       0 |       0 |                   
+  knowledgeBaseQueue.ts   |       0 |        0 |       0 |       0 | 1-35              
+  trainingQueue.ts        |       0 |        0 |       0 |       0 | 1-44              
+ lib                      |       0 |        0 |       0 |       0 |                   
+  analytics.ts            |       0 |        0 |       0 |       0 | 1-357             
+  dataRetention.ts        |       0 |        0 |       0 |       0 | 1-276             
+  emailTemplates.ts       |       0 |      100 |       0 |       0 | 17-577            
+  logger.ts               |       0 |        0 |       0 |       0 | 1-12              
+  onboardingService.ts    |       0 |        0 |       0 |       0 | 1-217             
+  prisma.ts               |       0 |        0 |     100 |       0 | 2-15              
+  sentry.ts               |       0 |        0 |       0 |       0 | 1-202             
+  stripe.ts               |       0 |        0 |       0 |       0 | 1-168             
+  usageTracker.ts         |       0 |        0 |       0 |       0 | 2-236             
+  websocket.ts            |       0 |        0 |       0 |       0 | 1-150             
+ middleware               |   28.23 |    20.89 |      25 |   27.71 |                   
+  admin.ts                |       0 |        0 |       0 |       0 | 3-11              
+  auth.ts                 |      96 |    77.77 |     100 |   95.83 | 24                
+  metrics.ts              |       0 |        0 |       0 |       0 | 2-139             
+  requireValidWidget.ts   |       0 |        0 |       0 |       0 | 2-76              
+ routes                   |       0 |        0 |       0 |       0 |                   
+  admin.ts                |       0 |      100 |       0 |       0 | 1-26              
+  auth.ts                 |       0 |        0 |       0 |       0 | 1-126             
+  chat.ts                 |       0 |        0 |       0 |       0 | 1-387             
+  companies.ts            |       0 |        0 |       0 |       0 | 1-46              
+  dashboard.ts            |       0 |      100 |       0 |       0 | 1-58              
+  dataRetention.ts        |       0 |        0 |       0 |       0 | 1-208             
+  faqs.ts                 |       0 |        0 |       0 |       0 | 1-77              
+  organizations.ts        |       0 |        0 |       0 |       0 | 1-80              
+  reports.ts              |       0 |        0 |       0 |       0 | 1-305             
+  security.ts             |       0 |        0 |       0 |       0 | 1-138             
+  settings.ts             |       0 |        0 |       0 |       0 | 1-159             
+  webhooks.ts             |       0 |        0 |       0 |       0 | 1-175             
+  widgetLoader.ts         |       0 |        0 |       0 |       0 | 1-98              
+  widgets.ts              |       0 |        0 |       0 |       0 | 1-168             
+ schemas                  |       0 |      100 |     100 |       0 |                   
+  dataRetentionSchema.ts  |       0 |      100 |     100 |       0 | 1-23              
+  securitySchema.ts       |       0 |      100 |     100 |       0 | 1-37              
+ services                 |       0 |        0 |       0 |       0 |                   
+  dataRetentionService.ts |       0 |        0 |       0 |       0 | 1-446             
+  faqSuggestionService.ts |       0 |        0 |       0 |       0 | 1-446             
+  knowledgeBaseService.ts |       0 |        0 |       0 |       0 | 1-198             
+  linkRuleService.ts      |       0 |        0 |       0 |       0 | 1-499             
+  organizationService.ts  |       0 |        0 |       0 |       0 | 1-172             
+  rbacService.ts          |       0 |        0 |       0 |       0 | 1-226             
+  securityService.ts      |       0 |        0 |       0 |       0 | 1-243             
+  storageService.ts       |       0 |        0 |       0 |       0 | 1-217             
+  trainingService.ts      |       0 |        0 |       0 |       0 | 1-84              
+ utils                    |   12.16 |    11.23 |    7.69 |   11.51 |                   
+  csvExporter.ts          |       0 |        0 |       0 |       0 | 1-96              
+  jwt.ts                  |     100 |      100 |     100 |     100 |                   
+  password.ts             |       0 |      100 |       0 |       0 | 1-15              
+  rateLimiter.ts          |       0 |        0 |       0 |       0 | 1-123             
+  themeUtils.ts           |       0 |        0 |       0 |       0 | 11-144            
+  validateHexColor.ts     |       0 |        0 |       0 |       0 | 6-23              
+  widgetKey.ts            |       0 |        0 |       0 |       0 | 1-21              
+--------------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 2.1% ( 42/2000 )
+Branches     : 2.41% ( 24/992 )
+Functions    : 1.03% ( 4/385 )
+Lines        : 2.09% ( 39/1859 )
+================================================================================
+Jest: "global" coverage threshold for statements (85%) not met: 2.96%
+Jest: "global" coverage threshold for branches (85%) not met: 3.49%
+Jest: "global" coverage threshold for lines (85%) not met: 2.78%
+Jest: "global" coverage threshold for functions (85%) not met: 1.62%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/admin.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/admin.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/admin.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/auth.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/auth.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/auth.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/auth.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/chat.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/chat.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/chat.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/chat.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/companies.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/companies.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/companies.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/companies.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/dashboard.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/dashboard.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/dashboard.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/faqs.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/faqs.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/faqs.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/faqs.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/dataRetention.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/dataRetention.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/dataRetention.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/dataRetention.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/organizations.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/organizations.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/organizations.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/organizations.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/security.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/security.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/security.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/security.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/reports.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/reports.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/reports.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/reports.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/widgetLoader.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/widgetLoader.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/widgetLoader.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/widgetLoader.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/settings.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/settings.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/settings.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/settings.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/webhooks.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/webhooks.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/webhooks.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/webhooks.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/widgets.ts" coverage threshold for statements (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/widgets.ts" coverage threshold for branches (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/widgets.ts" coverage threshold for lines (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/widgets.ts" coverage threshold for functions (90%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/auth.ts" coverage threshold for branches (85%) not met: 77.77%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/admin.ts" coverage threshold for statements (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/admin.ts" coverage threshold for branches (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/admin.ts" coverage threshold for lines (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/admin.ts" coverage threshold for functions (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/requireValidWidget.ts" coverage threshold for statements (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/requireValidWidget.ts" coverage threshold for branches (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/requireValidWidget.ts" coverage threshold for lines (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/requireValidWidget.ts" coverage threshold for functions (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/metrics.ts" coverage threshold for statements (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/metrics.ts" coverage threshold for branches (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/metrics.ts" coverage threshold for lines (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/middleware/metrics.ts" coverage threshold for functions (85%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/dataRetentionService.ts" coverage threshold for statements (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/dataRetentionService.ts" coverage threshold for branches (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/dataRetentionService.ts" coverage threshold for lines (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/dataRetentionService.ts" coverage threshold for functions (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/faqSuggestionService.ts" coverage threshold for statements (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/faqSuggestionService.ts" coverage threshold for branches (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/faqSuggestionService.ts" coverage threshold for lines (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/faqSuggestionService.ts" coverage threshold for functions (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/knowledgeBaseService.ts" coverage threshold for statements (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/knowledgeBaseService.ts" coverage threshold for branches (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/knowledgeBaseService.ts" coverage threshold for lines (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/knowledgeBaseService.ts" coverage threshold for functions (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/linkRuleService.ts" coverage threshold for statements (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/linkRuleService.ts" coverage threshold for branches (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/linkRuleService.ts" coverage threshold for lines (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/linkRuleService.ts" coverage threshold for functions (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/organizationService.ts" coverage threshold for statements (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/organizationService.ts" coverage threshold for branches (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/organizationService.ts" coverage threshold for lines (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/organizationService.ts" coverage threshold for functions (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/rbacService.ts" coverage threshold for statements (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/rbacService.ts" coverage threshold for branches (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/rbacService.ts" coverage threshold for lines (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/rbacService.ts" coverage threshold for functions (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/securityService.ts" coverage threshold for statements (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/securityService.ts" coverage threshold for branches (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/securityService.ts" coverage threshold for lines (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/securityService.ts" coverage threshold for functions (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/storageService.ts" coverage threshold for statements (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/storageService.ts" coverage threshold for branches (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/storageService.ts" coverage threshold for lines (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/storageService.ts" coverage threshold for functions (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/trainingService.ts" coverage threshold for statements (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/trainingService.ts" coverage threshold for branches (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/trainingService.ts" coverage threshold for lines (80%) not met: 0%
+Jest: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/services/trainingService.ts" coverage threshold for functions (80%) not met: 0%
+Test Suites: 15 failed, 3 passed, 18 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        20.436 s
+Ran all test suites.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

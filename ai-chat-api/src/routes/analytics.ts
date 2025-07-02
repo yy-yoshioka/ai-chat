@@ -665,3 +665,4 @@ function groupSimilarQuestions(chatLogs: ChatLogData[]) {
 }
 
 export { router as analyticsRoutes };
+export default router;

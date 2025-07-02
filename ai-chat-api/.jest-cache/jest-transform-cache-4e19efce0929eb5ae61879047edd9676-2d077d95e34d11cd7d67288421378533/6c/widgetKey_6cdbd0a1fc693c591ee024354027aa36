@@ -1,0 +1,49 @@
+e04f0289b6f79f51e2b24fc11e3f5d45
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isValidWidgetKey = exports.generateWidgetKey = void 0;
+const crypto = __importStar(require("crypto"));
+/**
+ * Generate a cryptographically secure widget key
+ * @returns A 64-character hexadecimal string
+ */
+function generateWidgetKey() {
+    return crypto.randomBytes(32).toString('hex');
+}
+exports.generateWidgetKey = generateWidgetKey;
+/**
+ * Validate widget key format
+ * @param key The widget key to validate
+ * @returns True if the key is valid format
+ */
+function isValidWidgetKey(key) {
+    // Allow both new format (64 hex characters) and legacy format (for development)
+    const newFormat = /^[0-9a-f]{64}$/.test(key);
+    const legacyFormat = /^[a-zA-Z0-9\-_]{3,50}$/.test(key); // Allow alphanumeric, hyphens, underscores, 3-50 chars
+    return newFormat || legacyFormat;
+}
+exports.isValidWidgetKey = isValidWidgetKey;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiL1VzZXJzL3l1c3VrZXlvc2hpb2thL3Byb2plY3RzL3lvdXR1YmUvYWktY2hhdC9haS1jaGF0LWFwaS9zcmMvdXRpbHMvd2lkZ2V0S2V5LnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsK0NBQWlDO0FBRWpDOzs7R0FHRztBQUNILFNBQWdCLGlCQUFpQjtJQUMvQixPQUFPLE1BQU0sQ0FBQyxXQUFXLENBQUMsRUFBRSxDQUFDLENBQUMsUUFBUSxDQUFDLEtBQUssQ0FBQyxDQUFDO0FBQ2hELENBQUM7QUFGRCw4Q0FFQztBQUVEOzs7O0dBSUc7QUFDSCxTQUFnQixnQkFBZ0IsQ0FBQyxHQUFXO0lBQzFDLGdGQUFnRjtJQUNoRixNQUFNLFNBQVMsR0FBRyxnQkFBZ0IsQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLENBQUM7SUFDN0MsTUFBTSxZQUFZLEdBQUcsd0JBQXdCLENBQUMsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsdURBQXVEO0lBRWhILE9BQU8sU0FBUyxJQUFJLFlBQVksQ0FBQztBQUNuQyxDQUFDO0FBTkQsNENBTUMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiL1VzZXJzL3l1c3VrZXlvc2hpb2thL3Byb2plY3RzL3lvdXR1YmUvYWktY2hhdC9haS1jaGF0LWFwaS9zcmMvdXRpbHMvd2lkZ2V0S2V5LnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCAqIGFzIGNyeXB0byBmcm9tICdjcnlwdG8nO1xuXG4vKipcbiAqIEdlbmVyYXRlIGEgY3J5cHRvZ3JhcGhpY2FsbHkgc2VjdXJlIHdpZGdldCBrZXlcbiAqIEByZXR1cm5zIEEgNjQtY2hhcmFjdGVyIGhleGFkZWNpbWFsIHN0cmluZ1xuICovXG5leHBvcnQgZnVuY3Rpb24gZ2VuZXJhdGVXaWRnZXRLZXkoKTogc3RyaW5nIHtcbiAgcmV0dXJuIGNyeXB0by5yYW5kb21CeXRlcygzMikudG9TdHJpbmcoJ2hleCcpO1xufVxuXG4vKipcbiAqIFZhbGlkYXRlIHdpZGdldCBrZXkgZm9ybWF0XG4gKiBAcGFyYW0ga2V5IFRoZSB3aWRnZXQga2V5IHRvIHZhbGlkYXRlXG4gKiBAcmV0dXJucyBUcnVlIGlmIHRoZSBrZXkgaXMgdmFsaWQgZm9ybWF0XG4gKi9cbmV4cG9ydCBmdW5jdGlvbiBpc1ZhbGlkV2lkZ2V0S2V5KGtleTogc3RyaW5nKTogYm9vbGVhbiB7XG4gIC8vIEFsbG93IGJvdGggbmV3IGZvcm1hdCAoNjQgaGV4IGNoYXJhY3RlcnMpIGFuZCBsZWdhY3kgZm9ybWF0IChmb3IgZGV2ZWxvcG1lbnQpXG4gIGNvbnN0IG5ld0Zvcm1hdCA9IC9eWzAtOWEtZl17NjR9JC8udGVzdChrZXkpO1xuICBjb25zdCBsZWdhY3lGb3JtYXQgPSAvXlthLXpBLVowLTlcXC1fXXszLDUwfSQvLnRlc3Qoa2V5KTsgLy8gQWxsb3cgYWxwaGFudW1lcmljLCBoeXBoZW5zLCB1bmRlcnNjb3JlcywgMy01MCBjaGFyc1xuXG4gIHJldHVybiBuZXdGb3JtYXQgfHwgbGVnYWN5Rm9ybWF0O1xufVxuIl0sInZlcnNpb24iOjN9

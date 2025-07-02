@@ -321,3 +321,4 @@ async function handlePaymentFailed(invoice: { id: string }) {
 }
 
 export { router as billingRoutes };
+export default router;

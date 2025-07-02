@@ -6,6 +6,8 @@ export interface UserPayload {
   id: string;
   email: string;
   isAdmin?: boolean;
+  organizationId?: string;
+  roles?: string[];
 }
 
 // Sign JWT token and store in HTTP-Only Cookie

@@ -37,7 +37,7 @@ export async function scheduleEmbeddingReprocess(
     }
 
     // 外部ソース（url, zendesk, intercom）のドキュメントを再クロール
-    const externalDocuments = await prisma.document.findMany({
+    const externalDocuments = await prisma.knowledgeBase.findMany({
       where: {
         knowledgeBase: {
           organizationId,
@@ -81,7 +81,7 @@ export async function scheduleEmbeddingReprocess(
 
         if (newContent && newContent !== doc.content) {
           // コンテンツが変更された場合のみ更新
-          await prisma.document.update({
+          await prisma.knowledgeBase.update({
             where: { id: doc.id },
             data: {
               content: newContent,
@@ -93,7 +93,7 @@ export async function scheduleEmbeddingReprocess(
           console.log(`Updated content for document: ${doc.title}`);
         } else {
           // 変更がない場合は lastCrawledAt のみ更新
-          await prisma.document.update({
+          await prisma.knowledgeBase.update({
             where: { id: doc.id },
             data: {
               lastCrawledAt: new Date(),
@@ -104,7 +104,7 @@ export async function scheduleEmbeddingReprocess(
         console.error(`Failed to update document ${doc.id}:`, error);
 
         // エラーを記録
-        await prisma.document.update({
+        await prisma.knowledgeBase.update({
           where: { id: doc.id },
           data: {
             status: 'failed',

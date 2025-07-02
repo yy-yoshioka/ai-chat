@@ -1,0 +1,323 @@
+yarn run v1.22.22
+$ jest
+PASS tests/unit/sample.test.ts (5.053 s)
+  Sample Test
+    ✓ should pass a simple test (4 ms)
+    ✓ should have environment variables set (1 ms)
+
+PASS tests/unit/utils/jwt.test.ts (5.119 s)
+  JWT Utils
+    signToken
+      ✓ should sign a token and set cookie (7 ms)
+      ✓ should set secure cookie in production (1 ms)
+      ✓ should throw error if JWT_SECRET is not defined (13 ms)
+    verifyToken
+      ✓ should verify a valid token (1 ms)
+      ✓ should throw error for invalid token (1 ms)
+      ✓ should throw error for expired token (1 ms)
+      ✓ should throw error if JWT_SECRET is not defined
+
+  console.error
+    Auth middleware error: Error: DB Error
+        at /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/tests/unit/middleware/auth.test.ts:146:7
+        at Generator.next (<anonymous>)
+        at /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/tests/unit/middleware/auth.test.ts:8:71
+        at new Promise (<anonymous>)
+        at __awaiter (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/tests/unit/middleware/auth.test.ts:4:12)
+        at Object.<anonymous> (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/tests/unit/middleware/auth.test.ts:138:50)
+        at Promise.finally.completed (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+        at _callCircusTest (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at _runTest (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:949:3)
+        at _runTestsForDescribeBlock (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+        at _runTestsForDescribeBlock (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+        at run (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:757:3)
+        at runAndTransformResultsToJestFormat (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/jestAdapterInit.js:1920:21)
+        at jestAdapter (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-circus/build/runner.js:101:19)
+        at runTestInternal (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-runner/build/testWorker.js:272:16)
+        at runTest (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-runner/build/testWorker.js:340:7)
+        at Object.worker (/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/jest-runner/build/testWorker.js:494:12)
+
+      58 |     next();
+      59 |   } catch (error) {
+    > 60 |     console.error('Auth middleware error:', error);
+         |             ^
+      61 |     return res.status(500).json({ error: 'Internal server error' });
+      62 |   }
+      63 | };
+
+      at src/middleware/auth.ts:60:13
+          at Generator.throw (<anonymous>)
+      at rejected (src/middleware/auth.ts:6:65)
+
+PASS tests/unit/middleware/auth.test.ts (5.303 s)
+  Auth Middleware
+    ✓ should authenticate valid token (11 ms)
+    ✓ should reject request without token (1 ms)
+    ✓ should reject invalid token
+    ✓ should reject expired token (1 ms)
+    ✓ should reject token for non-existent user (2 ms)
+    ✓ should handle database errors (28 ms)
+
+FAIL tests/routes/users.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/users.test.ts[0m:[93m7[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"../../src/middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+
+    [7m7[0m import { requireOrganizationAccess } from '../../src/middleware/organizationAccess';
+    [7m [0m [91m         ~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+FAIL tests/routes/knowledge-base.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/knowledge-base.test.ts[0m:[93m268[0m:[93m25[0m - [91merror[0m[90m TS2551: [0mProperty 'company' does not exist on type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }'. Did you mean 'companyId'?
+
+    [7m268[0m           ...testWidget.company,
+    [7m   [0m [91m                        ~~~~~~~[0m
+
+      [96mtests/fixtures/test-data.ts[0m:[93m59[0m:[93m3[0m
+        [7m59[0m   companyId: 'company-test-123',
+        [7m  [0m [96m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        'companyId' is declared here.
+    [96mtests/routes/knowledge-base.test.ts[0m:[93m629[0m:[93m25[0m - [91merror[0m[90m TS2551: [0mProperty 'company' does not exist on type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }'. Did you mean 'companyId'?
+
+    [7m629[0m           ...testWidget.company,
+    [7m   [0m [91m                        ~~~~~~~[0m
+
+      [96mtests/fixtures/test-data.ts[0m:[93m59[0m:[93m3[0m
+        [7m59[0m   companyId: 'company-test-123',
+        [7m  [0m [96m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        'companyId' is declared here.
+    [96mtests/routes/knowledge-base.test.ts[0m:[93m711[0m:[93m27[0m - [91merror[0m[90m TS2551: [0mProperty 'company' does not exist on type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }'. Did you mean 'companyId'?
+
+    [7m711[0m             ...testWidget.company,
+    [7m   [0m [91m                          ~~~~~~~[0m
+
+      [96mtests/fixtures/test-data.ts[0m:[93m59[0m:[93m3[0m
+        [7m59[0m   companyId: 'company-test-123',
+        [7m  [0m [96m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        'companyId' is declared here.
+    [96mtests/routes/knowledge-base.test.ts[0m:[93m918[0m:[93m27[0m - [91merror[0m[90m TS2551: [0mProperty 'company' does not exist on type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }'. Did you mean 'companyId'?
+
+    [7m918[0m             ...testWidget.company,
+    [7m   [0m [91m                          ~~~~~~~[0m
+
+      [96mtests/fixtures/test-data.ts[0m:[93m59[0m:[93m3[0m
+        [7m59[0m   companyId: 'company-test-123',
+        [7m  [0m [96m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        'companyId' is declared here.
+
+FAIL tests/routes/webhooks.test.ts
+  ● Test suite failed to run
+
+    [96msrc/middleware/organizationAccess.ts[0m:[93m8[0m:[93m30[0m - [91merror[0m[90m TS2339: [0mProperty 'organizationId' does not exist on type 'UserPayload & { roles?: string[] | undefined; }'.
+
+    [7m8[0m   if (!req.user || !req.user.organizationId) {
+    [7m [0m [91m                             ~~~~~~~~~~~~~~[0m
+
+FAIL tests/routes/widgets.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/widgets.test.ts[0m:[93m48[0m:[93m68[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ widgets: { id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }[]; total: number; page: number; limit: number; }' is not assignable to parameter of type '{ widgets: ({ company: { name: string; id: string; plan: PlanType; }; _count: { chatLogs: number; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; ... 10 more ...; fontFamily: string; })[]; pagination: { ...; }; } | Promise<...>'.
+      Property 'pagination' is missing in type '{ widgets: { id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }[]; total: number; page: number; limit: number; }' but required in type '{ widgets: ({ company: { name: string; id: string; plan: $Enums.PlanType; }; _count: { chatLogs: number; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; ... 10 more ...; fontFamily: string; })[]; pagination: { ...; }; }'.
+
+    [7m48[0m       widgetServiceMock.getWidgetsByOrganization.mockResolvedValue(mockResult);
+    [7m  [0m [91m                                                                   ~~~~~~~~~~[0m
+
+      [96msrc/services/widgetService.ts[0m:[93m60[0m:[93m5[0m
+        [7m 60[0m     pagination: {
+        [7m   [0m [96m    ~~~~~~~~~~~~~[0m
+        [7m 61[0m       page,
+        [7m   [0m [96m~~~~~~~~~~~[0m
+        [7m...[0m 
+        [7m 64[0m       totalPages: Math.ceil(total / limit),
+        [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        [7m 65[0m     },
+        [7m   [0m [96m~~~~~[0m
+        'pagination' is declared here.
+    [96mtests/routes/widgets.test.ts[0m:[93m76[0m:[93m68[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ widgets: { id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }[]; total: number; page: number; limit: number; }' is not assignable to parameter of type '{ widgets: ({ company: { name: string; id: string; plan: PlanType; }; _count: { chatLogs: number; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; ... 10 more ...; fontFamily: string; })[]; pagination: { ...; }; } | Promise<...>'.
+      Property 'pagination' is missing in type '{ widgets: { id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }[]; total: number; page: number; limit: number; }' but required in type '{ widgets: ({ company: { name: string; id: string; plan: $Enums.PlanType; }; _count: { chatLogs: number; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; ... 10 more ...; fontFamily: string; })[]; pagination: { ...; }; }'.
+
+    [7m76[0m       widgetServiceMock.getWidgetsByOrganization.mockResolvedValue(mockResult);
+    [7m  [0m [91m                                                                   ~~~~~~~~~~[0m
+
+      [96msrc/services/widgetService.ts[0m:[93m60[0m:[93m5[0m
+        [7m 60[0m     pagination: {
+        [7m   [0m [96m    ~~~~~~~~~~~~~[0m
+        [7m 61[0m       page,
+        [7m   [0m [96m~~~~~~~~~~~[0m
+        [7m...[0m 
+        [7m 64[0m       totalPages: Math.ceil(total / limit),
+        [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        [7m 65[0m     },
+        [7m   [0m [96m~~~~~[0m
+        'pagination' is declared here.
+    [96mtests/routes/widgets.test.ts[0m:[93m140[0m:[93m56[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ id: string; name: string; companyId: string; themeColor: string; welcomeMessage: string; placeholderText: string; widgetKey: string; status: string; settings: {}; createdAt: Date; updatedAt: Date; }' is not assignable to parameter of type '({ company: { name: string; id: string; plan: PlanType; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; companyId: string; isActive: boolean; ... 8 more ...; fontFamily: string; }) | Promise<...>'.
+      Type '{ id: string; name: string; companyId: string; themeColor: string; welcomeMessage: string; placeholderText: string; widgetKey: string; status: string; settings: {}; createdAt: Date; updatedAt: Date; }' is not assignable to type '{ company: { name: string; id: string; plan: PlanType; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; companyId: string; isActive: boolean; ... 8 more ...; fontFamily: string; }'.
+        Property 'company' is missing in type '{ id: string; name: string; companyId: string; themeColor: string; welcomeMessage: string; placeholderText: string; widgetKey: string; status: string; settings: {}; createdAt: Date; updatedAt: Date; }' but required in type '{ company: { name: string; id: string; plan: PlanType; }; }'.
+
+    [7m140[0m       widgetServiceMock.createWidget.mockResolvedValue(createdWidget);
+    [7m   [0m [91m                                                       ~~~~~~~~~~~~~[0m
+    [96mtests/routes/widgets.test.ts[0m:[93m193[0m:[93m57[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }' is not assignable to parameter of type '({ company: { name: string; id: string; plan: PlanType; organizationId: string | null; }; knowledgeBases: { name: string; id: string; createdAt: Date; status: string; chunks: number; }[]; _count: { ...; }; } & { ...; }) | Promise<...>'.
+      Type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }' is not assignable to type '{ company: { name: string; id: string; plan: PlanType; organizationId: string | null; }; knowledgeBases: { name: string; id: string; createdAt: Date; status: string; chunks: number; }[]; _count: { ...; }; } & { ...; }'.
+        Type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }' is missing the following properties from type '{ company: { name: string; id: string; plan: PlanType; organizationId: string | null; }; knowledgeBases: { name: string; id: string; createdAt: Date; status: string; chunks: number; }[]; _count: { ...; }; }': company, knowledgeBases, _count
+
+    [7m193[0m       widgetServiceMock.getWidgetById.mockResolvedValue(testWidget);
+    [7m   [0m [91m                                                        ~~~~~~~~~~[0m
+    [96mtests/routes/widgets.test.ts[0m:[93m249[0m:[93m56[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ updatedAt: Date; name: string; themeColor: string; status: "inactive"; id: string; widgetKey: string; welcomeMessage: string; placeholderText: string; settings: {}; companyId: string; createdAt: Date; }' is not assignable to parameter of type '({ company: { name: string; id: string; plan: PlanType; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; companyId: string; isActive: boolean; ... 8 more ...; fontFamily: string; }) | Promise<...>'.
+      Type '{ updatedAt: Date; name: string; themeColor: string; status: "inactive"; id: string; widgetKey: string; welcomeMessage: string; placeholderText: string; settings: {}; companyId: string; createdAt: Date; }' is not assignable to type '{ company: { name: string; id: string; plan: PlanType; }; } & { name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; companyId: string; isActive: boolean; ... 8 more ...; fontFamily: string; }'.
+        Property 'company' is missing in type '{ updatedAt: Date; name: string; themeColor: string; status: "inactive"; id: string; widgetKey: string; welcomeMessage: string; placeholderText: string; settings: {}; companyId: string; createdAt: Date; }' but required in type '{ company: { name: string; id: string; plan: PlanType; }; }'.
+
+    [7m249[0m       widgetServiceMock.updateWidget.mockResolvedValue(updatedWidget);
+    [7m   [0m [91m                                                       ~~~~~~~~~~~~~[0m
+    [96mtests/routes/widgets.test.ts[0m:[93m297[0m:[93m56[0m - [91merror[0m[90m TS2345: [0mArgument of type 'undefined' is not assignable to parameter of type '{ name: string; id: string; createdAt: Date; updatedAt: Date; widgetKey: string; companyId: string; isActive: boolean; accentColor: string; logoUrl: string | null; theme: string; ... 5 more ...; fontFamily: string; } | Promise<...>'.
+
+    [7m297[0m       widgetServiceMock.deleteWidget.mockResolvedValue(undefined);
+    [7m   [0m [91m                                                       ~~~~~~~~~[0m
+    [96mtests/routes/widgets.test.ts[0m:[93m356[0m:[93m62[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ totalChats: number; uniqueUsers: number; avgResponseTime: number; satisfactionRate: number; topQuestions: { question: string; count: number; }[]; chatsByDay: { date: string; count: number; }[]; }' is not assignable to parameter of type '{ totalChats: number; monthlyChats: number; avgSatisfaction: any; topQuestions: { question: string; count: number; }[]; } | Promise<{ totalChats: number; monthlyChats: number; avgSatisfaction: any; topQuestions: { ...; }[]; }>'.
+      Type '{ totalChats: number; uniqueUsers: number; avgResponseTime: number; satisfactionRate: number; topQuestions: { question: string; count: number; }[]; chatsByDay: { date: string; count: number; }[]; }' is missing the following properties from type '{ totalChats: number; monthlyChats: number; avgSatisfaction: any; topQuestions: { question: string; count: number; }[]; }': monthlyChats, avgSatisfaction
+
+    [7m356[0m       widgetServiceMock.getWidgetAnalytics.mockResolvedValue(mockAnalytics);
+    [7m   [0m [91m                                                             ~~~~~~~~~~~~~[0m
+
+FAIL tests/routes/organizations.test.ts
+  ● Test suite failed to run
+
+    [96mtests/fixtures/test-data.ts[0m:[93m168[0m:[93m10[0m - [91merror[0m[90m TS2769: [0mNo overload matches this call.
+      Overload 1 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: null, options?: (SignOptions & { algorithm: "none"; }) | undefined): string', gave the following error.
+        Argument of type 'string' is not assignable to parameter of type 'null'.
+      Overload 2 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, options?: SignOptions | undefined): string', gave the following error.
+        Type 'string' is not assignable to type 'number | StringValue | undefined'.
+      Overload 3 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, callback: SignCallback): void', gave the following error.
+        Object literal may only specify known properties, and 'expiresIn' does not exist in type 'SignCallback'.
+
+    [7m168[0m   return jwt.sign({ id: userId, organizationId }, process.env.JWT_SECRET!, {
+    [7m   [0m [91m         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m169[0m     expiresIn,
+    [7m   [0m [91m~~~~~~~~~~~~~~[0m
+    [7m170[0m   });
+    [7m   [0m [91m~~~~[0m
+
+FAIL tests/routes/chat.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/chat.test.ts[0m:[93m362[0m:[93m14[0m - [91merror[0m[90m TS2454: [0mVariable 'capturedMessages' is used before being assigned.
+
+    [7m362[0m       expect(capturedMessages).toContainEqual(
+    [7m   [0m [91m             ~~~~~~~~~~~~~~~~[0m
+    [96mtests/routes/chat.test.ts[0m:[93m368[0m:[93m14[0m - [91merror[0m[90m TS2454: [0mVariable 'capturedMessages' is used before being assigned.
+
+    [7m368[0m       expect(capturedMessages).toContainEqual(
+    [7m   [0m [91m             ~~~~~~~~~~~~~~~~[0m
+    [96mtests/routes/chat.test.ts[0m:[93m497[0m:[93m38[0m - [91merror[0m[90m TS2551: [0mProperty 'company' does not exist on type '{ id: string; name: string; widgetKey: string; themeColor: string; welcomeMessage: string; placeholderText: string; status: string; settings: {}; companyId: string; createdAt: Date; updatedAt: Date; }'. Did you mean 'companyId'?
+
+    [7m497[0m           organizationId: testWidget.company.organizationId,
+    [7m   [0m [91m                                     ~~~~~~~[0m
+
+      [96mtests/fixtures/test-data.ts[0m:[93m59[0m:[93m3[0m
+        [7m59[0m   companyId: 'company-test-123',
+        [7m  [0m [96m  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+        'companyId' is declared here.
+
+FAIL tests/routes/billing.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/billing.test.ts[0m:[93m4[0m:[93m8[0m - [91merror[0m[90m TS1192: [0mModule '"/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/billing"' has no default export.
+
+    [7m4[0m import billingRouter from '../../src/routes/billing';
+    [7m [0m [91m       ~~~~~~~~~~~~~[0m
+
+FAIL tests/routes/analytics.test.ts
+  ● Test suite failed to run
+
+    [96mtests/routes/analytics.test.ts[0m:[93m4[0m:[93m8[0m - [91merror[0m[90m TS1192: [0mModule '"/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/routes/analytics"' has no default export.
+
+    [7m4[0m import analyticsRouter from '../../src/routes/analytics';
+    [7m [0m [91m       ~~~~~~~~~~~~~~~[0m
+
+FAIL tests/routes/auth.test.ts
+  ● Test suite failed to run
+
+    [96mtests/fixtures/test-data.ts[0m:[93m168[0m:[93m10[0m - [91merror[0m[90m TS2769: [0mNo overload matches this call.
+      Overload 1 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: null, options?: (SignOptions & { algorithm: "none"; }) | undefined): string', gave the following error.
+        Argument of type 'string' is not assignable to parameter of type 'null'.
+      Overload 2 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, options?: SignOptions | undefined): string', gave the following error.
+        Type 'string' is not assignable to type 'number | StringValue | undefined'.
+      Overload 3 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, callback: SignCallback): void', gave the following error.
+        Object literal may only specify known properties, and 'expiresIn' does not exist in type 'SignCallback'.
+
+    [7m168[0m   return jwt.sign({ id: userId, organizationId }, process.env.JWT_SECRET!, {
+    [7m   [0m [91m         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m169[0m     expiresIn,
+    [7m   [0m [91m~~~~~~~~~~~~~~[0m
+    [7m170[0m   });
+    [7m   [0m [91m~~~~[0m
+
+FAIL tests/routes/admin.test.ts
+  ● Test suite failed to run
+
+    [96mtests/fixtures/test-data.ts[0m:[93m168[0m:[93m10[0m - [91merror[0m[90m TS2769: [0mNo overload matches this call.
+      Overload 1 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: null, options?: (SignOptions & { algorithm: "none"; }) | undefined): string', gave the following error.
+        Argument of type 'string' is not assignable to parameter of type 'null'.
+      Overload 2 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, options?: SignOptions | undefined): string', gave the following error.
+        Type 'string' is not assignable to type 'number | StringValue | undefined'.
+      Overload 3 of 5, '(payload: string | object | Buffer, secretOrPrivateKey: Secret | PrivateKeyInput | JsonWebKeyInput, callback: SignCallback): void', gave the following error.
+        Object literal may only specify known properties, and 'expiresIn' does not exist in type 'SignCallback'.
+
+    [7m168[0m   return jwt.sign({ id: userId, organizationId }, process.env.JWT_SECRET!, {
+    [7m   [0m [91m         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m169[0m     expiresIn,
+    [7m   [0m [91m~~~~~~~~~~~~~~[0m
+    [7m170[0m   });
+    [7m   [0m [91m~~~~[0m
+
+FAIL tests/integration/reports.test.ts
+  ● Test suite failed to run
+
+    [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+    [7m34[0m     const resource = new Resource({
+    [7m  [0m [91m                         ~~~~~~~~[0m
+
+FAIL tests/integration/organizations.test.ts
+  ● Test suite failed to run
+
+    [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+    [7m34[0m     const resource = new Resource({
+    [7m  [0m [91m                         ~~~~~~~~[0m
+
+FAIL tests/routes/dashboard.test.ts
+  ● Test suite failed to run
+
+    [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+    [7m34[0m     const resource = new Resource({
+    [7m  [0m [91m                         ~~~~~~~~[0m
+
+FAIL tests/integration/dashboard.test.ts
+  ● Test suite failed to run
+
+    [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+    [7m34[0m     const resource = new Resource({
+    [7m  [0m [91m                         ~~~~~~~~[0m
+
+FAIL tests/integration/users.test.ts
+  ● Test suite failed to run
+
+    [96msrc/lib/telemetry.ts[0m:[93m34[0m:[93m26[0m - [91merror[0m[90m TS2693: [0m'Resource' only refers to a type, but is being used as a value here.
+
+    [7m34[0m     const resource = new Resource({
+    [7m  [0m [91m                         ~~~~~~~~[0m
+
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
+Test Suites: 15 failed, 3 passed, 18 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        17.853 s
+Ran all test suites.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

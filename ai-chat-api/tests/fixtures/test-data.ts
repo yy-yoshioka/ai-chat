@@ -5,7 +5,7 @@ import {
   DocumentSourceType,
 } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
 // Generate a test password hash
 export const testPasswordHash = bcrypt.hashSync('password123', 10);
@@ -166,8 +166,8 @@ export const generateTestToken = (
   expiresIn = '1h'
 ) => {
   return jwt.sign(
-    { id: userId, organizationId },
-    process.env.JWT_SECRET!,
+    { id: userId, organizationId }, 
+    process.env.JWT_SECRET || 'test-secret',
     { expiresIn }
   );
 };
@@ -177,8 +177,8 @@ export const generateExpiredToken = (
   organizationId: string
 ) => {
   return jwt.sign(
-    { id: userId, organizationId },
-    process.env.JWT_SECRET!,
+    { id: userId, organizationId }, 
+    process.env.JWT_SECRET || 'test-secret',
     { expiresIn: '-1h' }
   );
 };
