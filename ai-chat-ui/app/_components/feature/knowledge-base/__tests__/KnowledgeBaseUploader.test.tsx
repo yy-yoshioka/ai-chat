@@ -29,14 +29,20 @@ describe('KnowledgeBaseUploader', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useDropzone } = require('react-dropzone');
-    useDropzone.mockImplementation((config: { onDrop: typeof mockOnDrop; disabled?: boolean; accept?: Record<string, string[]> }) => {
-      mockOnDrop = config.onDrop;
-      return {
-        getRootProps: mockGetRootProps,
-        getInputProps: mockGetInputProps,
-        isDragActive: false,
-      };
-    });
+    useDropzone.mockImplementation(
+      (config: {
+        onDrop: typeof mockOnDrop;
+        disabled?: boolean;
+        accept?: Record<string, string[]>;
+      }) => {
+        mockOnDrop = config.onDrop;
+        return {
+          getRootProps: mockGetRootProps,
+          getInputProps: mockGetInputProps,
+          isDragActive: false,
+        };
+      }
+    );
 
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
@@ -153,15 +159,21 @@ describe('KnowledgeBaseUploader', () => {
     const { useDropzone } = require('react-dropzone');
     let capturedConfig: { disabled?: boolean; accept?: Record<string, string[]> };
 
-    useDropzone.mockImplementation((config: { onDrop: typeof mockOnDrop; disabled?: boolean; accept?: Record<string, string[]> }) => {
-      capturedConfig = config;
-      mockOnDrop = config.onDrop;
-      return {
-        getRootProps: mockGetRootProps,
-        getInputProps: mockGetInputProps,
-        isDragActive: false,
-      };
-    });
+    useDropzone.mockImplementation(
+      (config: {
+        onDrop: typeof mockOnDrop;
+        disabled?: boolean;
+        accept?: Record<string, string[]>;
+      }) => {
+        capturedConfig = config;
+        mockOnDrop = config.onDrop;
+        return {
+          getRootProps: mockGetRootProps,
+          getInputProps: mockGetInputProps,
+          isDragActive: false,
+        };
+      }
+    );
 
     render(<KnowledgeBaseUploader {...defaultProps} />);
 
@@ -186,14 +198,20 @@ describe('KnowledgeBaseUploader', () => {
     const { useDropzone } = require('react-dropzone');
     let capturedConfig: { disabled?: boolean; accept?: Record<string, string[]> };
 
-    useDropzone.mockImplementation((config: { onDrop: typeof mockOnDrop; disabled?: boolean; accept?: Record<string, string[]> }) => {
-      capturedConfig = config;
-      return {
-        getRootProps: mockGetRootProps,
-        getInputProps: mockGetInputProps,
-        isDragActive: false,
-      };
-    });
+    useDropzone.mockImplementation(
+      (config: {
+        onDrop: typeof mockOnDrop;
+        disabled?: boolean;
+        accept?: Record<string, string[]>;
+      }) => {
+        capturedConfig = config;
+        return {
+          getRootProps: mockGetRootProps,
+          getInputProps: mockGetInputProps,
+          isDragActive: false,
+        };
+      }
+    );
 
     render(<KnowledgeBaseUploader {...defaultProps} />);
 

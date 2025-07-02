@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { EXPRESS_API } from '@/app/_config/api';
 
 // GET /api/bff/status - Get public status

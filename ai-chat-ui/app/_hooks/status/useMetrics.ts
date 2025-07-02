@@ -64,29 +64,34 @@ function processMetricsForChart(metrics: SystemMetric[]) {
       });
       return acc;
     },
-    {} as Record<string, {
-      service: string;
-      metricType: string;
-      unit: string;
-      data: Array<{ timestamp: string; value: number }>;
-    }>
+    {} as Record<
+      string,
+      {
+        service: string;
+        metricType: string;
+        unit: string;
+        data: Array<{ timestamp: string; value: number }>;
+      }
+    >
   );
 
   // Sort data points by timestamp
   Object.values(grouped).forEach((group) => {
-    group.data.sort(
-      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-    );
+    group.data.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
   });
 
   return grouped;
 }
 
 export const useHealthCheck = () => {
-  const { data, error } = useSWR<{ status: string; timestamp: string }>('/api/bff/status/health', fetchGet, {
-    refreshInterval: 10000, // Check every 10 seconds
-    revalidateOnFocus: false,
-  });
+  const { data, error } = useSWR<{ status: string; timestamp: string }>(
+    '/api/bff/status/health',
+    fetchGet,
+    {
+      refreshInterval: 10000, // Check every 10 seconds
+      revalidateOnFocus: false,
+    }
+  );
 
   return {
     health: data,
