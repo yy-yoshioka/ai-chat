@@ -19,11 +19,11 @@ export async function GET(request: NextRequest) {
 
     const data = await fetcherWithAuth(url, authToken);
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to fetch incidents:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch incidents' },
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Failed to fetch incidents' },
+      { status: 500 }
     );
   }
 }
@@ -51,11 +51,11 @@ export async function POST(request: NextRequest) {
     );
 
     return NextResponse.json(data, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to create incident:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to create incident' },
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Failed to create incident' },
+      { status: 500 }
     );
   }
 }

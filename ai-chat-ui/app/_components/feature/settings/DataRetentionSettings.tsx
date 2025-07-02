@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/components/ui/use-toast';
-import { useDataRetention } from '@/_hooks/settings/useDataRetention';
+import { useDataRetention, type RetentionPolicy } from '@/_hooks/settings/useDataRetention';
 import { RetentionJobHistory } from './RetentionJobHistory';
 
 interface DataRetentionSettingsProps {
@@ -15,7 +15,7 @@ interface DataRetentionSettingsProps {
 
 export function DataRetentionSettings({ orgId }: DataRetentionSettingsProps) {
   const { policy, isLoading, updatePolicy, triggerCleanup } = useDataRetention(orgId);
-  const [localPolicy, setLocalPolicy] = useState<any>({});
+  const [localPolicy, setLocalPolicy] = useState<Partial<RetentionPolicy>>({});
   const [isSaving, setIsSaving] = useState(false);
   const [isCleaningUp, setIsCleaningUp] = useState<string | null>(null);
   const { toast } = useToast();
@@ -123,7 +123,7 @@ export function DataRetentionSettings({ orgId }: DataRetentionSettingsProps) {
               <Switch
                 checked={localPolicy.autoDelete || false}
                 onCheckedChange={(checked) =>
-                  setLocalPolicy((prev: any) => ({ ...prev, autoDelete: checked }))
+                  setLocalPolicy((prev) => ({ ...prev, autoDelete: checked }))
                 }
               />
               <span>自動削除を有効化</span>
@@ -132,7 +132,7 @@ export function DataRetentionSettings({ orgId }: DataRetentionSettingsProps) {
               <Switch
                 checked={localPolicy.anonymizeData || false}
                 onCheckedChange={(checked) =>
-                  setLocalPolicy((prev: any) => ({ ...prev, anonymizeData: checked }))
+                  setLocalPolicy((prev) => ({ ...prev, anonymizeData: checked }))
                 }
               />
               <span>削除の代わりに匿名化</span>
@@ -160,7 +160,7 @@ export function DataRetentionSettings({ orgId }: DataRetentionSettingsProps) {
                       className="w-20"
                       value={localPolicy[item.key] || item.defaultDays}
                       onChange={(e) =>
-                        setLocalPolicy((prev: any) => ({
+                        setLocalPolicy((prev) => ({
                           ...prev,
                           [item.key]: parseInt(e.target.value) || item.defaultDays,
                         }))

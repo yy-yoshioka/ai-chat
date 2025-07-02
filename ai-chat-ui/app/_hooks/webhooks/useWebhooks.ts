@@ -36,10 +36,10 @@ export function useWebhooks() {
         });
 
         return newWebhook;
-      } catch (error: any) {
+      } catch (error) {
         toast({
           title: 'エラー',
-          description: error.message || 'Webhookの作成に失敗しました',
+          description: error instanceof Error ? error.message : 'Webhookの作成に失敗しました',
           variant: 'destructive',
         });
         throw error;
@@ -61,10 +61,10 @@ export function useWebhooks() {
         });
 
         return updatedWebhook;
-      } catch (error: any) {
+      } catch (error) {
         toast({
           title: 'エラー',
-          description: error.message || 'Webhookの更新に失敗しました',
+          description: error instanceof Error ? error.message : 'Webhookの更新に失敗しました',
           variant: 'destructive',
         });
         throw error;
@@ -84,10 +84,10 @@ export function useWebhooks() {
           title: 'Webhookを削除しました',
           description: 'Webhookが正常に削除されました',
         });
-      } catch (error: any) {
+      } catch (error) {
         toast({
           title: 'エラー',
-          description: error.message || 'Webhookの削除に失敗しました',
+          description: error instanceof Error ? error.message : 'Webhookの削除に失敗しました',
           variant: 'destructive',
         });
         throw error;
@@ -111,10 +111,10 @@ export function useWebhooks() {
         });
 
         return result;
-      } catch (error: any) {
+      } catch (error) {
         toast({
           title: 'エラー',
-          description: error.message || 'テストWebhookの送信に失敗しました',
+          description: error instanceof Error ? error.message : 'テストWebhookの送信に失敗しました',
           variant: 'destructive',
         });
         throw error;

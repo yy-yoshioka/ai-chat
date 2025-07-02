@@ -27,8 +27,9 @@ describe('KnowledgeBaseUploader', () => {
     mockGetInputProps = jest.fn(() => ({}));
     mockOnDrop = jest.fn();
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useDropzone } = require('react-dropzone');
-    useDropzone.mockImplementation((config: any) => {
+    useDropzone.mockImplementation((config: { onDrop: typeof mockOnDrop; disabled?: boolean; accept?: Record<string, string[]> }) => {
       mockOnDrop = config.onDrop;
       return {
         getRootProps: mockGetRootProps,
@@ -52,6 +53,7 @@ describe('KnowledgeBaseUploader', () => {
   });
 
   it('shows drag active state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useDropzone } = require('react-dropzone');
     useDropzone.mockImplementation(() => ({
       getRootProps: mockGetRootProps,
@@ -147,10 +149,11 @@ describe('KnowledgeBaseUploader', () => {
   });
 
   it('disables dropzone while uploading', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useDropzone } = require('react-dropzone');
-    let capturedConfig: any;
+    let capturedConfig: { disabled?: boolean; accept?: Record<string, string[]> };
 
-    useDropzone.mockImplementation((config: any) => {
+    useDropzone.mockImplementation((config: { onDrop: typeof mockOnDrop; disabled?: boolean; accept?: Record<string, string[]> }) => {
       capturedConfig = config;
       mockOnDrop = config.onDrop;
       return {
@@ -179,10 +182,11 @@ describe('KnowledgeBaseUploader', () => {
   });
 
   it('accepts only specified file types', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useDropzone } = require('react-dropzone');
-    let capturedConfig: any;
+    let capturedConfig: { disabled?: boolean; accept?: Record<string, string[]> };
 
-    useDropzone.mockImplementation((config: any) => {
+    useDropzone.mockImplementation((config: { onDrop: typeof mockOnDrop; disabled?: boolean; accept?: Record<string, string[]> }) => {
       capturedConfig = config;
       return {
         getRootProps: mockGetRootProps,

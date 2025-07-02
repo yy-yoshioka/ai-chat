@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { posterWithAuth, fetcherWithAuth } from '@/app/_utils/fetcher';
 import { getAuthTokenFromCookie } from '@/app/_utils/auth-utils';
 import { EXPRESS_API } from '@/app/_config/api';
-import { createWebhookSchema, webhookLogsQuerySchema } from '@/app/_schemas/webhooks';
+import { createWebhookSchema } from '@/app/_schemas/webhooks';
 import { validateRequest } from '@/app/_utils/validation';
 
 // GET /api/bff/webhooks - Get all webhooks
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const authToken = getAuthTokenFromCookie();
     if (!authToken) {
@@ -15,11 +15,11 @@ export async function GET(request: NextRequest) {
 
     const data = await fetcherWithAuth(`${EXPRESS_API}/api/webhooks`, authToken);
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to fetch webhooks:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch webhooks' },
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Failed to fetch webhooks' },
+      { status: 500 }
     );
   }
 }
@@ -43,11 +43,11 @@ export async function POST(request: NextRequest) {
     const data = await posterWithAuth(`${EXPRESS_API}/api/webhooks`, validation.data, authToken);
 
     return NextResponse.json(data, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to create webhook:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to create webhook' },
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Failed to create webhook' },
+      { status: 500 }
     );
   }
 }
