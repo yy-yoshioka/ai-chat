@@ -14,10 +14,8 @@ import { ja } from 'date-fns/locale';
 interface APIKeyManagerProps {
   orgId: string;
 }
-
 export function APIKeyManager({ orgId }: APIKeyManagerProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { apiKeys, isLoading, createKey, deleteKey } = useAPIKeys(orgId);
+  const { apiKeys, createKey, deleteKey } = useAPIKeys(orgId);
   const [showKeys, setShowKeys] = useState<Set<string>>(new Set());
   const [newKeyName, setNewKeyName] = useState('');
   const [isCreating, setIsCreating] = useState(false);
@@ -95,10 +93,21 @@ export function APIKeyManager({ orgId }: APIKeyManagerProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Key className="h-5 w-5" />
-          APIキー管理
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Key className="h-5 w-5" />
+            APIキー管理
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            <Link href="/api/docs" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm" className="gap-2">
+                <BookOpen className="h-4 w-4" />
+                APIドキュメント
+                <ExternalLink className="h-3 w-3" />
+              </Button>
+            </Link>
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

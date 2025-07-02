@@ -50,7 +50,9 @@
       "Bash(bash:*)",
       "Bash(yarn prettier:*)",
       "Bash(yarn type-check)",
-      "Bash(yarn:*)"
+      "Bash(yarn:*)",
+      "Bash(chmod:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "autoConfirm": true
