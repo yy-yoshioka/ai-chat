@@ -2,7 +2,7 @@
 
 import useSWR from 'swr';
 import { SystemMetric } from '@/app/_schemas/system-health';
-import { fetcherWithAuth } from '@/app/_utils/fetcher';
+import { fetcherWithAuth, fetchGet } from '@/app/_utils/fetcher';
 import { getAuthTokenFromCookie } from '@/app/_utils/auth-utils';
 
 interface MetricsQuery {
@@ -78,9 +78,9 @@ function processMetricsForChart(metrics: SystemMetric[]) {
 }
 
 export const useHealthCheck = () => {
-  const { data, error } = useSWR<any>(
+  const { data, error } = useSWR<unknown>(
     '/api/bff/status/health',
-    (url: string) => fetch(url).then((res) => res.json()),
+    fetchGet,
     {
       refreshInterval: 10000, // Check every 10 seconds
       revalidateOnFocus: false,
