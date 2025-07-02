@@ -1,5 +1,4 @@
 import { initializeRolePermissions } from '../services/rbacService';
-import { logger } from '../lib/logger';
 
 async function main() {
   try {

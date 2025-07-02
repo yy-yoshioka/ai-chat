@@ -1,7 +1,6 @@
 import { prisma } from '../lib/prisma';
 import { Incident, IncidentUpdate } from '@prisma/client';
 import { logger } from '../lib/logger';
-import { healthMonitorService } from './healthMonitorService';
 
 interface AlertThresholds {
   responseTime: number; // milliseconds

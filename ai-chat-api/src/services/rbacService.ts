@@ -134,7 +134,7 @@ export const getUserPermissions = async (
     select: { permission: true },
   });
 
-  let permissions = new Set(rolePermissions.map((rp) => rp.permission));
+  const permissions = new Set(rolePermissions.map((rp) => rp.permission));
 
   // Apply permission overrides
   for (const override of user.permissionOverrides) {
