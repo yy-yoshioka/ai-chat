@@ -44,12 +44,33 @@ const eslintConfig = [
 
       /* callback ネスト（then, setTimeout, コールバックなど） */
       'max-nested-callbacks': ['warn', 3], // 3 段まで
+      
+      /* ========== SWR 使用禁止ルール追加 ========== */
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'swr',
+              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useQuery を使用してください。',
+            },
+            {
+              name: 'swr/infinite',
+              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useInfiniteQuery を使用してください。',
+            },
+            {
+              name: 'swr/mutation',
+              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useMutation を使用してください。',
+            },
+          ],
+        },
+      ],
     },
   } /* 2) 例外：BFF ルート & 共通 fetcher & テストは fetch OK */,
   {
     files: ['**/api/**/route.ts', 'app/_utils/fetcher.ts', '**/*.test.{ts,tsx}'],
     rules: { 'no-restricted-globals': 'off' },
-  } /* 3) Zod は _schemas/** 限定 */,
+  } /* 3) Zod は _schemas/** 限定（SWR制限と統合） */,
   {
     files: ['**/*.{ts,tsx}'],
     ignores: ['app/_schemas/**'],
@@ -57,9 +78,25 @@ const eslintConfig = [
       'no-restricted-imports': [
         'error',
         {
-          name: 'zod',
-          message:
-            '📐 Zod スキーマは app/_schemas/** に定義してください（route や hooks では import のみ可）。',
+          paths: [
+            {
+              name: 'zod',
+              message:
+                '📐 Zod スキーマは app/_schemas/** に定義してください（route や hooks では import のみ可）。',
+            },
+            {
+              name: 'swr',
+              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useQuery を使用してください。',
+            },
+            {
+              name: 'swr/infinite',
+              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useInfiniteQuery を使用してください。',
+            },
+            {
+              name: 'swr/mutation',
+              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useMutation を使用してください。',
+            },
+          ],
         },
       ],
     },
