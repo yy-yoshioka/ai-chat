@@ -1,49 +1,35 @@
 'use client';
 
 import React, { FC } from 'react';
-import { Role } from '@/app/_domains/auth';
-import { useAuth } from '@/app/_hooks/auth/useAuth';
+import { Permission } from '@/app/_schemas/security';
+import { usePermissions } from '@/app/_hooks/security/usePermissions';
 
 interface PermissionGateProps {
   children: React.ReactNode;
-  orgId?: string;
-  requiredRole?: Role;
-  requiredResource?: string;
-  requiredAction?: string;
+  permission?: Permission | Permission[];
   fallback?: React.ReactNode;
 }
 
 const PermissionGate: FC<PermissionGateProps> = ({
   children,
-  orgId,
-  requiredRole,
-  requiredResource,
-  requiredAction,
+  permission,
   fallback = <AccessDenied />,
 }) => {
-  const { user, loading, hasOrgPermission, hasOrgResourcePermission } = useAuth();
+  const { hasPermission, hasAnyPermission, isLoading } = usePermissions();
 
-  // Show loading while checking authentication
-  if (loading) {
+  // Show loading while checking permissions
+  if (isLoading) {
     return <LoadingScreen />;
   }
 
-  // No user authenticated
-  if (!user) {
-    return fallback;
-  }
+  // Check permissions
+  if (permission) {
+    const canAccess = Array.isArray(permission)
+      ? hasAnyPermission(permission)
+      : hasPermission(permission);
 
-  // Check role-based permission
-  if (requiredRole && orgId) {
-    if (!hasOrgPermission(orgId, requiredRole)) {
-      return fallback;
-    }
-  }
-
-  // Check resource-based permission
-  if (requiredResource && requiredAction && orgId) {
-    if (!hasOrgResourcePermission(orgId, requiredResource, requiredAction)) {
-      return fallback;
+    if (!canAccess) {
+      return <>{fallback}</>;
     }
   }
 

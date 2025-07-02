@@ -43,6 +43,47 @@ enum Role {
   org_admin
   editor
   viewer
+  api_user      // API専用ユーザー
+  read_only     // 読み取り専用
+}
+
+enum Permission {
+  // Organization management
+  ORG_READ
+  ORG_WRITE
+  ORG_DELETE
+  ORG_INVITE_USERS
+  
+  // Widget management
+  WIDGET_READ
+  WIDGET_WRITE
+  WIDGET_DELETE
+  WIDGET_CONFIGURE
+  
+  // Chat management
+  CHAT_READ
+  CHAT_MODERATE
+  CHAT_EXPORT
+  
+  // Knowledge Base
+  KB_READ
+  KB_WRITE
+  KB_DELETE
+  KB_TRAIN
+  
+  // Analytics
+  ANALYTICS_READ
+  ANALYTICS_EXPORT
+  
+  // Settings
+  SETTINGS_READ
+  SETTINGS_WRITE
+  BILLING_READ
+  BILLING_WRITE
+  
+  // System admin
+  SYSTEM_ADMIN
+  AUDIT_READ
 }
 
 model Company {
@@ -126,6 +167,9 @@ model User {
   passwordResets  PasswordReset[]
   emailVerifications EmailVerification[]
   notifications   Notification[]
+  permissionOverrides UserPermissionOverride[]
+  securityAuditLogs   SecurityAuditLog[]
+  dataAccessLogs      DataAccessLog[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -218,6 +262,9 @@ model Organization {
   webhooks             Webhook[]
   dataRetentionPolicy  DataRetentionPolicy?
   dataRetentionJobs    DataRetentionJob[]
+  permissionOverrides UserPermissionOverride[]
+  securityAuditLogs   SecurityAuditLog[]
+  dataAccessLogs      DataAccessLog[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
@@ -586,4 +633,82 @@ model DataRetentionJob {
   @@index([status])
   @@index([createdAt])
   @@map("data_retention_jobs")
+}
+
+// Section-16: Security Models
+model RolePermission {
+  id         String     @id @default(cuid())
+  role       Role
+  permission Permission
+  
+  @@unique([role, permission])
+  @@map("role_permissions")
+}
+
+model UserPermissionOverride {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  permission   Permission
+  granted      Boolean    // true = grant, false = revoke
+  createdAt    DateTime   @default(now())
+  createdBy    String
+  
+  @@unique([userId, organizationId, permission])
+  @@index([userId])
+  @@index([organizationId])
+  @@map("user_permission_overrides")
+}
+
+model SecurityAuditLog {
+  id             String   @id @default(cuid())
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  action         String   // "login", "permission_change", "data_access", etc.
+  resource       String?  // Resource being accessed
+  resourceId     String?  // ID of the resource
+  
+  success        Boolean
+  ipAddress      String?
+  userAgent      String?
+  
+  details        Json?    // Additional context
+  risk_level     String   @default("low") // "low", "medium", "high", "critical"
+  
+  createdAt      DateTime @default(now())
+  
+  @@index([organizationId])
+  @@index([userId])
+  @@index([action])
+  @@index([success])
+  @@index([risk_level])
+  @@index([createdAt])
+  @@map("security_audit_logs")
+}
+
+model DataAccessLog {
+  id             String   @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  table_name     String   // "chat_logs", "knowledge_bases", etc.
+  operation      String   // "SELECT", "INSERT", "UPDATE", "DELETE"
+  record_ids     String[] // Array of affected record IDs
+  query_hash     String?  // Hash of the executed query
+  
+  createdAt      DateTime @default(now())
+  
+  @@index([organizationId])
+  @@index([userId])
+  @@index([table_name])
+  @@index([operation])
+  @@index([createdAt])
+  @@map("data_access_logs")
 }
