@@ -3,7 +3,7 @@ import { fetchGet, fetchDelete } from '@/app/_utils/fetcher';
 
 export function useKnowledgeBase(widgetId: string) {
   const queryClient = useQueryClient();
-  
+
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ['knowledge-base', widgetId],
     queryFn: () => fetchGet(`/api/bff/knowledge-base/items?widgetId=${widgetId}`),

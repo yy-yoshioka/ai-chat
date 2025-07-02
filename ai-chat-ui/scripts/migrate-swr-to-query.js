@@ -6,13 +6,13 @@ const glob = require('glob');
 
 // 移行対象ファイルを検索
 const files = glob.sync('app/**/*.{ts,tsx}', {
-  ignore: ['**/node_modules/**', '**/*.test.{ts,tsx}']
+  ignore: ['**/node_modules/**', '**/*.test.{ts,tsx}'],
 });
 
 let totalFiles = 0;
 let swrUsages = [];
 
-files.forEach(file => {
+files.forEach((file) => {
   const content = fs.readFileSync(file, 'utf8');
   let hasSwrUsage = false;
 
@@ -25,7 +25,7 @@ files.forEach(file => {
   if (content.includes('useSWR(') || content.includes('useSWR<')) {
     hasSwrUsage = true;
   }
-  
+
   // useSWRMutationパターンの検査
   if (content.includes('useSWRMutation(')) {
     hasSwrUsage = true;
@@ -33,25 +33,25 @@ files.forEach(file => {
 
   if (hasSwrUsage) {
     totalFiles++;
-    
+
     // 詳細な使用パターンを抽出
     const patterns = [];
-    
+
     // Import patterns
     const importMatches = content.match(/import.*from\s+['"]swr['"]/g);
     if (importMatches) {
       patterns.push(...importMatches);
     }
-    
+
     // useSWR patterns
     const useSWRMatches = content.match(/useSWR[^(]*\([^)]+\)/g);
     if (useSWRMatches) {
       patterns.push(...useSWRMatches);
     }
-    
+
     swrUsages.push({
       file,
-      patterns
+      patterns,
     });
   }
 });
@@ -61,7 +61,7 @@ console.log(`Total files using SWR: ${totalFiles}\n`);
 
 swrUsages.forEach(({ file, patterns }) => {
   console.log(`📝 ${file}`);
-  patterns.forEach(pattern => {
+  patterns.forEach((pattern) => {
     console.log(`   - ${pattern.trim()}`);
   });
   console.log('');
