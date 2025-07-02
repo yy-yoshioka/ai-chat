@@ -44,7 +44,7 @@ const eslintConfig = [
 
       /* callback ネスト（then, setTimeout, コールバックなど） */
       'max-nested-callbacks': ['warn', 3], // 3 段まで
-      
+
       /* ========== SWR 使用禁止ルール追加 ========== */
       'no-restricted-imports': [
         'error',
@@ -52,15 +52,18 @@ const eslintConfig = [
           paths: [
             {
               name: 'swr',
-              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useQuery を使用してください。',
+              message:
+                '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useQuery を使用してください。',
             },
             {
               name: 'swr/infinite',
-              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useInfiniteQuery を使用してください。',
+              message:
+                '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useInfiniteQuery を使用してください。',
             },
             {
               name: 'swr/mutation',
-              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useMutation を使用してください。',
+              message:
+                '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useMutation を使用してください。',
             },
           ],
         },
@@ -86,15 +89,18 @@ const eslintConfig = [
             },
             {
               name: 'swr',
-              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useQuery を使用してください。',
+              message:
+                '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useQuery を使用してください。',
             },
             {
               name: 'swr/infinite',
-              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useInfiniteQuery を使用してください。',
+              message:
+                '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useInfiniteQuery を使用してください。',
             },
             {
               name: 'swr/mutation',
-              message: '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useMutation を使用してください。',
+              message:
+                '❌ SWRは使用禁止です。代わりに @tanstack/react-query の useMutation を使用してください。',
             },
           ],
         },
