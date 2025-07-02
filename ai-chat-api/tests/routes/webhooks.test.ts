@@ -4,10 +4,10 @@ import { prisma } from '../../src/lib/prisma';
 import webhooksRouter from '../../src/routes/webhooks';
 import { authMiddleware } from '../../src/middleware/auth';
 import { orgAccessMiddleware } from '../../src/middleware/organizationAccess';
-import { 
-  testUser, 
+import {
+  testUser,
   testOrganization,
-  generateTestToken
+  generateTestToken,
 } from '../fixtures/test-data';
 import { webhookService } from '../../src/services/webhookService';
 import { logger } from '../../src/lib/logger';
@@ -28,7 +28,7 @@ describe('Webhooks Routes', () => {
     name: 'Test Webhook',
     url: 'https://api.example.com/webhook',
     events: ['chat.created', 'user.created'],
-    headers: { 'Authorization': 'Bearer token123' },
+    headers: { Authorization: 'Bearer token123' },
     retryCount: 3,
     timeoutMs: 5000,
     isActive: true,
@@ -88,7 +88,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(2);
@@ -99,7 +102,9 @@ describe('Webhooks Routes', () => {
         events: testWebhook.events,
       });
 
-      expect(mockWebhookService.getWebhooks).toHaveBeenCalledWith(testOrganization.id);
+      expect(mockWebhookService.getWebhooks).toHaveBeenCalledWith(
+        testOrganization.id
+      );
     });
 
     it('should handle service errors', async () => {
@@ -109,7 +114,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -127,7 +135,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
@@ -140,7 +151,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get(`/api/webhooks/${testWebhook.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -166,7 +180,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get('/api/webhooks/non-existent-id')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'Webhook not found' });
@@ -179,7 +196,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get(`/api/webhooks/${testWebhook.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -209,7 +229,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(createData);
 
       expect(response.status).toBe(201);
@@ -238,7 +261,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(invalidData);
 
       expect(response.status).toBe(400);
@@ -256,7 +282,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(invalidData);
 
       expect(response.status).toBe(400);
@@ -272,7 +301,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(invalidData);
 
       expect(response.status).toBe(400);
@@ -301,7 +333,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(invalidData);
 
       expect(response.status).toBe(400);
@@ -323,7 +358,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(createData);
 
       expect(response.status).toBe(500);
@@ -352,7 +390,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .put(`/api/webhooks/${testWebhook.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(updateData);
 
       expect(response.status).toBe(200);
@@ -378,7 +419,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .put('/api/webhooks/non-existent-id')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ name: 'Updated Name' });
 
       expect(response.status).toBe(404);
@@ -392,7 +436,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .put(`/api/webhooks/${testWebhook.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ name: 'Updated Name' });
 
       expect(response.status).toBe(500);
@@ -408,7 +455,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .delete(`/api/webhooks/${testWebhook.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(204);
       expect(response.body).toEqual({});
@@ -426,7 +476,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .delete('/api/webhooks/non-existent-id')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'Webhook not found' });
@@ -439,7 +492,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .delete(`/api/webhooks/${testWebhook.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -466,7 +522,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get(`/api/webhooks/${testWebhook.id}/logs`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(2);
@@ -491,7 +550,9 @@ describe('Webhooks Routes', () => {
     });
 
     it('should filter logs by query parameters', async () => {
-      mockWebhookService.getWebhookLogs.mockResolvedValue([testWebhookLog] as any);
+      mockWebhookService.getWebhookLogs.mockResolvedValue([
+        testWebhookLog,
+      ] as any);
 
       const queryParams = {
         status: 'success',
@@ -503,7 +564,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get(`/api/webhooks/${testWebhook.id}/logs`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query(queryParams);
 
       expect(response.status).toBe(200);
@@ -528,7 +592,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get('/api/webhooks/non-existent-id/logs')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'Webhook not found' });
@@ -541,7 +608,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get(`/api/webhooks/${testWebhook.id}/logs`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -566,7 +636,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post(`/api/webhooks/${testWebhook.id}/test`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -598,7 +671,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post(`/api/webhooks/${testWebhook.id}/test`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -615,7 +691,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks/non-existent-id/test')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'Webhook not found' });
@@ -628,7 +707,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post(`/api/webhooks/${testWebhook.id}/test`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -656,7 +738,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(403);
       expect(response.body).toEqual({ error: 'Organization access required' });
@@ -667,9 +752,14 @@ describe('Webhooks Routes', () => {
 
       await request(app)
         .get('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
-      expect(mockWebhookService.getWebhooks).toHaveBeenCalledWith(testOrganization.id);
+      expect(mockWebhookService.getWebhooks).toHaveBeenCalledWith(
+        testOrganization.id
+      );
     });
   });
 
@@ -692,7 +782,10 @@ describe('Webhooks Routes', () => {
 
         const response = await request(app)
           .post('/api/webhooks')
-          .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+          .set(
+            'Authorization',
+            `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+          )
           .send(createData);
 
         if (testCase.shouldPass) {
@@ -711,7 +804,7 @@ describe('Webhooks Routes', () => {
         url: 'https://api.example.com/webhook',
         events: ['chat.created'],
         headers: {
-          'Authorization': 'Bearer token123',
+          Authorization: 'Bearer token123',
           'X-Custom-Header': 'value',
           'Content-Type': 'application/json',
         },
@@ -721,7 +814,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(createData);
 
       expect(response.status).toBe(201);
@@ -747,7 +843,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(createData);
 
       expect(response.status).toBe(201);
@@ -766,7 +865,10 @@ describe('Webhooks Routes', () => {
     it('should handle malformed JSON in request body', async () => {
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .set('Content-Type', 'application/json')
         .send('{ invalid json }');
 
@@ -789,7 +891,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(createData);
 
       expect(response.status).toBe(201);
@@ -807,7 +912,10 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .post('/api/webhooks')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(createData);
 
       expect(response.status).toBe(201);
@@ -818,14 +926,17 @@ describe('Webhooks Routes', () => {
 
       const response = await request(app)
         .get(`/api/webhooks/${testWebhook.id}/logs`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({
           startDate: 'invalid-date',
           endDate: 'also-invalid',
         });
 
       expect(response.status).toBe(200);
-      
+
       // Service should receive Date objects (even if invalid dates)
       expect(mockWebhookService.getWebhookLogs).toHaveBeenCalledWith(
         testWebhook.id,

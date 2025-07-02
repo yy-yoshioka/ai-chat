@@ -4,10 +4,10 @@ import { prisma } from '../../src/lib/prisma';
 import dashboardRouter from '../../src/routes/dashboard';
 import { authMiddleware } from '../../src/middleware/auth';
 import { metricsMiddleware } from '../../src/middleware/metrics';
-import { 
-  testUser, 
+import {
+  testUser,
   testOrganization,
-  generateTestToken
+  generateTestToken,
 } from '../fixtures/test-data';
 
 // Mock dependencies
@@ -54,7 +54,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -67,7 +70,9 @@ describe('Dashboard Routes', () => {
 
       // Verify timestamp is valid ISO string
       expect(new Date(response.body.timestamp)).toBeInstanceOf(Date);
-      expect(new Date(response.body.timestamp).getTime()).toBeGreaterThan(Date.now() - 5000); // Within last 5 seconds
+      expect(new Date(response.body.timestamp).getTime()).toBeGreaterThan(
+        Date.now() - 5000
+      ); // Within last 5 seconds
     });
 
     it('should query total chats count correctly', async () => {
@@ -77,7 +82,10 @@ describe('Dashboard Routes', () => {
 
       await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(prisma.chatLog.count).toHaveBeenCalledWith();
     });
@@ -89,10 +97,13 @@ describe('Dashboard Routes', () => {
 
       await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-      
+
       expect(prisma.user.count).toHaveBeenCalledWith({
         where: {
           chatLogs: {
@@ -108,7 +119,9 @@ describe('Dashboard Routes', () => {
       // Verify the date is approximately 24 hours ago (within 1 minute tolerance)
       const callArgs = (prisma.user.count as jest.Mock).mock.calls[0][0];
       const actualDate = callArgs.where.chatLogs.some.createdAt.gte;
-      const timeDiff = Math.abs(actualDate.getTime() - twentyFourHoursAgo.getTime());
+      const timeDiff = Math.abs(
+        actualDate.getTime() - twentyFourHoursAgo.getTime()
+      );
       expect(timeDiff).toBeLessThan(60000); // Less than 1 minute difference
     });
 
@@ -119,7 +132,10 @@ describe('Dashboard Routes', () => {
 
       await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(prisma.chatLog.findMany).toHaveBeenCalledWith({
         where: {
@@ -143,27 +159,39 @@ describe('Dashboard Routes', () => {
       const findManyDelay = 120;
 
       (prisma.chatLog.count as jest.Mock).mockImplementation(
-        () => new Promise(resolve => setTimeout(() => resolve(100), countDelay))
+        () =>
+          new Promise((resolve) => setTimeout(() => resolve(100), countDelay))
       );
       (prisma.user.count as jest.Mock).mockImplementation(
-        () => new Promise(resolve => setTimeout(() => resolve(10), userCountDelay))
+        () =>
+          new Promise((resolve) =>
+            setTimeout(() => resolve(10), userCountDelay)
+          )
       );
       (prisma.chatLog.findMany as jest.Mock).mockImplementation(
-        () => new Promise(resolve => setTimeout(() => resolve([]), findManyDelay))
+        () =>
+          new Promise((resolve) => setTimeout(() => resolve([]), findManyDelay))
       );
 
       const startTime = Date.now();
-      
+
       await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       const endTime = Date.now();
       const totalTime = endTime - startTime;
 
       // Should take roughly the time of the longest query (not the sum of all)
-      expect(totalTime).toBeLessThan(countDelay + userCountDelay + findManyDelay);
-      expect(totalTime).toBeGreaterThan(Math.max(countDelay, userCountDelay, findManyDelay) - 50);
+      expect(totalTime).toBeLessThan(
+        countDelay + userCountDelay + findManyDelay
+      );
+      expect(totalTime).toBeGreaterThan(
+        Math.max(countDelay, userCountDelay, findManyDelay) - 50
+      );
     });
 
     it('should return hardcoded avgResponseTime and errorRate', async () => {
@@ -173,7 +201,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.body.avgResponseTime).toBe(250);
       expect(response.body.errorRate).toBe(0.02);
@@ -186,13 +217,18 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       // avgResponseTime should be rounded to nearest integer
       expect(Number.isInteger(response.body.avgResponseTime)).toBe(true);
-      
+
       // errorRate should be rounded to 3 decimal places
-      expect(response.body.errorRate.toString().split('.')[1]?.length || 0).toBeLessThanOrEqual(3);
+      expect(
+        response.body.errorRate.toString().split('.')[1]?.length || 0
+      ).toBeLessThanOrEqual(3);
     });
 
     it('should handle zero values gracefully', async () => {
@@ -202,7 +238,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -224,7 +263,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body.totalChats).toBe(largeChatCount);
@@ -238,7 +280,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -248,12 +293,17 @@ describe('Dashboard Routes', () => {
 
     it('should handle partial database failures gracefully', async () => {
       (prisma.chatLog.count as jest.Mock).mockResolvedValue(100);
-      (prisma.user.count as jest.Mock).mockRejectedValue(new Error('User query failed'));
+      (prisma.user.count as jest.Mock).mockRejectedValue(
+        new Error('User query failed')
+      );
       (prisma.chatLog.findMany as jest.Mock).mockResolvedValue([]);
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -262,16 +312,24 @@ describe('Dashboard Routes', () => {
     });
 
     it('should log errors to console', async () => {
-      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleErrorSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       const mockError = new Error('Database connection failed');
 
       (prisma.chatLog.count as jest.Mock).mockRejectedValue(mockError);
 
       await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Dashboard error:', mockError);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Dashboard error:',
+        mockError
+      );
 
       consoleErrorSpy.mockRestore();
     });
@@ -283,7 +341,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -302,7 +363,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body.totalChats).toBe(100);
@@ -322,7 +386,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body.totalChats).toBe(100);
@@ -345,7 +412,7 @@ describe('Dashboard Routes', () => {
     it('should not require admin permissions', async () => {
       // Regular user should be able to access dashboard
       const regularUser = { ...testUser, roles: ['user'] };
-      
+
       (authMiddleware as jest.Mock).mockImplementation((req, res, next) => {
         req.user = { ...regularUser, organization: testOrganization };
         next();
@@ -357,7 +424,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(regularUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(regularUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
     });
@@ -372,7 +442,10 @@ describe('Dashboard Routes', () => {
 
       await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(metricsMiddlewareSpy).toHaveBeenCalled();
     });
@@ -397,7 +470,10 @@ describe('Dashboard Routes', () => {
 
       await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(middlewareOrder).toEqual(['auth', 'metrics']);
     });
@@ -429,12 +505,15 @@ describe('Dashboard Routes', () => {
       const requests = Array.from({ length: 10 }, () =>
         request(app)
           .get('/api/dashboard')
-          .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+          .set(
+            'Authorization',
+            `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+          )
       );
 
       const responses = await Promise.all(requests);
 
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(response.status).toBe(200);
         expect(response.body.totalChats).toBe(100);
       });
@@ -449,7 +528,10 @@ describe('Dashboard Routes', () => {
 
       await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       // Verify that only createdAt is selected from recent chats
       expect(prisma.chatLog.findMany).toHaveBeenCalledWith({
@@ -472,7 +554,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .timeout(1000);
 
       // The request should timeout, which supertest handles appropriately
@@ -488,11 +573,15 @@ describe('Dashboard Routes', () => {
 
       await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       // Both user.count and chatLog.findMany should use the same time threshold
       const userCountCall = (prisma.user.count as jest.Mock).mock.calls[0][0];
-      const chatLogFindCall = (prisma.chatLog.findMany as jest.Mock).mock.calls[0][0];
+      const chatLogFindCall = (prisma.chatLog.findMany as jest.Mock).mock
+        .calls[0][0];
 
       const userDate = userCountCall.where.chatLogs.some.createdAt.gte;
       const chatDate = chatLogFindCall.where.createdAt.gte;
@@ -503,17 +592,22 @@ describe('Dashboard Routes', () => {
     });
 
     it('should handle edge case of exactly 24 hours ago', async () => {
-      const exactlyTwentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-      
+      const exactlyTwentyFourHoursAgo = new Date(
+        Date.now() - 24 * 60 * 60 * 1000
+      );
+
       (prisma.chatLog.count as jest.Mock).mockResolvedValue(100);
       (prisma.user.count as jest.Mock).mockResolvedValue(10);
       (prisma.chatLog.findMany as jest.Mock).mockResolvedValue([
-        { createdAt: exactlyTwentyFourHoursAgo }
+        { createdAt: exactlyTwentyFourHoursAgo },
       ]);
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body.totalChats).toBe(100);
@@ -537,7 +631,10 @@ describe('Dashboard Routes', () => {
 
       const response = await request(app)
         .get('/api/dashboard')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body.totalChats).toBe(150);

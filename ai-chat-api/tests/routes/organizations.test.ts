@@ -3,12 +3,12 @@ import express from 'express';
 import { prisma } from '../../src/lib/prisma';
 import organizationsRouter from '../../src/routes/organizations';
 import { authMiddleware } from '../../src/middleware/auth';
-import { 
-  testUser, 
+import {
+  testUser,
   testOrganization,
   testCompany,
   testWidget,
-  generateTestToken
+  generateTestToken,
 } from '../fixtures/test-data';
 import * as organizationService from '../../src/services/organizationService';
 
@@ -32,7 +32,9 @@ describe('Organizations Routes', () => {
       next();
     });
 
-    mockOrganizationService = organizationService as jest.Mocked<typeof organizationService>;
+    mockOrganizationService = organizationService as jest.Mocked<
+      typeof organizationService
+    >;
 
     // Reset all mocks
     jest.clearAllMocks();
@@ -70,15 +72,20 @@ describe('Organizations Routes', () => {
         },
       ];
 
-      mockOrganizationService.getUserOrganizations.mockResolvedValue(mockOrganizations as any);
+      mockOrganizationService.getUserOrganizations.mockResolvedValue(
+        mockOrganizations as any
+      );
 
       const response = await request(app)
         .get('/api/organizations')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(2);
-      
+
       expect(response.body[0]).toMatchObject({
         id: testOrganization.id,
         name: testOrganization.name,
@@ -95,7 +102,9 @@ describe('Organizations Routes', () => {
         plan: 'STARTER',
       });
 
-      expect(mockOrganizationService.getUserOrganizations).toHaveBeenCalledWith(testUser.id);
+      expect(mockOrganizationService.getUserOrganizations).toHaveBeenCalledWith(
+        testUser.id
+      );
     });
 
     it('should handle organizations without companies', async () => {
@@ -107,11 +116,16 @@ describe('Organizations Routes', () => {
         },
       ];
 
-      mockOrganizationService.getUserOrganizations.mockResolvedValue(mockOrganizations as any);
+      mockOrganizationService.getUserOrganizations.mockResolvedValue(
+        mockOrganizations as any
+      );
 
       const response = await request(app)
         .get('/api/organizations')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body[0]).toMatchObject({
@@ -128,7 +142,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .get('/api/organizations')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -167,11 +184,16 @@ describe('Organizations Routes', () => {
         ],
       };
 
-      mockOrganizationService.getOrganizationById.mockResolvedValue(mockOrganization as any);
+      mockOrganizationService.getOrganizationById.mockResolvedValue(
+        mockOrganization as any
+      );
 
       const response = await request(app)
         .get(`/api/organizations/${testOrganization.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -204,7 +226,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .get('/api/organizations/non-existent-id')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({
@@ -219,7 +244,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .get(`/api/organizations/${testOrganization.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({
@@ -234,7 +262,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .get(`/api/organizations/${testOrganization.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -259,11 +290,16 @@ describe('Organizations Routes', () => {
         updatedAt: new Date('2024-02-01'),
       };
 
-      mockOrganizationService.updateOrganization.mockResolvedValue(mockUpdatedOrganization as any);
+      mockOrganizationService.updateOrganization.mockResolvedValue(
+        mockUpdatedOrganization as any
+      );
 
       const response = await request(app)
         .put(`/api/organizations/${testOrganization.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(updateData);
 
       expect(response.status).toBe(200);
@@ -291,7 +327,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .put(`/api/organizations/${testOrganization.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(invalidData);
 
       expect(response.status).toBe(500);
@@ -307,7 +346,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .put(`/api/organizations/${testOrganization.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ name: 'New Name' });
 
       expect(response.status).toBe(403);
@@ -323,7 +365,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .put('/api/organizations/non-existent-id')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ name: 'New Name' });
 
       expect(response.status).toBe(403);
@@ -335,7 +380,10 @@ describe('Organizations Routes', () => {
     it('should handle malformed JSON', async () => {
       const response = await request(app)
         .put(`/api/organizations/${testOrganization.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .set('Content-Type', 'application/json')
         .send('{ invalid json }');
 
@@ -360,7 +408,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .put(`/api/organizations/${testOrganization.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send(maliciousData);
 
       expect(response.status).toBe(200);
@@ -402,11 +453,16 @@ describe('Organizations Routes', () => {
         },
       };
 
-      mockOrganizationService.getOrganizationStats.mockResolvedValue(mockStats as any);
+      mockOrganizationService.getOrganizationStats.mockResolvedValue(
+        mockStats as any
+      );
 
       const response = await request(app)
         .get(`/api/organizations/${testOrganization.id}/stats`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -446,7 +502,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .get(`/api/organizations/${testOrganization.id}/stats`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -475,11 +534,16 @@ describe('Organizations Routes', () => {
         },
       };
 
-      mockOrganizationService.getOrganizationStats.mockResolvedValue(emptyStats as any);
+      mockOrganizationService.getOrganizationStats.mockResolvedValue(
+        emptyStats as any
+      );
 
       const response = await request(app)
         .get(`/api/organizations/${testOrganization.id}/stats`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject(emptyStats);
@@ -500,15 +564,22 @@ describe('Organizations Routes', () => {
 
     it('should only return organizations accessible to the user', async () => {
       const userOrganizations = [testOrganization];
-      mockOrganizationService.getUserOrganizations.mockResolvedValue(userOrganizations as any);
+      mockOrganizationService.getUserOrganizations.mockResolvedValue(
+        userOrganizations as any
+      );
 
       const response = await request(app)
         .get('/api/organizations')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(1);
-      expect(mockOrganizationService.getUserOrganizations).toHaveBeenCalledWith(testUser.id);
+      expect(mockOrganizationService.getUserOrganizations).toHaveBeenCalledWith(
+        testUser.id
+      );
     });
   });
 
@@ -520,7 +591,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .get('/api/organizations/invalid-uuid-format')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -535,7 +609,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .put(`/api/organizations/${testOrganization.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ name: 'New Name' });
 
       expect(response.status).toBe(500);
@@ -552,7 +629,10 @@ describe('Organizations Routes', () => {
 
       const response = await request(app)
         .get('/api/organizations')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .timeout(1000);
 
       // This would timeout in a real scenario

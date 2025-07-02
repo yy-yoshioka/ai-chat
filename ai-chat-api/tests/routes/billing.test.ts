@@ -3,10 +3,10 @@ import express from 'express';
 import { prisma } from '../../src/lib/prisma';
 import billingRouter from '../../src/routes/billing';
 import { authMiddleware } from '../../src/middleware/auth';
-import { 
-  testUser, 
+import {
+  testUser,
   testOrganization,
-  generateTestToken
+  generateTestToken,
 } from '../fixtures/test-data';
 import Stripe from 'stripe';
 
@@ -34,10 +34,10 @@ describe('Billing Routes', () => {
     mockStripe = {
       customers: {
         create: jest.fn().mockResolvedValue({ id: 'cus_test_new' }),
-        retrieve: jest.fn().mockResolvedValue({ 
+        retrieve: jest.fn().mockResolvedValue({
           id: 'cus_test_123',
           email: testUser.email,
-          metadata: { organizationId: testOrganization.id }
+          metadata: { organizationId: testOrganization.id },
         }),
         update: jest.fn().mockResolvedValue({ id: 'cus_test_123' }),
       },
@@ -72,28 +72,30 @@ describe('Billing Routes', () => {
         }),
       },
       subscriptions: {
-        create: jest.fn().mockResolvedValue({ 
+        create: jest.fn().mockResolvedValue({
           id: 'sub_test_new',
           status: 'active',
           current_period_end: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60,
         }),
-        retrieve: jest.fn().mockResolvedValue({ 
+        retrieve: jest.fn().mockResolvedValue({
           id: 'sub_test_123',
           status: 'active',
           items: {
-            data: [{
-              price: {
-                id: 'price_pro',
-                unit_amount: 9900,
-                metadata: { plan: 'PRO' },
+            data: [
+              {
+                price: {
+                  id: 'price_pro',
+                  unit_amount: 9900,
+                  metadata: { plan: 'PRO' },
+                },
               },
-            }],
+            ],
           },
           current_period_end: Math.floor(Date.now() / 1000) + 15 * 24 * 60 * 60,
           cancel_at_period_end: false,
         }),
         update: jest.fn().mockResolvedValue({ id: 'sub_test_123' }),
-        cancel: jest.fn().mockResolvedValue({ 
+        cancel: jest.fn().mockResolvedValue({
           id: 'sub_test_123',
           cancel_at_period_end: true,
         }),
@@ -149,9 +151,15 @@ describe('Billing Routes', () => {
       products: {
         retrieve: jest.fn().mockImplementation((id) => {
           const products: any = {
-            'prod_starter': { name: 'Starter Plan', metadata: { features: 'basic' } },
-            'prod_pro': { name: 'Pro Plan', metadata: { features: 'advanced' } },
-            'prod_enterprise': { name: 'Enterprise Plan', metadata: { features: 'unlimited' } },
+            prod_starter: {
+              name: 'Starter Plan',
+              metadata: { features: 'basic' },
+            },
+            prod_pro: { name: 'Pro Plan', metadata: { features: 'advanced' } },
+            prod_enterprise: {
+              name: 'Enterprise Plan',
+              metadata: { features: 'unlimited' },
+            },
           };
           return Promise.resolve(products[id] || { name: 'Unknown' });
         }),
@@ -171,7 +179,10 @@ describe('Billing Routes', () => {
     it('should return available billing plans', async () => {
       const response = await request(app)
         .get('/api/billing/plans')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -199,11 +210,16 @@ describe('Billing Routes', () => {
     });
 
     it('should handle Stripe API errors', async () => {
-      mockStripe.prices.list.mockRejectedValueOnce(new Error('Stripe API error'));
+      mockStripe.prices.list.mockRejectedValueOnce(
+        new Error('Stripe API error')
+      );
 
       const response = await request(app)
         .get('/api/billing/plans')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -224,7 +240,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .get('/api/billing/subscription')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -250,7 +269,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .get('/api/billing/subscription')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -275,7 +297,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .get('/api/billing/subscription')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body.subscription.status).toBe('canceled');
@@ -297,7 +322,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .post('/api/billing/checkout')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           priceId: 'price_pro',
           successUrl: 'https://app.example.com/billing/success',
@@ -320,10 +348,12 @@ describe('Billing Routes', () => {
       expect(mockStripe.checkout.sessions.create).toHaveBeenCalledWith(
         expect.objectContaining({
           customer: 'cus_test_new',
-          line_items: [{
-            price: 'price_pro',
-            quantity: 1,
-          }],
+          line_items: [
+            {
+              price: 'price_pro',
+              quantity: 1,
+            },
+          ],
           mode: 'subscription',
           success_url: expect.any(String),
           cancel_url: expect.any(String),
@@ -342,7 +372,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .post('/api/billing/checkout')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           priceId: 'price_enterprise',
           successUrl: 'https://app.example.com/billing/success',
@@ -369,7 +402,10 @@ describe('Billing Routes', () => {
     it('should validate price ID', async () => {
       const response = await request(app)
         .post('/api/billing/checkout')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           priceId: '',
           successUrl: 'https://app.example.com/billing/success',
@@ -395,7 +431,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .post('/api/billing/cancel')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -403,9 +442,12 @@ describe('Billing Routes', () => {
         cancelAtPeriodEnd: true,
       });
 
-      expect(mockStripe.subscriptions.cancel).toHaveBeenCalledWith('sub_test_123', {
-        cancel_at_period_end: true,
-      });
+      expect(mockStripe.subscriptions.cancel).toHaveBeenCalledWith(
+        'sub_test_123',
+        {
+          cancel_at_period_end: true,
+        }
+      );
     });
 
     it('should return 404 if no subscription exists', async () => {
@@ -419,7 +461,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .post('/api/billing/cancel')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({
@@ -449,16 +494,22 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .post('/api/billing/reactivate')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
         message: 'Subscription reactivated successfully',
       });
 
-      expect(mockStripe.subscriptions.update).toHaveBeenCalledWith('sub_test_123', {
-        cancel_at_period_end: false,
-      });
+      expect(mockStripe.subscriptions.update).toHaveBeenCalledWith(
+        'sub_test_123',
+        {
+          cancel_at_period_end: false,
+        }
+      );
     });
   });
 
@@ -473,7 +524,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .get('/api/billing/portal')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ returnUrl: 'https://app.example.com/billing' });
 
       expect(response.status).toBe(200);
@@ -497,7 +551,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .get('/api/billing/portal')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({
@@ -517,7 +574,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .get('/api/billing/invoices')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -548,7 +608,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .get('/api/billing/invoices')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ includeUpcoming: true });
 
       expect(response.status).toBe(200);
@@ -574,7 +637,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .get('/api/billing/payment-methods')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -604,11 +670,13 @@ describe('Billing Routes', () => {
             customer: 'cus_test_123',
             status: 'active',
             items: {
-              data: [{
-                price: {
-                  metadata: { plan: 'PRO' },
+              data: [
+                {
+                  price: {
+                    metadata: { plan: 'PRO' },
+                  },
                 },
-              }],
+              ],
             },
           },
         },
@@ -760,7 +828,10 @@ describe('Billing Routes', () => {
 
       const response = await request(app)
         .get('/api/billing/usage')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({

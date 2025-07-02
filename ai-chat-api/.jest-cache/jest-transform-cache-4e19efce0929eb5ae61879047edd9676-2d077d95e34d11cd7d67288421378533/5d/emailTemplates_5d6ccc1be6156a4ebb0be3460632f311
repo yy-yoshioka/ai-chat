@@ -1,0 +1,952 @@
+77d0d986ea1146aa4b2cfe5e8389c6dc
+"use strict";
+
+/* istanbul ignore next */
+function cov_1dv2kicfn3() {
+  var path = "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/lib/emailTemplates.ts";
+  var hash = "fcc8be6a29ac1bed1d30a8cea2fdcbb90fd9672f";
+  var global = new Function("return this")();
+  var gcv = "__coverage__";
+  var coverageData = {
+    path: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/lib/emailTemplates.ts",
+    statementMap: {
+      "0": {
+        start: {
+          line: 2,
+          column: 0
+        },
+        end: {
+          line: 2,
+          column: 62
+        }
+      },
+      "1": {
+        start: {
+          line: 3,
+          column: 0
+        },
+        end: {
+          line: 3,
+          column: 187
+        }
+      },
+      "2": {
+        start: {
+          line: 6,
+          column: 4
+        },
+        end: {
+          line: 130,
+          column: 6
+        }
+      },
+      "3": {
+        start: {
+          line: 132,
+          column: 0
+        },
+        end: {
+          line: 132,
+          column: 58
+        }
+      },
+      "4": {
+        start: {
+          line: 135,
+          column: 4
+        },
+        end: {
+          line: 294,
+          column: 6
+        }
+      },
+      "5": {
+        start: {
+          line: 296,
+          column: 0
+        },
+        end: {
+          line: 296,
+          column: 64
+        }
+      },
+      "6": {
+        start: {
+          line: 299,
+          column: 4
+        },
+        end: {
+          line: 525,
+          column: 6
+        }
+      },
+      "7": {
+        start: {
+          line: 527,
+          column: 0
+        },
+        end: {
+          line: 527,
+          column: 72
+        }
+      },
+      "8": {
+        start: {
+          line: 529,
+          column: 30
+        },
+        end: {
+          line: 558,
+          column: 2
+        }
+      },
+      "9": {
+        start: {
+          line: 529,
+          column: 45
+        },
+        end: {
+          line: 558,
+          column: 1
+        }
+      },
+      "10": {
+        start: {
+          line: 559,
+          column: 0
+        },
+        end: {
+          line: 559,
+          column: 54
+        }
+      },
+      "11": {
+        start: {
+          line: 561,
+          column: 34
+        },
+        end: {
+          line: 588,
+          column: 2
+        }
+      },
+      "12": {
+        start: {
+          line: 561,
+          column: 50
+        },
+        end: {
+          line: 588,
+          column: 1
+        }
+      },
+      "13": {
+        start: {
+          line: 589,
+          column: 0
+        },
+        end: {
+          line: 589,
+          column: 62
+        }
+      }
+    },
+    fnMap: {
+      "0": {
+        name: "getWelcomeEmailTemplate",
+        decl: {
+          start: {
+            line: 5,
+            column: 9
+          },
+          end: {
+            line: 5,
+            column: 32
+          }
+        },
+        loc: {
+          start: {
+            line: 5,
+            column: 39
+          },
+          end: {
+            line: 131,
+            column: 1
+          }
+        },
+        line: 5
+      },
+      "1": {
+        name: "getUsageGuideEmailTemplate",
+        decl: {
+          start: {
+            line: 134,
+            column: 9
+          },
+          end: {
+            line: 134,
+            column: 35
+          }
+        },
+        loc: {
+          start: {
+            line: 134,
+            column: 42
+          },
+          end: {
+            line: 295,
+            column: 1
+          }
+        },
+        line: 134
+      },
+      "2": {
+        name: "getSuccessStoriesEmailTemplate",
+        decl: {
+          start: {
+            line: 298,
+            column: 9
+          },
+          end: {
+            line: 298,
+            column: 39
+          }
+        },
+        loc: {
+          start: {
+            line: 298,
+            column: 46
+          },
+          end: {
+            line: 526,
+            column: 1
+          }
+        },
+        line: 298
+      },
+      "3": {
+        name: "(anonymous_3)",
+        decl: {
+          start: {
+            line: 529,
+            column: 30
+          },
+          end: {
+            line: 529,
+            column: 31
+          }
+        },
+        loc: {
+          start: {
+            line: 529,
+            column: 45
+          },
+          end: {
+            line: 558,
+            column: 1
+          }
+        },
+        line: 529
+      },
+      "4": {
+        name: "(anonymous_4)",
+        decl: {
+          start: {
+            line: 561,
+            column: 34
+          },
+          end: {
+            line: 561,
+            column: 35
+          }
+        },
+        loc: {
+          start: {
+            line: 561,
+            column: 50
+          },
+          end: {
+            line: 588,
+            column: 1
+          }
+        },
+        line: 561
+      }
+    },
+    branchMap: {},
+    s: {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0,
+      "10": 0,
+      "11": 0,
+      "12": 0,
+      "13": 0
+    },
+    f: {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0
+    },
+    b: {},
+    inputSourceMap: {
+      file: "/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/lib/emailTemplates.ts",
+      mappings: "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",
+      names: [],
+      sources: ["/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/src/lib/emailTemplates.ts"],
+      sourcesContent: ["export interface EmailTemplate {\n  subject: string;\n  html: string;\n  text: string;\n}\n\nexport interface OnboardingData {\n  firstName: string;\n  company: string;\n  email: string;\n  setupUrl: string;\n  dashboardUrl: string;\n  supportUrl: string;\n}\n\n// Day 1: \u30A6\u30A7\u30EB\u30AB\u30E0\u30E1\u30FC\u30EB\nexport function getWelcomeEmailTemplate(data: OnboardingData): EmailTemplate {\n  return {\n    subject: `\uD83C\uDF89 ${data.firstName}\u3055\u3093\u3001AI Chat\u3078\u3088\u3046\u3053\u305D\uFF01\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u3092\u5B8C\u4E86\u3057\u307E\u3057\u3087\u3046`,\n    html: `\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>AI Chat \u3078\u3088\u3046\u3053\u305D</title>\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }\n    .container { max-width: 600px; margin: 0 auto; background: white; }\n    .header { background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%); color: white; padding: 40px 30px; text-align: center; }\n    .content { padding: 40px 30px; }\n    .button { display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 20px 0; }\n    .feature { margin: 30px 0; padding: 20px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #2563eb; }\n    .footer { background: #f8fafc; padding: 30px; text-align: center; color: #666; font-size: 14px; }\n    .checklist { background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 20px; margin: 20px 0; }\n    .checkitem { margin: 10px 0; }\n    .checkitem::before { content: \"\u2705 \"; color: #10b981; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>\uD83C\uDF89 AI Chat \u3078\u3088\u3046\u3053\u305D\uFF01</h1>\n      <p>\u3053\u3093\u306B\u3061\u306F ${data.firstName}\u3055\u3093\uFF01${data.company} \u3067\u306E\u30AB\u30B9\u30BF\u30DE\u30FC\u30B5\u30DD\u30FC\u30C8\u9769\u65B0\u306E\u7B2C\u4E00\u6B69\u3067\u3059\u3002</p>\n    </div>\n    \n    <div class=\"content\">\n      <h2>\uD83D\uDE80 \u305F\u3063\u305F5\u5206\u3067\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u5B8C\u4E86</h2>\n      <p>AI Chat \u3092\u59CB\u3081\u308B\u306E\u306F\u9A5A\u304F\u307B\u3069\u7C21\u5358\u3067\u3059\u3002\u4EE5\u4E0B\u306E\u30B9\u30C6\u30C3\u30D7\u306B\u5F93\u3063\u3066\u3001\u4ECA\u3059\u3050\u9867\u5BA2\u30B5\u30DD\u30FC\u30C8\u3092\u5411\u4E0A\u3055\u305B\u307E\u3057\u3087\u3046\uFF01</p>\n      \n      <div class=\"checklist\">\n        <h3>\uD83D\uDCCB \u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u30C1\u30A7\u30C3\u30AF\u30EA\u30B9\u30C8</h3>\n        <div class=\"checkitem\">\u30A2\u30AB\u30A6\u30F3\u30C8\u4F5C\u6210\uFF08\u5B8C\u4E86\uFF01\uFF09</div>\n        <div class=\"checkitem\">\u30A6\u30A3\u30B8\u30A7\u30C3\u30C8\u306E\u30AB\u30B9\u30BF\u30DE\u30A4\u30BA</div>\n        <div class=\"checkitem\">\u30A6\u30A7\u30D6\u30B5\u30A4\u30C8\u306B\u30B3\u30FC\u30C9\u8FFD\u52A0</div>\n        <div class=\"checkitem\">\u6700\u521D\u306E\u30C6\u30B9\u30C8\u30E1\u30C3\u30BB\u30FC\u30B8</div>\n      </div>\n      \n      <div style=\"text-align: center; margin: 30px 0;\">\n        <a href=\"${data.setupUrl}\" class=\"button\">\uD83D\uDD27 \u4ECA\u3059\u3050\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u3092\u958B\u59CB</a>\n      </div>\n      \n      <div class=\"feature\">\n        <h3>\uD83D\uDCA1 \u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u306E\u30DD\u30A4\u30F3\u30C8</h3>\n        <ul>\n          <li><strong>1-2\u5206:</strong> \u30A6\u30A3\u30B8\u30A7\u30C3\u30C8\u306E\u8272\u30FB\u4F4D\u7F6E\u3092\u30AB\u30B9\u30BF\u30DE\u30A4\u30BA</li>\n          <li><strong>1-2\u5206:</strong> 1\u884C\u306EJavaScript\u30B3\u30FC\u30C9\u3092\u30B5\u30A4\u30C8\u306B\u8FFD\u52A0</li>\n          <li><strong>1\u5206:</strong> \u30C6\u30B9\u30C8\u30E1\u30C3\u30BB\u30FC\u30B8\u3067\u52D5\u4F5C\u78BA\u8A8D</li>\n        </ul>\n        <p>\u6280\u8853\u7684\u306A\u77E5\u8B58\u306F\u4E00\u5207\u4E0D\u8981\u3067\u3059\uFF01</p>\n      </div>\n      \n      <h2>\uD83C\uDFAF \u5C0E\u5165\u5F8C\u306B\u671F\u5F85\u3067\u304D\u308B\u52B9\u679C</h2>\n      <div style=\"display: flex; justify-content: space-between; text-align: center; margin: 30px 0;\">\n        <div style=\"flex: 1; margin: 0 10px;\">\n          <div style=\"font-size: 32px; color: #10b981; font-weight: bold;\">92%</div>\n          <div style=\"color: #666;\">\u9867\u5BA2\u6E80\u8DB3\u5EA6\u5411\u4E0A</div>\n        </div>\n        <div style=\"flex: 1; margin: 0 10px;\">\n          <div style=\"font-size: 32px; color: #10b981; font-weight: bold;\">80%</div>\n          <div style=\"color: #666;\">\u5BFE\u5FDC\u6642\u9593\u77ED\u7E2E</div>\n        </div>\n        <div style=\"flex: 1; margin: 0 10px;\">\n          <div style=\"font-size: 32px; color: #10b981; font-weight: bold;\">3.2\u500D</div>\n          <div style=\"color: #666;\">\u30B3\u30F3\u30D0\u30FC\u30B8\u30E7\u30F3\u7387\u5411\u4E0A</div>\n        </div>\n      </div>\n      \n      <h2>\uD83D\uDCDE \u30B5\u30DD\u30FC\u30C8\u30C1\u30FC\u30E0\u304C\u304A\u624B\u4F1D\u3044\u3057\u307E\u3059</h2>\n      <p>\u4F55\u304B\u8CEA\u554F\u304C\u3054\u3056\u3044\u307E\u3057\u305F\u3089\u3001\u3044\u3064\u3067\u3082\u304A\u6C17\u8EFD\u306B\u304A\u58F0\u304C\u3051\u304F\u3060\u3055\u3044\u3002\u79C1\u305F\u3061\u306E\u30B5\u30DD\u30FC\u30C8\u30C1\u30FC\u30E0\u304C24\u6642\u9593\u4EE5\u5185\u306B\u3054\u56DE\u7B54\u3044\u305F\u3057\u307E\u3059\u3002</p>\n      \n      <div style=\"background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0;\">\n        <p><strong>\uD83D\uDCAC \u30C1\u30E3\u30C3\u30C8\u30B5\u30DD\u30FC\u30C8:</strong> \u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\u53F3\u4E0B\u306E\u30C1\u30E3\u30C3\u30C8\u30A2\u30A4\u30B3\u30F3</p>\n        <p><strong>\uD83D\uDCE7 \u30E1\u30FC\u30EB\u30B5\u30DD\u30FC\u30C8:</strong> <a href=\"mailto:support@aichat.com\">support@aichat.com</a></p>\n        <p><strong>\uD83D\uDCDA \u30D8\u30EB\u30D7\u30BB\u30F3\u30BF\u30FC:</strong> <a href=\"${data.supportUrl}\">\u8A73\u7D30\u30AC\u30A4\u30C9\u30FBFAQ</a></p>\n      </div>\n    </div>\n    \n    <div class=\"footer\">\n      <p>\u4ECA\u5F8C\u6570\u65E5\u9593\u3001\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u306E\u30B3\u30C4\u3084\u6210\u529F\u4E8B\u4F8B\u3092\u304A\u9001\u308A\u3057\u307E\u3059\u3002</p>\n      <p>AI Chat \u3067\u7D20\u6674\u3089\u3057\u3044\u30AB\u30B9\u30BF\u30DE\u30FC\u30A8\u30AF\u30B9\u30DA\u30EA\u30A8\u30F3\u30B9\u3092\u5B9F\u73FE\u3057\u307E\u3057\u3087\u3046\uFF01</p>\n      <p><a href=\"${data.dashboardUrl}\">\u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\u306B\u30A2\u30AF\u30BB\u30B9</a> | <a href=\"${data.supportUrl}\">\u30D8\u30EB\u30D7\u30BB\u30F3\u30BF\u30FC</a></p>\n    </div>\n  </div>\n</body>\n</html>\n    `,\n    text: `\n${data.firstName}\u3055\u3093\u3001AI Chat \u3078\u3088\u3046\u3053\u305D\uFF01\n\n\u3053\u3093\u306B\u3061\u306F\uFF01${data.company} \u3067\u306E\u30AB\u30B9\u30BF\u30DE\u30FC\u30B5\u30DD\u30FC\u30C8\u9769\u65B0\u306E\u7B2C\u4E00\u6B69\u3067\u3059\u3002\n\n\uD83D\uDE80 \u305F\u3063\u305F5\u5206\u3067\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u5B8C\u4E86\n\n\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u30C1\u30A7\u30C3\u30AF\u30EA\u30B9\u30C8:\n\u2705 \u30A2\u30AB\u30A6\u30F3\u30C8\u4F5C\u6210\uFF08\u5B8C\u4E86\uFF01\uFF09\n\u2705 \u30A6\u30A3\u30B8\u30A7\u30C3\u30C8\u306E\u30AB\u30B9\u30BF\u30DE\u30A4\u30BA\n\u2705 \u30A6\u30A7\u30D6\u30B5\u30A4\u30C8\u306B\u30B3\u30FC\u30C9\u8FFD\u52A0  \n\u2705 \u6700\u521D\u306E\u30C6\u30B9\u30C8\u30E1\u30C3\u30BB\u30FC\u30B8\n\n\u4ECA\u3059\u3050\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u3092\u958B\u59CB: ${data.setupUrl}\n\n\uD83D\uDCA1 \u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u306E\u30DD\u30A4\u30F3\u30C8:\n\u2022 1-2\u5206: \u30A6\u30A3\u30B8\u30A7\u30C3\u30C8\u306E\u8272\u30FB\u4F4D\u7F6E\u3092\u30AB\u30B9\u30BF\u30DE\u30A4\u30BA\n\u2022 1-2\u5206: 1\u884C\u306EJavaScript\u30B3\u30FC\u30C9\u3092\u30B5\u30A4\u30C8\u306B\u8FFD\u52A0\n\u2022 1\u5206: \u30C6\u30B9\u30C8\u30E1\u30C3\u30BB\u30FC\u30B8\u3067\u52D5\u4F5C\u78BA\u8A8D\n\n\u6280\u8853\u7684\u306A\u77E5\u8B58\u306F\u4E00\u5207\u4E0D\u8981\u3067\u3059\uFF01\n\n\uD83C\uDFAF \u5C0E\u5165\u5F8C\u306B\u671F\u5F85\u3067\u304D\u308B\u52B9\u679C:\n\u2022 92% \u9867\u5BA2\u6E80\u8DB3\u5EA6\u5411\u4E0A\n\u2022 80% \u5BFE\u5FDC\u6642\u9593\u77ED\u7E2E\n\u2022 3.2\u500D \u30B3\u30F3\u30D0\u30FC\u30B8\u30E7\u30F3\u7387\u5411\u4E0A\n\n\uD83D\uDCDE \u30B5\u30DD\u30FC\u30C8:\n\uD83D\uDCAC \u30C1\u30E3\u30C3\u30C8\u30B5\u30DD\u30FC\u30C8: \u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\u53F3\u4E0B\n\uD83D\uDCE7 \u30E1\u30FC\u30EB: support@aichat.com\n\uD83D\uDCDA \u30D8\u30EB\u30D7\u30BB\u30F3\u30BF\u30FC: ${data.supportUrl}\n\nAI Chat \u30C1\u30FC\u30E0\n    `,\n  };\n}\n\n// Day 3: \u6D3B\u7528\u30AC\u30A4\u30C9\u30E1\u30FC\u30EB\nexport function getUsageGuideEmailTemplate(\n  data: OnboardingData\n): EmailTemplate {\n  return {\n    subject: `\uD83C\uDFAF ${data.firstName}\u3055\u3093\u3001AI Chat\u306E\u52B9\u679C\u3092\u6700\u5927\u5316\u3059\u308B3\u3064\u306E\u30B3\u30C4`,\n    html: `\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>AI Chat \u6D3B\u7528\u30AC\u30A4\u30C9</title>\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }\n    .container { max-width: 600px; margin: 0 auto; background: white; }\n    .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 40px 30px; text-align: center; }\n    .content { padding: 40px 30px; }\n    .button { display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 20px 0; }\n    .tip { margin: 30px 0; padding: 25px; background: #f0fdf4; border-radius: 12px; border-left: 4px solid #10b981; }\n    .tip-number { background: #10b981; color: white; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; }\n    .stats { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: center; }\n    .footer { background: #f8fafc; padding: 30px; text-align: center; color: #666; font-size: 14px; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>\uD83C\uDFAF AI Chat \u6D3B\u7528\u30AC\u30A4\u30C9</h1>\n      <p>${data.firstName}\u3055\u3093\u3001\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u306F\u3044\u304B\u304C\u3067\u3057\u305F\u304B\uFF1F</p>\n      <p>\u4ECA\u65E5\u306F\u52B9\u679C\u3092\u6700\u5927\u5316\u3059\u308B3\u3064\u306E\u30B3\u30C4\u3092\u304A\u4F1D\u3048\u3057\u307E\u3059\uFF01</p>\n    </div>\n    \n    <div class=\"content\">\n      <div class=\"stats\">\n        <h3>\uD83D\uDCCA ${data.company} \u306E\u73FE\u5728\u306E\u72B6\u6CC1</h3>\n        <p>\u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\u3067\u8A73\u7D30\u306A\u5206\u6790\u3092\u3054\u78BA\u8A8D\u3044\u305F\u3060\u3051\u307E\u3059</p>\n        <a href=\"${data.dashboardUrl}\" class=\"button\">\uD83D\uDCC8 \u5206\u6790\u3092\u78BA\u8A8D\u3059\u308B</a>\n      </div>\n      \n      <h2>\uD83D\uDE80 \u52B9\u679C\u3092\u6700\u5927\u5316\u3059\u308B3\u3064\u306E\u30B3\u30C4</h2>\n      \n      <div class=\"tip\">\n        <div style=\"display: flex; align-items: flex-start;\">\n          <span class=\"tip-number\">1</span>\n          <div>\n            <h3>\uD83C\uDFA8 \u30D6\u30E9\u30F3\u30C9\u306B\u5408\u308F\u305B\u3066\u30AB\u30B9\u30BF\u30DE\u30A4\u30BA</h3>\n            <p>\u30A6\u30A3\u30B8\u30A7\u30C3\u30C8\u306E\u8272\u30FB\u4F4D\u7F6E\u30FB\u6328\u62F6\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u5FA1\u793E\u306E\u30D6\u30E9\u30F3\u30C9\u306B\u5408\u308F\u305B\u308B\u3053\u3068\u3067\u3001\u3088\u308A\u81EA\u7136\u306A\u9867\u5BA2\u4F53\u9A13\u3092\u63D0\u4F9B\u3067\u304D\u307E\u3059\u3002</p>\n            <ul>\n              <li><strong>\u8272\u306E\u5909\u66F4:</strong> \u30D6\u30E9\u30F3\u30C9\u30AB\u30E9\u30FC\u306B\u7D71\u4E00</li>\n              <li><strong>\u4F4D\u7F6E\u306E\u8ABF\u6574:</strong> \u53F3\u4E0B\u30FB\u5DE6\u4E0B\u30FB\u4E2D\u592E\u304B\u3089\u9078\u629E</li>\n              <li><strong>\u6328\u62F6\u6587:</strong> \u300C\u3053\u3093\u306B\u3061\u306F\uFF01\u4F55\u304B\u304A\u624B\u4F1D\u3044\u3067\u304D\u308B\u3053\u3068\u306F\u3042\u308A\u307E\u3059\u304B\uFF1F\u300D</li>\n            </ul>\n          </div>\n        </div>\n      </div>\n      \n      <div class=\"tip\">\n        <div style=\"display: flex; align-items: flex-start;\">\n          <span class=\"tip-number\">2</span>\n          <div>\n            <h3>\uD83D\uDCA1 \u3088\u304F\u3042\u308B\u8CEA\u554F\u3092\u4E8B\u524D\u8A2D\u5B9A</h3>\n            <p>\u5FA1\u793E\u7279\u6709\u306EFAQ\u3092\u8A2D\u5B9A\u3059\u308B\u3053\u3068\u3067\u3001AI \u306E\u56DE\u7B54\u7CBE\u5EA6\u304C\u683C\u6BB5\u306B\u5411\u4E0A\u3057\u307E\u3059\u3002</p>\n            <ul>\n              <li><strong>\u5546\u54C1\u30FB\u30B5\u30FC\u30D3\u30B9\u60C5\u5831</strong></li>\n              <li><strong>\u6599\u91D1\u30FB\u30D7\u30E9\u30F3\u8A73\u7D30</strong></li>\n              <li><strong>\u30B5\u30DD\u30FC\u30C8\u55B6\u696D\u6642\u9593</strong></li>\n              <li><strong>\u304A\u554F\u3044\u5408\u308F\u305B\u5148</strong></li>\n            </ul>\n            <p>\u8A2D\u5B9A\u306F\u7BA1\u7406\u753B\u9762\u306E\u300C\u30CA\u30EC\u30C3\u30B8\u30D9\u30FC\u30B9\u300D\u304B\u3089\u7C21\u5358\u306B\u884C\u3048\u307E\u3059\u3002</p>\n          </div>\n        </div>\n      </div>\n      \n      <div class=\"tip\">\n        <div style=\"display: flex; align-items: flex-start;\">\n          <span class=\"tip-number\">3</span>\n          <div>\n            <h3>\uD83D\uDCCA \u5B9A\u671F\u7684\u306A\u5206\u6790\u30FB\u6539\u5584</h3>\n            <p>\u90311\u56DE\u306E\u7C21\u5358\u306A\u632F\u308A\u8FD4\u308A\u3067\u3001\u7D99\u7D9A\u7684\u306B\u52B9\u679C\u3092\u5411\u4E0A\u3055\u305B\u307E\u3057\u3087\u3046\u3002</p>\n            <ul>\n              <li><strong>\u3088\u304F\u3042\u308B\u8CEA\u554F:</strong> \u56DE\u7B54\u3067\u304D\u306A\u304B\u3063\u305F\u8CEA\u554F\u3092\u30C1\u30A7\u30C3\u30AF</li>\n              <li><strong>\u9867\u5BA2\u6E80\u8DB3\u5EA6:</strong> \u8A55\u4FA1\u306E\u4F4E\u3044\u4F1A\u8A71\u3092\u5206\u6790</li>\n              <li><strong>\u30B3\u30F3\u30D0\u30FC\u30B8\u30E7\u30F3:</strong> \u8CFC\u5165\u30FB\u7533\u8FBC\u307F\u306B\u3064\u306A\u304C\u3063\u305F\u7D4C\u8DEF\u3092\u78BA\u8A8D</li>\n            </ul>\n          </div>\n        </div>\n      </div>\n      \n      <h2>\uD83C\uDFC6 \u6210\u529F\u4E8B\u4F8B: EC\u4F01\u696DA\u793E\u306E\u5834\u5408</h2>\n      <div style=\"background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 20px 0;\">\n        <h3>\u5C0E\u51653\u65E5\u5F8C\u306E\u52B9\u679C</h3>\n        <div style=\"display: flex; justify-content: space-between; text-align: center; margin: 20px 0;\">\n          <div style=\"flex: 1;\">\n            <div style=\"font-size: 24px; color: #0ea5e9; font-weight: bold;\">+47%</div>\n            <div>\u554F\u3044\u5408\u308F\u305B\u5897\u52A0</div>\n          </div>\n          <div style=\"flex: 1;\">\n            <div style=\"font-size: 24px; color: #0ea5e9; font-weight: bold;\">-65%</div>\n            <div>\u5BFE\u5FDC\u6642\u9593\u77ED\u7E2E</div>\n          </div>\n          <div style=\"flex: 1;\">\n            <div style=\"font-size: 24px; color: #0ea5e9; font-weight: bold;\">+23%</div>\n            <div>\u58F2\u4E0A\u5411\u4E0A</div>\n          </div>\n        </div>\n        <p><em>\u300C\u6DF1\u591C\u306E\u554F\u3044\u5408\u308F\u305B\u306B\u3082\u5373\u5EA7\u306B\u5BFE\u5FDC\u3067\u304D\u308B\u3088\u3046\u306B\u306A\u308A\u3001\u6A5F\u4F1A\u640D\u5931\u304C\u5927\u5E45\u306B\u6E1B\u5C11\u3057\u307E\u3057\u305F\u300D</em></p>\n      </div>\n      \n      <h2>\uD83E\uDD1D \u5C02\u4EFB\u30B5\u30DD\u30FC\u30C8\u3092\u3054\u6D3B\u7528\u304F\u3060\u3055\u3044</h2>\n      <p>\u8A2D\u5B9A\u3067\u304A\u56F0\u308A\u306E\u3053\u3068\u304C\u3054\u3056\u3044\u307E\u3057\u305F\u3089\u3001\u9060\u616E\u306A\u304F\u304A\u58F0\u304C\u3051\u304F\u3060\u3055\u3044\u3002\u5FA1\u793E\u5C02\u4EFB\u306E\u30AB\u30B9\u30BF\u30DE\u30FC\u30B5\u30AF\u30BB\u30B9\u62C5\u5F53\u304C\u30B5\u30DD\u30FC\u30C8\u3044\u305F\u3057\u307E\u3059\u3002</p>\n      \n      <div style=\"text-align: center; margin: 30px 0;\">\n        <a href=\"${data.supportUrl}\" class=\"button\">\uD83D\uDCAC \u30B5\u30DD\u30FC\u30C8\u306B\u76F8\u8AC7\u3059\u308B</a>\n      </div>\n    </div>\n    \n    <div class=\"footer\">\n      <p>\u660E\u65E5\u306F\u4ED6\u793E\u306E\u6210\u529F\u4E8B\u4F8B\u3068\u5177\u4F53\u7684\u306A ROI \u8A08\u7B97\u65B9\u6CD5\u3092\u304A\u9001\u308A\u3057\u307E\u3059\u3002</p>\n      <p><a href=\"${data.dashboardUrl}\">\u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\u306B\u30A2\u30AF\u30BB\u30B9</a> | <a href=\"${data.supportUrl}\">\u30D8\u30EB\u30D7\u30BB\u30F3\u30BF\u30FC</a></p>\n    </div>\n  </div>\n</body>\n</html>\n    `,\n    text: `\n${data.firstName}\u3055\u3093\u3001AI Chat \u6D3B\u7528\u30AC\u30A4\u30C9\n\n\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u306F\u3044\u304B\u304C\u3067\u3057\u305F\u304B\uFF1F\n\u4ECA\u65E5\u306F\u52B9\u679C\u3092\u6700\u5927\u5316\u3059\u308B3\u3064\u306E\u30B3\u30C4\u3092\u304A\u4F1D\u3048\u3057\u307E\u3059\uFF01\n\n\uD83D\uDCCA ${data.company} \u306E\u73FE\u5728\u306E\u72B6\u6CC1\n\u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\u3067\u8A73\u7D30\u306A\u5206\u6790\u3092\u3054\u78BA\u8A8D\u3044\u305F\u3060\u3051\u307E\u3059\n\u5206\u6790\u78BA\u8A8D: ${data.dashboardUrl}\n\n\uD83D\uDE80 \u52B9\u679C\u3092\u6700\u5927\u5316\u3059\u308B3\u3064\u306E\u30B3\u30C4\n\n1. \uD83C\uDFA8 \u30D6\u30E9\u30F3\u30C9\u306B\u5408\u308F\u305B\u3066\u30AB\u30B9\u30BF\u30DE\u30A4\u30BA\n\u2022 \u8272\u306E\u5909\u66F4: \u30D6\u30E9\u30F3\u30C9\u30AB\u30E9\u30FC\u306B\u7D71\u4E00\n\u2022 \u4F4D\u7F6E\u306E\u8ABF\u6574: \u53F3\u4E0B\u30FB\u5DE6\u4E0B\u30FB\u4E2D\u592E\u304B\u3089\u9078\u629E\n\u2022 \u6328\u62F6\u6587: \u81EA\u7136\u306A\u9867\u5BA2\u4F53\u9A13\u3092\u63D0\u4F9B\n\n2. \uD83D\uDCA1 \u3088\u304F\u3042\u308B\u8CEA\u554F\u3092\u4E8B\u524D\u8A2D\u5B9A\n\u2022 \u5546\u54C1\u30FB\u30B5\u30FC\u30D3\u30B9\u60C5\u5831\n\u2022 \u6599\u91D1\u30FB\u30D7\u30E9\u30F3\u8A73\u7D30\n\u2022 \u30B5\u30DD\u30FC\u30C8\u55B6\u696D\u6642\u9593\n\u2022 \u304A\u554F\u3044\u5408\u308F\u305B\u5148\n\n3. \uD83D\uDCCA \u5B9A\u671F\u7684\u306A\u5206\u6790\u30FB\u6539\u5584\n\u2022 \u3088\u304F\u3042\u308B\u8CEA\u554F: \u56DE\u7B54\u3067\u304D\u306A\u304B\u3063\u305F\u8CEA\u554F\u3092\u30C1\u30A7\u30C3\u30AF\n\u2022 \u9867\u5BA2\u6E80\u8DB3\u5EA6: \u8A55\u4FA1\u306E\u4F4E\u3044\u4F1A\u8A71\u3092\u5206\u6790\n\u2022 \u30B3\u30F3\u30D0\u30FC\u30B8\u30E7\u30F3: \u8CFC\u5165\u30FB\u7533\u8FBC\u307F\u306B\u3064\u306A\u304C\u3063\u305F\u7D4C\u8DEF\u3092\u78BA\u8A8D\n\n\uD83C\uDFC6 \u6210\u529F\u4E8B\u4F8B: EC\u4F01\u696DA\u793E\n\u5C0E\u51653\u65E5\u5F8C\u306E\u52B9\u679C:\n\u2022 +47% \u554F\u3044\u5408\u308F\u305B\u5897\u52A0\n\u2022 -65% \u5BFE\u5FDC\u6642\u9593\u77ED\u7E2E\n\u2022 +23% \u58F2\u4E0A\u5411\u4E0A\n\n\uD83E\uDD1D \u5C02\u4EFB\u30B5\u30DD\u30FC\u30C8: ${data.supportUrl}\n\nAI Chat \u30C1\u30FC\u30E0\n    `,\n  };\n}\n\n// Day 7: \u6210\u529F\u4E8B\u4F8B\u30FBROI\u8A08\u7B97\u30E1\u30FC\u30EB\nexport function getSuccessStoriesEmailTemplate(\n  data: OnboardingData\n): EmailTemplate {\n  return {\n    subject: `\uD83D\uDCC8 ${data.firstName}\u3055\u3093\u3001AI Chat\u3067${data.company}\u306EROI\u3092\u8A08\u7B97\u3057\u3066\u307F\u307E\u305B\u3093\u304B\uFF1F`,\n    html: `\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>AI Chat \u6210\u529F\u4E8B\u4F8B & ROI \u8A08\u7B97</title>\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }\n    .container { max-width: 600px; margin: 0 auto; background: white; }\n    .header { background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); color: white; padding: 40px 30px; text-align: center; }\n    .content { padding: 40px 30px; }\n    .button { display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 20px 0; }\n    .case-study { margin: 30px 0; padding: 25px; background: #faf5ff; border-radius: 12px; border-left: 4px solid #7c3aed; }\n    .roi-calculator { background: #f0fdf4; border: 1px solid #10b981; border-radius: 12px; padding: 25px; margin: 30px 0; }\n    .metrics { display: flex; justify-content: space-between; text-align: center; margin: 20px 0; }\n    .metric { flex: 1; margin: 0 10px; }\n    .metric-value { font-size: 28px; color: #7c3aed; font-weight: bold; }\n    .footer { background: #f8fafc; padding: 30px; text-align: center; color: #666; font-size: 14px; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>\uD83D\uDCC8 1\u9031\u9593\u5F8C\u306E\u632F\u308A\u8FD4\u308A</h1>\n      <p>${data.firstName}\u3055\u3093\u3001AI Chat \u3092\u304A\u4F7F\u3044\u3044\u305F\u3060\u304D1\u9031\u9593\u304C\u7D4C\u3061\u307E\u3057\u305F\uFF01</p>\n      <p>\u4ECA\u65E5\u306F\u6210\u529F\u4E8B\u4F8B\u3068 ROI \u8A08\u7B97\u3092\u3054\u7D39\u4ECB\u3057\u307E\u3059</p>\n    </div>\n    \n    <div class=\"content\">\n      <h2>\uD83C\uDFC6 \u4ED6\u793E\u306E\u9A5A\u304D\u306E\u6210\u529F\u4E8B\u4F8B</h2>\n      \n      <div class=\"case-study\">\n        <h3>\uD83D\uDCBB SaaS\u4F01\u696D B\u793E\uFF08\u5F93\u696D\u54E150\u540D\uFF09</h3>\n        <p><strong>\u5C0E\u5165\u80CC\u666F:</strong> \u30AB\u30B9\u30BF\u30DE\u30FC\u30B5\u30DD\u30FC\u30C8\u62C5\u5F53\u80052\u540D\u3067\u306F\u554F\u3044\u5408\u308F\u305B\u5BFE\u5FDC\u304C\u8FFD\u3044\u3064\u304B\u305A\u3001\u9867\u5BA2\u6E80\u8DB3\u5EA6\u304C\u4F4E\u4E0B</p>\n        \n        <div class=\"metrics\">\n          <div class=\"metric\">\n            <div class=\"metric-value\">+250%</div>\n            <div>CV\u7387\u5411\u4E0A</div>\n          </div>\n          <div class=\"metric\">\n            <div class=\"metric-value\">-70%</div>\n            <div>CS\u5DE5\u6570\u524A\u6E1B</div>\n          </div>\n          <div class=\"metric\">\n            <div class=\"metric-value\">+180%</div>\n            <div>\u6708\u9593\u554F\u3044\u5408\u308F\u305B\u5897</div>\n          </div>\n        </div>\n        \n        <p><strong>\u5C0E\u5165\u52B9\u679C:</strong> \u6280\u8853\u7684\u306A\u8CEA\u554F\u306B\u3082\u6B63\u78BA\u306B\u7B54\u3048\u3066\u304F\u308C\u308B\u306E\u3067\u3001\u9867\u5BA2\u6E80\u8DB3\u5EA6\u304C\u683C\u6BB5\u306B\u5411\u4E0A\u3002\u30B5\u30DD\u30FC\u30C8\u62C5\u5F53\u8005\u306F\u9AD8\u5EA6\u306A\u554F\u984C\u89E3\u6C7A\u306B\u96C6\u4E2D\u3067\u304D\u308B\u3088\u3046\u306B\u306A\u308A\u307E\u3057\u305F\u3002</p>\n        \n        <p><strong>\u5177\u4F53\u7684\u6539\u5584:</strong></p>\n        <ul>\n          <li>FAQ\u5BFE\u5FDC: 24\u6642\u9593\u81EA\u52D5\u5316 \u2192 \u4EBA\u4EF6\u8CBB \u6708\u984D30\u4E07\u5186\u524A\u6E1B</li>\n          <li>\u521D\u56DE\u554F\u3044\u5408\u308F\u305B\u89E3\u6C7A\u7387: 45% \u2192 87%</li>\n          <li>\u5E73\u5747\u5FDC\u7B54\u6642\u9593: 4\u6642\u9593 \u2192 0.3\u79D2</li>\n        </ul>\n      </div>\n      \n      <div class=\"case-study\">\n        <h3>\uD83C\uDFE5 \u533B\u7642\u6CD5\u4EBA C\u793E\uFF08\u30AF\u30EA\u30CB\u30C3\u30AF5\u9662\uFF09</h3>\n        <p><strong>\u5C0E\u5165\u80CC\u666F:</strong> \u8A3A\u7642\u6642\u9593\u5916\u306E\u554F\u3044\u5408\u308F\u305B\u5BFE\u5FDC\u304C\u3067\u304D\u305A\u3001\u4E88\u7D04\u6A5F\u4F1A\u3092\u9003\u3057\u3066\u3044\u305F</p>\n        \n        <div class=\"metrics\">\n          <div class=\"metric\">\n            <div class=\"metric-value\">+95%</div>\n            <div>\u60A3\u8005\u6E80\u8DB3\u5EA6\u5411\u4E0A</div>\n          </div>\n          <div class=\"metric\">\n            <div class=\"metric-value\">-80%</div>\n            <div>\u554F\u3044\u5408\u308F\u305B\u51E6\u7406\u6642\u9593</div>\n          </div>\n          <div class=\"metric\">\n            <div class=\"metric-value\">+42%</div>\n            <div>\u30AA\u30F3\u30E9\u30A4\u30F3\u4E88\u7D04\u5897</div>\n          </div>\n        </div>\n        \n        <p><strong>\u5C0E\u5165\u52B9\u679C:</strong> 24\u6642\u9593\u5BFE\u5FDC\u304C\u53EF\u80FD\u306B\u306A\u308A\u3001\u60A3\u8005\u69D8\u306B\u5B89\u5FC3\u611F\u3092\u63D0\u4F9B\u3002\u8A3A\u7642\u6642\u9593\u5916\u306E\u4E88\u7D04\u3082\u5927\u5E45\u306B\u5897\u52A0\u3057\u307E\u3057\u305F\u3002</p>\n      </div>\n      \n      <h2>\uD83D\uDCB0 ${data.company} \u306E ROI \u3092\u8A08\u7B97\u3057\u3066\u307F\u307E\u3057\u3087\u3046</h2>\n      \n      <div class=\"roi-calculator\">\n        <h3>\uD83D\uDCCA ROI \u8A08\u7B97\u30C4\u30FC\u30EB</h3>\n        <p>\u5FA1\u793E\u306E\u73FE\u5728\u306E\u72B6\u6CC1\u3092\u5165\u529B\u3057\u3066\u3001AI Chat \u306B\u3088\u308B\u8CBB\u7528\u5BFE\u52B9\u679C\u3092\u78BA\u8A8D\u3057\u3066\u307F\u307E\u305B\u3093\u304B\uFF1F</p>\n        \n        <div style=\"background: white; padding: 20px; border-radius: 8px; margin: 20px 0;\">\n          <h4>\uD83D\uDCA1 \u8A08\u7B97\u4F8B\uFF08\u5F93\u696D\u54E1\u657050\u540D\u306E\u4F01\u696D\uFF09</h4>\n          \n          <table style=\"width: 100%; border-collapse: collapse;\">\n            <tr style=\"background: #f8fafc;\">\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\"><strong>\u9805\u76EE</strong></td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\"><strong>\u5C0E\u5165\u524D</strong></td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\"><strong>\u5C0E\u5165\u5F8C</strong></td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\"><strong>\u52B9\u679C</strong></td>\n            </tr>\n            <tr>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">\u6708\u9593\u4EBA\u4EF6\u8CBB</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">60\u4E07\u5186</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">25\u4E07\u5186</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0; color: #10b981;\"><strong>-35\u4E07\u5186</strong></td>\n            </tr>\n            <tr>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">\u30C4\u30FC\u30EB\u8CBB\u7528</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">8\u4E07\u5186</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">2\u4E07\u5186</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0; color: #10b981;\"><strong>-6\u4E07\u5186</strong></td>\n            </tr>\n            <tr>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">\u6A5F\u4F1A\u640D\u5931</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">15\u4E07\u5186</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">3\u4E07\u5186</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0; color: #10b981;\"><strong>-12\u4E07\u5186</strong></td>\n            </tr>\n            <tr style=\"background: #f0fdf4; font-weight: bold;\">\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">\u6708\u9593\u7BC0\u7D04\u984D</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">-</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0;\">-</td>\n              <td style=\"padding: 10px; border: 1px solid #e2e8f0; color: #10b981;\"><strong>53\u4E07\u5186</strong></td>\n            </tr>\n          </table>\n          \n          <p style=\"text-align: center; margin: 20px 0; font-size: 18px; color: #10b981; font-weight: bold;\">\n            \u5E74\u9593\u7BC0\u7D04\u984D: 636\u4E07\u5186 | ROI: 3,180%\n          </p>\n        </div>\n        \n        <div style=\"text-align: center;\">\n          <a href=\"${data.dashboardUrl}/roi-calculator\" class=\"button\">\uD83E\uDDEE \u8A73\u7D30ROI\u8A08\u7B97\u3092\u3059\u308B</a>\n        </div>\n      </div>\n      \n      <h2>\uD83D\uDE80 \u6B21\u306E\u30B9\u30C6\u30C3\u30D7</h2>\n      <div style=\"background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0;\">\n        <h3>\uD83D\uDCC8 \u66F4\u306A\u308B\u52B9\u679C\u5411\u4E0A\u306E\u305F\u3081\u306B</h3>\n        <ul>\n          <li><strong>A/B\u30C6\u30B9\u30C8:</strong> \u30A6\u30A3\u30B8\u30A7\u30C3\u30C8\u306E\u4F4D\u7F6E\u30FB\u8272\u3092\u6700\u9069\u5316</li>\n          <li><strong>\u9AD8\u5EA6\u306A\u8A2D\u5B9A:</strong> \u696D\u754C\u7279\u5316\u578BAI\u30E2\u30C7\u30EB\u306B\u5207\u308A\u66FF\u3048</li>\n          <li><strong>\u9023\u643A\u5F37\u5316:</strong> CRM\u30FB\u30D8\u30EB\u30D7\u30C7\u30B9\u30AF\u3068\u306E\u9023\u643A\u8A2D\u5B9A</li>\n          <li><strong>\u30C1\u30FC\u30E0\u62E1\u5F35:</strong> \u8907\u6570\u90E8\u7F72\u3067\u306E\u6D3B\u7528</li>\n        </ul>\n      </div>\n      \n      <h2>\uD83D\uDCBC \u30A8\u30F3\u30BF\u30FC\u30D7\u30E9\u30A4\u30BA\u30D7\u30E9\u30F3\u306E\u3054\u6848\u5185</h2>\n      <p>\u3088\u308A\u5927\u898F\u6A21\u306A\u904B\u7528\u3084\u9AD8\u5EA6\u306A\u6A5F\u80FD\u3092\u3054\u5E0C\u671B\u306E\u5834\u5408\u306F\u3001\u30A8\u30F3\u30BF\u30FC\u30D7\u30E9\u30A4\u30BA\u30D7\u30E9\u30F3\u3092\u3054\u691C\u8A0E\u304F\u3060\u3055\u3044\uFF1A</p>\n      <ul>\n        <li>\uD83C\uDFE2 \u7121\u5236\u9650\u306E\u30A6\u30A3\u30B8\u30A7\u30C3\u30C8\u6570</li>\n        <li>\uD83D\uDC65 \u5C02\u4EFB\u30AB\u30B9\u30BF\u30DE\u30FC\u30B5\u30AF\u30BB\u30B9\u62C5\u5F53</li>\n        <li>\uD83D\uDD12 SSO\u30FBSAML\u5BFE\u5FDC</li>\n        <li>\uD83D\uDCCA \u9AD8\u5EA6\u306A\u5206\u6790\u30FB\u30EC\u30DD\u30FC\u30C8\u6A5F\u80FD</li>\n        <li>\u26A1 \u512A\u5148\u30B5\u30DD\u30FC\u30C8\uFF081\u6642\u9593\u4EE5\u5185\u5BFE\u5FDC\uFF09</li>\n      </ul>\n      \n      <div style=\"text-align: center; margin: 30px 0;\">\n        <a href=\"${data.supportUrl}/enterprise\" class=\"button\">\uD83C\uDFE2 \u30A8\u30F3\u30BF\u30FC\u30D7\u30E9\u30A4\u30BA\u76F8\u8AC7</a>\n      </div>\n    </div>\n    \n    <div class=\"footer\">\n      <p>\u4ECA\u5F8C\u3082\u5B9A\u671F\u7684\u306B\u6D3B\u7528\u30AC\u30A4\u30C9\u3084\u6210\u529F\u4E8B\u4F8B\u3092\u304A\u9001\u308A\u3057\u307E\u3059\u3002</p>\n      <p>AI Chat \u3067\u3001${data.company} \u306E\u30AB\u30B9\u30BF\u30DE\u30FC\u30B5\u30DD\u30FC\u30C8\u3092\u6B21\u306E\u30EC\u30D9\u30EB\u3078\uFF01</p>\n      <p><a href=\"${data.dashboardUrl}\">\u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\u306B\u30A2\u30AF\u30BB\u30B9</a> | <a href=\"${data.supportUrl}\">\u30D8\u30EB\u30D7\u30BB\u30F3\u30BF\u30FC</a></p>\n    </div>\n  </div>\n</body>\n</html>\n    `,\n    text: `\n${data.firstName}\u3055\u3093\u30011\u9031\u9593\u5F8C\u306E\u632F\u308A\u8FD4\u308A\n\nAI Chat \u3092\u304A\u4F7F\u3044\u3044\u305F\u3060\u304D1\u9031\u9593\u304C\u7D4C\u3061\u307E\u3057\u305F\uFF01\n\u4ECA\u65E5\u306F\u6210\u529F\u4E8B\u4F8B\u3068 ROI \u8A08\u7B97\u3092\u3054\u7D39\u4ECB\u3057\u307E\u3059\n\n\uD83C\uDFC6 \u4ED6\u793E\u306E\u9A5A\u304D\u306E\u6210\u529F\u4E8B\u4F8B\n\n\uD83D\uDCBB SaaS\u4F01\u696D B\u793E\uFF08\u5F93\u696D\u54E150\u540D\uFF09\n\u5C0E\u5165\u52B9\u679C:\n\u2022 +250% CV\u7387\u5411\u4E0A\n\u2022 -70% CS\u5DE5\u6570\u524A\u6E1B  \n\u2022 +180% \u6708\u9593\u554F\u3044\u5408\u308F\u305B\u5897\n\n\u5177\u4F53\u7684\u6539\u5584:\n\u2022 FAQ\u5BFE\u5FDC: 24\u6642\u9593\u81EA\u52D5\u5316 \u2192 \u4EBA\u4EF6\u8CBB \u6708\u984D30\u4E07\u5186\u524A\u6E1B\n\u2022 \u521D\u56DE\u554F\u3044\u5408\u308F\u305B\u89E3\u6C7A\u7387: 45% \u2192 87%\n\u2022 \u5E73\u5747\u5FDC\u7B54\u6642\u9593: 4\u6642\u9593 \u2192 0.3\u79D2\n\n\uD83C\uDFE5 \u533B\u7642\u6CD5\u4EBA C\u793E\uFF08\u30AF\u30EA\u30CB\u30C3\u30AF5\u9662\uFF09\n\u5C0E\u5165\u52B9\u679C:\n\u2022 +95% \u60A3\u8005\u6E80\u8DB3\u5EA6\u5411\u4E0A\n\u2022 -80% \u554F\u3044\u5408\u308F\u305B\u51E6\u7406\u6642\u9593\n\u2022 +42% \u30AA\u30F3\u30E9\u30A4\u30F3\u4E88\u7D04\u5897\n\n\uD83D\uDCB0 ${data.company} \u306E ROI \u8A08\u7B97\u4F8B\n\n\u8A08\u7B97\u4F8B\uFF08\u5F93\u696D\u54E1\u657050\u540D\u306E\u4F01\u696D\uFF09:\n\u2022 \u6708\u9593\u4EBA\u4EF6\u8CBB\u524A\u6E1B: -35\u4E07\u5186\n\u2022 \u30C4\u30FC\u30EB\u8CBB\u7528\u524A\u6E1B: -6\u4E07\u5186\n\u2022 \u6A5F\u4F1A\u640D\u5931\u524A\u6E1B: -12\u4E07\u5186\n\u2022 \u6708\u9593\u7BC0\u7D04\u984D: 53\u4E07\u5186\n\u2022 \u5E74\u9593\u7BC0\u7D04\u984D: 636\u4E07\u5186\n\u2022 ROI: 3,180%\n\n\u8A73\u7D30ROI\u8A08\u7B97: ${data.dashboardUrl}/roi-calculator\n\n\uD83D\uDE80 \u6B21\u306E\u30B9\u30C6\u30C3\u30D7\n\u2022 A/B\u30C6\u30B9\u30C8: \u30A6\u30A3\u30B8\u30A7\u30C3\u30C8\u306E\u4F4D\u7F6E\u30FB\u8272\u3092\u6700\u9069\u5316\n\u2022 \u9AD8\u5EA6\u306A\u8A2D\u5B9A: \u696D\u754C\u7279\u5316\u578BAI\u30E2\u30C7\u30EB\u306B\u5207\u308A\u66FF\u3048\n\u2022 \u9023\u643A\u5F37\u5316: CRM\u30FB\u30D8\u30EB\u30D7\u30C7\u30B9\u30AF\u3068\u306E\u9023\u643A\u8A2D\u5B9A\n\u2022 \u30C1\u30FC\u30E0\u62E1\u5F35: \u8907\u6570\u90E8\u7F72\u3067\u306E\u6D3B\u7528\n\n\uD83D\uDCBC \u30A8\u30F3\u30BF\u30FC\u30D7\u30E9\u30A4\u30BA\u30D7\u30E9\u30F3:\n\u2022 \u7121\u5236\u9650\u306E\u30A6\u30A3\u30B8\u30A7\u30C3\u30C8\u6570\n\u2022 \u5C02\u4EFB\u30AB\u30B9\u30BF\u30DE\u30FC\u30B5\u30AF\u30BB\u30B9\u62C5\u5F53\n\u2022 SSO\u30FBSAML\u5BFE\u5FDC\n\u2022 \u9AD8\u5EA6\u306A\u5206\u6790\u30FB\u30EC\u30DD\u30FC\u30C8\u6A5F\u80FD\n\u2022 \u512A\u5148\u30B5\u30DD\u30FC\u30C8\uFF081\u6642\u9593\u4EE5\u5185\u5BFE\u5FDC\uFF09\n\n\u30A8\u30F3\u30BF\u30FC\u30D7\u30E9\u30A4\u30BA\u76F8\u8AC7: ${data.supportUrl}/enterprise\n\nAI Chat \u30C1\u30FC\u30E0\n    `,\n  };\n}\n\n// Section-5: Password Reset Template\nexport const passwordResetTemplate = (resetUrl: string) => ({\n  subject: '\u30D1\u30B9\u30EF\u30FC\u30C9\u30EA\u30BB\u30C3\u30C8\u306E\u3054\u6848\u5185',\n  html: `\n    <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n      <h2>\u30D1\u30B9\u30EF\u30FC\u30C9\u30EA\u30BB\u30C3\u30C8</h2>\n      <p>\u30D1\u30B9\u30EF\u30FC\u30C9\u30EA\u30BB\u30C3\u30C8\u306E\u30EA\u30AF\u30A8\u30B9\u30C8\u3092\u53D7\u3051\u4ED8\u3051\u307E\u3057\u305F\u3002</p>\n      <p>\u4EE5\u4E0B\u306E\u30DC\u30BF\u30F3\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u3001\u65B0\u3057\u3044\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u8A2D\u5B9A\u3057\u3066\u304F\u3060\u3055\u3044\uFF1A</p>\n      <div style=\"margin: 30px 0;\">\n        <a href=\"${resetUrl}\" \n           style=\"background-color: #4F46E5; color: white; padding: 12px 24px; \n                  text-decoration: none; border-radius: 6px; display: inline-block;\">\n          \u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u30EA\u30BB\u30C3\u30C8\n        </a>\n      </div>\n      <p>\u3053\u306E\u30EA\u30F3\u30AF\u306F24\u6642\u9593\u6709\u52B9\u3067\u3059\u3002</p>\n      <p>\u5FC3\u5F53\u305F\u308A\u304C\u306A\u3044\u5834\u5408\u306F\u3001\u3053\u306E\u30E1\u30FC\u30EB\u3092\u7121\u8996\u3057\u3066\u304F\u3060\u3055\u3044\u3002</p>\n    </div>\n  `,\n  text: `\n    \u30D1\u30B9\u30EF\u30FC\u30C9\u30EA\u30BB\u30C3\u30C8\n    \n    \u30D1\u30B9\u30EF\u30FC\u30C9\u30EA\u30BB\u30C3\u30C8\u306E\u30EA\u30AF\u30A8\u30B9\u30C8\u3092\u53D7\u3051\u4ED8\u3051\u307E\u3057\u305F\u3002\n    \u4EE5\u4E0B\u306EURL\u304B\u3089\u65B0\u3057\u3044\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u8A2D\u5B9A\u3057\u3066\u304F\u3060\u3055\u3044\uFF1A\n    \n    ${resetUrl}\n    \n    \u3053\u306E\u30EA\u30F3\u30AF\u306F24\u6642\u9593\u6709\u52B9\u3067\u3059\u3002\n    \u5FC3\u5F53\u305F\u308A\u304C\u306A\u3044\u5834\u5408\u306F\u3001\u3053\u306E\u30E1\u30FC\u30EB\u3092\u7121\u8996\u3057\u3066\u304F\u3060\u3055\u3044\u3002\n  `,\n});\n\n// Section-5: Email Verification Template\nexport const emailVerificationTemplate = (verifyUrl: string) => ({\n  subject: '\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u306E\u78BA\u8A8D',\n  html: `\n    <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n      <h2>\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u306E\u78BA\u8A8D</h2>\n      <p>\u3054\u767B\u9332\u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059\u3002</p>\n      <p>\u4EE5\u4E0B\u306E\u30DC\u30BF\u30F3\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u3001\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\uFF1A</p>\n      <div style=\"margin: 30px 0;\">\n        <a href=\"${verifyUrl}\" \n           style=\"background-color: #4F46E5; color: white; padding: 12px 24px; \n                  text-decoration: none; border-radius: 6px; display: inline-block;\">\n          \u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u3092\u78BA\u8A8D\n        </a>\n      </div>\n      <p>\u3053\u306E\u30EA\u30F3\u30AF\u306F72\u6642\u9593\u6709\u52B9\u3067\u3059\u3002</p>\n    </div>\n  `,\n  text: `\n    \u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u306E\u78BA\u8A8D\n    \n    \u3054\u767B\u9332\u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059\u3002\n    \u4EE5\u4E0B\u306EURL\u304B\u3089\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\uFF1A\n    \n    ${verifyUrl}\n    \n    \u3053\u306E\u30EA\u30F3\u30AF\u306F72\u6642\u9593\u6709\u52B9\u3067\u3059\u3002\n  `,\n});\n"],
+      version: 3
+    },
+    _coverageSchema: "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    hash: "fcc8be6a29ac1bed1d30a8cea2fdcbb90fd9672f"
+  };
+  var coverage = global[gcv] || (global[gcv] = {});
+  if (!coverage[path] || coverage[path].hash !== hash) {
+    coverage[path] = coverageData;
+  }
+  var actualCoverage = coverage[path];
+  {
+    // @ts-ignore
+    cov_1dv2kicfn3 = function () {
+      return actualCoverage;
+    };
+  }
+  return actualCoverage;
+}
+cov_1dv2kicfn3();
+cov_1dv2kicfn3().s[0]++;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* istanbul ignore next */
+cov_1dv2kicfn3().s[1]++;
+exports.emailVerificationTemplate = exports.passwordResetTemplate = exports.getSuccessStoriesEmailTemplate = exports.getUsageGuideEmailTemplate = exports.getWelcomeEmailTemplate = void 0;
+// Day 1: ウェルカムメール
+function getWelcomeEmailTemplate(data) {
+  /* istanbul ignore next */
+  cov_1dv2kicfn3().f[0]++;
+  cov_1dv2kicfn3().s[2]++;
+  return {
+    subject: `🎉 ${data.firstName}さん、AI Chatへようこそ！セットアップを完了しましょう`,
+    html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Chat へようこそ</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; background: white; }
+    .header { background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%); color: white; padding: 40px 30px; text-align: center; }
+    .content { padding: 40px 30px; }
+    .button { display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 20px 0; }
+    .feature { margin: 30px 0; padding: 20px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #2563eb; }
+    .footer { background: #f8fafc; padding: 30px; text-align: center; color: #666; font-size: 14px; }
+    .checklist { background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 20px; margin: 20px 0; }
+    .checkitem { margin: 10px 0; }
+    .checkitem::before { content: "✅ "; color: #10b981; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎉 AI Chat へようこそ！</h1>
+      <p>こんにちは ${data.firstName}さん！${data.company} でのカスタマーサポート革新の第一歩です。</p>
+    </div>
+    
+    <div class="content">
+      <h2>🚀 たった5分でセットアップ完了</h2>
+      <p>AI Chat を始めるのは驚くほど簡単です。以下のステップに従って、今すぐ顧客サポートを向上させましょう！</p>
+      
+      <div class="checklist">
+        <h3>📋 セットアップチェックリスト</h3>
+        <div class="checkitem">アカウント作成（完了！）</div>
+        <div class="checkitem">ウィジェットのカスタマイズ</div>
+        <div class="checkitem">ウェブサイトにコード追加</div>
+        <div class="checkitem">最初のテストメッセージ</div>
+      </div>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${data.setupUrl}" class="button">🔧 今すぐセットアップを開始</a>
+      </div>
+      
+      <div class="feature">
+        <h3>💡 セットアップのポイント</h3>
+        <ul>
+          <li><strong>1-2分:</strong> ウィジェットの色・位置をカスタマイズ</li>
+          <li><strong>1-2分:</strong> 1行のJavaScriptコードをサイトに追加</li>
+          <li><strong>1分:</strong> テストメッセージで動作確認</li>
+        </ul>
+        <p>技術的な知識は一切不要です！</p>
+      </div>
+      
+      <h2>🎯 導入後に期待できる効果</h2>
+      <div style="display: flex; justify-content: space-between; text-align: center; margin: 30px 0;">
+        <div style="flex: 1; margin: 0 10px;">
+          <div style="font-size: 32px; color: #10b981; font-weight: bold;">92%</div>
+          <div style="color: #666;">顧客満足度向上</div>
+        </div>
+        <div style="flex: 1; margin: 0 10px;">
+          <div style="font-size: 32px; color: #10b981; font-weight: bold;">80%</div>
+          <div style="color: #666;">対応時間短縮</div>
+        </div>
+        <div style="flex: 1; margin: 0 10px;">
+          <div style="font-size: 32px; color: #10b981; font-weight: bold;">3.2倍</div>
+          <div style="color: #666;">コンバージョン率向上</div>
+        </div>
+      </div>
+      
+      <h2>📞 サポートチームがお手伝いします</h2>
+      <p>何か質問がございましたら、いつでもお気軽にお声がけください。私たちのサポートチームが24時間以内にご回答いたします。</p>
+      
+      <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <p><strong>💬 チャットサポート:</strong> ダッシュボード右下のチャットアイコン</p>
+        <p><strong>📧 メールサポート:</strong> <a href="mailto:support@aichat.com">support@aichat.com</a></p>
+        <p><strong>📚 ヘルプセンター:</strong> <a href="${data.supportUrl}">詳細ガイド・FAQ</a></p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>今後数日間、セットアップのコツや成功事例をお送りします。</p>
+      <p>AI Chat で素晴らしいカスタマーエクスペリエンスを実現しましょう！</p>
+      <p><a href="${data.dashboardUrl}">ダッシュボードにアクセス</a> | <a href="${data.supportUrl}">ヘルプセンター</a></p>
+    </div>
+  </div>
+</body>
+</html>
+    `,
+    text: `
+${data.firstName}さん、AI Chat へようこそ！
+
+こんにちは！${data.company} でのカスタマーサポート革新の第一歩です。
+
+🚀 たった5分でセットアップ完了
+
+セットアップチェックリスト:
+✅ アカウント作成（完了！）
+✅ ウィジェットのカスタマイズ
+✅ ウェブサイトにコード追加  
+✅ 最初のテストメッセージ
+
+今すぐセットアップを開始: ${data.setupUrl}
+
+💡 セットアップのポイント:
+• 1-2分: ウィジェットの色・位置をカスタマイズ
+• 1-2分: 1行のJavaScriptコードをサイトに追加
+• 1分: テストメッセージで動作確認
+
+技術的な知識は一切不要です！
+
+🎯 導入後に期待できる効果:
+• 92% 顧客満足度向上
+• 80% 対応時間短縮
+• 3.2倍 コンバージョン率向上
+
+📞 サポート:
+💬 チャットサポート: ダッシュボード右下
+📧 メール: support@aichat.com
+📚 ヘルプセンター: ${data.supportUrl}
+
+AI Chat チーム
+    `
+  };
+}
+/* istanbul ignore next */
+cov_1dv2kicfn3().s[3]++;
+exports.getWelcomeEmailTemplate = getWelcomeEmailTemplate;
+// Day 3: 活用ガイドメール
+function getUsageGuideEmailTemplate(data) {
+  /* istanbul ignore next */
+  cov_1dv2kicfn3().f[1]++;
+  cov_1dv2kicfn3().s[4]++;
+  return {
+    subject: `🎯 ${data.firstName}さん、AI Chatの効果を最大化する3つのコツ`,
+    html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Chat 活用ガイド</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; background: white; }
+    .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 40px 30px; text-align: center; }
+    .content { padding: 40px 30px; }
+    .button { display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 20px 0; }
+    .tip { margin: 30px 0; padding: 25px; background: #f0fdf4; border-radius: 12px; border-left: 4px solid #10b981; }
+    .tip-number { background: #10b981; color: white; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; }
+    .stats { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: center; }
+    .footer { background: #f8fafc; padding: 30px; text-align: center; color: #666; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎯 AI Chat 活用ガイド</h1>
+      <p>${data.firstName}さん、セットアップはいかがでしたか？</p>
+      <p>今日は効果を最大化する3つのコツをお伝えします！</p>
+    </div>
+    
+    <div class="content">
+      <div class="stats">
+        <h3>📊 ${data.company} の現在の状況</h3>
+        <p>ダッシュボードで詳細な分析をご確認いただけます</p>
+        <a href="${data.dashboardUrl}" class="button">📈 分析を確認する</a>
+      </div>
+      
+      <h2>🚀 効果を最大化する3つのコツ</h2>
+      
+      <div class="tip">
+        <div style="display: flex; align-items: flex-start;">
+          <span class="tip-number">1</span>
+          <div>
+            <h3>🎨 ブランドに合わせてカスタマイズ</h3>
+            <p>ウィジェットの色・位置・挨拶メッセージを御社のブランドに合わせることで、より自然な顧客体験を提供できます。</p>
+            <ul>
+              <li><strong>色の変更:</strong> ブランドカラーに統一</li>
+              <li><strong>位置の調整:</strong> 右下・左下・中央から選択</li>
+              <li><strong>挨拶文:</strong> 「こんにちは！何かお手伝いできることはありますか？」</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tip">
+        <div style="display: flex; align-items: flex-start;">
+          <span class="tip-number">2</span>
+          <div>
+            <h3>💡 よくある質問を事前設定</h3>
+            <p>御社特有のFAQを設定することで、AI の回答精度が格段に向上します。</p>
+            <ul>
+              <li><strong>商品・サービス情報</strong></li>
+              <li><strong>料金・プラン詳細</strong></li>
+              <li><strong>サポート営業時間</strong></li>
+              <li><strong>お問い合わせ先</strong></li>
+            </ul>
+            <p>設定は管理画面の「ナレッジベース」から簡単に行えます。</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tip">
+        <div style="display: flex; align-items: flex-start;">
+          <span class="tip-number">3</span>
+          <div>
+            <h3>📊 定期的な分析・改善</h3>
+            <p>週1回の簡単な振り返りで、継続的に効果を向上させましょう。</p>
+            <ul>
+              <li><strong>よくある質問:</strong> 回答できなかった質問をチェック</li>
+              <li><strong>顧客満足度:</strong> 評価の低い会話を分析</li>
+              <li><strong>コンバージョン:</strong> 購入・申込みにつながった経路を確認</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <h2>🏆 成功事例: EC企業A社の場合</h2>
+      <div style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h3>導入3日後の効果</h3>
+        <div style="display: flex; justify-content: space-between; text-align: center; margin: 20px 0;">
+          <div style="flex: 1;">
+            <div style="font-size: 24px; color: #0ea5e9; font-weight: bold;">+47%</div>
+            <div>問い合わせ増加</div>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-size: 24px; color: #0ea5e9; font-weight: bold;">-65%</div>
+            <div>対応時間短縮</div>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-size: 24px; color: #0ea5e9; font-weight: bold;">+23%</div>
+            <div>売上向上</div>
+          </div>
+        </div>
+        <p><em>「深夜の問い合わせにも即座に対応できるようになり、機会損失が大幅に減少しました」</em></p>
+      </div>
+      
+      <h2>🤝 専任サポートをご活用ください</h2>
+      <p>設定でお困りのことがございましたら、遠慮なくお声がけください。御社専任のカスタマーサクセス担当がサポートいたします。</p>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${data.supportUrl}" class="button">💬 サポートに相談する</a>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>明日は他社の成功事例と具体的な ROI 計算方法をお送りします。</p>
+      <p><a href="${data.dashboardUrl}">ダッシュボードにアクセス</a> | <a href="${data.supportUrl}">ヘルプセンター</a></p>
+    </div>
+  </div>
+</body>
+</html>
+    `,
+    text: `
+${data.firstName}さん、AI Chat 活用ガイド
+
+セットアップはいかがでしたか？
+今日は効果を最大化する3つのコツをお伝えします！
+
+📊 ${data.company} の現在の状況
+ダッシュボードで詳細な分析をご確認いただけます
+分析確認: ${data.dashboardUrl}
+
+🚀 効果を最大化する3つのコツ
+
+1. 🎨 ブランドに合わせてカスタマイズ
+• 色の変更: ブランドカラーに統一
+• 位置の調整: 右下・左下・中央から選択
+• 挨拶文: 自然な顧客体験を提供
+
+2. 💡 よくある質問を事前設定
+• 商品・サービス情報
+• 料金・プラン詳細
+• サポート営業時間
+• お問い合わせ先
+
+3. 📊 定期的な分析・改善
+• よくある質問: 回答できなかった質問をチェック
+• 顧客満足度: 評価の低い会話を分析
+• コンバージョン: 購入・申込みにつながった経路を確認
+
+🏆 成功事例: EC企業A社
+導入3日後の効果:
+• +47% 問い合わせ増加
+• -65% 対応時間短縮
+• +23% 売上向上
+
+🤝 専任サポート: ${data.supportUrl}
+
+AI Chat チーム
+    `
+  };
+}
+/* istanbul ignore next */
+cov_1dv2kicfn3().s[5]++;
+exports.getUsageGuideEmailTemplate = getUsageGuideEmailTemplate;
+// Day 7: 成功事例・ROI計算メール
+function getSuccessStoriesEmailTemplate(data) {
+  /* istanbul ignore next */
+  cov_1dv2kicfn3().f[2]++;
+  cov_1dv2kicfn3().s[6]++;
+  return {
+    subject: `📈 ${data.firstName}さん、AI Chatで${data.company}のROIを計算してみませんか？`,
+    html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Chat 成功事例 & ROI 計算</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; background: white; }
+    .header { background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); color: white; padding: 40px 30px; text-align: center; }
+    .content { padding: 40px 30px; }
+    .button { display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 20px 0; }
+    .case-study { margin: 30px 0; padding: 25px; background: #faf5ff; border-radius: 12px; border-left: 4px solid #7c3aed; }
+    .roi-calculator { background: #f0fdf4; border: 1px solid #10b981; border-radius: 12px; padding: 25px; margin: 30px 0; }
+    .metrics { display: flex; justify-content: space-between; text-align: center; margin: 20px 0; }
+    .metric { flex: 1; margin: 0 10px; }
+    .metric-value { font-size: 28px; color: #7c3aed; font-weight: bold; }
+    .footer { background: #f8fafc; padding: 30px; text-align: center; color: #666; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📈 1週間後の振り返り</h1>
+      <p>${data.firstName}さん、AI Chat をお使いいただき1週間が経ちました！</p>
+      <p>今日は成功事例と ROI 計算をご紹介します</p>
+    </div>
+    
+    <div class="content">
+      <h2>🏆 他社の驚きの成功事例</h2>
+      
+      <div class="case-study">
+        <h3>💻 SaaS企業 B社（従業員50名）</h3>
+        <p><strong>導入背景:</strong> カスタマーサポート担当者2名では問い合わせ対応が追いつかず、顧客満足度が低下</p>
+        
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-value">+250%</div>
+            <div>CV率向上</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">-70%</div>
+            <div>CS工数削減</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">+180%</div>
+            <div>月間問い合わせ増</div>
+          </div>
+        </div>
+        
+        <p><strong>導入効果:</strong> 技術的な質問にも正確に答えてくれるので、顧客満足度が格段に向上。サポート担当者は高度な問題解決に集中できるようになりました。</p>
+        
+        <p><strong>具体的改善:</strong></p>
+        <ul>
+          <li>FAQ対応: 24時間自動化 → 人件費 月額30万円削減</li>
+          <li>初回問い合わせ解決率: 45% → 87%</li>
+          <li>平均応答時間: 4時間 → 0.3秒</li>
+        </ul>
+      </div>
+      
+      <div class="case-study">
+        <h3>🏥 医療法人 C社（クリニック5院）</h3>
+        <p><strong>導入背景:</strong> 診療時間外の問い合わせ対応ができず、予約機会を逃していた</p>
+        
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-value">+95%</div>
+            <div>患者満足度向上</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">-80%</div>
+            <div>問い合わせ処理時間</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">+42%</div>
+            <div>オンライン予約増</div>
+          </div>
+        </div>
+        
+        <p><strong>導入効果:</strong> 24時間対応が可能になり、患者様に安心感を提供。診療時間外の予約も大幅に増加しました。</p>
+      </div>
+      
+      <h2>💰 ${data.company} の ROI を計算してみましょう</h2>
+      
+      <div class="roi-calculator">
+        <h3>📊 ROI 計算ツール</h3>
+        <p>御社の現在の状況を入力して、AI Chat による費用対効果を確認してみませんか？</p>
+        
+        <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h4>💡 計算例（従業員数50名の企業）</h4>
+          
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background: #f8fafc;">
+              <td style="padding: 10px; border: 1px solid #e2e8f0;"><strong>項目</strong></td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;"><strong>導入前</strong></td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;"><strong>導入後</strong></td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;"><strong>効果</strong></td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">月間人件費</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">60万円</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">25万円</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0; color: #10b981;"><strong>-35万円</strong></td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">ツール費用</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">8万円</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">2万円</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0; color: #10b981;"><strong>-6万円</strong></td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">機会損失</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">15万円</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">3万円</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0; color: #10b981;"><strong>-12万円</strong></td>
+            </tr>
+            <tr style="background: #f0fdf4; font-weight: bold;">
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">月間節約額</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">-</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0;">-</td>
+              <td style="padding: 10px; border: 1px solid #e2e8f0; color: #10b981;"><strong>53万円</strong></td>
+            </tr>
+          </table>
+          
+          <p style="text-align: center; margin: 20px 0; font-size: 18px; color: #10b981; font-weight: bold;">
+            年間節約額: 636万円 | ROI: 3,180%
+          </p>
+        </div>
+        
+        <div style="text-align: center;">
+          <a href="${data.dashboardUrl}/roi-calculator" class="button">🧮 詳細ROI計算をする</a>
+        </div>
+      </div>
+      
+      <h2>🚀 次のステップ</h2>
+      <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h3>📈 更なる効果向上のために</h3>
+        <ul>
+          <li><strong>A/Bテスト:</strong> ウィジェットの位置・色を最適化</li>
+          <li><strong>高度な設定:</strong> 業界特化型AIモデルに切り替え</li>
+          <li><strong>連携強化:</strong> CRM・ヘルプデスクとの連携設定</li>
+          <li><strong>チーム拡張:</strong> 複数部署での活用</li>
+        </ul>
+      </div>
+      
+      <h2>💼 エンタープライズプランのご案内</h2>
+      <p>より大規模な運用や高度な機能をご希望の場合は、エンタープライズプランをご検討ください：</p>
+      <ul>
+        <li>🏢 無制限のウィジェット数</li>
+        <li>👥 専任カスタマーサクセス担当</li>
+        <li>🔒 SSO・SAML対応</li>
+        <li>📊 高度な分析・レポート機能</li>
+        <li>⚡ 優先サポート（1時間以内対応）</li>
+      </ul>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${data.supportUrl}/enterprise" class="button">🏢 エンタープライズ相談</a>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>今後も定期的に活用ガイドや成功事例をお送りします。</p>
+      <p>AI Chat で、${data.company} のカスタマーサポートを次のレベルへ！</p>
+      <p><a href="${data.dashboardUrl}">ダッシュボードにアクセス</a> | <a href="${data.supportUrl}">ヘルプセンター</a></p>
+    </div>
+  </div>
+</body>
+</html>
+    `,
+    text: `
+${data.firstName}さん、1週間後の振り返り
+
+AI Chat をお使いいただき1週間が経ちました！
+今日は成功事例と ROI 計算をご紹介します
+
+🏆 他社の驚きの成功事例
+
+💻 SaaS企業 B社（従業員50名）
+導入効果:
+• +250% CV率向上
+• -70% CS工数削減  
+• +180% 月間問い合わせ増
+
+具体的改善:
+• FAQ対応: 24時間自動化 → 人件費 月額30万円削減
+• 初回問い合わせ解決率: 45% → 87%
+• 平均応答時間: 4時間 → 0.3秒
+
+🏥 医療法人 C社（クリニック5院）
+導入効果:
+• +95% 患者満足度向上
+• -80% 問い合わせ処理時間
+• +42% オンライン予約増
+
+💰 ${data.company} の ROI 計算例
+
+計算例（従業員数50名の企業）:
+• 月間人件費削減: -35万円
+• ツール費用削減: -6万円
+• 機会損失削減: -12万円
+• 月間節約額: 53万円
+• 年間節約額: 636万円
+• ROI: 3,180%
+
+詳細ROI計算: ${data.dashboardUrl}/roi-calculator
+
+🚀 次のステップ
+• A/Bテスト: ウィジェットの位置・色を最適化
+• 高度な設定: 業界特化型AIモデルに切り替え
+• 連携強化: CRM・ヘルプデスクとの連携設定
+• チーム拡張: 複数部署での活用
+
+💼 エンタープライズプラン:
+• 無制限のウィジェット数
+• 専任カスタマーサクセス担当
+• SSO・SAML対応
+• 高度な分析・レポート機能
+• 優先サポート（1時間以内対応）
+
+エンタープライズ相談: ${data.supportUrl}/enterprise
+
+AI Chat チーム
+    `
+  };
+}
+/* istanbul ignore next */
+cov_1dv2kicfn3().s[7]++;
+exports.getSuccessStoriesEmailTemplate = getSuccessStoriesEmailTemplate;
+// Section-5: Password Reset Template
+/* istanbul ignore next */
+cov_1dv2kicfn3().s[8]++;
+const passwordResetTemplate = resetUrl => {
+  /* istanbul ignore next */
+  cov_1dv2kicfn3().f[3]++;
+  cov_1dv2kicfn3().s[9]++;
+  return {
+    subject: 'パスワードリセットのご案内',
+    html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2>パスワードリセット</h2>
+      <p>パスワードリセットのリクエストを受け付けました。</p>
+      <p>以下のボタンをクリックして、新しいパスワードを設定してください：</p>
+      <div style="margin: 30px 0;">
+        <a href="${resetUrl}" 
+           style="background-color: #4F46E5; color: white; padding: 12px 24px; 
+                  text-decoration: none; border-radius: 6px; display: inline-block;">
+          パスワードをリセット
+        </a>
+      </div>
+      <p>このリンクは24時間有効です。</p>
+      <p>心当たりがない場合は、このメールを無視してください。</p>
+    </div>
+  `,
+    text: `
+    パスワードリセット
+    
+    パスワードリセットのリクエストを受け付けました。
+    以下のURLから新しいパスワードを設定してください：
+    
+    ${resetUrl}
+    
+    このリンクは24時間有効です。
+    心当たりがない場合は、このメールを無視してください。
+  `
+  };
+};
+/* istanbul ignore next */
+cov_1dv2kicfn3().s[10]++;
+exports.passwordResetTemplate = passwordResetTemplate;
+// Section-5: Email Verification Template
+/* istanbul ignore next */
+cov_1dv2kicfn3().s[11]++;
+const emailVerificationTemplate = verifyUrl => {
+  /* istanbul ignore next */
+  cov_1dv2kicfn3().f[4]++;
+  cov_1dv2kicfn3().s[12]++;
+  return {
+    subject: 'メールアドレスの確認',
+    html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2>メールアドレスの確認</h2>
+      <p>ご登録ありがとうございます。</p>
+      <p>以下のボタンをクリックして、メールアドレスを確認してください：</p>
+      <div style="margin: 30px 0;">
+        <a href="${verifyUrl}" 
+           style="background-color: #4F46E5; color: white; padding: 12px 24px; 
+                  text-decoration: none; border-radius: 6px; display: inline-block;">
+          メールアドレスを確認
+        </a>
+      </div>
+      <p>このリンクは72時間有効です。</p>
+    </div>
+  `,
+    text: `
+    メールアドレスの確認
+    
+    ご登録ありがとうございます。
+    以下のURLからメールアドレスを確認してください：
+    
+    ${verifyUrl}
+    
+    このリンクは72時間有効です。
+  `
+  };
+};
+/* istanbul ignore next */
+cov_1dv2kicfn3().s[13]++;
+exports.emailVerificationTemplate = emailVerificationTemplate;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJnZXRXZWxjb21lRW1haWxUZW1wbGF0ZSIsImRhdGEiLCJjb3ZfMWR2MmtpY2ZuMyIsImYiLCJzIiwic3ViamVjdCIsImZpcnN0TmFtZSIsImh0bWwiLCJjb21wYW55Iiwic2V0dXBVcmwiLCJzdXBwb3J0VXJsIiwiZGFzaGJvYXJkVXJsIiwidGV4dCIsImV4cG9ydHMiLCJnZXRVc2FnZUd1aWRlRW1haWxUZW1wbGF0ZSIsImdldFN1Y2Nlc3NTdG9yaWVzRW1haWxUZW1wbGF0ZSIsInBhc3N3b3JkUmVzZXRUZW1wbGF0ZSIsInJlc2V0VXJsIiwiZW1haWxWZXJpZmljYXRpb25UZW1wbGF0ZSIsInZlcmlmeVVybCJdLCJzb3VyY2VzIjpbIi9Vc2Vycy95dXN1a2V5b3NoaW9rYS9wcm9qZWN0cy95b3V0dWJlL2FpLWNoYXQvYWktY2hhdC1hcGkvc3JjL2xpYi9lbWFpbFRlbXBsYXRlcy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgaW50ZXJmYWNlIEVtYWlsVGVtcGxhdGUge1xuICBzdWJqZWN0OiBzdHJpbmc7XG4gIGh0bWw6IHN0cmluZztcbiAgdGV4dDogc3RyaW5nO1xufVxuXG5leHBvcnQgaW50ZXJmYWNlIE9uYm9hcmRpbmdEYXRhIHtcbiAgZmlyc3ROYW1lOiBzdHJpbmc7XG4gIGNvbXBhbnk6IHN0cmluZztcbiAgZW1haWw6IHN0cmluZztcbiAgc2V0dXBVcmw6IHN0cmluZztcbiAgZGFzaGJvYXJkVXJsOiBzdHJpbmc7XG4gIHN1cHBvcnRVcmw6IHN0cmluZztcbn1cblxuLy8gRGF5IDE6IOOCpuOCp+ODq+OCq+ODoOODoeODvOODq1xuZXhwb3J0IGZ1bmN0aW9uIGdldFdlbGNvbWVFbWFpbFRlbXBsYXRlKGRhdGE6IE9uYm9hcmRpbmdEYXRhKTogRW1haWxUZW1wbGF0ZSB7XG4gIHJldHVybiB7XG4gICAgc3ViamVjdDogYPCfjokgJHtkYXRhLmZpcnN0TmFtZX3jgZXjgpPjgIFBSSBDaGF044G444KI44GG44GT44Gd77yB44K744OD44OI44Ki44OD44OX44KS5a6M5LqG44GX44G+44GX44KH44GGYCxcbiAgICBodG1sOiBgXG48IURPQ1RZUEUgaHRtbD5cbjxodG1sPlxuPGhlYWQ+XG4gIDxtZXRhIGNoYXJzZXQ9XCJ1dGYtOFwiPlxuICA8bWV0YSBuYW1lPVwidmlld3BvcnRcIiBjb250ZW50PVwid2lkdGg9ZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlPTFcIj5cbiAgPHRpdGxlPkFJIENoYXQg44G444KI44GG44GT44GdPC90aXRsZT5cbiAgPHN0eWxlPlxuICAgIGJvZHkgeyBmb250LWZhbWlseTogLWFwcGxlLXN5c3RlbSwgQmxpbmtNYWNTeXN0ZW1Gb250LCAnU2Vnb2UgVUknLCBSb2JvdG8sIHNhbnMtc2VyaWY7IGxpbmUtaGVpZ2h0OiAxLjY7IGNvbG9yOiAjMzMzOyBtYXJnaW46IDA7IHBhZGRpbmc6IDA7IGJhY2tncm91bmQtY29sb3I6ICNmNWY1ZjU7IH1cbiAgICAuY29udGFpbmVyIHsgbWF4LXdpZHRoOiA2MDBweDsgbWFyZ2luOiAwIGF1dG87IGJhY2tncm91bmQ6IHdoaXRlOyB9XG4gICAgLmhlYWRlciB7IGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCgxMzVkZWcsICMyNTYzZWIgMCUsICM0ZjQ2ZTUgMTAwJSk7IGNvbG9yOiB3aGl0ZTsgcGFkZGluZzogNDBweCAzMHB4OyB0ZXh0LWFsaWduOiBjZW50ZXI7IH1cbiAgICAuY29udGVudCB7IHBhZGRpbmc6IDQwcHggMzBweDsgfVxuICAgIC5idXR0b24geyBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7IGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCgxMzVkZWcsICMyNTYzZWIgMCUsICM0ZjQ2ZTUgMTAwJSk7IGNvbG9yOiB3aGl0ZTsgcGFkZGluZzogMTZweCAzMnB4OyB0ZXh0LWRlY29yYXRpb246IG5vbmU7IGJvcmRlci1yYWRpdXM6IDhweDsgZm9udC13ZWlnaHQ6IDYwMDsgbWFyZ2luOiAyMHB4IDA7IH1cbiAgICAuZmVhdHVyZSB7IG1hcmdpbjogMzBweCAwOyBwYWRkaW5nOiAyMHB4OyBiYWNrZ3JvdW5kOiAjZjhmYWZjOyBib3JkZXItcmFkaXVzOiA4cHg7IGJvcmRlci1sZWZ0OiA0cHggc29saWQgIzI1NjNlYjsgfVxuICAgIC5mb290ZXIgeyBiYWNrZ3JvdW5kOiAjZjhmYWZjOyBwYWRkaW5nOiAzMHB4OyB0ZXh0LWFsaWduOiBjZW50ZXI7IGNvbG9yOiAjNjY2OyBmb250LXNpemU6IDE0cHg7IH1cbiAgICAuY2hlY2tsaXN0IHsgYmFja2dyb3VuZDogI2VjZmRmNTsgYm9yZGVyOiAxcHggc29saWQgIzEwYjk4MTsgYm9yZGVyLXJhZGl1czogOHB4OyBwYWRkaW5nOiAyMHB4OyBtYXJnaW46IDIwcHggMDsgfVxuICAgIC5jaGVja2l0ZW0geyBtYXJnaW46IDEwcHggMDsgfVxuICAgIC5jaGVja2l0ZW06OmJlZm9yZSB7IGNvbnRlbnQ6IFwi4pyFIFwiOyBjb2xvcjogIzEwYjk4MTsgZm9udC13ZWlnaHQ6IGJvbGQ7IH1cbiAgPC9zdHlsZT5cbjwvaGVhZD5cbjxib2R5PlxuICA8ZGl2IGNsYXNzPVwiY29udGFpbmVyXCI+XG4gICAgPGRpdiBjbGFzcz1cImhlYWRlclwiPlxuICAgICAgPGgxPvCfjokgQUkgQ2hhdCDjgbjjgojjgYbjgZPjgZ3vvIE8L2gxPlxuICAgICAgPHA+44GT44KT44Gr44Gh44GvICR7ZGF0YS5maXJzdE5hbWV944GV44KT77yBJHtkYXRhLmNvbXBhbnl9IOOBp+OBruOCq+OCueOCv+ODnuODvOOCteODneODvOODiOmdqeaWsOOBruesrOS4gOatqeOBp+OBmeOAgjwvcD5cbiAgICA8L2Rpdj5cbiAgICBcbiAgICA8ZGl2IGNsYXNzPVwiY29udGVudFwiPlxuICAgICAgPGgyPvCfmoAg44Gf44Gj44GfNeWIhuOBp+OCu+ODg+ODiOOCouODg+ODl+WujOS6hjwvaDI+XG4gICAgICA8cD5BSSBDaGF0IOOCkuWni+OCgeOCi+OBruOBr+mpmuOBj+OBu+OBqeewoeWNmOOBp+OBmeOAguS7peS4i+OBruOCueODhuODg+ODl+OBq+W+k+OBo+OBpuOAgeS7iuOBmeOBkOmhp+WuouOCteODneODvOODiOOCkuWQkeS4iuOBleOBm+OBvuOBl+OCh+OBhu+8gTwvcD5cbiAgICAgIFxuICAgICAgPGRpdiBjbGFzcz1cImNoZWNrbGlzdFwiPlxuICAgICAgICA8aDM+8J+TiyDjgrvjg4Pjg4jjgqLjg4Pjg5fjg4Hjgqfjg4Pjgq/jg6rjgrnjg4g8L2gzPlxuICAgICAgICA8ZGl2IGNsYXNzPVwiY2hlY2tpdGVtXCI+44Ki44Kr44Km44Oz44OI5L2c5oiQ77yI5a6M5LqG77yB77yJPC9kaXY+XG4gICAgICAgIDxkaXYgY2xhc3M9XCJjaGVja2l0ZW1cIj7jgqbjgqPjgrjjgqfjg4Pjg4jjga7jgqvjgrnjgr/jg57jgqTjgro8L2Rpdj5cbiAgICAgICAgPGRpdiBjbGFzcz1cImNoZWNraXRlbVwiPuOCpuOCp+ODluOCteOCpOODiOOBq+OCs+ODvOODiei/veWKoDwvZGl2PlxuICAgICAgICA8ZGl2IGNsYXNzPVwiY2hlY2tpdGVtXCI+5pyA5Yid44Gu44OG44K544OI44Oh44OD44K744O844K4PC9kaXY+XG4gICAgICA8L2Rpdj5cbiAgICAgIFxuICAgICAgPGRpdiBzdHlsZT1cInRleHQtYWxpZ246IGNlbnRlcjsgbWFyZ2luOiAzMHB4IDA7XCI+XG4gICAgICAgIDxhIGhyZWY9XCIke2RhdGEuc2V0dXBVcmx9XCIgY2xhc3M9XCJidXR0b25cIj7wn5SnIOS7iuOBmeOBkOOCu+ODg+ODiOOCouODg+ODl+OCkumWi+WnizwvYT5cbiAgICAgIDwvZGl2PlxuICAgICAgXG4gICAgICA8ZGl2IGNsYXNzPVwiZmVhdHVyZVwiPlxuICAgICAgICA8aDM+8J+SoSDjgrvjg4Pjg4jjgqLjg4Pjg5fjga7jg53jgqTjg7Pjg4g8L2gzPlxuICAgICAgICA8dWw+XG4gICAgICAgICAgPGxpPjxzdHJvbmc+MS0y5YiGOjwvc3Ryb25nPiDjgqbjgqPjgrjjgqfjg4Pjg4jjga7oibLjg7vkvY3nva7jgpLjgqvjgrnjgr/jg57jgqTjgro8L2xpPlxuICAgICAgICAgIDxsaT48c3Ryb25nPjEtMuWIhjo8L3N0cm9uZz4gMeihjOOBrkphdmFTY3JpcHTjgrPjg7zjg4njgpLjgrXjgqTjg4jjgavov73liqA8L2xpPlxuICAgICAgICAgIDxsaT48c3Ryb25nPjHliIY6PC9zdHJvbmc+IOODhuOCueODiOODoeODg+OCu+ODvOOCuOOBp+WLleS9nOeiuuiqjTwvbGk+XG4gICAgICAgIDwvdWw+XG4gICAgICAgIDxwPuaKgOihk+eahOOBquefpeitmOOBr+S4gOWIh+S4jeimgeOBp+OBme+8gTwvcD5cbiAgICAgIDwvZGl2PlxuICAgICAgXG4gICAgICA8aDI+8J+OryDlsI7lhaXlvozjgavmnJ/lvoXjgafjgY3jgovlirnmnpw8L2gyPlxuICAgICAgPGRpdiBzdHlsZT1cImRpc3BsYXk6IGZsZXg7IGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjsgdGV4dC1hbGlnbjogY2VudGVyOyBtYXJnaW46IDMwcHggMDtcIj5cbiAgICAgICAgPGRpdiBzdHlsZT1cImZsZXg6IDE7IG1hcmdpbjogMCAxMHB4O1wiPlxuICAgICAgICAgIDxkaXYgc3R5bGU9XCJmb250LXNpemU6IDMycHg7IGNvbG9yOiAjMTBiOTgxOyBmb250LXdlaWdodDogYm9sZDtcIj45MiU8L2Rpdj5cbiAgICAgICAgICA8ZGl2IHN0eWxlPVwiY29sb3I6ICM2NjY7XCI+6aGn5a6i5rqA6Laz5bqm5ZCR5LiKPC9kaXY+XG4gICAgICAgIDwvZGl2PlxuICAgICAgICA8ZGl2IHN0eWxlPVwiZmxleDogMTsgbWFyZ2luOiAwIDEwcHg7XCI+XG4gICAgICAgICAgPGRpdiBzdHlsZT1cImZvbnQtc2l6ZTogMzJweDsgY29sb3I6ICMxMGI5ODE7IGZvbnQtd2VpZ2h0OiBib2xkO1wiPjgwJTwvZGl2PlxuICAgICAgICAgIDxkaXYgc3R5bGU9XCJjb2xvcjogIzY2NjtcIj7lr77lv5zmmYLplpPnn63nuK48L2Rpdj5cbiAgICAgICAgPC9kaXY+XG4gICAgICAgIDxkaXYgc3R5bGU9XCJmbGV4OiAxOyBtYXJnaW46IDAgMTBweDtcIj5cbiAgICAgICAgICA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOiAzMnB4OyBjb2xvcjogIzEwYjk4MTsgZm9udC13ZWlnaHQ6IGJvbGQ7XCI+My4y5YCNPC9kaXY+XG4gICAgICAgICAgPGRpdiBzdHlsZT1cImNvbG9yOiAjNjY2O1wiPuOCs+ODs+ODkOODvOOCuOODp+ODs+eOh+WQkeS4ijwvZGl2PlxuICAgICAgICA8L2Rpdj5cbiAgICAgIDwvZGl2PlxuICAgICAgXG4gICAgICA8aDI+8J+TniDjgrXjg53jg7zjg4jjg4Hjg7zjg6DjgYzjgYrmiYvkvJ3jgYTjgZfjgb7jgZk8L2gyPlxuICAgICAgPHA+5L2V44GL6LOq5ZWP44GM44GU44GW44GE44G+44GX44Gf44KJ44CB44GE44Gk44Gn44KC44GK5rCX6Lu944Gr44GK5aOw44GM44GR44GP44Gg44GV44GE44CC56eB44Gf44Gh44Gu44K144Od44O844OI44OB44O844Og44GMMjTmmYLplpPku6XlhoXjgavjgZTlm57nrZTjgYTjgZ/jgZfjgb7jgZnjgII8L3A+XG4gICAgICBcbiAgICAgIDxkaXYgc3R5bGU9XCJiYWNrZ3JvdW5kOiAjZmVmM2M3OyBib3JkZXI6IDFweCBzb2xpZCAjZjU5ZTBiOyBib3JkZXItcmFkaXVzOiA4cHg7IHBhZGRpbmc6IDIwcHg7IG1hcmdpbjogMjBweCAwO1wiPlxuICAgICAgICA8cD48c3Ryb25nPvCfkqwg44OB44Oj44OD44OI44K144Od44O844OIOjwvc3Ryb25nPiDjg4Djg4Pjgrfjg6Xjg5zjg7zjg4nlj7PkuIvjga7jg4Hjg6Pjg4Pjg4jjgqLjgqTjgrPjg7M8L3A+XG4gICAgICAgIDxwPjxzdHJvbmc+8J+TpyDjg6Hjg7zjg6vjgrXjg53jg7zjg4g6PC9zdHJvbmc+IDxhIGhyZWY9XCJtYWlsdG86c3VwcG9ydEBhaWNoYXQuY29tXCI+c3VwcG9ydEBhaWNoYXQuY29tPC9hPjwvcD5cbiAgICAgICAgPHA+PHN0cm9uZz7wn5OaIOODmOODq+ODl+OCu+ODs+OCv+ODvDo8L3N0cm9uZz4gPGEgaHJlZj1cIiR7ZGF0YS5zdXBwb3J0VXJsfVwiPuips+e0sOOCrOOCpOODieODu0ZBUTwvYT48L3A+XG4gICAgICA8L2Rpdj5cbiAgICA8L2Rpdj5cbiAgICBcbiAgICA8ZGl2IGNsYXNzPVwiZm9vdGVyXCI+XG4gICAgICA8cD7ku4rlvozmlbDml6XplpPjgIHjgrvjg4Pjg4jjgqLjg4Pjg5fjga7jgrPjg4TjgoTmiJDlip/kuovkvovjgpLjgYrpgIHjgorjgZfjgb7jgZnjgII8L3A+XG4gICAgICA8cD5BSSBDaGF0IOOBp+e0oOaZtOOCieOBl+OBhOOCq+OCueOCv+ODnuODvOOCqOOCr+OCueODmuODquOCqOODs+OCueOCkuWun+ePvuOBl+OBvuOBl+OCh+OBhu+8gTwvcD5cbiAgICAgIDxwPjxhIGhyZWY9XCIke2RhdGEuZGFzaGJvYXJkVXJsfVwiPuODgOODg+OCt+ODpeODnOODvOODieOBq+OCouOCr+OCu+OCuTwvYT4gfCA8YSBocmVmPVwiJHtkYXRhLnN1cHBvcnRVcmx9XCI+44OY44Or44OX44K744Oz44K/44O8PC9hPjwvcD5cbiAgICA8L2Rpdj5cbiAgPC9kaXY+XG48L2JvZHk+XG48L2h0bWw+XG4gICAgYCxcbiAgICB0ZXh0OiBgXG4ke2RhdGEuZmlyc3ROYW1lfeOBleOCk+OAgUFJIENoYXQg44G444KI44GG44GT44Gd77yBXG5cbuOBk+OCk+OBq+OBoeOBr++8gSR7ZGF0YS5jb21wYW55fSDjgafjga7jgqvjgrnjgr/jg57jg7zjgrXjg53jg7zjg4jpnanmlrDjga7nrKzkuIDmranjgafjgZnjgIJcblxu8J+agCDjgZ/jgaPjgZ815YiG44Gn44K744OD44OI44Ki44OD44OX5a6M5LqGXG5cbuOCu+ODg+ODiOOCouODg+ODl+ODgeOCp+ODg+OCr+ODquOCueODiDpcbuKchSDjgqLjgqvjgqbjg7Pjg4jkvZzmiJDvvIjlrozkuobvvIHvvIlcbuKchSDjgqbjgqPjgrjjgqfjg4Pjg4jjga7jgqvjgrnjgr/jg57jgqTjgrpcbuKchSDjgqbjgqfjg5bjgrXjgqTjg4jjgavjgrPjg7zjg4nov73liqAgIFxu4pyFIOacgOWIneOBruODhuOCueODiOODoeODg+OCu+ODvOOCuFxuXG7ku4rjgZnjgZDjgrvjg4Pjg4jjgqLjg4Pjg5fjgpLplovlp4s6ICR7ZGF0YS5zZXR1cFVybH1cblxu8J+SoSDjgrvjg4Pjg4jjgqLjg4Pjg5fjga7jg53jgqTjg7Pjg4g6XG7igKIgMS0y5YiGOiDjgqbjgqPjgrjjgqfjg4Pjg4jjga7oibLjg7vkvY3nva7jgpLjgqvjgrnjgr/jg57jgqTjgrpcbuKAoiAxLTLliIY6IDHooYzjga5KYXZhU2NyaXB044Kz44O844OJ44KS44K144Kk44OI44Gr6L+95YqgXG7igKIgMeWIhjog44OG44K544OI44Oh44OD44K744O844K444Gn5YuV5L2c56K66KqNXG5cbuaKgOihk+eahOOBquefpeitmOOBr+S4gOWIh+S4jeimgeOBp+OBme+8gVxuXG7wn46vIOWwjuWFpeW+jOOBq+acn+W+heOBp+OBjeOCi+WKueaenDpcbuKAoiA5MiUg6aGn5a6i5rqA6Laz5bqm5ZCR5LiKXG7igKIgODAlIOWvvuW/nOaZgumWk+efree4rlxu4oCiIDMuMuWAjSDjgrPjg7Pjg5Djg7zjgrjjg6fjg7PnjoflkJHkuIpcblxu8J+TniDjgrXjg53jg7zjg4g6XG7wn5KsIOODgeODo+ODg+ODiOOCteODneODvOODiDog44OA44OD44K344Ol44Oc44O844OJ5Y+z5LiLXG7wn5OnIOODoeODvOODqzogc3VwcG9ydEBhaWNoYXQuY29tXG7wn5OaIOODmOODq+ODl+OCu+ODs+OCv+ODvDogJHtkYXRhLnN1cHBvcnRVcmx9XG5cbkFJIENoYXQg44OB44O844OgXG4gICAgYCxcbiAgfTtcbn1cblxuLy8gRGF5IDM6IOa0u+eUqOOCrOOCpOODieODoeODvOODq1xuZXhwb3J0IGZ1bmN0aW9uIGdldFVzYWdlR3VpZGVFbWFpbFRlbXBsYXRlKFxuICBkYXRhOiBPbmJvYXJkaW5nRGF0YVxuKTogRW1haWxUZW1wbGF0ZSB7XG4gIHJldHVybiB7XG4gICAgc3ViamVjdDogYPCfjq8gJHtkYXRhLmZpcnN0TmFtZX3jgZXjgpPjgIFBSSBDaGF044Gu5Yq55p6c44KS5pyA5aSn5YyW44GZ44KLM+OBpOOBruOCs+ODhGAsXG4gICAgaHRtbDogYFxuPCFET0NUWVBFIGh0bWw+XG48aHRtbD5cbjxoZWFkPlxuICA8bWV0YSBjaGFyc2V0PVwidXRmLThcIj5cbiAgPG1ldGEgbmFtZT1cInZpZXdwb3J0XCIgY29udGVudD1cIndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xXCI+XG4gIDx0aXRsZT5BSSBDaGF0IOa0u+eUqOOCrOOCpOODiTwvdGl0bGU+XG4gIDxzdHlsZT5cbiAgICBib2R5IHsgZm9udC1mYW1pbHk6IC1hcHBsZS1zeXN0ZW0sIEJsaW5rTWFjU3lzdGVtRm9udCwgJ1NlZ29lIFVJJywgUm9ib3RvLCBzYW5zLXNlcmlmOyBsaW5lLWhlaWdodDogMS42OyBjb2xvcjogIzMzMzsgbWFyZ2luOiAwOyBwYWRkaW5nOiAwOyBiYWNrZ3JvdW5kLWNvbG9yOiAjZjVmNWY1OyB9XG4gICAgLmNvbnRhaW5lciB7IG1heC13aWR0aDogNjAwcHg7IG1hcmdpbjogMCBhdXRvOyBiYWNrZ3JvdW5kOiB3aGl0ZTsgfVxuICAgIC5oZWFkZXIgeyBiYWNrZ3JvdW5kOiBsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjMTBiOTgxIDAlLCAjMDU5NjY5IDEwMCUpOyBjb2xvcjogd2hpdGU7IHBhZGRpbmc6IDQwcHggMzBweDsgdGV4dC1hbGlnbjogY2VudGVyOyB9XG4gICAgLmNvbnRlbnQgeyBwYWRkaW5nOiA0MHB4IDMwcHg7IH1cbiAgICAuYnV0dG9uIHsgZGlzcGxheTogaW5saW5lLWJsb2NrOyBiYWNrZ3JvdW5kOiBsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjMTBiOTgxIDAlLCAjMDU5NjY5IDEwMCUpOyBjb2xvcjogd2hpdGU7IHBhZGRpbmc6IDE2cHggMzJweDsgdGV4dC1kZWNvcmF0aW9uOiBub25lOyBib3JkZXItcmFkaXVzOiA4cHg7IGZvbnQtd2VpZ2h0OiA2MDA7IG1hcmdpbjogMjBweCAwOyB9XG4gICAgLnRpcCB7IG1hcmdpbjogMzBweCAwOyBwYWRkaW5nOiAyNXB4OyBiYWNrZ3JvdW5kOiAjZjBmZGY0OyBib3JkZXItcmFkaXVzOiAxMnB4OyBib3JkZXItbGVmdDogNHB4IHNvbGlkICMxMGI5ODE7IH1cbiAgICAudGlwLW51bWJlciB7IGJhY2tncm91bmQ6ICMxMGI5ODE7IGNvbG9yOiB3aGl0ZTsgd2lkdGg6IDMwcHg7IGhlaWdodDogMzBweDsgYm9yZGVyLXJhZGl1czogNTAlOyBkaXNwbGF5OiBpbmxpbmUtZmxleDsgYWxpZ24taXRlbXM6IGNlbnRlcjsganVzdGlmeS1jb250ZW50OiBjZW50ZXI7IGZvbnQtd2VpZ2h0OiBib2xkOyBtYXJnaW4tcmlnaHQ6IDE1cHg7IH1cbiAgICAuc3RhdHMgeyBiYWNrZ3JvdW5kOiAjZmVmM2M3OyBib3JkZXI6IDFweCBzb2xpZCAjZjU5ZTBiOyBib3JkZXItcmFkaXVzOiA4cHg7IHBhZGRpbmc6IDIwcHg7IG1hcmdpbjogMjBweCAwOyB0ZXh0LWFsaWduOiBjZW50ZXI7IH1cbiAgICAuZm9vdGVyIHsgYmFja2dyb3VuZDogI2Y4ZmFmYzsgcGFkZGluZzogMzBweDsgdGV4dC1hbGlnbjogY2VudGVyOyBjb2xvcjogIzY2NjsgZm9udC1zaXplOiAxNHB4OyB9XG4gIDwvc3R5bGU+XG48L2hlYWQ+XG48Ym9keT5cbiAgPGRpdiBjbGFzcz1cImNvbnRhaW5lclwiPlxuICAgIDxkaXYgY2xhc3M9XCJoZWFkZXJcIj5cbiAgICAgIDxoMT7wn46vIEFJIENoYXQg5rS755So44Ks44Kk44OJPC9oMT5cbiAgICAgIDxwPiR7ZGF0YS5maXJzdE5hbWV944GV44KT44CB44K744OD44OI44Ki44OD44OX44Gv44GE44GL44GM44Gn44GX44Gf44GL77yfPC9wPlxuICAgICAgPHA+5LuK5pel44Gv5Yq55p6c44KS5pyA5aSn5YyW44GZ44KLM+OBpOOBruOCs+ODhOOCkuOBiuS8neOBiOOBl+OBvuOBme+8gTwvcD5cbiAgICA8L2Rpdj5cbiAgICBcbiAgICA8ZGl2IGNsYXNzPVwiY29udGVudFwiPlxuICAgICAgPGRpdiBjbGFzcz1cInN0YXRzXCI+XG4gICAgICAgIDxoMz7wn5OKICR7ZGF0YS5jb21wYW55fSDjga7nj77lnKjjga7nirbms4E8L2gzPlxuICAgICAgICA8cD7jg4Djg4Pjgrfjg6Xjg5zjg7zjg4njgafoqbPntLDjgarliIbmnpDjgpLjgZTnorroqo3jgYTjgZ/jgaDjgZHjgb7jgZk8L3A+XG4gICAgICAgIDxhIGhyZWY9XCIke2RhdGEuZGFzaGJvYXJkVXJsfVwiIGNsYXNzPVwiYnV0dG9uXCI+8J+TiCDliIbmnpDjgpLnorroqo3jgZnjgos8L2E+XG4gICAgICA8L2Rpdj5cbiAgICAgIFxuICAgICAgPGgyPvCfmoAg5Yq55p6c44KS5pyA5aSn5YyW44GZ44KLM+OBpOOBruOCs+ODhDwvaDI+XG4gICAgICBcbiAgICAgIDxkaXYgY2xhc3M9XCJ0aXBcIj5cbiAgICAgICAgPGRpdiBzdHlsZT1cImRpc3BsYXk6IGZsZXg7IGFsaWduLWl0ZW1zOiBmbGV4LXN0YXJ0O1wiPlxuICAgICAgICAgIDxzcGFuIGNsYXNzPVwidGlwLW51bWJlclwiPjE8L3NwYW4+XG4gICAgICAgICAgPGRpdj5cbiAgICAgICAgICAgIDxoMz7wn46oIOODluODqeODs+ODieOBq+WQiOOCj+OBm+OBpuOCq+OCueOCv+ODnuOCpOOCujwvaDM+XG4gICAgICAgICAgICA8cD7jgqbjgqPjgrjjgqfjg4Pjg4jjga7oibLjg7vkvY3nva7jg7vmjKjmi7bjg6Hjg4Pjgrvjg7zjgrjjgpLlvqHnpL7jga7jg5bjg6njg7Pjg4njgavlkIjjgo/jgZvjgovjgZPjgajjgafjgIHjgojjgoroh6rnhLbjgarpoaflrqLkvZPpqJPjgpLmj5DkvpvjgafjgY3jgb7jgZnjgII8L3A+XG4gICAgICAgICAgICA8dWw+XG4gICAgICAgICAgICAgIDxsaT48c3Ryb25nPuiJsuOBruWkieabtDo8L3N0cm9uZz4g44OW44Op44Oz44OJ44Kr44Op44O844Gr57Wx5LiAPC9saT5cbiAgICAgICAgICAgICAgPGxpPjxzdHJvbmc+5L2N572u44Gu6Kq/5pW0Ojwvc3Ryb25nPiDlj7PkuIvjg7vlt6bkuIvjg7vkuK3lpK7jgYvjgonpgbjmip48L2xpPlxuICAgICAgICAgICAgICA8bGk+PHN0cm9uZz7mjKjmi7bmloc6PC9zdHJvbmc+IOOAjOOBk+OCk+OBq+OBoeOBr++8geS9leOBi+OBiuaJi+S8neOBhOOBp+OBjeOCi+OBk+OBqOOBr+OBguOCiuOBvuOBmeOBi++8n+OAjTwvbGk+XG4gICAgICAgICAgICA8L3VsPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cbiAgICAgIDwvZGl2PlxuICAgICAgXG4gICAgICA8ZGl2IGNsYXNzPVwidGlwXCI+XG4gICAgICAgIDxkaXYgc3R5bGU9XCJkaXNwbGF5OiBmbGV4OyBhbGlnbi1pdGVtczogZmxleC1zdGFydDtcIj5cbiAgICAgICAgICA8c3BhbiBjbGFzcz1cInRpcC1udW1iZXJcIj4yPC9zcGFuPlxuICAgICAgICAgIDxkaXY+XG4gICAgICAgICAgICA8aDM+8J+SoSDjgojjgY/jgYLjgovos6rllY/jgpLkuovliY3oqK3lrpo8L2gzPlxuICAgICAgICAgICAgPHA+5b6h56S+54m55pyJ44GuRkFR44KS6Kit5a6a44GZ44KL44GT44Go44Gn44CBQUkg44Gu5Zue562U57K+5bqm44GM5qC85q6144Gr5ZCR5LiK44GX44G+44GZ44CCPC9wPlxuICAgICAgICAgICAgPHVsPlxuICAgICAgICAgICAgICA8bGk+PHN0cm9uZz7llYblk4Hjg7vjgrXjg7zjg5Pjgrnmg4XloLE8L3N0cm9uZz48L2xpPlxuICAgICAgICAgICAgICA8bGk+PHN0cm9uZz7mlpnph5Hjg7vjg5fjg6njg7PoqbPntLA8L3N0cm9uZz48L2xpPlxuICAgICAgICAgICAgICA8bGk+PHN0cm9uZz7jgrXjg53jg7zjg4jllrbmpa3mmYLplpM8L3N0cm9uZz48L2xpPlxuICAgICAgICAgICAgICA8bGk+PHN0cm9uZz7jgYrllY/jgYTlkIjjgo/jgZvlhYg8L3N0cm9uZz48L2xpPlxuICAgICAgICAgICAgPC91bD5cbiAgICAgICAgICAgIDxwPuioreWumuOBr+euoeeQhueUu+mdouOBruOAjOODiuODrOODg+OCuOODmeODvOOCueOAjeOBi+OCieewoeWNmOOBq+ihjOOBiOOBvuOBmeOAgjwvcD5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgPC9kaXY+XG4gICAgICA8L2Rpdj5cbiAgICAgIFxuICAgICAgPGRpdiBjbGFzcz1cInRpcFwiPlxuICAgICAgICA8ZGl2IHN0eWxlPVwiZGlzcGxheTogZmxleDsgYWxpZ24taXRlbXM6IGZsZXgtc3RhcnQ7XCI+XG4gICAgICAgICAgPHNwYW4gY2xhc3M9XCJ0aXAtbnVtYmVyXCI+Mzwvc3Bhbj5cbiAgICAgICAgICA8ZGl2PlxuICAgICAgICAgICAgPGgzPvCfk4og5a6a5pyf55qE44Gq5YiG5p6Q44O75pS55ZaEPC9oMz5cbiAgICAgICAgICAgIDxwPumAsTHlm57jga7nsKHljZjjgarmjK/jgorov5TjgorjgafjgIHntpnntprnmoTjgavlirnmnpzjgpLlkJHkuIrjgZXjgZvjgb7jgZfjgofjgYbjgII8L3A+XG4gICAgICAgICAgICA8dWw+XG4gICAgICAgICAgICAgIDxsaT48c3Ryb25nPuOCiOOBj+OBguOCi+izquWVjzo8L3N0cm9uZz4g5Zue562U44Gn44GN44Gq44GL44Gj44Gf6LOq5ZWP44KS44OB44Kn44OD44KvPC9saT5cbiAgICAgICAgICAgICAgPGxpPjxzdHJvbmc+6aGn5a6i5rqA6Laz5bqmOjwvc3Ryb25nPiDoqZXkvqHjga7kvY7jgYTkvJroqbHjgpLliIbmnpA8L2xpPlxuICAgICAgICAgICAgICA8bGk+PHN0cm9uZz7jgrPjg7Pjg5Djg7zjgrjjg6fjg7M6PC9zdHJvbmc+IOizvOWFpeODu+eUs+i+vOOBv+OBq+OBpOOBquOBjOOBo+OBn+e1jOi3r+OCkueiuuiqjTwvbGk+XG4gICAgICAgICAgICA8L3VsPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cbiAgICAgIDwvZGl2PlxuICAgICAgXG4gICAgICA8aDI+8J+PhiDmiJDlip/kuovkvos6IEVD5LyB5qWtQeekvuOBruWgtOWQiDwvaDI+XG4gICAgICA8ZGl2IHN0eWxlPVwiYmFja2dyb3VuZDogI2YwZjlmZjsgYm9yZGVyOiAxcHggc29saWQgIzBlYTVlOTsgYm9yZGVyLXJhZGl1czogOHB4OyBwYWRkaW5nOiAyMHB4OyBtYXJnaW46IDIwcHggMDtcIj5cbiAgICAgICAgPGgzPuWwjuWFpTPml6Xlvozjga7lirnmnpw8L2gzPlxuICAgICAgICA8ZGl2IHN0eWxlPVwiZGlzcGxheTogZmxleDsganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuOyB0ZXh0LWFsaWduOiBjZW50ZXI7IG1hcmdpbjogMjBweCAwO1wiPlxuICAgICAgICAgIDxkaXYgc3R5bGU9XCJmbGV4OiAxO1wiPlxuICAgICAgICAgICAgPGRpdiBzdHlsZT1cImZvbnQtc2l6ZTogMjRweDsgY29sb3I6ICMwZWE1ZTk7IGZvbnQtd2VpZ2h0OiBib2xkO1wiPis0NyU8L2Rpdj5cbiAgICAgICAgICAgIDxkaXY+5ZWP44GE5ZCI44KP44Gb5aKX5YqgPC9kaXY+XG4gICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgPGRpdiBzdHlsZT1cImZsZXg6IDE7XCI+XG4gICAgICAgICAgICA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOiAyNHB4OyBjb2xvcjogIzBlYTVlOTsgZm9udC13ZWlnaHQ6IGJvbGQ7XCI+LTY1JTwvZGl2PlxuICAgICAgICAgICAgPGRpdj7lr77lv5zmmYLplpPnn63nuK48L2Rpdj5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICA8ZGl2IHN0eWxlPVwiZmxleDogMTtcIj5cbiAgICAgICAgICAgIDxkaXYgc3R5bGU9XCJmb250LXNpemU6IDI0cHg7IGNvbG9yOiAjMGVhNWU5OyBmb250LXdlaWdodDogYm9sZDtcIj4rMjMlPC9kaXY+XG4gICAgICAgICAgICA8ZGl2PuWjsuS4iuWQkeS4ijwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cbiAgICAgICAgPHA+PGVtPuOAjOa3seWknOOBruWVj+OBhOWQiOOCj+OBm+OBq+OCguWNs+W6p+OBq+WvvuW/nOOBp+OBjeOCi+OCiOOBhuOBq+OBquOCiuOAgeapn+S8muaQjeWkseOBjOWkp+W5heOBq+a4m+WwkeOBl+OBvuOBl+OBn+OAjTwvZW0+PC9wPlxuICAgICAgPC9kaXY+XG4gICAgICBcbiAgICAgIDxoMj7wn6SdIOWwguS7u+OCteODneODvOODiOOCkuOBlOa0u+eUqOOBj+OBoOOBleOBhDwvaDI+XG4gICAgICA8cD7oqK3lrprjgafjgYrlm7Djgorjga7jgZPjgajjgYzjgZTjgZbjgYTjgb7jgZfjgZ/jgonjgIHpgaDmha7jgarjgY/jgYrlo7DjgYzjgZHjgY/jgaDjgZXjgYTjgILlvqHnpL7lsILku7vjga7jgqvjgrnjgr/jg57jg7zjgrXjgq/jgrvjgrnmi4XlvZPjgYzjgrXjg53jg7zjg4jjgYTjgZ/jgZfjgb7jgZnjgII8L3A+XG4gICAgICBcbiAgICAgIDxkaXYgc3R5bGU9XCJ0ZXh0LWFsaWduOiBjZW50ZXI7IG1hcmdpbjogMzBweCAwO1wiPlxuICAgICAgICA8YSBocmVmPVwiJHtkYXRhLnN1cHBvcnRVcmx9XCIgY2xhc3M9XCJidXR0b25cIj7wn5KsIOOCteODneODvOODiOOBq+ebuOirh+OBmeOCizwvYT5cbiAgICAgIDwvZGl2PlxuICAgIDwvZGl2PlxuICAgIFxuICAgIDxkaXYgY2xhc3M9XCJmb290ZXJcIj5cbiAgICAgIDxwPuaYjuaXpeOBr+S7luekvuOBruaIkOWKn+S6i+S+i+OBqOWFt+S9k+eahOOBqiBST0kg6KiI566X5pa55rOV44KS44GK6YCB44KK44GX44G+44GZ44CCPC9wPlxuICAgICAgPHA+PGEgaHJlZj1cIiR7ZGF0YS5kYXNoYm9hcmRVcmx9XCI+44OA44OD44K344Ol44Oc44O844OJ44Gr44Ki44Kv44K744K5PC9hPiB8IDxhIGhyZWY9XCIke2RhdGEuc3VwcG9ydFVybH1cIj7jg5jjg6vjg5fjgrvjg7Pjgr/jg7w8L2E+PC9wPlxuICAgIDwvZGl2PlxuICA8L2Rpdj5cbjwvYm9keT5cbjwvaHRtbD5cbiAgICBgLFxuICAgIHRleHQ6IGBcbiR7ZGF0YS5maXJzdE5hbWV944GV44KT44CBQUkgQ2hhdCDmtLvnlKjjgqzjgqTjg4lcblxu44K744OD44OI44Ki44OD44OX44Gv44GE44GL44GM44Gn44GX44Gf44GL77yfXG7ku4rml6Xjga/lirnmnpzjgpLmnIDlpKfljJbjgZnjgosz44Gk44Gu44Kz44OE44KS44GK5Lyd44GI44GX44G+44GZ77yBXG5cbvCfk4ogJHtkYXRhLmNvbXBhbnl9IOOBruePvuWcqOOBrueKtuazgVxu44OA44OD44K344Ol44Oc44O844OJ44Gn6Kmz57Sw44Gq5YiG5p6Q44KS44GU56K66KqN44GE44Gf44Gg44GR44G+44GZXG7liIbmnpDnorroqo06ICR7ZGF0YS5kYXNoYm9hcmRVcmx9XG5cbvCfmoAg5Yq55p6c44KS5pyA5aSn5YyW44GZ44KLM+OBpOOBruOCs+ODhFxuXG4xLiDwn46oIOODluODqeODs+ODieOBq+WQiOOCj+OBm+OBpuOCq+OCueOCv+ODnuOCpOOCulxu4oCiIOiJsuOBruWkieabtDog44OW44Op44Oz44OJ44Kr44Op44O844Gr57Wx5LiAXG7igKIg5L2N572u44Gu6Kq/5pW0OiDlj7PkuIvjg7vlt6bkuIvjg7vkuK3lpK7jgYvjgonpgbjmip5cbuKAoiDmjKjmi7bmloc6IOiHqueEtuOBqumhp+WuouS9k+mok+OCkuaPkOS+m1xuXG4yLiDwn5KhIOOCiOOBj+OBguOCi+izquWVj+OCkuS6i+WJjeioreWumlxu4oCiIOWVhuWTgeODu+OCteODvOODk+OCueaDheWgsVxu4oCiIOaWmemHkeODu+ODl+ODqeODs+ips+e0sFxu4oCiIOOCteODneODvOODiOWWtualreaZgumWk1xu4oCiIOOBiuWVj+OBhOWQiOOCj+OBm+WFiFxuXG4zLiDwn5OKIOWumuacn+eahOOBquWIhuaekOODu+aUueWWhFxu4oCiIOOCiOOBj+OBguOCi+izquWVjzog5Zue562U44Gn44GN44Gq44GL44Gj44Gf6LOq5ZWP44KS44OB44Kn44OD44KvXG7igKIg6aGn5a6i5rqA6Laz5bqmOiDoqZXkvqHjga7kvY7jgYTkvJroqbHjgpLliIbmnpBcbuKAoiDjgrPjg7Pjg5Djg7zjgrjjg6fjg7M6IOizvOWFpeODu+eUs+i+vOOBv+OBq+OBpOOBquOBjOOBo+OBn+e1jOi3r+OCkueiuuiqjVxuXG7wn4+GIOaIkOWKn+S6i+S+izogRUPkvIHmpa1B56S+XG7lsI7lhaUz5pel5b6M44Gu5Yq55p6cOlxu4oCiICs0NyUg5ZWP44GE5ZCI44KP44Gb5aKX5YqgXG7igKIgLTY1JSDlr77lv5zmmYLplpPnn63nuK5cbuKAoiArMjMlIOWjsuS4iuWQkeS4ilxuXG7wn6SdIOWwguS7u+OCteODneODvOODiDogJHtkYXRhLnN1cHBvcnRVcmx9XG5cbkFJIENoYXQg44OB44O844OgXG4gICAgYCxcbiAgfTtcbn1cblxuLy8gRGF5IDc6IOaIkOWKn+S6i+S+i+ODu1JPSeioiOeul+ODoeODvOODq1xuZXhwb3J0IGZ1bmN0aW9uIGdldFN1Y2Nlc3NTdG9yaWVzRW1haWxUZW1wbGF0ZShcbiAgZGF0YTogT25ib2FyZGluZ0RhdGFcbik6IEVtYWlsVGVtcGxhdGUge1xuICByZXR1cm4ge1xuICAgIHN1YmplY3Q6IGDwn5OIICR7ZGF0YS5maXJzdE5hbWV944GV44KT44CBQUkgQ2hhdOOBpyR7ZGF0YS5jb21wYW55feOBrlJPSeOCkuioiOeul+OBl+OBpuOBv+OBvuOBm+OCk+OBi++8n2AsXG4gICAgaHRtbDogYFxuPCFET0NUWVBFIGh0bWw+XG48aHRtbD5cbjxoZWFkPlxuICA8bWV0YSBjaGFyc2V0PVwidXRmLThcIj5cbiAgPG1ldGEgbmFtZT1cInZpZXdwb3J0XCIgY29udGVudD1cIndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xXCI+XG4gIDx0aXRsZT5BSSBDaGF0IOaIkOWKn+S6i+S+iyAmIFJPSSDoqIjnrpc8L3RpdGxlPlxuICA8c3R5bGU+XG4gICAgYm9keSB7IGZvbnQtZmFtaWx5OiAtYXBwbGUtc3lzdGVtLCBCbGlua01hY1N5c3RlbUZvbnQsICdTZWdvZSBVSScsIFJvYm90bywgc2Fucy1zZXJpZjsgbGluZS1oZWlnaHQ6IDEuNjsgY29sb3I6ICMzMzM7IG1hcmdpbjogMDsgcGFkZGluZzogMDsgYmFja2dyb3VuZC1jb2xvcjogI2Y1ZjVmNTsgfVxuICAgIC5jb250YWluZXIgeyBtYXgtd2lkdGg6IDYwMHB4OyBtYXJnaW46IDAgYXV0bzsgYmFja2dyb3VuZDogd2hpdGU7IH1cbiAgICAuaGVhZGVyIHsgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KDEzNWRlZywgIzdjM2FlZCAwJSwgIzViMjFiNiAxMDAlKTsgY29sb3I6IHdoaXRlOyBwYWRkaW5nOiA0MHB4IDMwcHg7IHRleHQtYWxpZ246IGNlbnRlcjsgfVxuICAgIC5jb250ZW50IHsgcGFkZGluZzogNDBweCAzMHB4OyB9XG4gICAgLmJ1dHRvbiB7IGRpc3BsYXk6IGlubGluZS1ibG9jazsgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KDEzNWRlZywgIzdjM2FlZCAwJSwgIzViMjFiNiAxMDAlKTsgY29sb3I6IHdoaXRlOyBwYWRkaW5nOiAxNnB4IDMycHg7IHRleHQtZGVjb3JhdGlvbjogbm9uZTsgYm9yZGVyLXJhZGl1czogOHB4OyBmb250LXdlaWdodDogNjAwOyBtYXJnaW46IDIwcHggMDsgfVxuICAgIC5jYXNlLXN0dWR5IHsgbWFyZ2luOiAzMHB4IDA7IHBhZGRpbmc6IDI1cHg7IGJhY2tncm91bmQ6ICNmYWY1ZmY7IGJvcmRlci1yYWRpdXM6IDEycHg7IGJvcmRlci1sZWZ0OiA0cHggc29saWQgIzdjM2FlZDsgfVxuICAgIC5yb2ktY2FsY3VsYXRvciB7IGJhY2tncm91bmQ6ICNmMGZkZjQ7IGJvcmRlcjogMXB4IHNvbGlkICMxMGI5ODE7IGJvcmRlci1yYWRpdXM6IDEycHg7IHBhZGRpbmc6IDI1cHg7IG1hcmdpbjogMzBweCAwOyB9XG4gICAgLm1ldHJpY3MgeyBkaXNwbGF5OiBmbGV4OyBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47IHRleHQtYWxpZ246IGNlbnRlcjsgbWFyZ2luOiAyMHB4IDA7IH1cbiAgICAubWV0cmljIHsgZmxleDogMTsgbWFyZ2luOiAwIDEwcHg7IH1cbiAgICAubWV0cmljLXZhbHVlIHsgZm9udC1zaXplOiAyOHB4OyBjb2xvcjogIzdjM2FlZDsgZm9udC13ZWlnaHQ6IGJvbGQ7IH1cbiAgICAuZm9vdGVyIHsgYmFja2dyb3VuZDogI2Y4ZmFmYzsgcGFkZGluZzogMzBweDsgdGV4dC1hbGlnbjogY2VudGVyOyBjb2xvcjogIzY2NjsgZm9udC1zaXplOiAxNHB4OyB9XG4gIDwvc3R5bGU+XG48L2hlYWQ+XG48Ym9keT5cbiAgPGRpdiBjbGFzcz1cImNvbnRhaW5lclwiPlxuICAgIDxkaXYgY2xhc3M9XCJoZWFkZXJcIj5cbiAgICAgIDxoMT7wn5OIIDHpgLHplpPlvozjga7mjK/jgorov5Tjgoo8L2gxPlxuICAgICAgPHA+JHtkYXRhLmZpcnN0TmFtZX3jgZXjgpPjgIFBSSBDaGF0IOOCkuOBiuS9v+OBhOOBhOOBn+OBoOOBjTHpgLHplpPjgYzntYzjgaHjgb7jgZfjgZ/vvIE8L3A+XG4gICAgICA8cD7ku4rml6Xjga/miJDlip/kuovkvovjgaggUk9JIOioiOeul+OCkuOBlOe0ueS7i+OBl+OBvuOBmTwvcD5cbiAgICA8L2Rpdj5cbiAgICBcbiAgICA8ZGl2IGNsYXNzPVwiY29udGVudFwiPlxuICAgICAgPGgyPvCfj4Yg5LuW56S+44Gu6ama44GN44Gu5oiQ5Yqf5LqL5L6LPC9oMj5cbiAgICAgIFxuICAgICAgPGRpdiBjbGFzcz1cImNhc2Utc3R1ZHlcIj5cbiAgICAgICAgPGgzPvCfkrsgU2FhU+S8gealrSBC56S+77yI5b6T5qWt5ZOhNTDlkI3vvIk8L2gzPlxuICAgICAgICA8cD48c3Ryb25nPuWwjuWFpeiDjOaZrzo8L3N0cm9uZz4g44Kr44K544K/44Oe44O844K144Od44O844OI5ouF5b2T6ICFMuWQjeOBp+OBr+WVj+OBhOWQiOOCj+OBm+WvvuW/nOOBjOi/veOBhOOBpOOBi+OBmuOAgemhp+Wuoua6gOi2s+W6puOBjOS9juS4izwvcD5cbiAgICAgICAgXG4gICAgICAgIDxkaXYgY2xhc3M9XCJtZXRyaWNzXCI+XG4gICAgICAgICAgPGRpdiBjbGFzcz1cIm1ldHJpY1wiPlxuICAgICAgICAgICAgPGRpdiBjbGFzcz1cIm1ldHJpYy12YWx1ZVwiPisyNTAlPC9kaXY+XG4gICAgICAgICAgICA8ZGl2PkNW546H5ZCR5LiKPC9kaXY+XG4gICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgPGRpdiBjbGFzcz1cIm1ldHJpY1wiPlxuICAgICAgICAgICAgPGRpdiBjbGFzcz1cIm1ldHJpYy12YWx1ZVwiPi03MCU8L2Rpdj5cbiAgICAgICAgICAgIDxkaXY+Q1Plt6XmlbDliYrmuJs8L2Rpdj5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICA8ZGl2IGNsYXNzPVwibWV0cmljXCI+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzPVwibWV0cmljLXZhbHVlXCI+KzE4MCU8L2Rpdj5cbiAgICAgICAgICAgIDxkaXY+5pyI6ZaT5ZWP44GE5ZCI44KP44Gb5aKXPC9kaXY+XG4gICAgICAgICAgPC9kaXY+XG4gICAgICAgIDwvZGl2PlxuICAgICAgICBcbiAgICAgICAgPHA+PHN0cm9uZz7lsI7lhaXlirnmnpw6PC9zdHJvbmc+IOaKgOihk+eahOOBquizquWVj+OBq+OCguato+eiuuOBq+etlOOBiOOBpuOBj+OCjOOCi+OBruOBp+OAgemhp+Wuoua6gOi2s+W6puOBjOagvOauteOBq+WQkeS4iuOAguOCteODneODvOODiOaLheW9k+iAheOBr+mrmOW6puOBquWVj+mhjOino+axuuOBq+mbhuS4reOBp+OBjeOCi+OCiOOBhuOBq+OBquOCiuOBvuOBl+OBn+OAgjwvcD5cbiAgICAgICAgXG4gICAgICAgIDxwPjxzdHJvbmc+5YW35L2T55qE5pS55ZaEOjwvc3Ryb25nPjwvcD5cbiAgICAgICAgPHVsPlxuICAgICAgICAgIDxsaT5GQVHlr77lv5w6IDI05pmC6ZaT6Ieq5YuV5YyWIOKGkiDkurrku7bosrsg5pyI6aGNMzDkuIflhobliYrmuJs8L2xpPlxuICAgICAgICAgIDxsaT7liJ3lm57llY/jgYTlkIjjgo/jgZvop6Pmsbrnjoc6IDQ1JSDihpIgODclPC9saT5cbiAgICAgICAgICA8bGk+5bmz5Z2H5b+c562U5pmC6ZaTOiA05pmC6ZaTIOKGkiAwLjPnp5I8L2xpPlxuICAgICAgICA8L3VsPlxuICAgICAgPC9kaXY+XG4gICAgICBcbiAgICAgIDxkaXYgY2xhc3M9XCJjYXNlLXN0dWR5XCI+XG4gICAgICAgIDxoMz7wn4+lIOWMu+eZguazleS6uiBD56S+77yI44Kv44Oq44OL44OD44KvNemZou+8iTwvaDM+XG4gICAgICAgIDxwPjxzdHJvbmc+5bCO5YWl6IOM5pmvOjwvc3Ryb25nPiDoqLrnmYLmmYLplpPlpJbjga7llY/jgYTlkIjjgo/jgZvlr77lv5zjgYzjgafjgY3jgZrjgIHkuojntITmqZ/kvJrjgpLpgIPjgZfjgabjgYTjgZ88L3A+XG4gICAgICAgIFxuICAgICAgICA8ZGl2IGNsYXNzPVwibWV0cmljc1wiPlxuICAgICAgICAgIDxkaXYgY2xhc3M9XCJtZXRyaWNcIj5cbiAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJtZXRyaWMtdmFsdWVcIj4rOTUlPC9kaXY+XG4gICAgICAgICAgICA8ZGl2PuaCo+iAhea6gOi2s+W6puWQkeS4ijwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDxkaXYgY2xhc3M9XCJtZXRyaWNcIj5cbiAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJtZXRyaWMtdmFsdWVcIj4tODAlPC9kaXY+XG4gICAgICAgICAgICA8ZGl2PuWVj+OBhOWQiOOCj+OBm+WHpueQhuaZgumWkzwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDxkaXYgY2xhc3M9XCJtZXRyaWNcIj5cbiAgICAgICAgICAgIDxkaXYgY2xhc3M9XCJtZXRyaWMtdmFsdWVcIj4rNDIlPC9kaXY+XG4gICAgICAgICAgICA8ZGl2PuOCquODs+ODqeOCpOODs+S6iOe0hOWilzwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cbiAgICAgICAgXG4gICAgICAgIDxwPjxzdHJvbmc+5bCO5YWl5Yq55p6cOjwvc3Ryb25nPiAyNOaZgumWk+WvvuW/nOOBjOWPr+iDveOBq+OBquOCiuOAgeaCo+iAheanmOOBq+WuieW/g+aEn+OCkuaPkOS+m+OAguiouueZguaZgumWk+WkluOBruS6iOe0hOOCguWkp+W5heOBq+Wil+WKoOOBl+OBvuOBl+OBn+OAgjwvcD5cbiAgICAgIDwvZGl2PlxuICAgICAgXG4gICAgICA8aDI+8J+SsCAke2RhdGEuY29tcGFueX0g44GuIFJPSSDjgpLoqIjnrpfjgZfjgabjgb/jgb7jgZfjgofjgYY8L2gyPlxuICAgICAgXG4gICAgICA8ZGl2IGNsYXNzPVwicm9pLWNhbGN1bGF0b3JcIj5cbiAgICAgICAgPGgzPvCfk4ogUk9JIOioiOeul+ODhOODvOODqzwvaDM+XG4gICAgICAgIDxwPuW+oeekvuOBruePvuWcqOOBrueKtuazgeOCkuWFpeWKm+OBl+OBpuOAgUFJIENoYXQg44Gr44KI44KL6LK755So5a++5Yq55p6c44KS56K66KqN44GX44Gm44G/44G+44Gb44KT44GL77yfPC9wPlxuICAgICAgICBcbiAgICAgICAgPGRpdiBzdHlsZT1cImJhY2tncm91bmQ6IHdoaXRlOyBwYWRkaW5nOiAyMHB4OyBib3JkZXItcmFkaXVzOiA4cHg7IG1hcmdpbjogMjBweCAwO1wiPlxuICAgICAgICAgIDxoND7wn5KhIOioiOeul+S+i++8iOW+k+alreWToeaVsDUw5ZCN44Gu5LyB5qWt77yJPC9oND5cbiAgICAgICAgICBcbiAgICAgICAgICA8dGFibGUgc3R5bGU9XCJ3aWR0aDogMTAwJTsgYm9yZGVyLWNvbGxhcHNlOiBjb2xsYXBzZTtcIj5cbiAgICAgICAgICAgIDx0ciBzdHlsZT1cImJhY2tncm91bmQ6ICNmOGZhZmM7XCI+XG4gICAgICAgICAgICAgIDx0ZCBzdHlsZT1cInBhZGRpbmc6IDEwcHg7IGJvcmRlcjogMXB4IHNvbGlkICNlMmU4ZjA7XCI+PHN0cm9uZz7poIXnm648L3N0cm9uZz48L3RkPlxuICAgICAgICAgICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOiAxMHB4OyBib3JkZXI6IDFweCBzb2xpZCAjZTJlOGYwO1wiPjxzdHJvbmc+5bCO5YWl5YmNPC9zdHJvbmc+PC90ZD5cbiAgICAgICAgICAgICAgPHRkIHN0eWxlPVwicGFkZGluZzogMTBweDsgYm9yZGVyOiAxcHggc29saWQgI2UyZThmMDtcIj48c3Ryb25nPuWwjuWFpeW+jDwvc3Ryb25nPjwvdGQ+XG4gICAgICAgICAgICAgIDx0ZCBzdHlsZT1cInBhZGRpbmc6IDEwcHg7IGJvcmRlcjogMXB4IHNvbGlkICNlMmU4ZjA7XCI+PHN0cm9uZz7lirnmnpw8L3N0cm9uZz48L3RkPlxuICAgICAgICAgICAgPC90cj5cbiAgICAgICAgICAgIDx0cj5cbiAgICAgICAgICAgICAgPHRkIHN0eWxlPVwicGFkZGluZzogMTBweDsgYm9yZGVyOiAxcHggc29saWQgI2UyZThmMDtcIj7mnIjplpPkurrku7bosrs8L3RkPlxuICAgICAgICAgICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOiAxMHB4OyBib3JkZXI6IDFweCBzb2xpZCAjZTJlOGYwO1wiPjYw5LiH5YaGPC90ZD5cbiAgICAgICAgICAgICAgPHRkIHN0eWxlPVwicGFkZGluZzogMTBweDsgYm9yZGVyOiAxcHggc29saWQgI2UyZThmMDtcIj4yNeS4h+WGhjwvdGQ+XG4gICAgICAgICAgICAgIDx0ZCBzdHlsZT1cInBhZGRpbmc6IDEwcHg7IGJvcmRlcjogMXB4IHNvbGlkICNlMmU4ZjA7IGNvbG9yOiAjMTBiOTgxO1wiPjxzdHJvbmc+LTM15LiH5YaGPC9zdHJvbmc+PC90ZD5cbiAgICAgICAgICAgIDwvdHI+XG4gICAgICAgICAgICA8dHI+XG4gICAgICAgICAgICAgIDx0ZCBzdHlsZT1cInBhZGRpbmc6IDEwcHg7IGJvcmRlcjogMXB4IHNvbGlkICNlMmU4ZjA7XCI+44OE44O844Or6LK755SoPC90ZD5cbiAgICAgICAgICAgICAgPHRkIHN0eWxlPVwicGFkZGluZzogMTBweDsgYm9yZGVyOiAxcHggc29saWQgI2UyZThmMDtcIj445LiH5YaGPC90ZD5cbiAgICAgICAgICAgICAgPHRkIHN0eWxlPVwicGFkZGluZzogMTBweDsgYm9yZGVyOiAxcHggc29saWQgI2UyZThmMDtcIj4y5LiH5YaGPC90ZD5cbiAgICAgICAgICAgICAgPHRkIHN0eWxlPVwicGFkZGluZzogMTBweDsgYm9yZGVyOiAxcHggc29saWQgI2UyZThmMDsgY29sb3I6ICMxMGI5ODE7XCI+PHN0cm9uZz4tNuS4h+WGhjwvc3Ryb25nPjwvdGQ+XG4gICAgICAgICAgICA8L3RyPlxuICAgICAgICAgICAgPHRyPlxuICAgICAgICAgICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOiAxMHB4OyBib3JkZXI6IDFweCBzb2xpZCAjZTJlOGYwO1wiPuapn+S8muaQjeWksTwvdGQ+XG4gICAgICAgICAgICAgIDx0ZCBzdHlsZT1cInBhZGRpbmc6IDEwcHg7IGJvcmRlcjogMXB4IHNvbGlkICNlMmU4ZjA7XCI+MTXkuIflhoY8L3RkPlxuICAgICAgICAgICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOiAxMHB4OyBib3JkZXI6IDFweCBzb2xpZCAjZTJlOGYwO1wiPjPkuIflhoY8L3RkPlxuICAgICAgICAgICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOiAxMHB4OyBib3JkZXI6IDFweCBzb2xpZCAjZTJlOGYwOyBjb2xvcjogIzEwYjk4MTtcIj48c3Ryb25nPi0xMuS4h+WGhjwvc3Ryb25nPjwvdGQ+XG4gICAgICAgICAgICA8L3RyPlxuICAgICAgICAgICAgPHRyIHN0eWxlPVwiYmFja2dyb3VuZDogI2YwZmRmNDsgZm9udC13ZWlnaHQ6IGJvbGQ7XCI+XG4gICAgICAgICAgICAgIDx0ZCBzdHlsZT1cInBhZGRpbmc6IDEwcHg7IGJvcmRlcjogMXB4IHNvbGlkICNlMmU4ZjA7XCI+5pyI6ZaT56+A57SE6aGNPC90ZD5cbiAgICAgICAgICAgICAgPHRkIHN0eWxlPVwicGFkZGluZzogMTBweDsgYm9yZGVyOiAxcHggc29saWQgI2UyZThmMDtcIj4tPC90ZD5cbiAgICAgICAgICAgICAgPHRkIHN0eWxlPVwicGFkZGluZzogMTBweDsgYm9yZGVyOiAxcHggc29saWQgI2UyZThmMDtcIj4tPC90ZD5cbiAgICAgICAgICAgICAgPHRkIHN0eWxlPVwicGFkZGluZzogMTBweDsgYm9yZGVyOiAxcHggc29saWQgI2UyZThmMDsgY29sb3I6ICMxMGI5ODE7XCI+PHN0cm9uZz41M+S4h+WGhjwvc3Ryb25nPjwvdGQ+XG4gICAgICAgICAgICA8L3RyPlxuICAgICAgICAgIDwvdGFibGU+XG4gICAgICAgICAgXG4gICAgICAgICAgPHAgc3R5bGU9XCJ0ZXh0LWFsaWduOiBjZW50ZXI7IG1hcmdpbjogMjBweCAwOyBmb250LXNpemU6IDE4cHg7IGNvbG9yOiAjMTBiOTgxOyBmb250LXdlaWdodDogYm9sZDtcIj5cbiAgICAgICAgICAgIOW5tOmWk+evgOe0hOmhjTogNjM25LiH5YaGIHwgUk9JOiAzLDE4MCVcbiAgICAgICAgICA8L3A+XG4gICAgICAgIDwvZGl2PlxuICAgICAgICBcbiAgICAgICAgPGRpdiBzdHlsZT1cInRleHQtYWxpZ246IGNlbnRlcjtcIj5cbiAgICAgICAgICA8YSBocmVmPVwiJHtkYXRhLmRhc2hib2FyZFVybH0vcm9pLWNhbGN1bGF0b3JcIiBjbGFzcz1cImJ1dHRvblwiPvCfp64g6Kmz57SwUk9J6KiI566X44KS44GZ44KLPC9hPlxuICAgICAgICA8L2Rpdj5cbiAgICAgIDwvZGl2PlxuICAgICAgXG4gICAgICA8aDI+8J+agCDmrKHjga7jgrnjg4bjg4Pjg5c8L2gyPlxuICAgICAgPGRpdiBzdHlsZT1cImJhY2tncm91bmQ6ICNmZWYzYzc7IGJvcmRlcjogMXB4IHNvbGlkICNmNTllMGI7IGJvcmRlci1yYWRpdXM6IDhweDsgcGFkZGluZzogMjBweDsgbWFyZ2luOiAyMHB4IDA7XCI+XG4gICAgICAgIDxoMz7wn5OIIOabtOOBquOCi+WKueaenOWQkeS4iuOBruOBn+OCgeOBqzwvaDM+XG4gICAgICAgIDx1bD5cbiAgICAgICAgICA8bGk+PHN0cm9uZz5BL0Ljg4bjgrnjg4g6PC9zdHJvbmc+IOOCpuOCo+OCuOOCp+ODg+ODiOOBruS9jee9ruODu+iJsuOCkuacgOmBqeWMljwvbGk+XG4gICAgICAgICAgPGxpPjxzdHJvbmc+6auY5bqm44Gq6Kit5a6aOjwvc3Ryb25nPiDmpa3nlYznibnljJblnotBSeODouODh+ODq+OBq+WIh+OCiuabv+OBiDwvbGk+XG4gICAgICAgICAgPGxpPjxzdHJvbmc+6YCj5pC65by35YyWOjwvc3Ryb25nPiBDUk3jg7vjg5jjg6vjg5fjg4fjgrnjgq/jgajjga7pgKPmkLroqK3lrpo8L2xpPlxuICAgICAgICAgIDxsaT48c3Ryb25nPuODgeODvOODoOaLoeW8tTo8L3N0cm9uZz4g6KSH5pWw6YOo572y44Gn44Gu5rS755SoPC9saT5cbiAgICAgICAgPC91bD5cbiAgICAgIDwvZGl2PlxuICAgICAgXG4gICAgICA8aDI+8J+SvCDjgqjjg7Pjgr/jg7zjg5fjg6njgqTjgrrjg5fjg6njg7Pjga7jgZTmoYjlhoU8L2gyPlxuICAgICAgPHA+44KI44KK5aSn6KaP5qih44Gq6YGL55So44KE6auY5bqm44Gq5qmf6IO944KS44GU5biM5pyb44Gu5aC05ZCI44Gv44CB44Ko44Oz44K/44O844OX44Op44Kk44K644OX44Op44Oz44KS44GU5qSc6KiO44GP44Gg44GV44GE77yaPC9wPlxuICAgICAgPHVsPlxuICAgICAgICA8bGk+8J+PoiDnhKHliLbpmZDjga7jgqbjgqPjgrjjgqfjg4Pjg4jmlbA8L2xpPlxuICAgICAgICA8bGk+8J+RpSDlsILku7vjgqvjgrnjgr/jg57jg7zjgrXjgq/jgrvjgrnmi4XlvZM8L2xpPlxuICAgICAgICA8bGk+8J+UkiBTU0/jg7tTQU1M5a++5b+cPC9saT5cbiAgICAgICAgPGxpPvCfk4og6auY5bqm44Gq5YiG5p6Q44O744Os44Od44O844OI5qmf6IO9PC9saT5cbiAgICAgICAgPGxpPuKaoSDlhKrlhYjjgrXjg53jg7zjg4jvvIgx5pmC6ZaT5Lul5YaF5a++5b+c77yJPC9saT5cbiAgICAgIDwvdWw+XG4gICAgICBcbiAgICAgIDxkaXYgc3R5bGU9XCJ0ZXh0LWFsaWduOiBjZW50ZXI7IG1hcmdpbjogMzBweCAwO1wiPlxuICAgICAgICA8YSBocmVmPVwiJHtkYXRhLnN1cHBvcnRVcmx9L2VudGVycHJpc2VcIiBjbGFzcz1cImJ1dHRvblwiPvCfj6Ig44Ko44Oz44K/44O844OX44Op44Kk44K655u46KuHPC9hPlxuICAgICAgPC9kaXY+XG4gICAgPC9kaXY+XG4gICAgXG4gICAgPGRpdiBjbGFzcz1cImZvb3RlclwiPlxuICAgICAgPHA+5LuK5b6M44KC5a6a5pyf55qE44Gr5rS755So44Ks44Kk44OJ44KE5oiQ5Yqf5LqL5L6L44KS44GK6YCB44KK44GX44G+44GZ44CCPC9wPlxuICAgICAgPHA+QUkgQ2hhdCDjgafjgIEke2RhdGEuY29tcGFueX0g44Gu44Kr44K544K/44Oe44O844K144Od44O844OI44KS5qyh44Gu44Os44OZ44Or44G477yBPC9wPlxuICAgICAgPHA+PGEgaHJlZj1cIiR7ZGF0YS5kYXNoYm9hcmRVcmx9XCI+44OA44OD44K344Ol44Oc44O844OJ44Gr44Ki44Kv44K744K5PC9hPiB8IDxhIGhyZWY9XCIke2RhdGEuc3VwcG9ydFVybH1cIj7jg5jjg6vjg5fjgrvjg7Pjgr/jg7w8L2E+PC9wPlxuICAgIDwvZGl2PlxuICA8L2Rpdj5cbjwvYm9keT5cbjwvaHRtbD5cbiAgICBgLFxuICAgIHRleHQ6IGBcbiR7ZGF0YS5maXJzdE5hbWV944GV44KT44CBMemAsemWk+W+jOOBruaMr+OCiui/lOOCilxuXG5BSSBDaGF0IOOCkuOBiuS9v+OBhOOBhOOBn+OBoOOBjTHpgLHplpPjgYzntYzjgaHjgb7jgZfjgZ/vvIFcbuS7iuaXpeOBr+aIkOWKn+S6i+S+i+OBqCBST0kg6KiI566X44KS44GU57S55LuL44GX44G+44GZXG5cbvCfj4Yg5LuW56S+44Gu6ama44GN44Gu5oiQ5Yqf5LqL5L6LXG5cbvCfkrsgU2FhU+S8gealrSBC56S+77yI5b6T5qWt5ZOhNTDlkI3vvIlcbuWwjuWFpeWKueaenDpcbuKAoiArMjUwJSBDVueOh+WQkeS4ilxu4oCiIC03MCUgQ1Plt6XmlbDliYrmuJsgIFxu4oCiICsxODAlIOaciOmWk+WVj+OBhOWQiOOCj+OBm+Wil1xuXG7lhbfkvZPnmoTmlLnlloQ6XG7igKIgRkFR5a++5b+cOiAyNOaZgumWk+iHquWLleWMliDihpIg5Lq65Lu26LK7IOaciOmhjTMw5LiH5YaG5YmK5ribXG7igKIg5Yid5Zue5ZWP44GE5ZCI44KP44Gb6Kej5rG6546HOiA0NSUg4oaSIDg3JVxu4oCiIOW5s+Wdh+W/nOetlOaZgumWkzogNOaZgumWkyDihpIgMC4z56eSXG5cbvCfj6Ug5Yy755mC5rOV5Lq6IEPnpL7vvIjjgq/jg6rjg4vjg4Pjgq816Zmi77yJXG7lsI7lhaXlirnmnpw6XG7igKIgKzk1JSDmgqPogIXmuoDotrPluqblkJHkuIpcbuKAoiAtODAlIOWVj+OBhOWQiOOCj+OBm+WHpueQhuaZgumWk1xu4oCiICs0MiUg44Kq44Oz44Op44Kk44Oz5LqI57SE5aKXXG5cbvCfkrAgJHtkYXRhLmNvbXBhbnl9IOOBriBST0kg6KiI566X5L6LXG5cbuioiOeul+S+i++8iOW+k+alreWToeaVsDUw5ZCN44Gu5LyB5qWt77yJOlxu4oCiIOaciOmWk+S6uuS7tuiyu+WJiua4mzogLTM15LiH5YaGXG7igKIg44OE44O844Or6LK755So5YmK5ribOiAtNuS4h+WGhlxu4oCiIOapn+S8muaQjeWkseWJiua4mzogLTEy5LiH5YaGXG7igKIg5pyI6ZaT56+A57SE6aGNOiA1M+S4h+WGhlxu4oCiIOW5tOmWk+evgOe0hOmhjTogNjM25LiH5YaGXG7igKIgUk9JOiAzLDE4MCVcblxu6Kmz57SwUk9J6KiI566XOiAke2RhdGEuZGFzaGJvYXJkVXJsfS9yb2ktY2FsY3VsYXRvclxuXG7wn5qAIOasoeOBruOCueODhuODg+ODl1xu4oCiIEEvQuODhuOCueODiDog44Km44Kj44K444Kn44OD44OI44Gu5L2N572u44O76Imy44KS5pyA6YGp5YyWXG7igKIg6auY5bqm44Gq6Kit5a6aOiDmpa3nlYznibnljJblnotBSeODouODh+ODq+OBq+WIh+OCiuabv+OBiFxu4oCiIOmAo+aQuuW8t+WMljogQ1JN44O744OY44Or44OX44OH44K544Kv44Go44Gu6YCj5pC66Kit5a6aXG7igKIg44OB44O844Og5ouh5by1OiDopIfmlbDpg6jnvbLjgafjga7mtLvnlKhcblxu8J+SvCDjgqjjg7Pjgr/jg7zjg5fjg6njgqTjgrrjg5fjg6njg7M6XG7igKIg54Sh5Yi26ZmQ44Gu44Km44Kj44K444Kn44OD44OI5pWwXG7igKIg5bCC5Lu744Kr44K544K/44Oe44O844K144Kv44K744K55ouF5b2TXG7igKIgU1NP44O7U0FNTOWvvuW/nFxu4oCiIOmrmOW6puOBquWIhuaekOODu+ODrOODneODvOODiOapn+iDvVxu4oCiIOWEquWFiOOCteODneODvOODiO+8iDHmmYLplpPku6XlhoXlr77lv5zvvIlcblxu44Ko44Oz44K/44O844OX44Op44Kk44K655u46KuHOiAke2RhdGEuc3VwcG9ydFVybH0vZW50ZXJwcmlzZVxuXG5BSSBDaGF0IOODgeODvOODoFxuICAgIGAsXG4gIH07XG59XG5cbi8vIFNlY3Rpb24tNTogUGFzc3dvcmQgUmVzZXQgVGVtcGxhdGVcbmV4cG9ydCBjb25zdCBwYXNzd29yZFJlc2V0VGVtcGxhdGUgPSAocmVzZXRVcmw6IHN0cmluZykgPT4gKHtcbiAgc3ViamVjdDogJ+ODkeOCueODr+ODvOODieODquOCu+ODg+ODiOOBruOBlOahiOWGhScsXG4gIGh0bWw6IGBcbiAgICA8ZGl2IHN0eWxlPVwiZm9udC1mYW1pbHk6IEFyaWFsLCBzYW5zLXNlcmlmOyBtYXgtd2lkdGg6IDYwMHB4OyBtYXJnaW46IDAgYXV0bztcIj5cbiAgICAgIDxoMj7jg5Hjgrnjg6/jg7zjg4njg6rjgrvjg4Pjg4g8L2gyPlxuICAgICAgPHA+44OR44K544Ov44O844OJ44Oq44K744OD44OI44Gu44Oq44Kv44Ko44K544OI44KS5Y+X44GR5LuY44GR44G+44GX44Gf44CCPC9wPlxuICAgICAgPHA+5Lul5LiL44Gu44Oc44K/44Oz44KS44Kv44Oq44OD44Kv44GX44Gm44CB5paw44GX44GE44OR44K544Ov44O844OJ44KS6Kit5a6a44GX44Gm44GP44Gg44GV44GE77yaPC9wPlxuICAgICAgPGRpdiBzdHlsZT1cIm1hcmdpbjogMzBweCAwO1wiPlxuICAgICAgICA8YSBocmVmPVwiJHtyZXNldFVybH1cIiBcbiAgICAgICAgICAgc3R5bGU9XCJiYWNrZ3JvdW5kLWNvbG9yOiAjNEY0NkU1OyBjb2xvcjogd2hpdGU7IHBhZGRpbmc6IDEycHggMjRweDsgXG4gICAgICAgICAgICAgICAgICB0ZXh0LWRlY29yYXRpb246IG5vbmU7IGJvcmRlci1yYWRpdXM6IDZweDsgZGlzcGxheTogaW5saW5lLWJsb2NrO1wiPlxuICAgICAgICAgIOODkeOCueODr+ODvOODieOCkuODquOCu+ODg+ODiFxuICAgICAgICA8L2E+XG4gICAgICA8L2Rpdj5cbiAgICAgIDxwPuOBk+OBruODquODs+OCr+OBrzI05pmC6ZaT5pyJ5Yq544Gn44GZ44CCPC9wPlxuICAgICAgPHA+5b+D5b2T44Gf44KK44GM44Gq44GE5aC05ZCI44Gv44CB44GT44Gu44Oh44O844Or44KS54Sh6KaW44GX44Gm44GP44Gg44GV44GE44CCPC9wPlxuICAgIDwvZGl2PlxuICBgLFxuICB0ZXh0OiBgXG4gICAg44OR44K544Ov44O844OJ44Oq44K744OD44OIXG4gICAgXG4gICAg44OR44K544Ov44O844OJ44Oq44K744OD44OI44Gu44Oq44Kv44Ko44K544OI44KS5Y+X44GR5LuY44GR44G+44GX44Gf44CCXG4gICAg5Lul5LiL44GuVVJM44GL44KJ5paw44GX44GE44OR44K544Ov44O844OJ44KS6Kit5a6a44GX44Gm44GP44Gg44GV44GE77yaXG4gICAgXG4gICAgJHtyZXNldFVybH1cbiAgICBcbiAgICDjgZPjga7jg6rjg7Pjgq/jga8yNOaZgumWk+acieWKueOBp+OBmeOAglxuICAgIOW/g+W9k+OBn+OCiuOBjOOBquOBhOWgtOWQiOOBr+OAgeOBk+OBruODoeODvOODq+OCkueEoeimluOBl+OBpuOBj+OBoOOBleOBhOOAglxuICBgLFxufSk7XG5cbi8vIFNlY3Rpb24tNTogRW1haWwgVmVyaWZpY2F0aW9uIFRlbXBsYXRlXG5leHBvcnQgY29uc3QgZW1haWxWZXJpZmljYXRpb25UZW1wbGF0ZSA9ICh2ZXJpZnlVcmw6IHN0cmluZykgPT4gKHtcbiAgc3ViamVjdDogJ+ODoeODvOODq+OCouODieODrOOCueOBrueiuuiqjScsXG4gIGh0bWw6IGBcbiAgICA8ZGl2IHN0eWxlPVwiZm9udC1mYW1pbHk6IEFyaWFsLCBzYW5zLXNlcmlmOyBtYXgtd2lkdGg6IDYwMHB4OyBtYXJnaW46IDAgYXV0bztcIj5cbiAgICAgIDxoMj7jg6Hjg7zjg6vjgqLjg4njg6zjgrnjga7norroqo08L2gyPlxuICAgICAgPHA+44GU55m76Yyy44GC44KK44GM44Go44GG44GU44GW44GE44G+44GZ44CCPC9wPlxuICAgICAgPHA+5Lul5LiL44Gu44Oc44K/44Oz44KS44Kv44Oq44OD44Kv44GX44Gm44CB44Oh44O844Or44Ki44OJ44Os44K544KS56K66KqN44GX44Gm44GP44Gg44GV44GE77yaPC9wPlxuICAgICAgPGRpdiBzdHlsZT1cIm1hcmdpbjogMzBweCAwO1wiPlxuICAgICAgICA8YSBocmVmPVwiJHt2ZXJpZnlVcmx9XCIgXG4gICAgICAgICAgIHN0eWxlPVwiYmFja2dyb3VuZC1jb2xvcjogIzRGNDZFNTsgY29sb3I6IHdoaXRlOyBwYWRkaW5nOiAxMnB4IDI0cHg7IFxuICAgICAgICAgICAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lOyBib3JkZXItcmFkaXVzOiA2cHg7IGRpc3BsYXk6IGlubGluZS1ibG9jaztcIj5cbiAgICAgICAgICDjg6Hjg7zjg6vjgqLjg4njg6zjgrnjgpLnorroqo1cbiAgICAgICAgPC9hPlxuICAgICAgPC9kaXY+XG4gICAgICA8cD7jgZPjga7jg6rjg7Pjgq/jga83MuaZgumWk+acieWKueOBp+OBmeOAgjwvcD5cbiAgICA8L2Rpdj5cbiAgYCxcbiAgdGV4dDogYFxuICAgIOODoeODvOODq+OCouODieODrOOCueOBrueiuuiqjVxuICAgIFxuICAgIOOBlOeZu+mMsuOBguOCiuOBjOOBqOOBhuOBlOOBluOBhOOBvuOBmeOAglxuICAgIOS7peS4i+OBrlVSTOOBi+OCieODoeODvOODq+OCouODieODrOOCueOCkueiuuiqjeOBl+OBpuOBj+OBoOOBleOBhO+8mlxuICAgIFxuICAgICR7dmVyaWZ5VXJsfVxuICAgIFxuICAgIOOBk+OBruODquODs+OCr+OBrzcy5pmC6ZaT5pyJ5Yq544Gn44GZ44CCXG4gIGAsXG59KTtcbiJdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQWVBO0FBQ0EsU0FBZ0JBLHVCQUF1QkEsQ0FBQ0MsSUFBb0I7RUFBQTtFQUFBQyxjQUFBLEdBQUFDLENBQUE7RUFBQUQsY0FBQSxHQUFBRSxDQUFBO0VBQzFELE9BQU87SUFDTEMsT0FBTyxFQUFFLE1BQU1KLElBQUksQ0FBQ0ssU0FBUyxnQ0FBZ0M7SUFDN0RDLElBQUksRUFBRTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O2lCQXdCT04sSUFBSSxDQUFDSyxTQUFTLE1BQU1MLElBQUksQ0FBQ08sT0FBTzs7Ozs7Ozs7Ozs7Ozs7OzttQkFnQjlCUCxJQUFJ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

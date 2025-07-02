@@ -3,12 +3,12 @@ import express from 'express';
 import { prisma } from '../../src/lib/prisma';
 import analyticsRouter from '../../src/routes/analytics';
 import { authMiddleware } from '../../src/middleware/auth';
-import { 
-  testUser, 
+import {
+  testUser,
   testOrganization,
   testWidget,
   testChatLog,
-  generateTestToken
+  generateTestToken,
 } from '../fixtures/test-data';
 
 // Mock dependencies
@@ -48,14 +48,18 @@ describe('Analytics Routes', () => {
       };
 
       // Mock aggregation queries
-      (prisma.chatLog.count as jest.Mock).mockResolvedValue(mockData.totalChats);
+      (prisma.chatLog.count as jest.Mock).mockResolvedValue(
+        mockData.totalChats
+      );
       (prisma.chatLog.groupBy as jest.Mock).mockResolvedValue([
-        { _count: { _all: mockData.totalUsers } }
+        { _count: { _all: mockData.totalUsers } },
       ]);
       (prisma.chatLog.aggregate as jest.Mock).mockResolvedValue({
-        _avg: { responseTime: mockData.avgResponseTime }
+        _avg: { responseTime: mockData.avgResponseTime },
       });
-      (prisma.widget.count as jest.Mock).mockResolvedValue(mockData.activeWidgets);
+      (prisma.widget.count as jest.Mock).mockResolvedValue(
+        mockData.activeWidgets
+      );
       (prisma.messageFeedback.groupBy as jest.Mock).mockResolvedValue([
         { feedback: 'positive', _count: { _all: mockData.positiveFeedback } },
         { feedback: 'negative', _count: { _all: mockData.negativeFeedback } },
@@ -64,10 +68,13 @@ describe('Analytics Routes', () => {
 
       const response = await request(app)
         .get('/api/analytics/overview')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           startDate: '2024-01-01',
-          endDate: '2024-01-31'
+          endDate: '2024-01-31',
         });
 
       expect(response.status).toBe(200);
@@ -91,13 +98,18 @@ describe('Analytics Routes', () => {
 
       (prisma.chatLog.count as jest.Mock).mockResolvedValue(100);
       (prisma.chatLog.groupBy as jest.Mock).mockResolvedValue([]);
-      (prisma.chatLog.aggregate as jest.Mock).mockResolvedValue({ _avg: { responseTime: 2.0 } });
+      (prisma.chatLog.aggregate as jest.Mock).mockResolvedValue({
+        _avg: { responseTime: 2.0 },
+      });
       (prisma.widget.count as jest.Mock).mockResolvedValue(3);
       (prisma.messageFeedback.groupBy as jest.Mock).mockResolvedValue([]);
 
       const response = await request(app)
         .get('/api/analytics/overview')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ startDate, endDate });
 
       expect(response.status).toBe(200);
@@ -134,11 +146,14 @@ describe('Analytics Routes', () => {
 
       const response = await request(app)
         .get('/api/analytics/conversations')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           startDate: '2024-01-01',
           endDate: '2024-01-31',
-          groupBy: 'day'
+          groupBy: 'day',
         });
 
       expect(response.status).toBe(200);
@@ -160,7 +175,10 @@ describe('Analytics Routes', () => {
       for (const groupBy of testCases) {
         const response = await request(app)
           .get('/api/analytics/conversations')
-          .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+          .set(
+            'Authorization',
+            `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+          )
           .query({ groupBy });
 
         expect(response.status).toBe(200);
@@ -172,7 +190,10 @@ describe('Analytics Routes', () => {
 
       const response = await request(app)
         .get('/api/analytics/conversations')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ widgetId: testWidget.id });
 
       expect(response.status).toBe(200);
@@ -207,7 +228,9 @@ describe('Analytics Routes', () => {
         },
       ];
 
-      (prisma.unansweredMessage.findMany as jest.Mock).mockResolvedValue(mockUnanswered);
+      (prisma.unansweredMessage.findMany as jest.Mock).mockResolvedValue(
+        mockUnanswered
+      );
       (prisma.unansweredMessage.count as jest.Mock).mockResolvedValue(2);
 
       // Mock topic clustering
@@ -219,10 +242,13 @@ describe('Analytics Routes', () => {
 
       const response = await request(app)
         .get('/api/analytics/unanswered')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           status: 'pending',
-          limit: 10
+          limit: 10,
         });
 
       expect(response.status).toBe(200);
@@ -252,7 +278,10 @@ describe('Analytics Routes', () => {
       for (const status of statuses) {
         const response = await request(app)
           .get('/api/analytics/unanswered')
-          .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+          .set(
+            'Authorization',
+            `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+          )
           .query({ status });
 
         expect(response.status).toBe(200);
@@ -273,10 +302,13 @@ describe('Analytics Routes', () => {
 
       const response = await request(app)
         .get('/api/analytics/unanswered')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           page: 2,
-          limit: 20
+          limit: 20,
         });
 
       expect(response.status).toBe(200);
@@ -320,11 +352,14 @@ describe('Analytics Routes', () => {
 
       const response = await request(app)
         .get('/api/analytics/topics')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           startDate: '2024-01-01',
           endDate: '2024-01-31',
-          limit: 10
+          limit: 10,
         });
 
       expect(response.status).toBe(200);
@@ -339,10 +374,13 @@ describe('Analytics Routes', () => {
 
       const response = await request(app)
         .get('/api/analytics/topics')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           widgetId: testWidget.id,
-          limit: 5
+          limit: 5,
         });
 
       expect(response.status).toBe(200);
@@ -373,10 +411,13 @@ describe('Analytics Routes', () => {
 
       const response = await request(app)
         .get('/api/analytics/feedback')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           startDate: '2024-01-01',
-          endDate: '2024-01-31'
+          endDate: '2024-01-31',
         });
 
       expect(response.status).toBe(200);
@@ -417,12 +458,17 @@ describe('Analytics Routes', () => {
       ];
 
       (prisma.messageFeedback.groupBy as jest.Mock).mockResolvedValue([]);
-      (prisma.messageFeedback.findMany as jest.Mock).mockResolvedValue(mockComments);
+      (prisma.messageFeedback.findMany as jest.Mock).mockResolvedValue(
+        mockComments
+      );
       (prisma.$queryRaw as jest.Mock).mockResolvedValue([]);
 
       const response = await request(app)
         .get('/api/analytics/feedback')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ includeComments: true });
 
       expect(response.status).toBe(200);
@@ -452,19 +498,29 @@ describe('Analytics Routes', () => {
       });
 
       (prisma.$queryRaw as jest.Mock)
-        .mockResolvedValueOnce([{ p95: mockMetrics.p95ResponseTime, p99: mockMetrics.p99ResponseTime }])
-        .mockResolvedValueOnce([{ 
-          total: mockMetrics.totalRequests,
-          successful: mockMetrics.successfulRequests,
-          failed: mockMetrics.failedRequests,
-        }]);
+        .mockResolvedValueOnce([
+          {
+            p95: mockMetrics.p95ResponseTime,
+            p99: mockMetrics.p99ResponseTime,
+          },
+        ])
+        .mockResolvedValueOnce([
+          {
+            total: mockMetrics.totalRequests,
+            successful: mockMetrics.successfulRequests,
+            failed: mockMetrics.failedRequests,
+          },
+        ]);
 
       const response = await request(app)
         .get('/api/analytics/performance')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           startDate: '2024-01-01',
-          endDate: '2024-01-31'
+          endDate: '2024-01-31',
         });
 
       expect(response.status).toBe(200);
@@ -491,7 +547,9 @@ describe('Analytics Routes', () => {
         { date: '2024-01-03', avgResponseTime: 2.1, errorRate: 0.015 },
       ];
 
-      (prisma.systemMetric.aggregate as jest.Mock).mockResolvedValue({ _avg: { value: 1.8 } });
+      (prisma.systemMetric.aggregate as jest.Mock).mockResolvedValue({
+        _avg: { value: 1.8 },
+      });
       (prisma.$queryRaw as jest.Mock)
         .mockResolvedValueOnce([{ p95: 3.0, p99: 5.0 }])
         .mockResolvedValueOnce([{ total: 1000, successful: 980, failed: 20 }])
@@ -499,11 +557,14 @@ describe('Analytics Routes', () => {
 
       const response = await request(app)
         .get('/api/analytics/performance')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           startDate: '2024-01-01',
           endDate: '2024-01-03',
-          includeTrends: true
+          includeTrends: true,
         });
 
       expect(response.status).toBe(200);
@@ -526,25 +587,32 @@ describe('Analytics Routes', () => {
       };
 
       // Mock all the queries
-      (prisma.chatLog.count as jest.Mock).mockResolvedValue(mockData.overview.totalChats);
+      (prisma.chatLog.count as jest.Mock).mockResolvedValue(
+        mockData.overview.totalChats
+      );
       (prisma.chatLog.groupBy as jest.Mock).mockResolvedValue([
-        { _count: { _all: mockData.overview.totalUsers } }
+        { _count: { _all: mockData.overview.totalUsers } },
       ]);
       (prisma.$queryRaw as jest.Mock).mockResolvedValue(mockData.conversations);
 
       const response = await request(app)
         .get('/api/analytics/export')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           format: 'csv',
           startDate: '2024-01-01',
-          endDate: '2024-01-31'
+          endDate: '2024-01-31',
         });
 
       expect(response.status).toBe(200);
       expect(response.headers['content-type']).toContain('text/csv');
       expect(response.headers['content-disposition']).toContain('attachment');
-      expect(response.headers['content-disposition']).toContain('analytics-export');
+      expect(response.headers['content-disposition']).toContain(
+        'analytics-export'
+      );
     });
 
     it('should export analytics data as JSON', async () => {
@@ -555,19 +623,24 @@ describe('Analytics Routes', () => {
         },
       };
 
-      (prisma.chatLog.count as jest.Mock).mockResolvedValue(mockData.overview.totalChats);
+      (prisma.chatLog.count as jest.Mock).mockResolvedValue(
+        mockData.overview.totalChats
+      );
       (prisma.chatLog.groupBy as jest.Mock).mockResolvedValue([
-        { _count: { _all: mockData.overview.totalUsers } }
+        { _count: { _all: mockData.overview.totalUsers } },
       ]);
       (prisma.$queryRaw as jest.Mock).mockResolvedValue([]);
 
       const response = await request(app)
         .get('/api/analytics/export')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           format: 'json',
           startDate: '2024-01-01',
-          endDate: '2024-01-31'
+          endDate: '2024-01-31',
         });
 
       expect(response.status).toBe(200);
@@ -580,7 +653,10 @@ describe('Analytics Routes', () => {
     it('should return 400 for invalid export format', async () => {
       const response = await request(app)
         .get('/api/analytics/export')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ format: 'pdf' });
 
       expect(response.status).toBe(400);
@@ -604,13 +680,18 @@ describe('Analytics Routes', () => {
     it('should only return data for user organization', async () => {
       (prisma.chatLog.count as jest.Mock).mockResolvedValue(100);
       (prisma.chatLog.groupBy as jest.Mock).mockResolvedValue([]);
-      (prisma.chatLog.aggregate as jest.Mock).mockResolvedValue({ _avg: { responseTime: 2.0 } });
+      (prisma.chatLog.aggregate as jest.Mock).mockResolvedValue({
+        _avg: { responseTime: 2.0 },
+      });
       (prisma.widget.count as jest.Mock).mockResolvedValue(3);
       (prisma.messageFeedback.groupBy as jest.Mock).mockResolvedValue([]);
 
       await request(app)
         .get('/api/analytics/overview')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(prisma.chatLog.count).toHaveBeenCalledWith({
         where: expect.objectContaining({

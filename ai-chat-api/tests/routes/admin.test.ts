@@ -4,10 +4,10 @@ import { prisma } from '../../src/lib/prisma';
 import adminRouter from '../../src/routes/admin';
 import { authMiddleware } from '../../src/middleware/auth';
 import { adminMiddleware } from '../../src/middleware/admin';
-import { 
-  testUser, 
+import {
+  testUser,
   testOrganization,
-  generateTestToken
+  generateTestToken,
 } from '../fixtures/test-data';
 
 // Mock dependencies
@@ -91,11 +91,14 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(3);
-      
+
       expect(response.body[0]).toMatchObject({
         id: 'chat-log-1',
         question: 'What is your return policy?',
@@ -128,7 +131,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
@@ -141,7 +147,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
     });
@@ -157,7 +166,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(3);
@@ -175,7 +187,10 @@ describe('Admin Routes', () => {
 
       await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(prisma.chatLog.findMany).toHaveBeenCalledWith({
         include: { user: { select: { id: true, email: true } } },
@@ -205,11 +220,16 @@ describe('Admin Routes', () => {
         mockChatLogs[1],
       ];
 
-      (prisma.chatLog.findMany as jest.Mock).mockResolvedValue(logsWithMissingUser);
+      (prisma.chatLog.findMany as jest.Mock).mockResolvedValue(
+        logsWithMissingUser
+      );
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(2);
@@ -242,11 +262,14 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/report/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(3);
-      
+
       expect(response.body[0]).toMatchObject({
         createdAt: '2024-01-15T00:00:00.000Z',
         _count: { id: 5 },
@@ -273,7 +296,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/report/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
@@ -286,7 +312,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/report/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
     });
@@ -296,7 +325,10 @@ describe('Admin Routes', () => {
 
       await request(app)
         .get('/api/admin/report/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(prisma.chatLog.groupBy).toHaveBeenCalledWith({
         by: ['createdAt'],
@@ -315,7 +347,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/report/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(365);
@@ -326,7 +361,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/report/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .query({
           startDate: '2024-01-01',
           endDate: '2024-01-31',
@@ -334,7 +372,7 @@ describe('Admin Routes', () => {
         });
 
       expect(response.status).toBe(200);
-      
+
       // Should not use query parameters
       expect(prisma.chatLog.groupBy).toHaveBeenCalledWith({
         by: ['createdAt'],
@@ -373,7 +411,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(403);
       expect(response.body).toEqual({ error: 'Admin access required' });
@@ -386,7 +427,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/report/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(403);
       expect(response.body).toEqual({ error: 'Admin access required' });
@@ -410,7 +454,10 @@ describe('Admin Routes', () => {
 
       await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(middlewareOrder).toEqual(['auth', 'admin']);
     });
@@ -445,7 +492,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(403);
       expect(prisma.chatLog.findMany).not.toHaveBeenCalled();
@@ -459,12 +509,15 @@ describe('Admin Routes', () => {
       const requests = Array.from({ length: 10 }, () =>
         request(app)
           .get('/api/admin/chat-logs')
-          .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+          .set(
+            'Authorization',
+            `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+          )
       );
 
       const responses = await Promise.all(requests);
 
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(response.status).toBe(200);
         expect(response.body).toHaveLength(3);
       });
@@ -492,7 +545,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(10000);
@@ -513,7 +569,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body[0].createdAt).toBe('invalid-date');
@@ -538,7 +597,10 @@ describe('Admin Routes', () => {
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body[0].question).toBeNull();
@@ -568,11 +630,16 @@ describe('Admin Routes', () => {
         },
       ];
 
-      (prisma.chatLog.findMany as jest.Mock).mockResolvedValue(logsWithVariousTypes);
+      (prisma.chatLog.findMany as jest.Mock).mockResolvedValue(
+        logsWithVariousTypes
+      );
 
       const response = await request(app)
         .get('/api/admin/chat-logs')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(typeof response.body[0].id).toBe('string');

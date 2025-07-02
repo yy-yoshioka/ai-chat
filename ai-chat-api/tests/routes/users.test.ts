@@ -5,10 +5,10 @@ import usersRouter from '../../src/routes/users';
 import { authMiddleware } from '../../src/middleware/auth';
 import { adminMiddleware } from '../../src/middleware/admin';
 import { requireOrganizationAccess } from '../../src/middleware/organizationAccess';
-import { 
-  testUser, 
+import {
+  testUser,
   testOrganization,
-  generateTestToken
+  generateTestToken,
 } from '../fixtures/test-data';
 import { Role } from '@prisma/client';
 import { webhookService } from '../../src/services/webhookService';
@@ -31,7 +31,7 @@ mockCrypto.randomBytes = jest.fn().mockReturnValue({
 
 describe('Users Routes', () => {
   let app: express.Application;
-  
+
   const adminUser = {
     ...testUser,
     id: 'admin-user-id',
@@ -73,9 +73,11 @@ describe('Users Routes', () => {
       next();
     });
 
-    (requireOrganizationAccess as jest.Mock).mockImplementation((req, res, next) => {
-      next();
-    });
+    (requireOrganizationAccess as jest.Mock).mockImplementation(
+      (req, res, next) => {
+        next();
+      }
+    );
 
     (hashPassword as jest.Mock).mockResolvedValue('hashed-password');
 
@@ -86,7 +88,7 @@ describe('Users Routes', () => {
   describe('GET /api/users', () => {
     it('should return paginated list of users in organization', async () => {
       const mockUsers = [adminUser, memberUser, guestUser];
-      
+
       (prisma.user.findUnique as jest.Mock).mockResolvedValue({
         organizationId: testOrganization.id,
       });
@@ -96,7 +98,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .get('/api/users')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .query({ page: 1, limit: 10 });
 
       expect(response.status).toBe(200);
@@ -141,7 +146,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .get('/api/users')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .query({ search: 'member' });
 
       expect(response.status).toBe(200);
@@ -170,7 +178,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .get('/api/users')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .query({ role: 'admin' });
 
       expect(response.status).toBe(200);
@@ -196,7 +207,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .get('/api/users')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .query({ page: 2, limit: 5 });
 
       expect(response.status).toBe(200);
@@ -222,7 +236,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .get('/api/users')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(400);
       expect(response.body).toEqual({
@@ -241,7 +258,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .get(`/api/users/${memberUser.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -270,7 +290,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .get('/api/users/non-existent-id')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'User not found' });
@@ -290,7 +313,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .get(`/api/users/${memberUser.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body.role).toBe('admin');
@@ -323,7 +349,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .put(`/api/users/${memberUser.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .send(updateData);
 
       expect(response.status).toBe(200);
@@ -373,7 +402,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .put(`/api/users/${memberUser.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`
+        )
         .send(updateData);
 
       expect(response.status).toBe(200);
@@ -394,7 +426,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .put(`/api/users/${adminUser.id}`) // Different user ID
-        .set('Authorization', `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`
+        )
         .send({ name: 'Unauthorized Update' });
 
       expect(response.status).toBe(403);
@@ -425,7 +460,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .put(`/api/users/${memberUser.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`
+        )
         .send({ name: 'Updated Name', role: 'admin' }); // Trying to elevate role
 
       expect(response.status).toBe(200);
@@ -456,11 +494,16 @@ describe('Users Routes', () => {
 
       (prisma.user.update as jest.Mock).mockResolvedValue(updatedUser);
 
-      const triggerWebhookSpy = jest.spyOn(webhookService, 'triggerWebhook').mockResolvedValue();
+      const triggerWebhookSpy = jest
+        .spyOn(webhookService, 'triggerWebhook')
+        .mockResolvedValue();
 
       const response = await request(app)
         .put(`/api/users/${memberUser.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .send({ name: 'Updated Name' });
 
       expect(response.status).toBe(200);
@@ -494,7 +537,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .delete(`/api/users/${memberUser.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ success: true });
@@ -507,10 +553,15 @@ describe('Users Routes', () => {
     it('should not allow users to delete themselves', async () => {
       const response = await request(app)
         .delete(`/api/users/${adminUser.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(400);
-      expect(response.body).toEqual({ error: 'Cannot delete your own account' });
+      expect(response.body).toEqual({
+        error: 'Cannot delete your own account',
+      });
     });
 
     it('should not allow non-admin users to delete others', async () => {
@@ -527,7 +578,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .delete(`/api/users/${guestUser.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(403);
       expect(response.body).toEqual({ error: 'Insufficient permissions' });
@@ -543,7 +597,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .delete('/api/users/non-existent-id')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'User not found' });
@@ -572,11 +629,16 @@ describe('Users Routes', () => {
 
       (prisma.user.create as jest.Mock).mockResolvedValue(newUser);
 
-      const triggerWebhookSpy = jest.spyOn(webhookService, 'triggerWebhook').mockResolvedValue();
+      const triggerWebhookSpy = jest
+        .spyOn(webhookService, 'triggerWebhook')
+        .mockResolvedValue();
 
       const response = await request(app)
         .post('/api/users/invite')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .send(inviteData);
 
       expect(response.status).toBe(200);
@@ -635,7 +697,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .post('/api/users/invite')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .send(inviteData);
 
       expect(response.status).toBe(200);
@@ -671,7 +736,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .post('/api/users/invite')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .send(inviteData);
 
       expect(response.status).toBe(200);
@@ -698,7 +766,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .post('/api/users/invite')
-        .set('Authorization', `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`
+        )
         .send({
           email: 'newuser@example.com',
           role: 'member',
@@ -720,7 +791,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .post('/api/users/invite')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .send({
           email: memberUser.email,
           role: 'member',
@@ -747,7 +821,10 @@ describe('Users Routes', () => {
 
       await request(app)
         .post('/api/users/invite')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .send({
           email: 'test@example.com',
           role: 'member',
@@ -779,20 +856,28 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .get('/api/users')
-        .set('Authorization', `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(memberUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(403);
       expect(response.body).toEqual({ error: 'Admin access required' });
     });
 
     it('should require organization access', async () => {
-      (requireOrganizationAccess as jest.Mock).mockImplementationOnce((req, res) => {
-        res.status(403).json({ error: 'Organization access required' });
-      });
+      (requireOrganizationAccess as jest.Mock).mockImplementationOnce(
+        (req, res) => {
+          res.status(403).json({ error: 'Organization access required' });
+        }
+      );
 
       const response = await request(app)
         .get('/api/users')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(403);
       expect(response.body).toEqual({ error: 'Organization access required' });
@@ -807,7 +892,10 @@ describe('Users Routes', () => {
 
       const response = await request(app)
         .get('/api/users')
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toMatchObject({
@@ -833,13 +921,16 @@ describe('Users Routes', () => {
       (prisma.user.update as jest.Mock).mockResolvedValue(updatedUser);
 
       // Mock webhook failure
-      jest.spyOn(webhookService, 'triggerWebhook').mockRejectedValue(
-        new Error('Webhook service unavailable')
-      );
+      jest
+        .spyOn(webhookService, 'triggerWebhook')
+        .mockRejectedValue(new Error('Webhook service unavailable'));
 
       const response = await request(app)
         .put(`/api/users/${memberUser.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(adminUser.id, testOrganization.id)}`
+        )
         .send({ name: 'Updated Name' });
 
       // Should still succeed even if webhook fails

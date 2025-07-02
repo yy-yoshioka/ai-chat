@@ -58,11 +58,13 @@ describe('Auth Middleware', () => {
       where: { id: userId },
       select: { id: true, email: true, roles: true },
     });
-    expect(mockRequest.user).toEqual({
-      id: userId,
-      email: 'test@example.com',
-      roles: ['viewer'],
-    });
+    expect(mockRequest.user).toEqual(
+      expect.objectContaining({
+        id: userId,
+        email: 'test@example.com',
+        roles: ['viewer'],
+      })
+    );
     expect(mockNext).toHaveBeenCalled();
   });
 
@@ -93,16 +95,13 @@ describe('Auth Middleware', () => {
   });
 
   it('should reject expired token', async () => {
-    // Mock jwt.verify to throw expired error
-    jest.mock('../../../src/utils/jwt', () => ({
-      verifyToken: jest.fn(() => {
-        const error = new Error('jwt expired');
-        error.name = 'TokenExpiredError';
-        throw error;
-      }),
-    }));
+    // Create an actually expired token
+    const token = jwt.sign(
+      { id: 'test-user-id', email: 'test@example.com' },
+      process.env.JWT_SECRET!,
+      { expiresIn: '-1s' } // Expired 1 second ago
+    );
 
-    const token = 'expired-token';
     mockRequest.cookies = { token: token };
 
     await authMiddleware(

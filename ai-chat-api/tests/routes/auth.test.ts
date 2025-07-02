@@ -317,7 +317,9 @@ describe('Auth Routes', () => {
     });
 
     it('should return 400 if email is missing', async () => {
-      const response = await request(app).post('/auth/forgot-password').send({});
+      const response = await request(app)
+        .post('/auth/forgot-password')
+        .send({});
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe('Email is required');
@@ -564,13 +566,15 @@ describe('Auth Routes', () => {
 
       expect(response.status).toBe(201);
       // The name should be stored as-is (sanitization happens on output)
-      expect(response.body.user.name).toBe('Test <script>alert("XSS")</script>');
+      expect(response.body.user.name).toBe(
+        'Test <script>alert("XSS")</script>'
+      );
     });
 
     it('should handle concurrent signup attempts with same email', async () => {
       // First call returns null (user doesn't exist)
       (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
-      
+
       // Create throws unique constraint error
       (prisma.organization.create as jest.Mock).mockRejectedValue({
         code: 'P2002',

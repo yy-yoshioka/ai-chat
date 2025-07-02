@@ -95,12 +95,10 @@ jest.mock('stripe', () => ({
     },
     checkout: {
       sessions: {
-        create: jest
-          .fn()
-          .mockResolvedValue({
-            id: 'cs_test',
-            url: 'https://checkout.stripe.com/test',
-          }),
+        create: jest.fn().mockResolvedValue({
+          id: 'cs_test',
+          url: 'https://checkout.stripe.com/test',
+        }),
       },
     },
     billingPortal: {
@@ -163,8 +161,8 @@ jest.mock('socket.io', () => {
     disconnect: jest.fn(),
   };
 
-  const mockIo = {
-    on: jest.fn((event, handler) => {
+  const mockIo: any = {
+    on: jest.fn((event: string, handler: (socket: any) => void) => {
       if (event === 'connection') {
         // Simulate a connection
         setImmediate(() => handler(mockSocket));
@@ -205,7 +203,7 @@ jest.useFakeTimers();
 jest.setSystemTime(mockDate);
 
 // Helper to reset all mocks
-global.resetAllMocks = () => {
+(global as any).resetAllMocks = () => {
   jest.clearAllMocks();
   jest.clearAllTimers();
 };

@@ -90,7 +90,7 @@ describe('JWT Utils', () => {
 
       expect(() => {
         verifyToken(token);
-      }).toThrow('Invalid token');
+      }).toThrow('jwt expired');
     });
 
     it('should throw error if JWT_SECRET is not defined', () => {

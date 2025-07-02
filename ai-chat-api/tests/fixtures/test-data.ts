@@ -15,7 +15,7 @@ export const testUser = {
   email: 'test@example.com',
   name: 'Test User',
   password: testPasswordHash,
-  roles: [Role.ADMIN],
+  roles: [Role.owner],
   organizationId: 'org-test-123',
   emailVerified: true,
   emailVerificationToken: null,
@@ -30,7 +30,7 @@ export const testOrganization = {
   id: 'org-test-123',
   name: 'Test Organization',
   slug: 'test-org',
-  plan: PlanType.PRO,
+  plan: PlanType.pro,
   stripeCustomerId: 'cus_test_123',
   stripeSubscriptionId: 'sub_test_123',
   trialEndsAt: null,
@@ -166,8 +166,8 @@ export const generateTestToken = (
   expiresIn = '1h'
 ) => {
   return jwt.sign(
-    { userId, organizationId },
-    process.env.JWT_SECRET || 'test-secret',
+    { id: userId, organizationId },
+    process.env.JWT_SECRET!,
     { expiresIn }
   );
 };
@@ -177,8 +177,8 @@ export const generateExpiredToken = (
   organizationId: string
 ) => {
   return jwt.sign(
-    { userId, organizationId },
-    process.env.JWT_SECRET || 'test-secret',
+    { id: userId, organizationId },
+    process.env.JWT_SECRET!,
     { expiresIn: '-1h' }
   );
 };

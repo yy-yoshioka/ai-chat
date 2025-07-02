@@ -3,13 +3,13 @@ import express from 'express';
 import { prisma } from '../../src/lib/prisma';
 import knowledgeBaseRouter from '../../src/routes/knowledge-base';
 import { authMiddleware } from '../../src/middleware/auth';
-import { 
-  testUser, 
+import {
+  testUser,
   testOrganization,
   testWidget,
   testKnowledgeBase,
   generateTestToken,
-  mockFile 
+  mockFile,
 } from '../fixtures/test-data';
 import { S3Client } from '@aws-sdk/client-s3';
 import fs from 'fs';
@@ -59,14 +59,16 @@ jest.mock('@qdrant/js-client-rest', () => ({
 }));
 
 // Mock PDF parser
-jest.mock('pdf-parse', () => jest.fn().mockResolvedValue({
-  text: 'This is test PDF content',
-  numpages: 1,
-  info: {
-    Title: 'Test PDF',
-    Author: 'Test Author',
-  },
-}));
+jest.mock('pdf-parse', () =>
+  jest.fn().mockResolvedValue({
+    text: 'This is test PDF content',
+    numpages: 1,
+    info: {
+      Title: 'Test PDF',
+      Author: 'Test Author',
+    },
+  })
+);
 
 // Mock cheerio for HTML parsing
 jest.mock('cheerio', () => ({
@@ -117,7 +119,9 @@ describe('Knowledge Base Routes', () => {
       };
 
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
-      (prisma.knowledgeBase.create as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.create as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
       (prisma.knowledgeBase.update as jest.Mock).mockResolvedValue({
         ...mockDocument,
         status: 'processed',
@@ -134,7 +138,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .post('/api/knowledge-base/upload')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .field('widgetId', 'widget-test-123')
         .field('title', 'Test PDF')
         .attach('file', Buffer.from('test pdf content'), {
@@ -182,7 +189,9 @@ describe('Knowledge Base Routes', () => {
       };
 
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
-      (prisma.knowledgeBase.create as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.create as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
       (prisma.knowledgeBase.update as jest.Mock).mockResolvedValue({
         ...mockDocument,
         status: 'processed',
@@ -197,7 +206,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .post('/api/knowledge-base/upload')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .field('widgetId', 'widget-test-123')
         .field('title', 'Test Text')
         .attach('file', Buffer.from('This is test text content'), {
@@ -212,7 +224,10 @@ describe('Knowledge Base Routes', () => {
     it('should return 400 for unsupported file type', async () => {
       const response = await request(app)
         .post('/api/knowledge-base/upload')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .field('widgetId', 'widget-test-123')
         .attach('file', Buffer.from('binary content'), {
           filename: 'test.exe',
@@ -230,7 +245,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .post('/api/knowledge-base/upload')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .field('widgetId', 'widget-test-123')
         .attach('file', largeBuffer, {
           filename: 'large.pdf',
@@ -256,7 +274,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .post('/api/knowledge-base/upload')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .field('widgetId', 'widget-test-123')
         .attach('file', Buffer.from('test content'), {
           filename: 'test.pdf',
@@ -282,7 +303,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .post('/api/knowledge-base/upload')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .field('widgetId', 'widget-test-123')
         .attach('file', Buffer.from('corrupted pdf'), {
           filename: 'corrupted.pdf',
@@ -322,7 +346,9 @@ describe('Knowledge Base Routes', () => {
 
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
       (prisma.knowledgeBase.findFirst as jest.Mock).mockResolvedValue(null);
-      (prisma.knowledgeBase.create as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.create as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
       (prisma.knowledgeBase.update as jest.Mock).mockResolvedValue({
         ...mockDocument,
         status: 'processed',
@@ -334,12 +360,19 @@ describe('Knowledge Base Routes', () => {
         headers: {
           get: jest.fn().mockReturnValue('text/html'),
         },
-        text: jest.fn().mockResolvedValue('<html><head><title>Test Web Page</title></head><body>This is test HTML content</body></html>'),
+        text: jest
+          .fn()
+          .mockResolvedValue(
+            '<html><head><title>Test Web Page</title></head><body>This is test HTML content</body></html>'
+          ),
       });
 
       const response = await request(app)
         .post('/api/knowledge-base/url')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           widgetId: 'widget-test-123',
           url: 'https://example.com/page',
@@ -358,11 +391,16 @@ describe('Knowledge Base Routes', () => {
 
     it('should return 409 if URL already exists for widget', async () => {
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
-      (prisma.knowledgeBase.findFirst as jest.Mock).mockResolvedValue(testKnowledgeBase);
+      (prisma.knowledgeBase.findFirst as jest.Mock).mockResolvedValue(
+        testKnowledgeBase
+      );
 
       const response = await request(app)
         .post('/api/knowledge-base/url')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           widgetId: 'widget-test-123',
           url: 'https://example.com/existing',
@@ -377,7 +415,10 @@ describe('Knowledge Base Routes', () => {
     it('should return 400 for invalid URL', async () => {
       const response = await request(app)
         .post('/api/knowledge-base/url')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           widgetId: 'widget-test-123',
           url: 'not-a-valid-url',
@@ -401,7 +442,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .post('/api/knowledge-base/url')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           widgetId: 'widget-test-123',
           url: 'https://example.com/unreachable',
@@ -445,12 +489,17 @@ describe('Knowledge Base Routes', () => {
       ];
 
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
-      (prisma.knowledgeBase.findMany as jest.Mock).mockResolvedValue(mockDocuments);
+      (prisma.knowledgeBase.findMany as jest.Mock).mockResolvedValue(
+        mockDocuments
+      );
       (prisma.knowledgeBase.count as jest.Mock).mockResolvedValue(2);
 
       const response = await request(app)
         .get('/api/knowledge-base')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ widgetId: 'widget-test-123', page: 1, limit: 20 });
 
       expect(response.status).toBe(200);
@@ -488,17 +537,20 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .get('/api/knowledge-base')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           widgetId: 'widget-test-123',
-          status: 'active'
+          status: 'active',
         });
 
       expect(response.status).toBe(200);
       expect(prisma.knowledgeBase.findMany).toHaveBeenCalledWith({
-        where: { 
+        where: {
           widgetId: 'widget-test-123',
-          status: 'active'
+          status: 'active',
         },
         orderBy: { createdAt: 'desc' },
         skip: 0,
@@ -514,17 +566,20 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .get('/api/knowledge-base')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           widgetId: 'widget-test-123',
-          sourceType: 'file'
+          sourceType: 'file',
         });
 
       expect(response.status).toBe(200);
       expect(prisma.knowledgeBase.findMany).toHaveBeenCalledWith({
-        where: { 
+        where: {
           widgetId: 'widget-test-123',
-          sourceType: 'file'
+          sourceType: 'file',
         },
         orderBy: { createdAt: 'desc' },
         skip: 0,
@@ -540,11 +595,14 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .get('/api/knowledge-base')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .query({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .query({
           widgetId: 'widget-test-123',
           page: 2,
-          limit: 10
+          limit: 10,
         });
 
       expect(response.status).toBe(200);
@@ -577,7 +635,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .get('/api/knowledge-base')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ widgetId: 'widget-test-123' });
 
       expect(response.status).toBe(403);
@@ -608,11 +669,16 @@ describe('Knowledge Base Routes', () => {
         updatedAt: new Date(),
       };
 
-      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
 
       const response = await request(app)
         .get('/api/knowledge-base/kb-test-123')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -625,7 +691,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .get('/api/knowledge-base/non-existent-id')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({
@@ -645,11 +714,16 @@ describe('Knowledge Base Routes', () => {
         },
       };
 
-      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
 
       const response = await request(app)
         .get('/api/knowledge-base/kb-test-123')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(403);
       expect(response.body).toEqual({
@@ -665,7 +739,9 @@ describe('Knowledge Base Routes', () => {
         widget: testWidget,
       };
 
-      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
       (prisma.knowledgeBase.update as jest.Mock).mockResolvedValue({
         ...mockDocument,
         title: 'Updated Title',
@@ -677,7 +753,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .put('/api/knowledge-base/kb-test-123')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           title: 'Updated Title',
           metadata: {
@@ -712,12 +791,19 @@ describe('Knowledge Base Routes', () => {
         widget: testWidget,
       };
 
-      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(mockDocument);
-      (prisma.knowledgeBase.update as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
+      (prisma.knowledgeBase.update as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
 
       const response = await request(app)
         .put('/api/knowledge-base/kb-test-123')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           id: 'different-id',
           widgetId: 'different-widget',
@@ -726,9 +812,10 @@ describe('Knowledge Base Routes', () => {
         });
 
       expect(response.status).toBe(200);
-      
+
       // Verify protected fields were not passed to update
-      const updateCall = (prisma.knowledgeBase.update as jest.Mock).mock.calls[0][0];
+      const updateCall = (prisma.knowledgeBase.update as jest.Mock).mock
+        .calls[0][0];
       expect(updateCall.data).not.toHaveProperty('id');
       expect(updateCall.data).not.toHaveProperty('widgetId');
       expect(updateCall.data).not.toHaveProperty('organizationId');
@@ -744,15 +831,22 @@ describe('Knowledge Base Routes', () => {
         vectorIds: ['vec-1', 'vec-2'],
       };
 
-      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(mockDocument);
-      (prisma.knowledgeBase.delete as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
+      (prisma.knowledgeBase.delete as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
 
       const QdrantClient = require('@qdrant/js-client-rest').QdrantClient;
       const mockQdrant = new QdrantClient();
 
       const response = await request(app)
         .delete('/api/knowledge-base/kb-test-123')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -776,8 +870,12 @@ describe('Knowledge Base Routes', () => {
         url: 'https://s3.amazonaws.com/test-bucket/kb-test-123.pdf',
       };
 
-      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(mockDocument);
-      (prisma.knowledgeBase.delete as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
+      (prisma.knowledgeBase.delete as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
 
       const mockS3Send = jest.fn().mockResolvedValue({});
       (S3Client as jest.Mock).mockImplementation(() => ({
@@ -786,7 +884,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .delete('/api/knowledge-base/kb-test-123')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(mockS3Send).toHaveBeenCalled();
@@ -797,7 +898,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .delete('/api/knowledge-base/non-existent-id')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({
@@ -817,11 +921,16 @@ describe('Knowledge Base Routes', () => {
         },
       };
 
-      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
 
       const response = await request(app)
         .delete('/api/knowledge-base/kb-test-123')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(403);
       expect(response.body).toEqual({
@@ -839,7 +948,9 @@ describe('Knowledge Base Routes', () => {
         vectorIds: ['old-vec-1', 'old-vec-2'],
       };
 
-      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
       (prisma.knowledgeBase.update as jest.Mock).mockResolvedValue({
         ...mockDocument,
         status: 'processed',
@@ -852,7 +963,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .post('/api/knowledge-base/reprocess/kb-test-123')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
@@ -878,15 +992,22 @@ describe('Knowledge Base Routes', () => {
         widget: testWidget,
       };
 
-      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(mockDocument);
+      (prisma.knowledgeBase.findUnique as jest.Mock).mockResolvedValue(
+        mockDocument
+      );
 
       const OpenAI = require('openai').default;
       const mockOpenAI = OpenAI.mock.results[0].value;
-      mockOpenAI.embeddings.create.mockRejectedValueOnce(new Error('Embedding error'));
+      mockOpenAI.embeddings.create.mockRejectedValueOnce(
+        new Error('Embedding error')
+      );
 
       const response = await request(app)
         .post('/api/knowledge-base/reprocess/kb-test-123')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -904,8 +1025,16 @@ describe('Knowledge Base Routes', () => {
     it('should upload multiple files', async () => {
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
       (prisma.knowledgeBase.create as jest.Mock)
-        .mockResolvedValueOnce({ id: 'kb-1', title: 'File 1', status: 'processed' })
-        .mockResolvedValueOnce({ id: 'kb-2', title: 'File 2', status: 'processed' });
+        .mockResolvedValueOnce({
+          id: 'kb-1',
+          title: 'File 1',
+          status: 'processed',
+        })
+        .mockResolvedValueOnce({
+          id: 'kb-2',
+          title: 'File 2',
+          status: 'processed',
+        });
 
       const mockS3Send = jest.fn().mockResolvedValue({
         Location: 'https://s3.amazonaws.com/test-bucket/file.pdf',
@@ -916,7 +1045,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .post('/api/knowledge-base/bulk-upload')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .field('widgetId', 'widget-test-123')
         .attach('files', Buffer.from('file 1 content'), {
           filename: 'file1.pdf',
@@ -945,7 +1077,11 @@ describe('Knowledge Base Routes', () => {
     it('should handle partial failures in bulk upload', async () => {
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
       (prisma.knowledgeBase.create as jest.Mock)
-        .mockResolvedValueOnce({ id: 'kb-1', title: 'File 1', status: 'processed' })
+        .mockResolvedValueOnce({
+          id: 'kb-1',
+          title: 'File 1',
+          status: 'processed',
+        })
         .mockRejectedValueOnce(new Error('Database error'));
 
       const mockS3Send = jest.fn().mockResolvedValue({
@@ -957,7 +1093,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .post('/api/knowledge-base/bulk-upload')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .field('widgetId', 'widget-test-123')
         .attach('files', Buffer.from('file 1 content'), {
           filename: 'file1.pdf',
@@ -979,7 +1118,10 @@ describe('Knowledge Base Routes', () => {
     it('should return 400 if no files provided', async () => {
       const response = await request(app)
         .post('/api/knowledge-base/bulk-upload')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .field('widgetId', 'widget-test-123');
 
       expect(response.status).toBe(400);
@@ -989,17 +1131,22 @@ describe('Knowledge Base Routes', () => {
     });
 
     it('should return 400 if too many files', async () => {
-      const files = Array(11).fill(null).map((_, i) => ({
-        filename: `file${i}.pdf`,
-        content: Buffer.from(`file ${i} content`),
-      }));
+      const files = Array(11)
+        .fill(null)
+        .map((_, i) => ({
+          filename: `file${i}.pdf`,
+          content: Buffer.from(`file ${i} content`),
+        }));
 
       let req = request(app)
         .post('/api/knowledge-base/bulk-upload')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .field('widgetId', 'widget-test-123');
 
-      files.forEach(file => {
+      files.forEach((file) => {
         req = req.attach('files', file.content, {
           filename: file.filename,
           contentType: 'application/pdf',
@@ -1035,7 +1182,9 @@ describe('Knowledge Base Routes', () => {
       ];
 
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
-      (prisma.knowledgeBase.findMany as jest.Mock).mockResolvedValue(mockResults);
+      (prisma.knowledgeBase.findMany as jest.Mock).mockResolvedValue(
+        mockResults
+      );
 
       const QdrantClient = require('@qdrant/js-client-rest').QdrantClient;
       const mockQdrant = new QdrantClient();
@@ -1048,7 +1197,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .get('/api/knowledge-base/search')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({
           widgetId: 'widget-test-123',
           query: 'search query',
@@ -1076,7 +1228,10 @@ describe('Knowledge Base Routes', () => {
     it('should return 400 if query is missing', async () => {
       const response = await request(app)
         .get('/api/knowledge-base/search')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ widgetId: 'widget-test-123' });
 
       expect(response.status).toBe(400);
@@ -1087,14 +1242,17 @@ describe('Knowledge Base Routes', () => {
 
     it('should return empty results for no matches', async () => {
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
-      
+
       const QdrantClient = require('@qdrant/js-client-rest').QdrantClient;
       const mockQdrant = new QdrantClient();
       mockQdrant.search.mockResolvedValue({ result: [] });
 
       const response = await request(app)
         .get('/api/knowledge-base/search')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({
           widgetId: 'widget-test-123',
           query: 'no matches',
@@ -1111,7 +1269,7 @@ describe('Knowledge Base Routes', () => {
   describe('POST /api/knowledge-base/sync', () => {
     it('should sync documents from external source', async () => {
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
-      
+
       // Mock external API call
       global.fetch = jest.fn().mockResolvedValue({
         ok: true,
@@ -1129,7 +1287,10 @@ describe('Knowledge Base Routes', () => {
 
       const response = await request(app)
         .post('/api/knowledge-base/sync')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           widgetId: 'widget-test-123',
           sourceUrl: 'https://api.example.com/documents',
@@ -1150,12 +1311,15 @@ describe('Knowledge Base Routes', () => {
 
     it('should handle sync errors', async () => {
       (prisma.widget.findFirst as jest.Mock).mockResolvedValue(testWidget);
-      
+
       global.fetch = jest.fn().mockRejectedValue(new Error('API error'));
 
       const response = await request(app)
         .post('/api/knowledge-base/sync')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({
           widgetId: 'widget-test-123',
           sourceUrl: 'https://api.example.com/documents',

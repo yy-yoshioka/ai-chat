@@ -6,13 +6,13 @@ import { prisma } from '../../src/lib/prisma';
 import chatRouter from '../../src/routes/chat';
 import { authMiddleware } from '../../src/middleware/auth';
 import { requireValidWidget } from '../../src/middleware/requireValidWidget';
-import { 
-  testUser, 
+import {
+  testUser,
   testOrganization,
-  testWidget, 
+  testWidget,
   testChatLog,
   generateTestToken,
-  createMockSocket 
+  createMockSocket,
 } from '../fixtures/test-data';
 import Redis from 'ioredis';
 
@@ -152,10 +152,13 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .post('/api/chat')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .send({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .send({
           message: 'Hello',
-          sessionId: 'session-123'
+          sessionId: 'session-123',
         });
 
       expect(response.status).toBe(200);
@@ -195,7 +198,10 @@ describe('Chat Routes', () => {
     it('should return 400 for missing message', async () => {
       const response = await request(app)
         .post('/api/chat')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({});
 
       expect(response.status).toBe(400);
@@ -207,7 +213,10 @@ describe('Chat Routes', () => {
     it('should return 400 for empty message', async () => {
       const response = await request(app)
         .post('/api/chat')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ message: '   ' });
 
       expect(response.status).toBe(400);
@@ -221,7 +230,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .post('/api/chat')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ message: longMessage });
 
       expect(response.status).toBe(400);
@@ -233,14 +245,19 @@ describe('Chat Routes', () => {
     it('should handle OpenAI API errors gracefully', async () => {
       const OpenAI = require('openai').default;
       const mockOpenAI = OpenAI.mock.results[0].value;
-      mockOpenAI.chat.completions.create.mockRejectedValueOnce(new Error('OpenAI API error'));
+      mockOpenAI.chat.completions.create.mockRejectedValueOnce(
+        new Error('OpenAI API error')
+      );
 
       (prisma.fAQ.findMany as jest.Mock).mockResolvedValue([]);
       (prisma.chatLog.findMany as jest.Mock).mockResolvedValue([]);
 
       const response = await request(app)
         .post('/api/chat')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ message: 'Hello' });
 
       expect(response.status).toBe(500);
@@ -261,7 +278,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .post('/api/chat')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ message: 'Hello' });
 
       expect(response.status).toBe(429);
@@ -304,28 +324,38 @@ describe('Chat Routes', () => {
       const OpenAI = require('openai').default;
       const mockOpenAI = OpenAI.mock.results[0].value;
       let capturedMessages: any[];
-      mockOpenAI.chat.completions.create.mockImplementationOnce((options: any) => {
-        capturedMessages = options.messages;
-        return Promise.resolve({
-          choices: [
-            {
-              message: {
-                content: 'TypeScript provides type safety and better IDE support',
-                role: 'assistant',
+      mockOpenAI.chat.completions.create.mockImplementationOnce(
+        (options: any) => {
+          capturedMessages = options.messages;
+          return Promise.resolve({
+            choices: [
+              {
+                message: {
+                  content:
+                    'TypeScript provides type safety and better IDE support',
+                  role: 'assistant',
+                },
+                finish_reason: 'stop',
               },
-              finish_reason: 'stop',
+            ],
+            usage: {
+              prompt_tokens: 50,
+              completion_tokens: 10,
+              total_tokens: 60,
             },
-          ],
-          usage: { prompt_tokens: 50, completion_tokens: 10, total_tokens: 60 },
-        });
-      });
+          });
+        }
+      );
 
       const response = await request(app)
         .post('/api/chat')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .send({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .send({
           message: 'What are its benefits?',
-          sessionId: 'session-123'
+          sessionId: 'session-123',
         });
 
       expect(response.status).toBe(200);
@@ -357,13 +387,15 @@ describe('Chat Routes', () => {
         createdAt: new Date(),
       });
 
-      (prisma.unansweredMessage.deleteMany as jest.Mock).mockResolvedValue({ count: 0 });
+      (prisma.unansweredMessage.deleteMany as jest.Mock).mockResolvedValue({
+        count: 0,
+      });
 
       const response = await request(app)
         .post('/api/chat/widget/wk_test_123')
-        .send({ 
+        .send({
           message: 'Help with widget',
-          sessionId: 'widget-session-123'
+          sessionId: 'widget-session-123',
         });
 
       expect(response.status).toBe(200);
@@ -378,7 +410,9 @@ describe('Chat Routes', () => {
         ]),
       });
 
-      const { searchKnowledgeBase } = require('../../src/services/knowledgeBaseService');
+      const {
+        searchKnowledgeBase,
+      } = require('../../src/services/knowledgeBaseService');
       expect(searchKnowledgeBase).toHaveBeenCalledWith(
         testWidget.id,
         'Help with widget'
@@ -476,9 +510,15 @@ describe('Chat Routes', () => {
       // Mock streaming response
       const mockStream = {
         [Symbol.asyncIterator]: async function* () {
-          yield { choices: [{ delta: { content: 'Hello' }, finish_reason: null }] };
-          yield { choices: [{ delta: { content: ' there!' }, finish_reason: null }] };
-          yield { choices: [{ delta: { content: '' }, finish_reason: 'stop' }] };
+          yield {
+            choices: [{ delta: { content: 'Hello' }, finish_reason: null }],
+          };
+          yield {
+            choices: [{ delta: { content: ' there!' }, finish_reason: null }],
+          };
+          yield {
+            choices: [{ delta: { content: '' }, finish_reason: 'stop' }],
+          };
         },
       };
 
@@ -496,7 +536,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .post('/api/chat/stream')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .set('Accept', 'text/event-stream')
         .send({ message: 'Hello' });
 
@@ -511,7 +554,9 @@ describe('Chat Routes', () => {
       // Mock streaming error
       const mockStream = {
         [Symbol.asyncIterator]: async function* () {
-          yield { choices: [{ delta: { content: 'Hello' }, finish_reason: null }] };
+          yield {
+            choices: [{ delta: { content: 'Hello' }, finish_reason: null }],
+          };
           throw new Error('Stream error');
         },
       };
@@ -523,7 +568,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .post('/api/chat/stream')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .set('Accept', 'text/event-stream')
         .send({ message: 'Hello' });
 
@@ -562,7 +610,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .get('/api/chat/history')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ page: 1, limit: 20 });
 
       expect(response.status).toBe(200);
@@ -590,14 +641,17 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .get('/api/chat/history')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ sessionId: 'session-123' });
 
       expect(response.status).toBe(200);
       expect(prisma.chatLog.findMany).toHaveBeenCalledWith({
-        where: { 
+        where: {
           userId: testUser.id,
-          sessionId: 'session-123'
+          sessionId: 'session-123',
         },
         orderBy: { createdAt: 'desc' },
         skip: 0,
@@ -614,17 +668,20 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .get('/api/chat/history')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ startDate, endDate });
 
       expect(response.status).toBe(200);
       expect(prisma.chatLog.findMany).toHaveBeenCalledWith({
-        where: { 
+        where: {
           userId: testUser.id,
           createdAt: {
             gte: new Date(startDate),
             lte: new Date(endDate + 'T23:59:59.999Z'),
-          }
+          },
         },
         orderBy: { createdAt: 'desc' },
         skip: 0,
@@ -638,7 +695,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .get('/api/chat/history')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ page: 3, limit: 10 });
 
       expect(response.status).toBe(200);
@@ -674,7 +734,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .get('/api/chat/history')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
@@ -706,10 +769,13 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .post(`/api/chat/${testChatLog.id}/feedback`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
-        .send({ 
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
+        .send({
           feedback: 'positive',
-          comment: 'Very helpful!'
+          comment: 'Very helpful!',
         });
 
       expect(response.status).toBe(200);
@@ -737,7 +803,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .post('/api/chat/non-existent-id/feedback')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ feedback: 'positive' });
 
       expect(response.status).toBe(404);
@@ -756,7 +825,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .post(`/api/chat/${testChatLog.id}/feedback`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ feedback: 'positive' });
 
       expect(response.status).toBe(403);
@@ -768,7 +840,10 @@ describe('Chat Routes', () => {
     it('should return 400 for invalid feedback value', async () => {
       const response = await request(app)
         .post(`/api/chat/${testChatLog.id}/feedback`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ feedback: 'invalid' });
 
       expect(response.status).toBe(400);
@@ -790,7 +865,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .delete(`/api/chat/${testChatLog.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -807,7 +885,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .delete('/api/chat/non-existent-id')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({
@@ -825,7 +906,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .delete(`/api/chat/${testChatLog.id}`)
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`);
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        );
 
       expect(response.status).toBe(403);
       expect(response.body).toEqual({
@@ -837,7 +921,7 @@ describe('Chat Routes', () => {
   describe('WebSocket chat functionality', () => {
     it('should handle WebSocket chat messages', (done) => {
       const mockSocket = createMockSocket();
-      
+
       io.on('connection', (socket) => {
         socket.on('chat:message', async (data) => {
           expect(data).toEqual({
@@ -857,16 +941,16 @@ describe('Chat Routes', () => {
       io.emit('connection', mockSocket);
 
       // Simulate chat message
-      mockSocket.on.mock.calls
-        .find(([event]) => event === 'chat:message')[1]({
-          widgetKey: 'wk_test_123',
-          message: 'Hello WebSocket',
-          sessionId: 'ws-session-123',
-        });
+      mockSocket.on.mock.calls.find(([event]) => event === 'chat:message')[1]({
+        widgetKey: 'wk_test_123',
+        message: 'Hello WebSocket',
+        sessionId: 'ws-session-123',
+      });
 
       // Verify response was emitted
       setTimeout(() => {
-        expect(mockSocket.emit).toHaveBeenCalledWith('chat:response', 
+        expect(mockSocket.emit).toHaveBeenCalledWith(
+          'chat:response',
           expect.objectContaining({
             answer: 'WebSocket response',
             timestamp: expect.any(String),
@@ -889,14 +973,14 @@ describe('Chat Routes', () => {
 
       io.emit('connection', mockSocket);
 
-      mockSocket.on.mock.calls
-        .find(([event]) => event === 'chat:message')[1]({
-          widgetKey: 'invalid_key',
-          message: 'Hello',
-        });
+      mockSocket.on.mock.calls.find(([event]) => event === 'chat:message')[1]({
+        widgetKey: 'invalid_key',
+        message: 'Hello',
+      });
 
       setTimeout(() => {
-        expect(mockSocket.emit).toHaveBeenCalledWith('chat:error', 
+        expect(mockSocket.emit).toHaveBeenCalledWith(
+          'chat:error',
           expect.objectContaining({
             error: 'Failed to process message',
           })
@@ -922,11 +1006,10 @@ describe('Chat Routes', () => {
 
       io.emit('connection', mockSocket);
 
-      mockSocket.on.mock.calls
-        .find(([event]) => event === 'chat:typing')[1]({
-          sessionId: 'session-123',
-          isTyping: true,
-        });
+      mockSocket.on.mock.calls.find(([event]) => event === 'chat:typing')[1]({
+        sessionId: 'session-123',
+        isTyping: true,
+      });
 
       done();
     });
@@ -958,7 +1041,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .post('/api/chat')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ message: 'Hello' });
 
       expect(response.status).toBe(200);
@@ -977,7 +1063,9 @@ describe('Chat Routes', () => {
     it('should track error metrics', async () => {
       const OpenAI = require('openai').default;
       const mockOpenAI = OpenAI.mock.results[0].value;
-      mockOpenAI.chat.completions.create.mockRejectedValueOnce(new Error('API Error'));
+      mockOpenAI.chat.completions.create.mockRejectedValueOnce(
+        new Error('API Error')
+      );
 
       (prisma.fAQ.findMany as jest.Mock).mockResolvedValue([]);
       (prisma.chatLog.findMany as jest.Mock).mockResolvedValue([]);
@@ -991,7 +1079,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .post('/api/chat')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .send({ message: 'Hello' });
 
       expect(response.status).toBe(500);
@@ -1033,7 +1124,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .get('/api/chat/export')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ format: 'csv' });
 
       expect(response.status).toBe(200);
@@ -1059,7 +1153,10 @@ describe('Chat Routes', () => {
 
       const response = await request(app)
         .get('/api/chat/export')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ format: 'json' });
 
       expect(response.status).toBe(200);
@@ -1075,7 +1172,10 @@ describe('Chat Routes', () => {
     it('should return 400 for invalid export format', async () => {
       const response = await request(app)
         .get('/api/chat/export')
-        .set('Authorization', `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`)
+        .set(
+          'Authorization',
+          `Bearer ${generateTestToken(testUser.id, testOrganization.id)}`
+        )
         .query({ format: 'invalid' });
 
       expect(response.status).toBe(400);
