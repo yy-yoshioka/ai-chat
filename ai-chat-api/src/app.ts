@@ -29,6 +29,7 @@ import settingsRoutes from './routes/settings';
 import webhooksRoutes from './routes/webhooks';
 import statusRoutes from './routes/status';
 import dataRetentionRoutes from './routes/dataRetention';
+import securityRoutes from './routes/security';
 
 // Load environment variables
 dotenv.config();
@@ -126,6 +127,7 @@ app.use('/api/settings', settingsRoutes);
 app.use('/api/webhooks', webhooksRoutes);
 app.use('/api/status', statusRoutes);
 app.use('/api/data-retention', dataRetentionRoutes);
+app.use('/api/security', securityRoutes);
 app.use('/v1/settings', settingsRoutes);
 app.use('/v1/organizations', organizationsRoutes);
 app.use('/v1/widgets', widgetsRoutes);

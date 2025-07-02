@@ -1,8 +1,10 @@
+import { Permission } from '../../_schemas/security';
+
 export interface NavItem {
   title: string;
   path: string;
   icon: string; // Emoji / HeroIcon 名など
-  permission?: string; // 例: 'view_dashboard'
+  permission?: Permission;
 }
 
 export const ADMIN_SIDEBAR: NavItem[] = [
@@ -15,4 +17,16 @@ export const ADMIN_SIDEBAR: NavItem[] = [
   { title: 'レポート', path: '/admin/reports', icon: '📈' },
   { title: 'ログ監視', path: '/admin/logs', icon: '📋' },
   { title: 'システムヘルス', path: '/admin/system-health', icon: '🏥' },
+  {
+    title: 'セキュリティ',
+    path: '/admin/[orgId]/security',
+    icon: '🔒',
+    permission: 'AUDIT_READ' as Permission,
+  },
+  {
+    title: '権限管理',
+    path: '/admin/[orgId]/security/permissions',
+    icon: '🔑',
+    permission: 'ORG_WRITE' as Permission,
+  },
 ] as const;
