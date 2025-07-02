@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { useCallback } from 'react';
 import { Incident, CreateIncidentInput, UpdateIncidentInput } from '@/app/_schemas/system-health';
 import { toast } from '@/components/ui/use-toast';
-import { fetchGet, fetchPost, fetchPut } from '@/app/_utils/fetcher';
+import { fetchGet, fetchPost } from '@/app/_utils/fetcher';
 
 export const useIncidents = (days: number = 30) => {
   const { data, error, mutate } = useSWR<Incident[]>(

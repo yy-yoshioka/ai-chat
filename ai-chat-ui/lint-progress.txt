@@ -1,0 +1,159 @@
+yarn run v1.22.22
+$ next lint --max-warnings=0
+(node:52821) ESLintIgnoreWarning: The ".eslintignore" file is no longer supported. Switch to using the "ignores" property in "eslint.config.js": https://eslint.org/docs/latest/use/configure/migration-guide#ignoring-files
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+./app/(auth)/reset-password/[token]/page.tsx
+12:16  Error: Function 'ResetPasswordPage' has too many lines (102). Maximum allowed is 100.  max-lines-per-function
+
+./app/(org)/admin/[orgId]/system-health/page.tsx
+23:16  Error: Function 'SystemHealthPage' has too many lines (136). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/chat/__tests__/ChatMessage.test.tsx
+9:47  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+15:25  Error: Arrow function has too many lines (113). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/knowledge-base/__tests__/KnowledgeBaseUploader.test.tsx
+13:35  Error: Arrow function has too many lines (188). Maximum allowed is 100.  max-lines-per-function
+30:29  Error: A `require()` style import is forbidden.  @typescript-eslint/no-require-imports
+31:45  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+55:29  Error: A `require()` style import is forbidden.  @typescript-eslint/no-require-imports
+150:29  Error: A `require()` style import is forbidden.  @typescript-eslint/no-require-imports
+151:25  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+153:45  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+182:29  Error: A `require()` style import is forbidden.  @typescript-eslint/no-require-imports
+183:25  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+185:45  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/_components/feature/reports/ExportForm.tsx
+62:27  Error: Arrow function has too many lines (226). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/security/PermissionsManager.tsx
+26:8  Error: Function 'PermissionsManager' has too many lines (118). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/security/SecurityDashboard.tsx
+12:8  Error: Function 'SecurityDashboard' has too many lines (128). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/settings/APIKeyManager.tsx
+18:8  Error: Function 'APIKeyManager' has too many lines (166). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/settings/DataRetentionSettings.tsx
+16:8  Error: Function 'DataRetentionSettings' has too many lines (173). Maximum allowed is 100.  max-lines-per-function
+18:50  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+126:41  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+135:41  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+163:47  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/_components/feature/settings/NotificationSettings.tsx
+46:8  Error: Function 'NotificationSettings' has too many lines (104). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/status/CreateIncidentModal.tsx
+53:8  Error: Function 'CreateIncidentModal' has too many lines (151). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/status/StatusDashboard.tsx
+101:41  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+103:50  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/_components/feature/users/UserDetailView.tsx
+18:8  Error: Function 'UserDetailView' has too many lines (106). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/webhooks/WebhookCard.tsx
+31:8  Error: Function 'WebhookCard' has too many lines (114). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/webhooks/WebhookForm.tsx
+27:8  Error: Function 'WebhookForm' has too many lines (123). Maximum allowed is 100.  max-lines-per-function
+
+./app/_components/feature/webhooks/WebhookLogsModal.tsx
+19:8  Error: Function 'WebhookLogsModal' has too many lines (147). Maximum allowed is 100.  max-lines-per-function
+
+./app/_hooks/settings/useDataRetention.ts
+32:29  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/_hooks/status/useIncidents.ts
+7:31  Error: 'fetchPut' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/_hooks/status/useMetrics.ts
+67:26  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+71:42  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+73:11  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+73:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/_hooks/webhooks/useWebhooks.ts
+13:8  Error: Function 'useWebhooks' has too many lines (108). Maximum allowed is 100.  max-lines-per-function
+39:23  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+64:23  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+87:23  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+114:23  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/_utils/validation.ts
+2:1  Error: 'zod' import is restricted from being used. 📐 Zod スキーマは app/_schemas/** に定義してください（route や hooks では import のみ可）。  no-restricted-imports
+
+./app/api/bff/settings/[id]/route.ts
+33:12  Error: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+61:12  Error: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/bff/settings/notifications/read-all/route.ts
+21:12  Error: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/bff/settings/route.ts
+42:12  Error: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+86:12  Error: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/bff/status/health/route.ts
+5:27  Error: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+15:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/bff/status/incidents/[id]/route.ts
+2:10  Error: 'fetcherWithAuth' is defined but never used.  @typescript-eslint/no-unused-vars
+3:10  Error: 'getAuthTokenFromCookie' is defined but never used.  @typescript-eslint/no-unused-vars
+18:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/bff/status/incidents/[id]/updates/route.ts
+31:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/bff/status/incidents/route.ts
+22:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+54:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/bff/status/metrics/route.ts
+20:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/bff/status/route.ts
+2:10  Error: 'fetcherWithAuth' is defined but never used.  @typescript-eslint/no-unused-vars
+3:10  Error: 'getAuthTokenFromCookie' is defined but never used.  @typescript-eslint/no-unused-vars
+7:27  Error: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+17:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/bff/webhooks/[id]/logs/route.ts
+34:19  Error: '_' is defined but never used.  @typescript-eslint/no-unused-vars
+44:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/bff/webhooks/[id]/route.ts
+18:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+50:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+70:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/bff/webhooks/[id]/test/route.ts
+21:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/bff/webhooks/route.ts
+5:31  Error: 'webhookLogsQuerySchema' is defined but never used.  @typescript-eslint/no-unused-vars
+9:27  Error: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+18:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+46:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/organizations/page.tsx
+20:16  Error: Function 'OrganizationsPage' has too many lines (119). Maximum allowed is 100.  max-lines-per-function
+
+./components/ui/card.tsx
+3:18  Error: An interface declaring no members is equivalent to its supertype.  @typescript-eslint/no-empty-object-type
+
+./components/ui/input.tsx
+3:18  Error: An interface declaring no members is equivalent to its supertype.  @typescript-eslint/no-empty-object-type
+
+./components/ui/label.tsx
+3:11  Error: An interface declaring no members is equivalent to its supertype.  @typescript-eslint/no-empty-object-type
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

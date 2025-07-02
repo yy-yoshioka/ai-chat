@@ -29,7 +29,7 @@ export interface RetentionJob {
   startedAt?: string;
   completedAt?: string;
   error?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: string;
 }
 
