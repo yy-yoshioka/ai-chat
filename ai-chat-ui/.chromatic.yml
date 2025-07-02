@@ -1,0 +1,6 @@
+# Chromatic configuration
+project: YOUR_PROJECT_ID
+buildScriptName: build-storybook
+exitOnceUploaded: true
+exitZeroOnChanges: true
+ignoreLastBuildOnBranch: main

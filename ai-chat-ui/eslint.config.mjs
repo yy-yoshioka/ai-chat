@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook';
+
 /* eslint import/no-anonymous-default-export: off */
 
 import { dirname } from 'path';
@@ -12,9 +15,11 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 
 const eslintConfig = [
   /* 0) Next.js & Prettier 推奨 */
-  ...compat.extends('next/core-web-vitals', 'next/typescript', 'plugin:prettier/recommended'),
-
-  /* 1) 共通ルール */
+  ...compat.extends(
+    'next/core-web-vitals',
+    'next/typescript',
+    'plugin:prettier/recommended'
+  ) /* 1) 共通ルール */,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     plugins: { boundaries },
@@ -40,15 +45,11 @@ const eslintConfig = [
       /* callback ネスト（then, setTimeout, コールバックなど） */
       'max-nested-callbacks': ['warn', 3], // 3 段まで
     },
-  },
-
-  /* 2) 例外：BFF ルート & 共通 fetcher & テストは fetch OK */
+  } /* 2) 例外：BFF ルート & 共通 fetcher & テストは fetch OK */,
   {
     files: ['**/api/**/route.ts', 'app/_utils/fetcher.ts', '**/*.test.{ts,tsx}'],
     rules: { 'no-restricted-globals': 'off' },
-  },
-
-  /* 3) Zod は _schemas/** 限定 */
+  } /* 3) Zod は _schemas/** 限定 */,
   {
     files: ['**/*.{ts,tsx}'],
     ignores: ['app/_schemas/**'],
@@ -63,6 +64,7 @@ const eslintConfig = [
       ],
     },
   },
+  ...storybook.configs['flat/recommended'],
 ];
 
 export default eslintConfig;
