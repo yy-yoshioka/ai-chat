@@ -78,14 +78,10 @@ function processMetricsForChart(metrics: SystemMetric[]) {
 }
 
 export const useHealthCheck = () => {
-  const { data, error } = useSWR<unknown>(
-    '/api/bff/status/health',
-    fetchGet,
-    {
-      refreshInterval: 10000, // Check every 10 seconds
-      revalidateOnFocus: false,
-    }
-  );
+  const { data, error } = useSWR<unknown>('/api/bff/status/health', fetchGet, {
+    refreshInterval: 10000, // Check every 10 seconds
+    revalidateOnFocus: false,
+  });
 
   return {
     health: data,

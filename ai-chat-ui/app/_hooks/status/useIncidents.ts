@@ -37,7 +37,10 @@ export const useIncidents = (days: number = 30) => {
   const updateIncident = useCallback(
     async (incidentId: string, update: UpdateIncidentInput) => {
       try {
-        const updatedIncident = await fetchPost(`/api/bff/status/incidents/${incidentId}/updates`, update);
+        const updatedIncident = await fetchPost(
+          `/api/bff/status/incidents/${incidentId}/updates`,
+          update
+        );
         mutate();
         toast({ title: 'Incident updated successfully' });
         return updatedIncident;
