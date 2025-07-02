@@ -18,7 +18,7 @@ export async function PATCH(request: NextRequest) {
     });
 
     return NextResponse.json({}, { status: 204 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to mark all as read' }, { status: 500 });
   }
 }

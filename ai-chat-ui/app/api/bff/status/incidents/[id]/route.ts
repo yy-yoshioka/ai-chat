@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetcherWithAuth } from '@/app/_utils/fetcher';
-import { getAuthTokenFromCookie } from '@/app/_utils/auth-utils';
 import { EXPRESS_API } from '@/app/_config/api';
 
 // GET /api/bff/status/incidents/[id] - Get specific incident
@@ -15,11 +13,11 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to fetch incident:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch incident' },
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Failed to fetch incident' },
+      { status: 500 }
     );
   }
 }

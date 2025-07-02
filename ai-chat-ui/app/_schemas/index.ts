@@ -34,6 +34,9 @@ export * from './webhooks';
 // Common Response Schemas
 import { z } from 'zod';
 
+// Re-export Zod types for validation utilities
+export type { ZodError, ZodSchema } from 'zod';
+
 export const SuccessResponseSchema = z.object({
   success: z.boolean(),
 });

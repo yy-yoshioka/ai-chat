@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
   }
 }
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(data, { status: method === 'POST' ? 201 : 200 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
   }
 }
