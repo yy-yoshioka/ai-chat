@@ -7,6 +7,7 @@ export const settingsTabSchema = z.enum([
   'api',
   'notifications',
   'security',
+  'data-retention',
 ]);
 
 export const brandingSettingsSchema = z.object({
