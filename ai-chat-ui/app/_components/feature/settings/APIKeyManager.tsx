@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Key, Copy, Eye, EyeOff, Trash2, Plus } from 'lucide-react';
+import { Key, Copy, Eye, EyeOff, Trash2, Plus, BookOpen, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useAPIKeys } from '@/app/_hooks/settings/useSettings';
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
+import Link from 'next/link';
 
 interface APIKeyManagerProps {
   orgId: string;
@@ -95,10 +96,25 @@ export function APIKeyManager({ orgId }: APIKeyManagerProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Key className="h-5 w-5" />
-          APIキー管理
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Key className="h-5 w-5" />
+            APIキー管理
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/api/docs"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" size="sm" className="gap-2">
+                <BookOpen className="h-4 w-4" />
+                APIドキュメント
+                <ExternalLink className="h-3 w-3" />
+              </Button>
+            </Link>
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -178,6 +194,35 @@ export function APIKeyManager({ orgId }: APIKeyManagerProps) {
           {apiKeys.length === 0 && (
             <p className="text-center text-gray-500 py-4">APIキーがまだありません</p>
           )}
+
+          {/* API情報 */}
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <h4 className="font-medium mb-2">API接続情報</h4>
+            <div className="space-y-1 text-sm">
+              <div>
+                <span className="text-gray-600">エンドポイント:</span>{' '}
+                <code className="font-mono bg-white px-1 py-0.5 rounded">
+                  {process.env.NEXT_PUBLIC_API_URL || 'https://api.ai-chat.com/v1'}
+                </code>
+              </div>
+              <div>
+                <span className="text-gray-600">認証ヘッダー:</span>{' '}
+                <code className="font-mono bg-white px-1 py-0.5 rounded">
+                  Authorization: Bearer YOUR_API_KEY
+                </code>
+              </div>
+              <div className="mt-2">
+                <Link
+                  href="https://github.com/ai-chat/sdk-js"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline text-sm"
+                >
+                  JavaScript SDK →
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
