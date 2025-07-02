@@ -10,12 +10,6 @@ interface WebhookPayload {
   organizationId: string;
 }
 
-interface WebhookResponse {
-  status: number;
-  body: string;
-  error?: string;
-}
-
 export class WebhookService {
   private static instance: WebhookService;
 

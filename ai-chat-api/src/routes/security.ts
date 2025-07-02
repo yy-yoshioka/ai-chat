@@ -1,6 +1,5 @@
 import express from 'express';
 import { authMiddleware as requireAuth } from '../middleware/auth';
-import { adminMiddleware as requireAdmin } from '../middleware/admin';
 import { requirePermission } from '../middleware/security';
 import { Permission } from '@prisma/client';
 import * as rbacService from '../services/rbacService';

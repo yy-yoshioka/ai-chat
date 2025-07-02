@@ -1,5 +1,5 @@
 import { prisma } from '../lib/prisma';
-import { SystemMetric, HealthCheck, Incident } from '@prisma/client';
+import { SystemMetric, HealthCheck } from '@prisma/client';
 import { logger } from '../lib/logger';
 import { Client } from 'pg';
 import Redis from 'ioredis';
