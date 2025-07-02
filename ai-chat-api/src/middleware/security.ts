@@ -180,12 +180,12 @@ export const requireIPAllowlist = async (
       select: { settings: true },
     });
 
-    const ipAllowlist = org?.settings?.ipAllowlist as string[] | undefined;
+    const ipAllowlist = (org?.settings as any)?.ipAllowlist as string[] | undefined;
 
     if (ipAllowlist && ipAllowlist.length > 0) {
       const clientIP = req.ip;
       const isAllowed = ipAllowlist.some((allowedIP) => {
-        return clientIP === allowedIP || clientIP.startsWith(allowedIP);
+        return clientIP && (clientIP === allowedIP || clientIP.startsWith(allowedIP));
       });
 
       if (!isAllowed) {

@@ -163,12 +163,12 @@ export const testAPIKey = {
 export const generateTestToken = (
   userId: string,
   organizationId: string,
-  expiresIn = '1h'
+  expiresIn: string | number = '1h'
 ) => {
   return jwt.sign(
-    { id: userId, organizationId }, 
+    { id: userId, organizationId },
     process.env.JWT_SECRET || 'test-secret',
-    { expiresIn }
+    { expiresIn } as jwt.SignOptions
   );
 };
 
@@ -177,9 +177,9 @@ export const generateExpiredToken = (
   organizationId: string
 ) => {
   return jwt.sign(
-    { id: userId, organizationId }, 
+    { id: userId, organizationId },
     process.env.JWT_SECRET || 'test-secret',
-    { expiresIn: '-1h' }
+    { expiresIn: '-1h' } as jwt.SignOptions
   );
 };
 

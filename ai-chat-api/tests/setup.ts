@@ -27,6 +27,9 @@ jest.mock('../src/lib/prisma');
 // Mock Redis
 jest.mock('ioredis');
 
+// Mock services
+jest.mock('../src/services/widgetService');
+
 // Mock logger to reduce noise in tests
 jest.mock('../src/lib/logger', () => ({
   logger: {
