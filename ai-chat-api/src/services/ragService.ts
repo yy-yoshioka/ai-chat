@@ -419,10 +419,14 @@ export async function generateRAGResponse(
 export async function getRAGStats(organizationId: string) {
   try {
     const [documentsCount, faqsCount, unansweredCount] = await Promise.all([
-      prisma.document.count({
+      prisma.knowledgeBase.count({
         where: {
-          knowledgeBase: { organizationId },
-          status: 'completed',
+          organizationId,
+          documents: {
+            some: {
+              status: 'completed',
+            },
+          },
         },
       }),
       prisma.fAQ.count({

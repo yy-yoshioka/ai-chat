@@ -93,7 +93,7 @@ async function processDocumentEmbedding(
 ): Promise<void> {
   try {
     // ドキュメントをデータベースから取得
-    const document = await prisma.document.findUnique({
+    const document = await prisma.knowledgeBase.findUnique({
       where: { id: jobData.id },
       include: { knowledgeBase: true },
     });
@@ -103,7 +103,7 @@ async function processDocumentEmbedding(
     }
 
     // ドキュメントのステータスを「処理中」に更新
-    await prisma.document.update({
+    await prisma.knowledgeBase.update({
       where: { id: jobData.id },
       data: { status: 'processing' },
     });
@@ -154,7 +154,7 @@ async function processDocumentEmbedding(
     console.error(`Failed to process document embedding:`, error);
 
     // エラー状態を記録
-    await prisma.document.update({
+    await prisma.knowledgeBase.update({
       where: { id: jobData.id },
       data: {
         status: 'failed',

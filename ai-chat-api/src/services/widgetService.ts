@@ -245,7 +245,7 @@ export const getWidgetAnalytics = async (
 
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-  const [totalChats, monthlyChats, avgSatisfaction, topQuestions] =
+  const [totalChats, monthlyChats, helpfulCount, totalFeedback, topQuestions] =
     await Promise.all([
       prisma.chatLog.count({
         where: { widgetId: id },
@@ -256,12 +256,16 @@ export const getWidgetAnalytics = async (
           createdAt: { gte: thirtyDaysAgo },
         },
       }),
-      prisma.messageFeedback.aggregate({
+      prisma.messageFeedback.count({
         where: {
           chatLog: { widgetId: id },
           helpful: true,
         },
-        _avg: { helpful: true },
+      }),
+      prisma.messageFeedback.count({
+        where: {
+          chatLog: { widgetId: id },
+        },
       }),
       prisma.chatLog.groupBy({
         by: ['question'],
@@ -278,7 +282,7 @@ export const getWidgetAnalytics = async (
   return {
     totalChats,
     monthlyChats,
-    avgSatisfaction: avgSatisfaction._avg.helpful || 0,
+    avgSatisfaction: totalFeedback > 0 ? (helpfulCount / totalFeedback) * 5 : 0,
     topQuestions: topQuestions.map((q) => ({
       question: q.question,
       count: q._count.question,

@@ -5,7 +5,7 @@ import crypto from 'crypto';
 export const createAPIKey = async (organizationId: string, name: string) => {
   const key = `ak_${crypto.randomBytes(24).toString('hex')}`;
 
-  return prisma.apiKey.create({
+  return prisma.aPIKey.create({
     data: {
       name,
       key,
@@ -15,7 +15,7 @@ export const createAPIKey = async (organizationId: string, name: string) => {
 };
 
 export const listAPIKeys = async (organizationId: string) => {
-  return prisma.apiKey.findMany({
+  return prisma.aPIKey.findMany({
     where: { organizationId },
     orderBy: { createdAt: 'desc' },
     select: {
@@ -29,7 +29,7 @@ export const listAPIKeys = async (organizationId: string) => {
 };
 
 export const deleteAPIKey = async (keyId: string, organizationId: string) => {
-  return prisma.apiKey.delete({
+  return prisma.aPIKey.delete({
     where: {
       id: keyId,
       organizationId,
@@ -38,14 +38,14 @@ export const deleteAPIKey = async (keyId: string, organizationId: string) => {
 };
 
 export const validateAPIKey = async (key: string) => {
-  const apiKey = await prisma.apiKey.findUnique({
+  const apiKey = await prisma.aPIKey.findUnique({
     where: { key },
     include: { organization: true },
   });
 
   if (apiKey) {
     // Update last used
-    await prisma.apiKey.update({
+    await prisma.aPIKey.update({
       where: { id: apiKey.id },
       data: { lastUsed: new Date() },
     });

@@ -164,7 +164,7 @@ async function syncZendeskSection(
         const content = `# ${article.title}\n\n${cleanContent}`;
 
         // 既存の記事をチェック
-        const existingDoc = await prisma.document.findFirst({
+        const existingDoc = await prisma.knowledgeBase.findFirst({
           where: {
             knowledgeBaseId,
             url: article.html_url,
@@ -175,7 +175,7 @@ async function syncZendeskSection(
         if (existingDoc) {
           // 更新が必要かチェック
           if (new Date(article.updated_at) > existingDoc.updatedAt) {
-            await prisma.document.update({
+            await prisma.knowledgeBase.update({
               where: { id: existingDoc.id },
               data: {
                 title: article.title,
@@ -192,7 +192,7 @@ async function syncZendeskSection(
           }
         } else {
           // 新規作成
-          const newDoc = await prisma.document.create({
+          const newDoc = await prisma.knowledgeBase.create({
             data: {
               knowledgeBaseId,
               sourceType: 'zendesk',
@@ -269,7 +269,7 @@ export async function syncIntercomArticles(
         const content = `# ${article.title}\n\n${cleanContent}`;
 
         // 既存の記事をチェック
-        const existingDoc = await prisma.document.findFirst({
+        const existingDoc = await prisma.knowledgeBase.findFirst({
           where: {
             knowledgeBaseId,
             sourceMetadata: {
@@ -282,7 +282,7 @@ export async function syncIntercomArticles(
         if (existingDoc) {
           // 更新が必要かチェック
           if (new Date(article.updated_at) > existingDoc.updatedAt) {
-            await prisma.document.update({
+            await prisma.knowledgeBase.update({
               where: { id: existingDoc.id },
               data: {
                 title: article.title,
@@ -298,7 +298,7 @@ export async function syncIntercomArticles(
           }
         } else {
           // 新規作成
-          const newDoc = await prisma.document.create({
+          const newDoc = await prisma.knowledgeBase.create({
             data: {
               knowledgeBaseId,
               sourceType: 'intercom',
@@ -393,7 +393,7 @@ export async function importCSVData(
         }
 
         // ドキュメントを作成
-        const newDoc = await prisma.document.create({
+        const newDoc = await prisma.knowledgeBase.create({
           data: {
             knowledgeBaseId,
             sourceType: 'csv',
@@ -448,7 +448,7 @@ export async function importMarkdownFiles(
         const title = file.name.replace(/\.md$/, '').replace(/[-_]/g, ' ');
 
         // ドキュメントを作成
-        const newDoc = await prisma.document.create({
+        const newDoc = await prisma.knowledgeBase.create({
           data: {
             knowledgeBaseId,
             sourceType: 'markdown',
@@ -544,7 +544,7 @@ export async function runIncrementalSync(
     }
 
     // 最後の同期時刻を取得
-    const lastSyncDoc = await prisma.document.findFirst({
+    const lastSyncDoc = await prisma.knowledgeBase.findFirst({
       where: {
         knowledgeBase: { organizationId },
         sourceType: type,
@@ -582,7 +582,7 @@ export async function runIncrementalSync(
 // 同期統計を取得
 export async function getSyncStats(organizationId: string) {
   try {
-    const stats = await prisma.document.groupBy({
+    const stats = await prisma.knowledgeBase.groupBy({
       by: ['sourceType'],
       where: {
         knowledgeBase: { organizationId },

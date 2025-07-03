@@ -1,5 +1,6 @@
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
+import { resourceFromAttributes } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
@@ -30,7 +31,7 @@ export function initializeTelemetry(): NodeSDK | null {
     });
 
     // Configure resource
-    const resource = new Resource({
+    const resource = resourceFromAttributes({
       [SemanticResourceAttributes.SERVICE_NAME]: serviceName,
       [SemanticResourceAttributes.SERVICE_VERSION]:
         process.env.npm_package_version || '1.0.0',
@@ -49,7 +50,7 @@ export function initializeTelemetry(): NodeSDK | null {
           '@opentelemetry/instrumentation-http': {
             requestHook: (span, request) => {
               // Add custom attributes to HTTP spans
-              if (request.url) {
+              if ('url' in request && request.url) {
                 span.setAttribute('http.url.path', request.url);
               }
             },
@@ -58,7 +59,10 @@ export function initializeTelemetry(): NodeSDK | null {
             requestHook: (span, info) => {
               // Add custom attributes to Express spans
               if (info.request) {
-                span.setAttribute('express.route', info.layerPath || 'unknown');
+                span.setAttribute(
+                  'express.route',
+                  (info as any).layerPath || 'unknown'
+                );
               }
             },
           },

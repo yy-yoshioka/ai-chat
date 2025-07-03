@@ -1,0 +1,184 @@
+# Failed Tests Detailed Analysis
+Generated: 2025-07-02
+
+## Overview
+15 test suites failed to execute due to TypeScript compilation errors. No test failures occurred at runtime - all failures are build-time compilation issues.
+
+## Critical TypeScript Errors
+
+### 1. JWT Token Generation (tests/fixtures/test-data.ts:168)
+**Error**: No overload matches this call for jwt.sign()
+**Impact**: Affects 8 test suites (all route tests using test tokens)
+**Code Location**: tests/fixtures/test-data.ts:168-170
+```typescript
+// Current problematic code:
+return jwt.sign({ id: userId, organizationId }, process.env.JWT_SECRET!, {
+  expiresIn,
+});
+```
+**Root Cause**: JWT library type definitions expect specific parameter types
+**Solution**: Fix parameter type annotations and non-null assertion
+
+### 2. Organization Access Middleware (src/middleware/organizationAccess.ts:8)
+**Error**: Property 'organizationId' does not exist on type 'UserPayload'
+**Impact**: Affects 7 test suites that import organization access middleware
+**Code Location**: src/middleware/organizationAccleware.ts:8
+```typescript
+// Current problematic code:
+if (!req.user || !req.user.organizationId) {
+```
+**Root Cause**: UserPayload type definition missing organizationId property
+**Solution**: Update UserPayload interface in src/types/express.d.ts
+
+### 3. Telemetry Resource Import (src/lib/telemetry.ts:34)
+**Error**: 'Resource' only refers to a type, but is being used as a value
+**Impact**: Affects 4 integration test suites
+**Code Location**: src/lib/telemetry.ts:34
+```typescript
+// Current problematic code:
+const resource = new Resource({
+```
+**Root Cause**: Incorrect import statement for OpenTelemetry Resource
+**Solution**: Fix import to include Resource as value, not just type
+
+## Route-Specific Test Failures
+
+### tests/routes/webhooks.test.ts
+- Primary Error: organizationAccess middleware type error
+- Secondary: Missing exports from organizationAccess module
+
+### tests/routes/dashboard.test.ts
+- Primary Error: telemetry.ts Resource import issue
+- Secondary: Organization access type errors
+
+### tests/routes/organizations.test.ts
+- Primary Error: JWT token generation type conflict
+- Secondary: test-data.ts function signature issues
+
+### tests/routes/users.test.ts
+- Primary Error: Missing requireOrganizationAccess export
+- Secondary: JWT token generation issues
+
+### tests/routes/widgets.test.ts
+- Multiple mock return type mismatches:
+  - Widget service expecting 'pagination' property, getting 'total', 'page', 'limit'
+  - Missing 'company' property in widget objects
+  - Analytics mock structure mismatch
+
+### tests/routes/knowledge-base.test.ts
+- Property access errors: testWidget.company does not exist
+- Should use testWidget.companyId instead
+
+### tests/routes/auth.test.ts
+- JWT token generation type error (same as test-data.ts)
+
+### tests/routes/billing.test.ts
+- Missing default export from billing route module
+
+### tests/routes/admin.test.ts
+- JWT token generation type error (same as test-data.ts)
+
+### tests/routes/analytics.test.ts
+- Missing default export from analytics route module
+
+### tests/routes/chat.test.ts
+- Variable 'capturedMessages' used before assignment
+- Property 'company' access errors (same pattern as knowledge-base)
+
+## Integration Test Failures
+
+### tests/integration/users.test.ts
+- Telemetry Resource import issue
+
+### tests/integration/reports.test.ts
+- Telemetry Resource import issue
+
+### tests/integration/organizations.test.ts
+- Telemetry Resource import issue
+
+### tests/integration/dashboard.test.ts
+- Telemetry Resource import issue
+
+## Mock Structure Issues
+
+### Widget Service Mocks
+Tests expect mock return objects with specific structures:
+```typescript
+// Expected by service:
+{
+  widgets: [...],
+  pagination: { page, limit, total, totalPages }
+}
+
+// Currently provided by tests:
+{
+  widgets: [...],
+  total, page, limit  // Missing pagination wrapper
+}
+```
+
+### Company/Organization Relationship
+Tests try to access `testWidget.company` but fixture only has `companyId`:
+```typescript
+// Incorrect usage in tests:
+...testWidget.company
+
+// Should be:
+companyId: testWidget.companyId
+```
+
+## Prisma Schema Mismatches
+
+### Document Model References
+Multiple files reference non-existent `prisma.document`:
+- src/jobs/embeddingCron.ts
+- src/services/embeddingWorker.ts  
+- src/services/ragService.ts
+- src/services/thirdPartyConnectors.ts
+
+### Missing Properties
+- HealthCheck model missing 'timestamp' property
+- Various models missing expected relation properties
+
+## Missing Dependencies
+
+### Type Declarations
+- @types/js-yaml (src/routes/docs.ts)
+- @types/swagger-ui-express (src/routes/docs.ts)
+
+### Export Issues
+- analytics route missing default export
+- billing route missing default export
+
+## Resolution Priority
+
+### Immediate (Blocks all route tests)
+1. Fix JWT token generation in test-data.ts
+2. Add organizationId to UserPayload type
+3. Fix telemetry Resource import
+
+### High Priority (Affects multiple suites)
+1. Fix widget service mock return structures
+2. Resolve company/companyId property access
+3. Add missing route exports
+
+### Medium Priority (Individual test fixes)
+1. Fix capturedMessages variable initialization
+2. Install missing type declarations
+3. Update Prisma schema references
+
+## Impact Assessment
+
+- **Blocking**: 15 test suites cannot execute
+- **Code Coverage**: 0% for route and integration tests
+- **CI/CD**: Test pipeline would fail
+- **Development**: No regression testing for API endpoints
+
+## Quick Fix Summary
+
+The majority of issues can be resolved by addressing these 3 core problems:
+1. JWT type annotations in test fixtures
+2. UserPayload interface extension
+3. OpenTelemetry Resource import correction
+
+Once these are fixed, approximately 80% of the failing tests should execute successfully.

@@ -1,0 +1,105 @@
+yarn run v1.22.22
+$ /Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/.bin/tsc --noEmit
+src/jobs/dataRetentionCron.ts(91,7): error TS2322: Type 'null' is not assignable to type '(Without<WebhookScalarRelationFilter, WebhookWhereInput> & WebhookWhereInput) | (Without<WebhookWhereInput, WebhookScalarRelationFilter> & WebhookScalarRelationFilter) | undefined'.
+src/jobs/dataRetentionCron.ts(98,7): error TS2322: Type 'null' is not assignable to type '(Without<ChatLogScalarRelationFilter, ChatLogWhereInput> & ChatLogWhereInput) | (Without<ChatLogWhereInput, ChatLogScalarRelationFilter> & ChatLogScalarRelationFilter) | undefined'.
+src/jobs/embeddingCron.ts(40,44): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/jobs/embeddingCron.ts(84,24): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/jobs/embeddingCron.ts(96,24): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/jobs/embeddingCron.ts(107,22): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/jobs/embeddingCron.ts(277,5): error TS2353: Object literal may only specify known properties, and 'scheduled' does not exist in type 'TaskOptions'.
+src/lib/telemetry.ts(34,26): error TS2693: 'Resource' only refers to a type, but is being used as a value here.
+src/middleware/organizationAccess.ts(8,30): error TS2339: Property 'organizationId' does not exist on type 'UserPayload & { roles?: string[] | undefined; }'.
+src/middleware/security.ts(183,40): error TS2339: Property 'ipAllowlist' does not exist on type 'string | number | boolean | JsonObject | JsonArray'.
+  Property 'ipAllowlist' does not exist on type 'string'.
+src/middleware/security.ts(188,42): error TS18048: 'clientIP' is possibly 'undefined'.
+src/routes/analytics.ts(4,3): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+src/routes/analytics.ts(5,3): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'OrganizationRequest'.
+src/routes/billing.ts(4,3): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+src/routes/billing.ts(5,3): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'OrganizationRequest'.
+src/routes/docs.ts(2,23): error TS2307: Cannot find module 'swagger-ui-express' or its corresponding type declarations.
+src/routes/docs.ts(3,18): error TS7016: Could not find a declaration file for module 'js-yaml'. '/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/js-yaml/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/js-yaml` if it exists or add a new declaration (.d.ts) file containing `declare module 'js-yaml';`
+src/routes/embed.ts(4,3): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+src/routes/embed.ts(5,3): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'OrganizationRequest'.
+src/routes/knowledge-base.ts(8,3): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+src/routes/knowledge-base.ts(9,3): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'OrganizationRequest'.
+src/routes/knowledge-base.ts(55,3): error TS2352: Conversion of type 'import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/multer/node_modules/@types/express/index").RequestHandler<import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/multer/node_modules/@types/express-serve-static-core/index").ParamsDictionary, any, a...' to type 'import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/express/index").RequestHandler<import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/express-serve-static-core/index").ParamsDictionary, any, any, qs.ParsedQs, Record<...>>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Types of parameters 'req' and 'req' are incompatible.
+    Type 'import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/express-serve-static-core/index").Request<import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/express-serve-static-core/index").ParamsDictionary, any, any, qs.ParsedQs, Record<...>>' is not comparable to type 'import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/multer/node_modules/@types/express-serve-static-core/index").Request<import("/Users/yusukeyoshioka/projects/youtube/ai-chat/ai-chat-api/node_modules/@types/multer/node_modules/@types/express-serve-static-core/index").ParamsDiction...'.
+      The types of 'app.router' are incompatible between these types.
+        Type 'string' is not comparable to type 'Router'.
+src/routes/status.ts(73,25): error TS2339: Property 'updates' does not exist on type '{ description: string; id: string; createdAt: Date; status: string; title: string; severity: string; affectedServices: string[]; resolvedAt: Date | null; }'.
+src/routes/status.ts(73,51): error TS7006: Parameter 'update' implicitly has an 'any' type.
+src/routes/status.ts(222,7): error TS2353: Object literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckWhereInput'.
+src/routes/training.ts(2,26): error TS2305: Module '"../middleware/auth"' has no exported member 'AuthRequest'.
+src/routes/training.ts(98,11): error TS2322: Type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+src/routes/translation.ts(4,3): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+src/routes/translation.ts(5,3): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'OrganizationRequest'.
+src/routes/users.ts(5,10): error TS2305: Module '"../middleware/organizationAccess"' has no exported member 'requireOrganizationAccess'.
+src/routes/users.ts(444,33): error TS2339: Property 'email' does not exist on type '{ organizationId: string | null; roles: Role[]; }'.
+src/services/alertService.ts(87,9): error TS2353: Object literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckWhereInput'.
+src/services/alertService.ts(89,18): error TS2353: Object literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckOrderByWithRelationInput | HealthCheckOrderByWithRelationInput[]'.
+src/services/alertService.ts(272,9): error TS2353: Object literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckWhereInput'.
+src/services/alertService.ts(274,18): error TS2353: Object literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckOrderByWithRelationInput | HealthCheckOrderByWithRelationInput[]'.
+src/services/embeddingWorker.ts(96,35): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/embeddingWorker.ts(106,18): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/embeddingWorker.ts(157,18): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/embeddingWorker.ts(258,33): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/embeddingWorker.ts(309,34): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/embeddingWorker.ts(328,23): error TS7006: Parameter 'doc' implicitly has an 'any' type.
+src/services/healthMonitorService.ts(276,22): error TS2353: Object literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckOrderByWithRelationInput | HealthCheckOrderByWithRelationInput[]'.
+src/services/healthMonitorService.ts(341,18): error TS2353: Object literal may only specify known properties, and 'timestamp' does not exist in type 'HealthCheckWhereInput'.
+src/services/ragService.ts(422,14): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/reportService.ts(55,7): error TS2353: Object literal may only specify known properties, and 'messages' does not exist in type 'ChatLogInclude<DefaultArgs>'.
+src/services/reportService.ts(67,25): error TS2551: Property 'widget' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'. Did you mean 'widgetId'?
+src/services/reportService.ts(68,26): error TS2551: Property 'widget' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'. Did you mean 'widgetId'?
+src/services/reportService.ts(69,24): error TS2339: Property 'userAgent' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'.
+src/services/reportService.ts(71,21): error TS2339: Property 'messages' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'.
+src/services/reportService.ts(72,27): error TS2339: Property 'messages' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'.
+src/services/reportService.ts(90,7): error TS2561: Object literal may only specify known properties, but 'organizations' does not exist in type 'UserInclude<DefaultArgs>'. Did you mean to write 'organization'?
+src/services/reportService.ts(133,32): error TS2551: Property 'organizations' does not exist on type '{ name: string | null; id: string; email: string; organizationId: string | null; createdAt: Date; updatedAt: Date; companyId: string | null; password: string; isAdmin: boolean; roles: Role[]; }'. Did you mean 'organizationId'?
+src/services/reportService.ts(135,25): error TS2339: Property '_count' does not exist on type '{ name: string | null; id: string; email: string; organizationId: string | null; createdAt: Date; updatedAt: Date; companyId: string | null; password: string; isAdmin: boolean; roles: Role[]; }'.
+src/services/reportService.ts(170,11): error TS2353: Object literal may only specify known properties, and 'messages' does not exist in type 'ChatLogInclude<DefaultArgs>'.
+src/services/reportService.ts(180,13): error TS2339: Property 'messages' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'.
+src/services/reportService.ts(180,28): error TS7006: Parameter 'msg' implicitly has an 'any' type.
+src/services/reportService.ts(184,13): error TS2339: Property 'messages' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'.
+src/services/reportService.ts(184,28): error TS7006: Parameter 'msg' implicitly has an 'any' type.
+src/services/reportService.ts(185,31): error TS7006: Parameter 'feedback' implicitly has an 'any' type.
+src/services/reportService.ts(230,7): error TS2353: Object literal may only specify known properties, and 'messages' does not exist in type 'ChatLogWhereInput'.
+src/services/reportService.ts(242,7): error TS2353: Object literal may only specify known properties, and 'messages' does not exist in type 'ChatLogInclude<DefaultArgs>'.
+src/services/reportService.ts(268,34): error TS2551: Property 'widget' does not exist on type '{ id: string; createdAt: Date; tokens: number | null; widgetId: string | null; userId: string | null; question: string; answer: string; }'. Did you mean 'widgetId'?
+src/services/reportService.ts(426,43): error TS2322: Type '{ label: string; value: string; }[] | { label: string; value: string; }[] | { label: string; value: string; }[] | { label: string; value: string; }[] | { label: string; value: string; }[]' is not assignable to type 'string[] | undefined'.
+  Type '{ label: string; value: string; }[]' is not assignable to type 'string[]'.
+    Type '{ label: string; value: string; }' is not assignable to type 'string'.
+src/services/settingsService.ts(8,17): error TS2551: Property 'apiKey' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'aPIKey'?
+src/services/settingsService.ts(18,17): error TS2551: Property 'apiKey' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'aPIKey'?
+src/services/settingsService.ts(32,17): error TS2551: Property 'apiKey' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'aPIKey'?
+src/services/settingsService.ts(41,31): error TS2551: Property 'apiKey' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'aPIKey'?
+src/services/settingsService.ts(48,18): error TS2551: Property 'apiKey' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'aPIKey'?
+src/services/settingsService.ts(102,5): error TS2322: Type '{ organizationId: string; userId?: string | undefined; type: string; title: string; message: string; data?: Record<string, unknown> | undefined; }' is not assignable to type '(Without<NotificationCreateInput, NotificationUncheckedCreateInput> & NotificationUncheckedCreateInput) | (Without<...> & NotificationCreateInput)'.
+  Type '{ organizationId: string; userId?: string | undefined; type: string; title: string; message: string; data?: Record<string, unknown> | undefined; }' is not assignable to type 'Without<NotificationCreateInput, NotificationUncheckedCreateInput> & NotificationUncheckedCreateInput'.
+    Type '{ organizationId: string; userId?: string | undefined; type: string; title: string; message: string; data?: Record<string, unknown> | undefined; }' is not assignable to type 'NotificationUncheckedCreateInput'.
+      Types of property 'data' are incompatible.
+        Type 'Record<string, unknown> | undefined' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+          Type 'Record<string, unknown>' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+            Type 'Record<string, unknown>' is missing the following properties from type 'readonly (InputJsonValue | null)[]': length, concat, join, slice, and 20 more.
+src/services/thirdPartyConnectors.ts(167,42): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/thirdPartyConnectors.ts(178,26): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/thirdPartyConnectors.ts(195,39): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/thirdPartyConnectors.ts(272,42): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/thirdPartyConnectors.ts(285,26): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/thirdPartyConnectors.ts(301,39): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/thirdPartyConnectors.ts(396,37): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/thirdPartyConnectors.ts(451,37): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/thirdPartyConnectors.ts(547,38): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/thirdPartyConnectors.ts(585,32): error TS2339: Property 'document' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/webhookService.ts(198,9): error TS2322: Type 'WebhookPayload' is not assignable to type 'JsonNull | InputJsonValue'.
+  Type 'WebhookPayload' is not assignable to type 'InputJsonObject'.
+    Index signature for type 'string' is missing in type 'WebhookPayload'.
+src/services/widgetService.ts(264,9): error TS2322: Type '{ helpful: true; }' is not assignable to type 'never'.
+src/services/widgetService.ts(281,38): error TS2339: Property '_avg' does not exist on type 'GetMessageFeedbackAggregateType<{ where: { chatLog: { widgetId: string; }; helpful: true; }; _avg: { helpful: boolean; }; }>'.
+src/utils/pdfGenerator.ts(2,15): error TS2305: Module '"pdfkit"' has no exported member 'PDFDocument'.
+src/utils/pdfGenerator.ts(189,28): error TS7006: Parameter 'chunk' implicitly has an 'any' type.
+error Command failed with exit code 2.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

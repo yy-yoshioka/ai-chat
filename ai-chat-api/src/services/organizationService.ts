@@ -118,7 +118,8 @@ export const updateOrganization = async (
   return prisma.organization.update({
     where: { id },
     data: {
-      ...data,
+      name: data.name,
+      settings: data.settings as any,
       updatedAt: new Date(),
     },
   });
