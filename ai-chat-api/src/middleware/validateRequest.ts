@@ -17,12 +17,14 @@ export function validateRequest(schemas: ValidationOptions) {
 
       // Validate query parameters
       if (schemas.query) {
-        req.query = await schemas.query.parseAsync(req.query);
+        const parsedQuery = await schemas.query.parseAsync(req.query);
+        req.query = parsedQuery as any;
       }
 
       // Validate URL parameters
       if (schemas.params) {
-        req.params = await schemas.params.parseAsync(req.params);
+        const parsedParams = await schemas.params.parseAsync(req.params);
+        req.params = parsedParams as any;
       }
 
       next();

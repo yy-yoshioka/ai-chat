@@ -511,7 +511,7 @@ export async function saveConnectorConfig(
         organizationId,
         service: type,
         name: 'Default',
-        credentials: config as unknown as CredentialData,
+        credentials: config,
       },
       adminUser.id
     );

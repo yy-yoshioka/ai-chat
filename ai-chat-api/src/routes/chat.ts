@@ -9,7 +9,9 @@ import { rateLimiter } from '../utils/rateLimiter';
 import { combinedRateLimit } from '../middleware/chatRateLimit';
 import { searchKnowledgeBase } from '../services/knowledgeBaseService';
 import { webhookService } from '../services/webhookService';
+import { customResponseService } from '../services/customResponseService';
 import type { UserPayload } from '../utils/jwt';
+import { ResponseType } from '@prisma/client';
 
 const router = Router();
 
@@ -177,9 +179,59 @@ async function handleChatRequest(
       });
 
       if (!rateLimitResult.allowed) {
+        // Try to get custom rate limit response
+        const customResponse =
+          await customResponseService.getResponseForContext(
+            req.widget.id,
+            ResponseType.RATE_LIMIT,
+            { widgetName: req.widget.name }
+          );
+
         res.status(429).json({
-          error: 'Rate limit exceeded. Please try again later.',
+          error:
+            customResponse || 'Rate limit exceeded. Please try again later.',
           resetTime: rateLimitResult.resetTime,
+        });
+        return;
+      }
+    }
+
+    // Check if this is a greeting message
+    const greetingPatterns = [
+      /^(hello|hi|hey|こんにちは|はじめまして|よろしく)/i,
+      /^(good\s*(morning|afternoon|evening))/i,
+      /^(おはよう|こんばんは)/i,
+    ];
+
+    const isGreeting = greetingPatterns.some((pattern) =>
+      pattern.test(message.trim())
+    );
+
+    if (isGreeting && isWidgetRequest && req.widget) {
+      const greetingResponse =
+        await customResponseService.getResponseForContext(
+          req.widget.id,
+          ResponseType.GREETING,
+          {
+            widgetName: req.widget.name,
+            time: new Date().toLocaleTimeString('ja-JP', { hour: 'numeric' }),
+          }
+        );
+
+      if (greetingResponse) {
+        // Save greeting interaction to chat log
+        await prisma.chatLog.create({
+          data: {
+            question: message,
+            answer: greetingResponse,
+            widgetId: req.widget.id,
+          },
+        });
+
+        res.json({
+          answer: greetingResponse,
+          timestamp: new Date().toISOString(),
+          sources: [],
         });
         return;
       }
@@ -318,8 +370,21 @@ async function handleChatRequest(
       }
     }
 
+    // Get custom error response if this is a widget request
+    let errorMessage = '申し訳ございません。一時的なエラーが発生しました。';
+    if (isWidgetRequest && req.widget) {
+      const customError = await customResponseService.getResponseForContext(
+        req.widget.id,
+        ResponseType.ERROR,
+        { widgetName: req.widget.name }
+      );
+      if (customError) {
+        errorMessage = customError;
+      }
+    }
+
     res.status(500).json({
-      error: '申し訳ございません。一時的なエラーが発生しました。',
+      error: errorMessage,
       message: 'Internal server error',
     });
   }
