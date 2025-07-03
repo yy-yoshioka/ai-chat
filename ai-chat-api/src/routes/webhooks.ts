@@ -25,8 +25,8 @@ router.get('/:id', requireAuth, requireOrgAccess, async (req, res) => {
       req.organizationId!
     );
     res.json(webhook);
-  } catch (error: any) {
-    if (error.message === 'Webhook not found') {
+  } catch (error) {
+    if (error instanceof Error && error.message === 'Webhook not found') {
       res.status(404).json({ error: 'Webhook not found' });
     } else {
       logger.error('Failed to fetch webhook', error);
@@ -101,7 +101,7 @@ router.put('/:id', requireAuth, requireOrgAccess, async (req, res) => {
       req.body
     );
     res.json(webhook);
-  } catch (error: any) {
+  } catch (error) {
     if (error.message === 'Webhook not found or access denied') {
       res.status(404).json({ error: 'Webhook not found' });
     } else {
@@ -116,7 +116,7 @@ router.delete('/:id', requireAuth, requireOrgAccess, async (req, res) => {
   try {
     await webhookService.deleteWebhook(req.params.id, req.organizationId!);
     res.status(204).send();
-  } catch (error: any) {
+  } catch (error) {
     if (error.message === 'Webhook not found or access denied') {
       res.status(404).json({ error: 'Webhook not found' });
     } else {
@@ -144,7 +144,7 @@ router.get('/:id/logs', requireAuth, requireOrgAccess, async (req, res) => {
     );
 
     res.json(logs);
-  } catch (error: any) {
+  } catch (error) {
     if (error.message === 'Webhook not found or access denied') {
       res.status(404).json({ error: 'Webhook not found' });
     } else {
@@ -162,8 +162,8 @@ router.post('/:id/test', requireAuth, requireOrgAccess, async (req, res) => {
       req.organizationId!
     );
     res.json(log);
-  } catch (error: any) {
-    if (error.message === 'Webhook not found') {
+  } catch (error) {
+    if (error instanceof Error && error.message === 'Webhook not found') {
       res.status(404).json({ error: 'Webhook not found' });
     } else {
       logger.error('Failed to test webhook', error);

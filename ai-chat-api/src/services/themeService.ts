@@ -12,15 +12,6 @@ interface ThemeData {
   logoUrl?: string;
 }
 
-interface OrganizationTheme extends ThemeData {
-  id: string;
-  organizationId: string;
-  name: string;
-  isDefault: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export class ThemeService {
   /**
    * Get default theme for an organization
@@ -32,7 +23,7 @@ export class ThemeService {
       where: { id: organizationId },
     });
 
-    const settings = organization?.settings as any;
+    const settings = organization?.settings as Record<string, unknown>;
     const defaultTheme = settings?.theme?.default || {};
 
     return {
@@ -69,7 +60,8 @@ export class ThemeService {
       throw new Error('Organization not found');
     }
 
-    const currentSettings = (organization.settings as any) || {};
+    const currentSettings =
+      (organization.settings as Record<string, unknown>) || {};
     const updatedSettings = {
       ...currentSettings,
       theme: {
@@ -83,7 +75,7 @@ export class ThemeService {
       },
     };
 
-    const updatedOrg = await prisma.organization.update({
+    await prisma.organization.update({
       where: { id: organizationId },
       data: {
         settings: updatedSettings,
@@ -192,7 +184,7 @@ export class ThemeService {
       where: { id: organizationId },
     });
 
-    const settings = organization?.settings as any;
+    const settings = organization?.settings as Record<string, unknown>;
     const themeConstraints = settings?.theme?.constraints || {};
 
     // Check if custom themes are allowed
@@ -387,7 +379,8 @@ export class ThemeService {
       throw new Error('Organization not found');
     }
 
-    const currentSettings = (organization.settings as any) || {};
+    const currentSettings =
+      (organization.settings as Record<string, unknown>) || {};
     const presets = currentSettings.theme?.presets || [];
 
     const newPreset = {
@@ -424,7 +417,7 @@ export class ThemeService {
       where: { id: organizationId },
     });
 
-    const settings = organization?.settings as any;
+    const settings = organization?.settings as Record<string, unknown>;
     return settings?.theme?.presets || [];
   }
 }

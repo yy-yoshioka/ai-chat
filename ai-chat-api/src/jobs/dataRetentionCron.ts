@@ -85,17 +85,35 @@ export const startDataRetentionCron = () => {
 };
 
 const cleanupOrphanedRecords = async () => {
+  // Get all valid webhook IDs
+  const validWebhookIds = await prisma.webhook
+    .findMany({
+      select: { id: true },
+    })
+    .then((webhooks) => webhooks.map((w) => w.id));
+
   // Clean up webhook logs without webhooks
   const orphanedWebhookLogs = await prisma.webhookLog.deleteMany({
     where: {
-      webhook: null,
+      webhookId: {
+        notIn: validWebhookIds.length > 0 ? validWebhookIds : ['dummy-id'],
+      },
     },
   });
+
+  // Get all valid chat log IDs
+  const validChatLogIds = await prisma.chatLog
+    .findMany({
+      select: { id: true },
+    })
+    .then((logs) => logs.map((l) => l.id));
 
   // Clean up message feedback without chat logs
   const orphanedFeedback = await prisma.messageFeedback.deleteMany({
     where: {
-      chatLog: null,
+      chatLogId: {
+        notIn: validChatLogIds.length > 0 ? validChatLogIds : ['dummy-id'],
+      },
     },
   });
 

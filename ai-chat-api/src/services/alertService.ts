@@ -155,7 +155,7 @@ export class AlertService {
     return conditions;
   }
 
-  private shouldTriggerAlert(condition: AlertCondition): boolean {
+  private shouldTriggerAlert(_condition: AlertCondition): boolean {
     // For now, always trigger alerts when conditions are met
     // In production, you might want to implement debouncing or rate limiting
     return true;
@@ -290,7 +290,7 @@ export class AlertService {
   }
 
   private aggregateByService(
-    healthChecks: any[],
+    healthChecks: Array<Record<string, unknown>>,
     field: string
   ): Record<string, number> {
     const grouped = this.groupBy(healthChecks, 'service');

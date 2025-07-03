@@ -1,11 +1,11 @@
 import { prisma } from '../lib/prisma';
-import { Webhook, WebhookLog } from '@prisma/client';
+import { Webhook, WebhookLog, Prisma } from '@prisma/client';
 import crypto from 'crypto';
 import { logger } from '../lib/logger';
 
 interface WebhookPayload {
   event: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: string;
   organizationId: string;
 }
@@ -28,7 +28,7 @@ export class WebhookService {
       name: string;
       url: string;
       events: string[];
-      headers?: any;
+      headers?: Record<string, string>;
       retryCount?: number;
       timeoutMs?: number;
     }
@@ -57,7 +57,7 @@ export class WebhookService {
       url: string;
       events: string[];
       isActive: boolean;
-      headers: any;
+      headers: Record<string, string>;
       retryCount: number;
       timeoutMs: number;
     }>
@@ -108,7 +108,15 @@ export class WebhookService {
   ): Promise<WebhookLog[]> {
     await this.verifyWebhookOwnership(webhookId, organizationId);
 
-    const where: any = { webhookId };
+    const where: {
+      webhookId: string;
+      status?: string;
+      event?: string;
+      createdAt?: {
+        gte?: Date;
+        lte?: Date;
+      };
+    } = { webhookId };
 
     if (filters?.status) {
       where.status = filters.status;
@@ -138,7 +146,7 @@ export class WebhookService {
   async triggerWebhook(
     organizationId: string,
     event: string,
-    data: any
+    data: Record<string, unknown>
   ): Promise<void> {
     const webhooks = await prisma.webhook.findMany({
       where: {
@@ -161,7 +169,7 @@ export class WebhookService {
         logger.error('Failed to send webhook', {
           webhookId: webhook.id,
           event,
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
         });
       });
     });
@@ -195,7 +203,7 @@ export class WebhookService {
       data: {
         webhookId: webhook.id,
         event: payload.event,
-        payload: payload as any, // Cast to any for Prisma JSON field
+        payload: payload as unknown as Prisma.InputJsonValue,
         status: 'pending',
         attempts: attempt,
       },
@@ -243,19 +251,19 @@ export class WebhookService {
             logger.error('Webhook retry failed', {
               webhookId: webhook.id,
               attempt: attempt + 1,
-              error: error.message,
+              error: error instanceof Error ? error.message : String(error),
             });
           });
         }, delay);
       }
 
       return prisma.webhookLog.findUniqueOrThrow({ where: { id: log.id } });
-    } catch (error: any) {
+    } catch (error) {
       await prisma.webhookLog.update({
         where: { id: log.id },
         data: {
           status: 'failed',
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
           completedAt: new Date(),
         },
       });
@@ -267,7 +275,7 @@ export class WebhookService {
             logger.error('Webhook retry failed', {
               webhookId: webhook.id,
               attempt: attempt + 1,
-              error: err.message,
+              error: err instanceof Error ? err.message : String(err),
             });
           });
         }, delay);
@@ -277,7 +285,7 @@ export class WebhookService {
     }
   }
 
-  private generateSignature(payload: any, secret: string): string {
+  private generateSignature(payload: WebhookPayload, secret: string): string {
     const hmac = crypto.createHmac('sha256', secret);
     hmac.update(JSON.stringify(payload));
     return hmac.digest('hex');

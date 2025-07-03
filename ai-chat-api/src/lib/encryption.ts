@@ -116,7 +116,7 @@ export function decrypt(encryptedText: string): string {
  * @param obj - The object to encrypt
  * @returns The encrypted data as base64 string
  */
-export function encryptObject(obj: any): string {
+export function encryptObject(obj: unknown): string {
   return encrypt(JSON.stringify(obj));
 }
 
@@ -125,7 +125,7 @@ export function encryptObject(obj: any): string {
  * @param encryptedText - The encrypted JSON data
  * @returns The decrypted and parsed object
  */
-export function decryptObject<T = any>(encryptedText: string): T {
+export function decryptObject<T = unknown>(encryptedText: string): T {
   const decrypted = decrypt(encryptedText);
   return JSON.parse(decrypted) as T;
 }

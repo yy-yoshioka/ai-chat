@@ -1,9 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { authMiddleware } from '../middleware/auth';
-import {
-  requireOrganizationAccess,
-  OrganizationRequest,
-} from '../middleware/organizationAccess';
+import { requireOrganizationAccess } from '../middleware/organizationAccess';
 import { prisma } from '../lib/prisma';
 import {
   getAnalytics,
@@ -68,7 +65,7 @@ router.get(
   '/company',
   authMiddleware,
   requireOrganizationAccess,
-  async (req: OrganizationRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     try {
       const { startDate, endDate, widgetId } = req.query;
 
@@ -77,8 +74,17 @@ router.get(
         : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
       const end = endDate ? new Date(endDate as string) : new Date();
 
+      // Get company from organization
+      const company = await prisma.company.findFirst({
+        where: { organizationId: req.organizationId! },
+      });
+
+      if (!company) {
+        return res.status(404).json({ error: 'Company not found' });
+      }
+
       const analytics = await getAnalytics({
-        companyId: req.companyId!,
+        companyId: company.id,
         widgetId: widgetId as string,
         startDate: start,
         endDate: end,
@@ -99,7 +105,7 @@ router.get(
   '/kpi',
   authMiddleware,
   requireOrganizationAccess,
-  async (req: OrganizationRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     try {
       const { period = '30d' } = req.query;
 
@@ -121,8 +127,8 @@ router.get(
       }
 
       // Get company info
-      const company = await prisma.company.findUnique({
-        where: { id: req.companyId! },
+      const company = await prisma.company.findFirst({
+        where: { organizationId: req.organizationId! },
         include: {
           widgets: true,
           _count: {
@@ -142,7 +148,7 @@ router.get(
       const weeklyActiveUsers = await prisma.event.groupBy({
         by: ['userId', 'anonymousId'],
         where: {
-          companyId: req.companyId!,
+          companyId: company.id,
           createdAt: {
             gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
             lte: endDate,
@@ -153,7 +159,7 @@ router.get(
 
       // Calculate ARPU (Average Revenue Per User)
       const totalRevenue = await calculateTotalRevenue(
-        req.companyId!,
+        company.id,
         startDate,
         endDate
       );
@@ -164,7 +170,7 @@ router.get(
       const messageStats = await prisma.event.groupBy({
         by: ['eventType'],
         where: {
-          companyId: req.companyId!,
+          companyId: company.id,
           eventType: EventTypes.MESSAGE_SENT,
           createdAt: {
             gte: startDate,
@@ -182,7 +188,7 @@ router.get(
       // Get conversion stats
       const conversionStats = await prisma.event.count({
         where: {
-          companyId: req.companyId!,
+          companyId: company.id,
           eventType: EventTypes.CONVERSION,
           createdAt: {
             gte: startDate,
@@ -192,11 +198,7 @@ router.get(
       });
 
       // Daily stats for charts
-      const dailyStats = await getDailyKPIStats(
-        req.companyId!,
-        startDate,
-        endDate
-      );
+      const dailyStats = await getDailyKPIStats(company.id, startDate, endDate);
 
       // Widget performance
       const widgetPerformance = await Promise.all(
@@ -276,17 +278,26 @@ router.get(
   '/realtime',
   authMiddleware,
   requireOrganizationAccess,
-  async (req: OrganizationRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     try {
       const now = new Date();
       const last24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
       const lastHour = new Date(now.getTime() - 60 * 60 * 1000);
 
+      // First get the company for this organization
+      const company = await prisma.company.findFirst({
+        where: { organizationId: req.organizationId! },
+      });
+
+      if (!company) {
+        return res.status(404).json({ error: 'Company not found' });
+      }
+
       // Active users in last hour
       const activeUsersLastHour = await prisma.event.groupBy({
         by: ['userId', 'anonymousId'],
         where: {
-          companyId: req.companyId!,
+          companyId: company.id,
           createdAt: {
             gte: lastHour,
             lte: now,
@@ -298,7 +309,7 @@ router.get(
       // Messages in last 24h
       const messagesLast24h = await prisma.event.count({
         where: {
-          companyId: req.companyId!,
+          companyId: company.id,
           eventType: EventTypes.MESSAGE_SENT,
           createdAt: {
             gte: last24h,
@@ -310,7 +321,7 @@ router.get(
       // Active widgets
       const activeWidgets = await prisma.widget.count({
         where: {
-          companyId: req.companyId!,
+          companyId: company.id,
           isActive: true,
         },
       });
@@ -318,7 +329,7 @@ router.get(
       // Recent events
       const recentEvents = await prisma.event.findMany({
         where: {
-          companyId: req.companyId!,
+          companyId: company.id,
           createdAt: {
             gte: lastHour,
             lte: now,
@@ -482,7 +493,7 @@ router.get(
   '/conversation-flow',
   authMiddleware,
   requireOrganizationAccess,
-  async (req: OrganizationRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     try {
       const { widgetId, startDate, endDate } = req.query;
 
@@ -566,7 +577,7 @@ router.get(
   '/unresolved',
   authMiddleware,
   requireOrganizationAccess,
-  async (req: OrganizationRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     try {
       const { widgetId, limit = 50 } = req.query;
 

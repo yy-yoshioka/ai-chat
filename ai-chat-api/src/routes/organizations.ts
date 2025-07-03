@@ -1,9 +1,6 @@
 import express, { Request, Response } from 'express';
 import { authMiddleware } from '../middleware/auth';
-import {
-  requirePermission,
-  requireAnyPermission,
-} from '../middleware/permissions';
+import { requirePermission } from '../middleware/permissions';
 import { organizationManagementService } from '../services/organizationManagementService';
 import { validateRequest } from '../middleware/validateRequest';
 import { Permission, Role } from '@prisma/client';

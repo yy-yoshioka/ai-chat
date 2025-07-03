@@ -39,16 +39,15 @@ export async function scheduleEmbeddingReprocess(
     // 外部ソース（url, zendesk, intercom）のドキュメントを再クロール
     const externalDocuments = await prisma.knowledgeBase.findMany({
       where: {
-        knowledgeBase: {
-          organizationId,
-        },
-        sourceType: {
+        organizationId,
+        type: {
           in: ['url', 'zendesk', 'intercom'],
         },
         status: 'completed',
       },
       include: {
-        knowledgeBase: true,
+        widget: true,
+        organization: true,
       },
     });
 
@@ -61,19 +60,19 @@ export async function scheduleEmbeddingReprocess(
       try {
         let newContent = '';
 
-        switch (doc.sourceType) {
+        switch (doc.type) {
           case 'url':
-            newContent = await fetchUrlContent(doc.url || '');
+            newContent = await fetchUrlContent(doc.source || '');
             break;
           case 'zendesk':
             newContent = await fetchZendeskContent(
-              doc.url || '',
+              doc.source || '',
               organizationId
             );
             break;
           case 'intercom':
             newContent = await fetchIntercomContent(
-              doc.url || '',
+              doc.source || '',
               organizationId
             );
             break;
@@ -85,20 +84,13 @@ export async function scheduleEmbeddingReprocess(
             where: { id: doc.id },
             data: {
               content: newContent,
-              lastCrawledAt: new Date(),
               status: 'pending', // 再処理待ちに設定
             },
           });
 
-          console.log(`Updated content for document: ${doc.title}`);
+          console.log(`Updated content for document: ${doc.name}`);
         } else {
-          // 変更がない場合は lastCrawledAt のみ更新
-          await prisma.knowledgeBase.update({
-            where: { id: doc.id },
-            data: {
-              lastCrawledAt: new Date(),
-            },
-          });
+          // 変更がない場合は何もしない
         }
       } catch (error) {
         console.error(`Failed to update document ${doc.id}:`, error);
@@ -108,9 +100,7 @@ export async function scheduleEmbeddingReprocess(
           where: { id: doc.id },
           data: {
             status: 'failed',
-            errorMessage:
-              error instanceof Error ? error.message : 'Unknown error',
-            lastCrawledAt: new Date(),
+            error: error instanceof Error ? error.message : 'Unknown error',
           },
         });
       }
@@ -273,10 +263,7 @@ export function startEmbeddingCronJobs(): void {
   console.log('🚀 Starting embedding cron jobs...');
 
   // 毎日04:00 UTC (日本時間13:00) に実行
-  cron.schedule(DAILY_REPROCESS_SCHEDULE, reprocessAllOrganizations, {
-    scheduled: true,
-    timezone: 'UTC',
-  });
+  cron.schedule(DAILY_REPROCESS_SCHEDULE, reprocessAllOrganizations);
 
   console.log(
     `✅ Embedding cron job scheduled: ${DAILY_REPROCESS_SCHEDULE} UTC`
@@ -286,7 +273,7 @@ export function startEmbeddingCronJobs(): void {
 // Cronジョブの停止
 export function stopEmbeddingCronJobs(): void {
   console.log('🛑 Stopping embedding cron jobs...');
-  cron.getTasks().forEach((task: cron.ScheduledTask) => {
+  cron.getTasks().forEach((task) => {
     task.stop();
   });
 }

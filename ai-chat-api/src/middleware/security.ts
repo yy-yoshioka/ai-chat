@@ -9,6 +9,13 @@ import rateLimit from 'express-rate-limit';
 import { prisma } from '../lib/prisma';
 import crypto from 'crypto';
 
+// Extend Express Request type to include organizationId
+declare module 'express' {
+  interface Request {
+    organizationId?: string;
+  }
+}
+
 // Enhanced auth middleware with RBAC
 export const requirePermission = (permission: Permission) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -180,9 +187,8 @@ export const requireIPAllowlist = async (
       select: { settings: true },
     });
 
-    const ipAllowlist = (org?.settings as any)?.ipAllowlist as
-      | string[]
-      | undefined;
+    const settings = org?.settings as Record<string, unknown> | null;
+    const ipAllowlist = settings?.ipAllowlist as string[] | undefined;
 
     if (ipAllowlist && ipAllowlist.length > 0) {
       const clientIP = req.ip;
@@ -215,7 +221,7 @@ export const requireIPAllowlist = async (
   }
 };
 
-const extractRecordIds = (req: Request, responseData: any): string[] => {
+const extractRecordIds = (req: Request, responseData: unknown): string[] => {
   // Extract record IDs from request params, body, or response
   const ids: string[] = [];
 
@@ -227,11 +233,23 @@ const extractRecordIds = (req: Request, responseData: any): string[] => {
       typeof responseData === 'string'
         ? JSON.parse(responseData)
         : responseData;
-    if (data?.id) ids.push(data.id);
-    if (Array.isArray(data)) {
-      data.forEach((item) => {
-        if (item?.id) ids.push(item.id);
-      });
+
+    if (typeof data === 'object' && data !== null) {
+      if ('id' in data && typeof data.id === 'string') {
+        ids.push(data.id);
+      }
+      if (Array.isArray(data)) {
+        data.forEach((item) => {
+          if (
+            typeof item === 'object' &&
+            item !== null &&
+            'id' in item &&
+            typeof item.id === 'string'
+          ) {
+            ids.push(item.id);
+          }
+        });
+      }
     }
   } catch (error) {
     // Ignore JSON parse errors

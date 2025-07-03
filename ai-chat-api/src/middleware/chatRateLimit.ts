@@ -193,7 +193,7 @@ class ChatRateLimiter {
 
     return async (req: Request, res: Response, next: NextFunction) => {
       // First check IP limit
-      ipLimit(req, res, (err?: any) => {
+      ipLimit(req, res, (err?: unknown) => {
         if (err || res.headersSent) {
           return;
         }

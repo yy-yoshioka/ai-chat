@@ -9,7 +9,7 @@ interface ServiceHealth {
   status: 'healthy' | 'degraded' | 'unhealthy';
   responseTime: number;
   message?: string;
-  details?: any;
+  details?: Record<string, unknown>;
 }
 
 interface MetricData {
@@ -17,7 +17,7 @@ interface MetricData {
   metricType: string;
   value: number;
   unit: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export class HealthMonitorService {
@@ -115,13 +115,15 @@ export class HealthMonitorService {
         responseTime,
         message: 'Database connection successful',
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         service: 'database',
         status: 'unhealthy',
         responseTime: Date.now() - start,
         message: 'Database connection failed',
-        details: { error: error.message },
+        details: {
+          error: error instanceof Error ? error.message : String(error),
+        },
       };
     }
   }
@@ -142,13 +144,15 @@ export class HealthMonitorService {
         responseTime,
         message: 'Redis connection successful',
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         service: 'redis',
         status: 'unhealthy',
         responseTime: Date.now() - start,
         message: 'Redis connection failed',
-        details: { error: error.message },
+        details: {
+          error: error instanceof Error ? error.message : String(error),
+        },
       };
     }
   }
@@ -173,13 +177,15 @@ export class HealthMonitorService {
         responseTime,
         message: 'Vector DB accessible',
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         service: 'vector_db',
         status: 'unhealthy',
         responseTime: Date.now() - start,
         message: 'Vector DB check failed',
-        details: { error: error.message },
+        details: {
+          error: error instanceof Error ? error.message : String(error),
+        },
       };
     }
   }
@@ -205,13 +211,15 @@ export class HealthMonitorService {
         message: 'External API accessible',
         details: { statusCode: response.status },
       };
-    } catch (error: any) {
+    } catch (error) {
       return {
         service: 'external_api',
         status: 'unhealthy',
         responseTime: Date.now() - start,
         message: 'External API check failed',
-        details: { error: error.message },
+        details: {
+          error: error instanceof Error ? error.message : String(error),
+        },
       };
     }
   }
@@ -312,7 +320,14 @@ export class HealthMonitorService {
     startDate?: Date,
     endDate?: Date
   ): Promise<SystemMetric[]> {
-    const where: any = {};
+    const where: {
+      service?: string;
+      metricType?: string;
+      timestamp?: {
+        gte?: Date;
+        lte?: Date;
+      };
+    } = {};
 
     if (service) where.service = service;
     if (metricType) where.metricType = metricType;

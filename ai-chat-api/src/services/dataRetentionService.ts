@@ -59,7 +59,7 @@ export const updateRetentionPolicy = async (
 export const createRetentionJob = async (data: {
   organizationId?: string;
   jobType: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }) => {
   return prisma.dataRetentionJob.create({
     data: {

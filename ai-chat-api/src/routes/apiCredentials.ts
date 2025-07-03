@@ -31,7 +31,7 @@ const updateCredentialsSchema = z.object({
 router.get(
   '/',
   authMiddleware,
-  requirePermission(Permission.settings_manage),
+  requirePermission(Permission.SETTINGS_WRITE),
   async (req: Request, res: Response) => {
     try {
       const { service } = req.query;
@@ -53,7 +53,7 @@ router.get(
 router.post(
   '/',
   authMiddleware,
-  requirePermission(Permission.settings_manage),
+  requirePermission(Permission.SETTINGS_WRITE),
   async (req: Request, res: Response) => {
     try {
       const validation = createCredentialsSchema.safeParse(req.body);
@@ -75,7 +75,7 @@ router.post(
       );
 
       // Don't return the encrypted data
-      const { encryptedData, ...response } = apiCredentials;
+      const { ...response } = apiCredentials;
 
       res.status(201).json({ credentials: response });
     } catch (error) {
@@ -89,7 +89,7 @@ router.post(
 router.put(
   '/:id',
   authMiddleware,
-  requirePermission(Permission.settings_manage),
+  requirePermission(Permission.SETTINGS_WRITE),
   async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
@@ -99,7 +99,12 @@ router.put(
         return res.status(400).json({ error: validation.error.flatten() });
       }
 
-      const updateData: any = {};
+      const updateData: {
+        name?: string;
+        credentials?: Record<string, unknown>;
+        expiresAt?: Date;
+        isActive?: boolean;
+      } = {};
       if (validation.data.name !== undefined) {
         updateData.name = validation.data.name;
       }
@@ -121,7 +126,7 @@ router.put(
       );
 
       // Don't return the encrypted data
-      const { encryptedData, ...response } = apiCredentials;
+      const { ...response } = apiCredentials;
 
       res.json({ credentials: response });
     } catch (error) {
@@ -135,7 +140,7 @@ router.put(
 router.delete(
   '/:id',
   authMiddleware,
-  requirePermission(Permission.settings_manage),
+  requirePermission(Permission.SETTINGS_WRITE),
   async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
@@ -154,7 +159,7 @@ router.delete(
 router.post(
   '/test',
   authMiddleware,
-  requirePermission(Permission.settings_manage),
+  requirePermission(Permission.SETTINGS_WRITE),
   async (req: Request, res: Response) => {
     try {
       const { service, credentials } = req.body;

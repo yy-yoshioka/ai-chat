@@ -59,7 +59,7 @@ router.get('/public', async (req, res) => {
         };
         return acc;
       },
-      {} as Record<string, any>
+      {} as Record<string, { status: string; message?: string }>
     );
 
     // Simplify incidents for public view
