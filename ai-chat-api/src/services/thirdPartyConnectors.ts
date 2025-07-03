@@ -486,20 +486,37 @@ export async function importMarkdownFiles(
 export async function saveConnectorConfig(
   organizationId: string,
   type: 'zendesk' | 'intercom',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _config: ZendeskConfig | IntercomConfig
+  config: ZendeskConfig | IntercomConfig
 ): Promise<void> {
   try {
-    // TODO: 設定を暗号化して保存
-    // 実際の実装では、設定を暗号化してデータベースに保存する
-    console.log(`Saving ${type} config for organization: ${organizationId}`);
+    // Import the service dynamically to avoid circular dependency
+    const { createApiCredentials } = await import('./apiCredentialsService');
 
-    // 一時的に環境変数で保存（実際の実装では専用テーブルを使用）
-    // await prisma.organizationConfig.upsert({
-    //   where: { organizationId_type: { organizationId, type } },
-    //   update: { config: encrypt(JSON.stringify(config)) },
-    //   create: { organizationId, type, config: encrypt(JSON.stringify(config)) }
-    // });
+    // Get the first admin user for the organization (for audit logging)
+    const adminUser = await prisma.user.findFirst({
+      where: {
+        organizationId,
+        roles: {
+          has: 'owner',
+        },
+      },
+    });
+
+    if (!adminUser) {
+      throw new Error('No admin user found for organization');
+    }
+
+    await createApiCredentials(
+      {
+        organizationId,
+        service: type,
+        name: 'Default',
+        credentials: config as any,
+      },
+      adminUser.id
+    );
+
+    console.log(`Saved ${type} config for organization: ${organizationId}`);
   } catch (error) {
     console.error(`Failed to save ${type} config:`, error);
     throw error;
@@ -512,10 +529,25 @@ export async function getConnectorConfig(
   type: 'zendesk' | 'intercom'
 ): Promise<ZendeskConfig | IntercomConfig | null> {
   try {
-    // TODO: データベースから設定を取得して復号化
-    console.log(`Getting ${type} config for organization: ${organizationId}`);
+    // Import the service dynamically to avoid circular dependency
+    const { getApiCredentials } = await import('./apiCredentialsService');
 
-    // 一時的に環境変数から取得（実際の実装では専用テーブルから取得）
+    const credentials = await getApiCredentials(organizationId, type);
+    if (!credentials) {
+      return null;
+    }
+
+    // Validate the structure based on type
+    if (type === 'zendesk') {
+      if (credentials.subdomain && credentials.email && credentials.token) {
+        return credentials as ZendeskConfig;
+      }
+    } else if (type === 'intercom') {
+      if (credentials.accessToken && credentials.workspaceId) {
+        return credentials as IntercomConfig;
+      }
+    }
+
     return null;
   } catch (error) {
     console.error(`Failed to get ${type} config:`, error);

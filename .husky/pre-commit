@@ -2,7 +2,7 @@ echo "🔍 Running format, lint, and build checks..."
 
 # Format all code
 echo "📝 Formatting code..."
-yarn format
+yarn format && git add -u
 
 # # Lint all code
 # echo "🔍 Linting code..."

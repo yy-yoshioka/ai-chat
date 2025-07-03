@@ -265,6 +265,7 @@ model Organization {
   permissionOverrides UserPermissionOverride[]
   securityAuditLogs   SecurityAuditLog[]
   dataAccessLogs      DataAccessLog[]
+  apiCredentials      ApiCredentials[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
@@ -711,4 +712,30 @@ model DataAccessLog {
   @@index([operation])
   @@index([createdAt])
   @@map("data_access_logs")
+}
+
+// Section-17: API Credentials (Encrypted)
+model ApiCredentials {
+  id             String   @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  service        String   // "openai", "stripe", "zendesk", "intercom", etc.
+  name           String   // Display name for the credentials
+  encryptedData  String   @db.Text // Encrypted JSON containing the actual credentials
+  
+  // Metadata
+  lastUsed       DateTime?
+  lastRotated    DateTime?
+  expiresAt      DateTime?
+  isActive       Boolean  @default(true)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@unique([organizationId, service, name])
+  @@index([organizationId])
+  @@index([service])
+  @@index([isActive])
+  @@map("api_credentials")
 }
