@@ -195,7 +195,7 @@ export class WebhookService {
       data: {
         webhookId: webhook.id,
         event: payload.event,
-        payload,
+        payload: payload as any, // Cast to any for Prisma JSON field
         status: 'pending',
         attempts: attempt,
       },

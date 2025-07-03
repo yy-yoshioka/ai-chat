@@ -5,7 +5,10 @@ import { prisma } from '../lib/prisma';
 // Extend Express Request type to include user
 declare module 'express' {
   interface Request {
-    user?: UserPayload & { roles?: string[] };
+    user?: UserPayload & {
+      roles?: string[];
+      organizationId?: string;
+    };
   }
 }
 
@@ -47,14 +50,18 @@ export const authMiddleware = async (
     // Check if user still exists
     const dbUser = await prisma.user.findUnique({
       where: { id: user.id },
-      select: { id: true, email: true, roles: true },
+      select: { id: true, email: true, roles: true, organizationId: true },
     });
 
     if (!dbUser) {
       return res.status(401).json({ error: 'User not found' });
     }
 
-    req.user = { ...user, roles: dbUser.roles };
+    req.user = {
+      ...user,
+      roles: dbUser.roles,
+      organizationId: dbUser.organizationId || undefined,
+    };
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);
