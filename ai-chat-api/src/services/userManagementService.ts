@@ -198,14 +198,7 @@ export class UserManagementService {
    * List users in an organization with filtering
    */
   async listUsers(params: UserListParams) {
-    const {
-      organizationId,
-      page = 1,
-      limit = 10,
-      search,
-      role,
-      status,
-    } = params;
+    const { organizationId, page = 1, limit = 10, search, role } = params;
 
     const skip = (page - 1) * limit;
 

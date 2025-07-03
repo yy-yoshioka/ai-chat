@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma';
+import { Prisma } from '@prisma/client';
 
 export const getUserOrganizations = async (userId: string) => {
   return prisma.organization.findMany({
@@ -119,7 +120,7 @@ export const updateOrganization = async (
     where: { id },
     data: {
       name: data.name,
-      settings: data.settings as any,
+      settings: data.settings as Prisma.InputJsonValue,
       updatedAt: new Date(),
     },
   });

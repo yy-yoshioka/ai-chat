@@ -75,7 +75,7 @@ router.post(
       );
 
       // Don't return the encrypted data
-      const { encryptedData, ...response } = apiCredentials;
+      const { ...response } = apiCredentials;
 
       res.status(201).json({ credentials: response });
     } catch (error) {
@@ -99,7 +99,12 @@ router.put(
         return res.status(400).json({ error: validation.error.flatten() });
       }
 
-      const updateData: any = {};
+      const updateData: {
+        name?: string;
+        credentials?: Record<string, unknown>;
+        expiresAt?: Date;
+        isActive?: boolean;
+      } = {};
       if (validation.data.name !== undefined) {
         updateData.name = validation.data.name;
       }
@@ -121,7 +126,7 @@ router.put(
       );
 
       // Don't return the encrypted data
-      const { encryptedData, ...response } = apiCredentials;
+      const { ...response } = apiCredentials;
 
       res.json({ credentials: response });
     } catch (error) {

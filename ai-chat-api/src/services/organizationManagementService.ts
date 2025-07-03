@@ -1,6 +1,6 @@
 import { prisma } from '../lib/prisma';
 import { webhookService } from './webhookService';
-import { Role } from '@prisma/client';
+import { Role, Prisma } from '@prisma/client';
 
 interface CreateOrganizationData {
   name: string;
@@ -248,7 +248,7 @@ export class OrganizationManagementService {
       data: {
         name: data.name,
         slug: data.slug,
-        settings: data.settings as any,
+        settings: data.settings as Prisma.InputJsonValue,
       },
     });
 
@@ -471,7 +471,7 @@ export class OrganizationManagementService {
     period: 'day' | 'week' | 'month' = 'month'
   ) {
     const now = new Date();
-    let startDate = new Date();
+    const startDate = new Date();
 
     switch (period) {
       case 'day':

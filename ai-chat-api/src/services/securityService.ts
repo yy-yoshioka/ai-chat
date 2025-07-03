@@ -10,7 +10,7 @@ interface SecurityEventData {
   success: boolean;
   ipAddress?: string;
   userAgent?: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   risk_level?: 'low' | 'medium' | 'high' | 'critical';
 }
 

@@ -14,7 +14,13 @@ export interface EmailOptions {
 }
 
 export const sendEmail = async (options: EmailOptions): Promise<void> => {
-  const msg: any = {
+  const msg: {
+    to: string;
+    from: string;
+    subject: string;
+    text?: string;
+    html?: string;
+  } = {
     to: options.to,
     from: options.from || process.env.EMAIL_FROM || 'noreply@example.com',
     subject: options.subject,

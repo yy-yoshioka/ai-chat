@@ -76,7 +76,7 @@ router.get(
 
       // Get company from organization
       const company = await prisma.company.findFirst({
-        where: { organizationId: (req as any).organizationId },
+        where: { organizationId: req.organizationId! },
       });
 
       if (!company) {
@@ -128,7 +128,7 @@ router.get(
 
       // Get company info
       const company = await prisma.company.findFirst({
-        where: { organizationId: (req as any).organizationId },
+        where: { organizationId: req.organizationId! },
         include: {
           widgets: true,
           _count: {
@@ -286,7 +286,7 @@ router.get(
 
       // First get the company for this organization
       const company = await prisma.company.findFirst({
-        where: { organizationId: (req as any).organizationId },
+        where: { organizationId: req.organizationId! },
       });
 
       if (!company) {

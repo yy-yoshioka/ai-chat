@@ -61,7 +61,8 @@ export function initializeTelemetry(): NodeSDK | null {
               if (info.request) {
                 span.setAttribute(
                   'express.route',
-                  (info as any).layerPath || 'unknown'
+                  (info as unknown as { layerPath?: string }).layerPath ||
+                    'unknown'
                 );
               }
             },
@@ -148,14 +149,20 @@ export const customMetrics = {
 
 // Helper function to record metric with attributes
 export function recordMetric(
-  metric: any,
+  metric: {
+    add?: (value: number, attributes?: Record<string, string | number>) => void;
+    record?: (
+      value: number,
+      attributes?: Record<string, string | number>
+    ) => void;
+  },
   value: number,
   attributes?: Record<string, string | number>
 ): void {
   try {
-    if ('add' in metric) {
+    if ('add' in metric && metric.add) {
       metric.add(value, attributes);
-    } else if ('record' in metric) {
+    } else if ('record' in metric && metric.record) {
       metric.record(value, attributes);
     }
   } catch (error) {

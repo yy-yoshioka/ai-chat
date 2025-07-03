@@ -13,7 +13,7 @@ export const orgAccessMiddleware = (
   if (!req.user || !req.user.organizationId) {
     return res.status(403).json({ message: 'Organization access required' });
   }
-  (req as any).organizationId = req.user.organizationId;
+  req.organizationId = req.user.organizationId;
   // Note: companyId should be set by a separate middleware that fetches it from the organization
   return next();
 };

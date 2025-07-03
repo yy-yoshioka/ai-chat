@@ -104,7 +104,11 @@ router.get(
       const { type, key } = req.params;
 
       let fullKey: string;
-      let config: any;
+      let config: {
+        windowMs: number;
+        maxRequests: number;
+        keyPrefix: string;
+      };
 
       if (type === 'ip') {
         fullKey = `chat_rl_ip:${key}`;

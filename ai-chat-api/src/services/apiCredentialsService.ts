@@ -4,7 +4,7 @@ import { ApiCredentials } from '@prisma/client';
 import { logSecurityEvent } from './securityService';
 
 export interface CredentialData {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface CreateCredentialInput {
@@ -93,7 +93,12 @@ export async function getApiCredentials(
   name?: string
 ): Promise<CredentialData | null> {
   try {
-    const where: any = {
+    const where: {
+      organizationId: string;
+      service: string;
+      isActive: boolean;
+      name?: string;
+    } = {
       organizationId,
       service,
       isActive: true,
@@ -145,7 +150,14 @@ export async function updateApiCredentials(
   userId: string
 ): Promise<ApiCredentials> {
   try {
-    const updateData: any = {
+    const updateData: {
+      updatedAt: Date;
+      name?: string;
+      encryptedData?: string;
+      lastRotated?: Date;
+      expiresAt?: Date | null;
+      isActive?: boolean;
+    } = {
       updatedAt: new Date(),
     };
 
@@ -269,7 +281,10 @@ export async function listApiCredentials(
   organizationId: string,
   service?: string
 ): Promise<Omit<ApiCredentials, 'encryptedData'>[]> {
-  const where: any = {
+  const where: {
+    organizationId: string;
+    service?: string;
+  } = {
     organizationId,
   };
 

@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { z, ZodError } from 'zod';
 
 interface ValidationOptions {
-  body?: z.ZodSchema<any>;
-  query?: z.ZodSchema<any>;
-  params?: z.ZodSchema<any>;
+  body?: z.ZodSchema<unknown>;
+  query?: z.ZodSchema<unknown>;
+  params?: z.ZodSchema<unknown>;
 }
 
 export function validateRequest(schemas: ValidationOptions) {
