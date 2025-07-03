@@ -1,5 +1,4 @@
 import PDFDocument from 'pdfkit';
-import type { PDFDocument as PDFDocumentType } from 'pdfkit';
 import { Readable } from 'stream';
 
 interface PDFOptions {
@@ -18,7 +17,7 @@ interface TableColumn {
 }
 
 export class PDFGenerator {
-  private doc: PDFDocumentType;
+  private doc: typeof PDFDocument.prototype;
   private pageWidth: number;
   private pageHeight: number;
   private margin: number;
@@ -186,7 +185,7 @@ export class PDFGenerator {
     return new Promise((resolve, reject) => {
       const chunks: Buffer[] = [];
 
-      this.doc.on('data', (chunk) => chunks.push(chunk));
+      this.doc.on('data', (chunk: Buffer) => chunks.push(chunk));
       this.doc.on('end', () => resolve(Buffer.concat(chunks)));
       this.doc.on('error', reject);
 

@@ -31,7 +31,7 @@ const updateCredentialsSchema = z.object({
 router.get(
   '/',
   authMiddleware,
-  requirePermission(Permission.settings_manage),
+  requirePermission(Permission.SETTINGS_WRITE),
   async (req: Request, res: Response) => {
     try {
       const { service } = req.query;
@@ -53,7 +53,7 @@ router.get(
 router.post(
   '/',
   authMiddleware,
-  requirePermission(Permission.settings_manage),
+  requirePermission(Permission.SETTINGS_WRITE),
   async (req: Request, res: Response) => {
     try {
       const validation = createCredentialsSchema.safeParse(req.body);
@@ -89,7 +89,7 @@ router.post(
 router.put(
   '/:id',
   authMiddleware,
-  requirePermission(Permission.settings_manage),
+  requirePermission(Permission.SETTINGS_WRITE),
   async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
@@ -135,7 +135,7 @@ router.put(
 router.delete(
   '/:id',
   authMiddleware,
-  requirePermission(Permission.settings_manage),
+  requirePermission(Permission.SETTINGS_WRITE),
   async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
@@ -154,7 +154,7 @@ router.delete(
 router.post(
   '/test',
   authMiddleware,
-  requirePermission(Permission.settings_manage),
+  requirePermission(Permission.SETTINGS_WRITE),
   async (req: Request, res: Response) => {
     try {
       const { service, credentials } = req.body;

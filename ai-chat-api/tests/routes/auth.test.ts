@@ -7,6 +7,12 @@ import {
   generateTestToken,
 } from '../fixtures/test-data';
 
+// Mock dependencies
+jest.mock('../../src/lib/prisma');
+jest.mock('../../src/utils/jwt');
+jest.mock('../../src/utils/password');
+jest.mock('../../src/utils/email');
+
 // Create Express app for testing
 const app = express();
 app.use(express.json());

@@ -9,11 +9,18 @@ import rateLimit from 'express-rate-limit';
 import { prisma } from '../lib/prisma';
 import crypto from 'crypto';
 
+// Extend Express Request type to include organizationId
+declare module 'express' {
+  interface Request {
+    organizationId?: string;
+  }
+}
+
 // Enhanced auth middleware with RBAC
 export const requirePermission = (permission: Permission) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (!req.user?.id || !req.organizationId) {
+      if (!req.user?.id || !(req as any).organizationId) {
         await logSecurityEvent({
           action: 'unauthorized_access_attempt',
           resource: req.path,
@@ -28,14 +35,14 @@ export const requirePermission = (permission: Permission) => {
 
       const hasRequiredPermission = await hasPermission(
         req.user.id,
-        req.organizationId,
+        (req as any).organizationId,
         permission
       );
 
       if (!hasRequiredPermission) {
         await logSecurityEvent({
           userId: req.user.id,
-          organizationId: req.organizationId,
+          organizationId: (req as any).organizationId,
           action: 'permission_denied',
           resource: req.path,
           success: false,
@@ -50,7 +57,7 @@ export const requirePermission = (permission: Permission) => {
 
       await logSecurityEvent({
         userId: req.user.id,
-        organizationId: req.organizationId,
+        organizationId: (req as any).organizationId,
         action: 'permission_granted',
         resource: req.path,
         success: true,
@@ -64,7 +71,7 @@ export const requirePermission = (permission: Permission) => {
     } catch (error) {
       await logSecurityEvent({
         userId: req.user?.id,
-        organizationId: req.organizationId,
+        organizationId: (req as any).organizationId,
         action: 'permission_check_error',
         resource: req.path,
         success: false,
@@ -84,20 +91,20 @@ export const requirePermission = (permission: Permission) => {
 export const requireAnyPermission = (permissions: Permission[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (!req.user?.id || !req.organizationId) {
+      if (!req.user?.id || !(req as any).organizationId) {
         return res.status(401).json({ error: 'Authentication required' });
       }
 
       const hasRequiredPermissions = await hasAnyPermission(
         req.user.id,
-        req.organizationId,
+        (req as any).organizationId,
         permissions
       );
 
       if (!hasRequiredPermissions) {
         await logSecurityEvent({
           userId: req.user.id,
-          organizationId: req.organizationId,
+          organizationId: (req as any).organizationId,
           action: 'permission_denied',
           resource: req.path,
           success: false,
@@ -124,9 +131,9 @@ export const logDataAccess = (tableName: string, operation: string) => {
 
     res.send = function (data) {
       // Log the data access
-      if (req.user?.id && req.organizationId) {
+      if (req.user?.id && (req as any).organizationId) {
         logDataAccessService({
-          organizationId: req.organizationId,
+          organizationId: (req as any).organizationId,
           userId: req.user.id,
           table_name: tableName,
           operation,
@@ -155,7 +162,7 @@ export const createOrgRateLimit = (
     max: maxRequests,
     message: message || 'Too many requests',
     keyGenerator: (req) => {
-      return `${req.organizationId || 'anonymous'}:${req.ip}`;
+      return `${(req as any).organizationId || 'anonymous'}:${req.ip}`;
     },
     skip: (req) => {
       // Skip rate limiting for system admins
@@ -171,12 +178,12 @@ export const requireIPAllowlist = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.organizationId) {
+    if (!(req as any).organizationId) {
       return next();
     }
 
     const org = await prisma.organization.findUnique({
-      where: { id: req.organizationId },
+      where: { id: (req as any).organizationId },
       select: { settings: true },
     });
 
@@ -195,7 +202,7 @@ export const requireIPAllowlist = async (
       if (!isAllowed) {
         await logSecurityEvent({
           userId: req.user?.id,
-          organizationId: req.organizationId,
+          organizationId: (req as any).organizationId,
           action: 'ip_blocked',
           resource: req.path,
           success: false,
