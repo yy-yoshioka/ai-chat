@@ -32,6 +32,7 @@ import dataRetentionRoutes from './routes/dataRetention';
 import securityRoutes from './routes/security';
 import apiCredentialsRoutes from './routes/apiCredentials';
 import rateLimitStatusRoutes from './routes/rateLimitStatus';
+import customResponsesRoutes from './routes/customResponses';
 
 // Load environment variables
 dotenv.config();
@@ -132,6 +133,7 @@ app.use('/api/data-retention', dataRetentionRoutes);
 app.use('/api/security', securityRoutes);
 app.use('/api/api-credentials', apiCredentialsRoutes);
 app.use('/api/rate-limit', rateLimitStatusRoutes);
+app.use('/api/custom-responses', customResponsesRoutes);
 app.use('/v1/settings', settingsRoutes);
 app.use('/v1/organizations', organizationsRoutes);
 app.use('/v1/widgets', widgetsRoutes);

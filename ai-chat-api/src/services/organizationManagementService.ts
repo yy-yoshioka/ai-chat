@@ -1,5 +1,6 @@
 import { prisma } from '../lib/prisma';
 import { webhookService } from './webhookService';
+import { customResponseService } from './customResponseService';
 import { Role, Prisma } from '@prisma/client';
 
 interface CreateOrganizationData {
@@ -82,6 +83,9 @@ export class OrganizationManagementService {
         },
       },
     });
+
+    // Create default custom responses
+    await customResponseService.createDefaultResponses(organization.id);
 
     // Trigger webhook
     await webhookService.triggerWebhook(

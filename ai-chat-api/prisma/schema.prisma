@@ -139,6 +139,7 @@ model Widget {
   chatLogs      ChatLog[]
   events        Event[]   // Event tracking
   knowledgeBases KnowledgeBase[]
+  customResponses WidgetCustomResponse[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -272,6 +273,7 @@ model Organization {
   securityAuditLogs   SecurityAuditLog[]
   dataAccessLogs      DataAccessLog[]
   apiCredentials      ApiCredentials[]
+  customResponses     CustomResponse[]
   invitations     UserInvitation[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
@@ -766,4 +768,69 @@ model ApiCredentials {
   @@index([service])
   @@index([isActive])
   @@map("api_credentials")
+}
+
+// Custom response templates for organizations
+model CustomResponse {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  name           String       // Template name for reference
+  type           ResponseType // Type of response (greeting, fallback, etc.)
+  
+  // Response content
+  content        String       @db.Text // The actual response text with variables
+  metadata       Json?        // Additional configuration
+  
+  // Usage settings
+  isActive       Boolean      @default(true)
+  priority       Int          @default(0) // Higher priority responses are used first
+  conditions     Json?        // Conditions when this response should be used
+  
+  // Widget associations
+  widgets        WidgetCustomResponse[]
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  
+  @@unique([organizationId, name])
+  @@index([organizationId])
+  @@index([type])
+  @@index([isActive])
+  @@map("custom_responses")
+}
+
+// Widget-specific custom response associations
+model WidgetCustomResponse {
+  id               String         @id @default(cuid())
+  widgetId         String
+  widget           Widget         @relation(fields: [widgetId], references: [id], onDelete: Cascade)
+  customResponseId String
+  customResponse   CustomResponse @relation(fields: [customResponseId], references: [id], onDelete: Cascade)
+  
+  // Override settings for this widget
+  isEnabled        Boolean        @default(true)
+  overrideContent  String?        @db.Text // Widget-specific override
+  
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  
+  @@unique([widgetId, customResponseId])
+  @@index([widgetId])
+  @@index([customResponseId])
+  @@map("widget_custom_responses")
+}
+
+enum ResponseType {
+  GREETING
+  FALLBACK
+  ERROR
+  MAINTENANCE
+  RATE_LIMIT
+  UNAUTHORIZED
+  KNOWLEDGE_NOT_FOUND
+  CLARIFICATION
+  CONFIRMATION
+  CUSTOM
 }
