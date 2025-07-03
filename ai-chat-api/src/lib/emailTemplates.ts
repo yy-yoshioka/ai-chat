@@ -1,3 +1,8 @@
+// Backward compatibility during migration
+// TODO: Remove this file after all imports are updated
+export * from '../shared/email/templates';
+
+// Keep the original content below until migration is complete
 export interface EmailTemplate {
   subject: string;
   html: string;

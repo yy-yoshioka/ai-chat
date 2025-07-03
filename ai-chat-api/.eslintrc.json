@@ -7,17 +7,89 @@
   "parserOptions": {
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier", "boundaries"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:boundaries/recommended"
   ],
   "rules": {
     "prettier/prettier": "error",
     "@typescript-eslint/no-unused-vars": [
       "error",
       { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ],
+    "boundaries/elements": [
+      2,
+      {
+        "default": "allow",
+        "rules": [
+          {
+            "from": ["modules/*"],
+            "allow": ["modules/{{elementName}}/*", "shared"],
+            "message": "Modules can only import from themselves and shared utilities"
+          },
+          {
+            "from": ["shared"],
+            "allow": ["shared"],
+            "message": "Shared utilities can only import from other shared utilities"
+          },
+          {
+            "from": ["jobs"],
+            "allow": ["modules/*", "shared"],
+            "message": "Jobs can import from modules and shared utilities"
+          },
+          {
+            "from": ["middlewares", "middleware"],
+            "allow": ["shared", "modules/*"],
+            "message": "Middlewares can import from shared utilities and modules"
+          }
+        ]
+      }
+    ],
+    "boundaries/external": [
+      2,
+      {
+        "default": "allow",
+        "rules": [
+          {
+            "from": ["shared"],
+            "disallow": ["express", "fastify"],
+            "message": "Shared utilities should not depend on web frameworks"
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {
+    "boundaries/elements": [
+      {
+        "type": "modules",
+        "pattern": "src/modules/*",
+        "mode": "folder",
+        "capture": ["elementName"]
+      },
+      {
+        "type": "shared",
+        "pattern": "src/shared/**",
+        "mode": "file"
+      },
+      {
+        "type": "jobs",
+        "pattern": "src/jobs/**",
+        "mode": "file"
+      },
+      {
+        "type": "middlewares",
+        "pattern": "src/middlewares/**",
+        "mode": "file"
+      },
+      {
+        "type": "middleware",
+        "pattern": "src/middleware/**",
+        "mode": "file"
+      }
     ]
   }
 }
