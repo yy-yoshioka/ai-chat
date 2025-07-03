@@ -54,7 +54,16 @@
       "Bash(chmod:*)",
       "Bash(node:*)",
       "Bash(npx storybook@latest init:*)",
-      "Bash(DATABASE_URL=\"postgresql://postgres:postgres@localhost:5432/ai_chat_db?schema=public\" yarn prisma migrate dev --name add_data_retention)"
+      "Bash(DATABASE_URL=\"postgresql://postgres:postgres@localhost:5432/ai_chat_db?schema=public\" yarn prisma migrate dev --name add_data_retention)",
+      "Bash(for file in src/utils/*.ts)",
+      "Bash(do [ \"$file\" != \"src/utils/email.ts\" ])",
+      "Bash(done)",
+      "Bash(# Create directories for all modules\nmodules=(widgets chat faqs knowledge-base webhooks users security analytics status themes custom-responses)\nfor module in \"\"${modules[@]}\"\"; do\n  mkdir -p \"\"src/modules/$module/services\"\" \"\"src/modules/$module/controllers\"\"\ndone)",
+      "Bash(# Create directories for all modules\nfor module in widgets chat faqs knowledge-base webhooks users security analytics status themes custom-responses; do\n  mkdir -p \"\"src/modules/$module/services\"\" \"\"src/modules/$module/controllers\"\"\ndone)",
+      "Bash(./scripts/migrate-modules.sh:*)",
+      "Bash(# Migrate users module\ncp src/routes/users.ts src/modules/users/routes.ts 2>/dev/null || true\ncp src/services/userManagementService.ts src/modules/users/services/ 2>/dev/null || true\n\n# Migrate security module  \ncp src/routes/security.ts src/modules/security/routes.ts 2>/dev/null || true\ncp src/services/securityService.ts src/modules/security/services/ 2>/dev/null || true\ncp src/services/dataRetentionService.ts src/modules/security/services/ 2>/dev/null || true\n\n# Migrate analytics module\ncp src/routes/analytics.ts src/modules/analytics/routes.ts 2>/dev/null || true\ncp src/services/reportService.ts src/modules/analytics/services/ 2>/dev/null || true\n\n# Migrate status module\ncp src/routes/status.ts src/modules/status/routes.ts 2>/dev/null || true\ncp src/services/healthMonitorService.ts src/modules/status/services/ 2>/dev/null || true\n\n# Migrate themes module\ncp src/routes/themes.ts src/modules/themes/routes.ts 2>/dev/null || true\ncp src/services/themeService.ts src/modules/themes/services/ 2>/dev/null || true)",
+      "Bash(./scripts/create-module-indexes.sh:*)",
+      "Bash(./scripts/fix-imports.sh:*)"
     ],
     "deny": [],
     "autoConfirm": true
