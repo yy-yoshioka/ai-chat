@@ -100,6 +100,11 @@ model Company {
   subscriptionStatus String?       @default("inactive")
   tokenBalance       Int           @default(0)
   
+  // Trial fields
+  trialStartedAt     DateTime?
+  trialEndsAt        DateTime?
+  trialExpired       Boolean       @default(false)
+  
   widgets            Widget[]
   users              User[]
   usage              Usage[]
