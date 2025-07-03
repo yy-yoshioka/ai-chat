@@ -14,13 +14,19 @@ export interface EmailOptions {
 }
 
 export const sendEmail = async (options: EmailOptions): Promise<void> => {
-  const msg = {
+  const msg: any = {
     to: options.to,
     from: options.from || process.env.EMAIL_FROM || 'noreply@example.com',
     subject: options.subject,
-    text: options.text,
-    html: options.html,
   };
+
+  // SendGrid requires either text or html content
+  if (options.text) {
+    msg.text = options.text;
+  }
+  if (options.html) {
+    msg.html = options.html;
+  }
 
   if (process.env.NODE_ENV === 'test') {
     // Don't actually send emails in test environment
@@ -37,7 +43,10 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
 };
 
 // Email templates
-export const sendWelcomeEmail = async (email: string, name: string): Promise<void> => {
+export const sendWelcomeEmail = async (
+  email: string,
+  name: string
+): Promise<void> => {
   await sendEmail({
     to: email,
     subject: 'Welcome to AI Chat!',

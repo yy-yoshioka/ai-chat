@@ -150,9 +150,7 @@ describe('Widget Routes', () => {
 
       widgetService.createWidget.mockResolvedValue(mockCreatedWidget);
 
-      const response = await request(app)
-        .post('/api/widgets')
-        .send(createData);
+      const response = await request(app).post('/api/widgets').send(createData);
 
       expect(response.status).toBe(201);
       expect(response.body).toEqual(mockCreatedWidget);
@@ -163,12 +161,10 @@ describe('Widget Routes', () => {
     });
 
     it('should return 400 for invalid data', async () => {
-      const response = await request(app)
-        .post('/api/widgets')
-        .send({
-          name: 'Widget',
-          // missing required fields
-        });
+      const response = await request(app).post('/api/widgets').send({
+        name: 'Widget',
+        // missing required fields
+      });
 
       expect(response.status).toBe(400);
     });
@@ -222,7 +218,9 @@ describe('Widget Routes', () => {
     it('should delete a widget', async () => {
       widgetService.deleteWidget.mockResolvedValue(testWidget);
 
-      const response = await request(app).delete(`/api/widgets/${testWidget.id}`);
+      const response = await request(app).delete(
+        `/api/widgets/${testWidget.id}`
+      );
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Widget deleted successfully');
@@ -235,7 +233,9 @@ describe('Widget Routes', () => {
     it('should return 404 if widget not found', async () => {
       widgetService.deleteWidget.mockResolvedValue(null);
 
-      const response = await request(app).delete('/api/widgets/non-existent-id');
+      const response = await request(app).delete(
+        '/api/widgets/non-existent-id'
+      );
 
       expect(response.status).toBe(404);
       expect(response.body.message).toBe('Widget not found');

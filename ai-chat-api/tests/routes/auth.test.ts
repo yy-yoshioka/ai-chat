@@ -1,10 +1,10 @@
 import request from 'supertest';
 import express from 'express';
 import authRouter from '../../src/routes/auth';
-import { 
-  testUser, 
-  testOrganization, 
-  generateTestToken 
+import {
+  testUser,
+  testOrganization,
+  generateTestToken,
 } from '../fixtures/test-data';
 
 // Create Express app for testing
@@ -30,12 +30,10 @@ describe('Auth Routes', () => {
       verifyPassword.mockResolvedValue(true);
       signToken.mockReturnValue('mock-token');
 
-      const response = await request(app)
-        .post('/auth/login')
-        .send({
-          email: 'test@example.com',
-          password: 'password123',
-        });
+      const response = await request(app).post('/auth/login').send({
+        email: 'test@example.com',
+        password: 'password123',
+      });
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Login successful');
@@ -56,12 +54,10 @@ describe('Auth Routes', () => {
     it('should return 401 if user not found', async () => {
       prisma.user.findUnique.mockResolvedValue(null);
 
-      const response = await request(app)
-        .post('/auth/login')
-        .send({
-          email: 'nonexistent@example.com',
-          password: 'password123',
-        });
+      const response = await request(app).post('/auth/login').send({
+        email: 'nonexistent@example.com',
+        password: 'password123',
+      });
 
       expect(response.status).toBe(401);
       expect(response.body.message).toBe('Invalid credentials');
@@ -71,12 +67,10 @@ describe('Auth Routes', () => {
       prisma.user.findUnique.mockResolvedValue(testUser);
       verifyPassword.mockResolvedValue(false);
 
-      const response = await request(app)
-        .post('/auth/login')
-        .send({
-          email: 'test@example.com',
-          password: 'wrongpassword',
-        });
+      const response = await request(app).post('/auth/login').send({
+        email: 'test@example.com',
+        password: 'wrongpassword',
+      });
 
       expect(response.status).toBe(401);
       expect(response.body.message).toBe('Invalid credentials');
@@ -130,14 +124,12 @@ describe('Auth Routes', () => {
       signToken.mockReturnValue('mock-token');
       sendEmail.mockResolvedValue(undefined);
 
-      const response = await request(app)
-        .post('/auth/signup')
-        .send({
-          email: 'newuser@example.com',
-          password: 'StrongPassword123!',
-          name: 'New User',
-          organizationName: 'New Organization',
-        });
+      const response = await request(app).post('/auth/signup').send({
+        email: 'newuser@example.com',
+        password: 'StrongPassword123!',
+        name: 'New User',
+        organizationName: 'New Organization',
+      });
 
       expect(response.status).toBe(201);
       expect(response.body.message).toBe('User created successfully');
@@ -147,13 +139,11 @@ describe('Auth Routes', () => {
     });
 
     it('should return 400 if required fields are missing', async () => {
-      const response = await request(app)
-        .post('/auth/signup')
-        .send({
-          email: 'newuser@example.com',
-          password: 'StrongPassword123!',
-          // missing name and organizationName
-        });
+      const response = await request(app).post('/auth/signup').send({
+        email: 'newuser@example.com',
+        password: 'StrongPassword123!',
+        // missing name and organizationName
+      });
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe('All fields are required');
@@ -162,14 +152,12 @@ describe('Auth Routes', () => {
     it('should return 400 if email already exists', async () => {
       prisma.user.findFirst.mockResolvedValue(testUser);
 
-      const response = await request(app)
-        .post('/auth/signup')
-        .send({
-          email: 'test@example.com',
-          password: 'StrongPassword123!',
-          name: 'Test User',
-          organizationName: 'Test Organization',
-        });
+      const response = await request(app).post('/auth/signup').send({
+        email: 'test@example.com',
+        password: 'StrongPassword123!',
+        name: 'Test User',
+        organizationName: 'Test Organization',
+      });
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe('Email already exists');
@@ -233,12 +221,10 @@ describe('Auth Routes', () => {
         resetPasswordExpires: null,
       });
 
-      const response = await request(app)
-        .post('/auth/reset-password')
-        .send({
-          token: 'valid-token',
-          password: 'NewPassword123!',
-        });
+      const response = await request(app).post('/auth/reset-password').send({
+        token: 'valid-token',
+        password: 'NewPassword123!',
+      });
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Password reset successful');
@@ -247,12 +233,10 @@ describe('Auth Routes', () => {
     it('should return 400 if token is invalid or expired', async () => {
       prisma.user.findFirst.mockResolvedValue(null);
 
-      const response = await request(app)
-        .post('/auth/reset-password')
-        .send({
-          token: 'invalid-token',
-          password: 'NewPassword123!',
-        });
+      const response = await request(app).post('/auth/reset-password').send({
+        token: 'invalid-token',
+        password: 'NewPassword123!',
+      });
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe('Invalid or expired reset token');
