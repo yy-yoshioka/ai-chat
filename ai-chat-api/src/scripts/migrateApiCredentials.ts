@@ -11,26 +11,28 @@ dotenv.config();
  */
 async function migrateApiCredentials() {
   console.log('Starting API credentials migration...');
-  
+
   // Get the organization ID from command line argument
   const organizationId = process.argv[2];
   if (!organizationId) {
-    console.error('Usage: yarn ts-node src/scripts/migrateApiCredentials.ts <organizationId>');
+    console.error(
+      'Usage: yarn ts-node src/scripts/migrateApiCredentials.ts <organizationId>'
+    );
     process.exit(1);
   }
-  
+
   // Verify organization exists
   const organization = await prisma.organization.findUnique({
     where: { id: organizationId },
   });
-  
+
   if (!organization) {
     console.error(`Organization not found: ${organizationId}`);
     process.exit(1);
   }
-  
+
   console.log(`Migrating credentials for organization: ${organization.name}`);
-  
+
   // Get the first admin user for the organization (for audit logging)
   const adminUser = await prisma.user.findFirst({
     where: {
@@ -40,16 +42,19 @@ async function migrateApiCredentials() {
       },
     },
   });
-  
+
   if (!adminUser) {
     console.error('No admin user found for organization');
     process.exit(1);
   }
-  
+
   const credentialsToMigrate = [];
-  
+
   // OpenAI API Key
-  if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'your_openai_api_key_here') {
+  if (
+    process.env.OPENAI_API_KEY &&
+    process.env.OPENAI_API_KEY !== 'your_openai_api_key_here'
+  ) {
     credentialsToMigrate.push({
       service: 'openai',
       name: 'Default',
@@ -59,9 +64,12 @@ async function migrateApiCredentials() {
       },
     });
   }
-  
+
   // Stripe API Keys
-  if (process.env.STRIPE_SECRET_KEY && !process.env.STRIPE_SECRET_KEY.startsWith('sk_test_development')) {
+  if (
+    process.env.STRIPE_SECRET_KEY &&
+    !process.env.STRIPE_SECRET_KEY.startsWith('sk_test_development')
+  ) {
     credentialsToMigrate.push({
       service: 'stripe',
       name: 'Default',
@@ -72,7 +80,7 @@ async function migrateApiCredentials() {
       },
     });
   }
-  
+
   // SMTP Configuration
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
     credentialsToMigrate.push({
@@ -86,7 +94,7 @@ async function migrateApiCredentials() {
       },
     });
   }
-  
+
   // Migrate each credential
   for (const cred of credentialsToMigrate) {
     try {
@@ -98,12 +106,12 @@ async function migrateApiCredentials() {
           name: cred.name,
         },
       });
-      
+
       if (existing) {
         console.log(`Skipping ${cred.service}:${cred.name} - already exists`);
         continue;
       }
-      
+
       await createApiCredentials(
         {
           organizationId,
@@ -113,17 +121,21 @@ async function migrateApiCredentials() {
         },
         adminUser.id
       );
-      
+
       console.log(`✓ Migrated ${cred.service}:${cred.name}`);
     } catch (error) {
       console.error(`✗ Failed to migrate ${cred.service}:${cred.name}:`, error);
     }
   }
-  
+
   console.log('\nMigration complete!');
-  console.log('\nIMPORTANT: After verifying that the migrated credentials work correctly:');
+  console.log(
+    '\nIMPORTANT: After verifying that the migrated credentials work correctly:'
+  );
   console.log('1. Remove the API keys from your .env file');
-  console.log('2. Update your deployment to not include these sensitive values');
+  console.log(
+    '2. Update your deployment to not include these sensitive values'
+  );
   console.log('3. Rotate the API keys for additional security');
 }
 

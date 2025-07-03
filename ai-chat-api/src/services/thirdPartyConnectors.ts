@@ -491,7 +491,7 @@ export async function saveConnectorConfig(
   try {
     // Import the service dynamically to avoid circular dependency
     const { createApiCredentials } = await import('./apiCredentialsService');
-    
+
     // Get the first admin user for the organization (for audit logging)
     const adminUser = await prisma.user.findFirst({
       where: {
@@ -501,11 +501,11 @@ export async function saveConnectorConfig(
         },
       },
     });
-    
+
     if (!adminUser) {
       throw new Error('No admin user found for organization');
     }
-    
+
     await createApiCredentials(
       {
         organizationId,
@@ -515,7 +515,7 @@ export async function saveConnectorConfig(
       },
       adminUser.id
     );
-    
+
     console.log(`Saved ${type} config for organization: ${organizationId}`);
   } catch (error) {
     console.error(`Failed to save ${type} config:`, error);
@@ -531,12 +531,12 @@ export async function getConnectorConfig(
   try {
     // Import the service dynamically to avoid circular dependency
     const { getApiCredentials } = await import('./apiCredentialsService');
-    
+
     const credentials = await getApiCredentials(organizationId, type);
     if (!credentials) {
       return null;
     }
-    
+
     // Validate the structure based on type
     if (type === 'zendesk') {
       if (credentials.subdomain && credentials.email && credentials.token) {
@@ -547,7 +547,7 @@ export async function getConnectorConfig(
         return credentials as IntercomConfig;
       }
     }
-    
+
     return null;
   } catch (error) {
     console.error(`Failed to get ${type} config:`, error);

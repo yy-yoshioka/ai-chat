@@ -5,6 +5,7 @@
 All third-party API credentials (OpenAI, Stripe, Zendesk, Intercom, etc.) are now stored with AES-256-GCM encryption in the database instead of plain text environment variables.
 
 ### Features:
+
 - **Encryption**: AES-256-GCM with per-credential salt and IV
 - **Key Derivation**: PBKDF2 with 100,000 iterations
 - **Organization Isolation**: Each organization has its own encrypted credentials
@@ -12,6 +13,7 @@ All third-party API credentials (OpenAI, Stripe, Zendesk, Intercom, etc.) are no
 - **Automatic Expiration**: Support for credential expiration dates
 
 ### Migration:
+
 To migrate existing environment variable credentials to encrypted storage:
 
 ```bash
@@ -19,6 +21,7 @@ yarn ts-node src/scripts/migrateApiCredentials.ts <organizationId>
 ```
 
 ### API Endpoints:
+
 - `GET /api/api-credentials` - List credentials (without decrypting)
 - `POST /api/api-credentials` - Create new encrypted credentials
 - `PUT /api/api-credentials/:id` - Update credentials
@@ -30,6 +33,7 @@ yarn ts-node src/scripts/migrateApiCredentials.ts <organizationId>
 Enhanced rate limiting for chat endpoints to prevent abuse and ensure fair usage.
 
 ### Features:
+
 - **Dual Rate Limiting**: Both IP-based and organization-based limits
 - **Sliding Window**: Accurate rate limiting with Redis-backed sliding window
 - **Fallback**: Automatic fallback to in-memory store if Redis is unavailable
@@ -37,10 +41,12 @@ Enhanced rate limiting for chat endpoints to prevent abuse and ensure fair usage
 - **Security Logging**: Rate limit violations are logged as security events
 
 ### Default Limits:
+
 - **IP Rate Limit**: 100 requests per minute per IP address
 - **Organization Rate Limit**: 1000 requests per hour per organization
 
 ### Rate Limit Headers:
+
 ```
 X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 95
@@ -51,6 +57,7 @@ X-RateLimit-Org-Reset: 2024-07-03T13:00:00.000Z
 ```
 
 ### Monitoring Endpoints:
+
 - `GET /api/rate-limit/status` - Get current rate limit status
 - `POST /api/rate-limit/reset` - Reset rate limits (admin only)
 - `GET /api/rate-limit/admin/status/:type/:key` - Check any key's status (admin only)
@@ -58,6 +65,7 @@ X-RateLimit-Org-Reset: 2024-07-03T13:00:00.000Z
 ## Environment Variables
 
 ### Required Security Configuration:
+
 ```env
 # JWT Secret (Required)
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production

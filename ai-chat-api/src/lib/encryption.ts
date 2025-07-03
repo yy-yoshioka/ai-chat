@@ -25,31 +25,37 @@ const getEncryptionKey = (): string => {
 export function encrypt(text: string): string {
   try {
     const masterKey = getEncryptionKey();
-    
+
     // Generate a random salt
     const salt = crypto.randomBytes(SALT_LENGTH);
-    
+
     // Derive a key from the master key and salt
-    const key = crypto.pbkdf2Sync(masterKey, salt, ITERATIONS, KEY_LENGTH, 'sha256');
-    
+    const key = crypto.pbkdf2Sync(
+      masterKey,
+      salt,
+      ITERATIONS,
+      KEY_LENGTH,
+      'sha256'
+    );
+
     // Generate a random initialization vector
     const iv = crypto.randomBytes(IV_LENGTH);
-    
+
     // Create cipher
     const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
-    
+
     // Encrypt the text
     const encrypted = Buffer.concat([
       cipher.update(text, 'utf8'),
-      cipher.final()
+      cipher.final(),
     ]);
-    
+
     // Get the authentication tag
     const tag = cipher.getAuthTag();
-    
+
     // Combine salt, iv, tag, and encrypted data
     const combined = Buffer.concat([salt, iv, tag, encrypted]);
-    
+
     // Return base64 encoded string
     return combined.toString('base64');
   } catch (error) {
@@ -66,29 +72,38 @@ export function encrypt(text: string): string {
 export function decrypt(encryptedText: string): string {
   try {
     const masterKey = getEncryptionKey();
-    
+
     // Decode from base64
     const combined = Buffer.from(encryptedText, 'base64');
-    
+
     // Extract components
     const salt = combined.slice(0, SALT_LENGTH);
     const iv = combined.slice(SALT_LENGTH, SALT_LENGTH + IV_LENGTH);
-    const tag = combined.slice(SALT_LENGTH + IV_LENGTH, SALT_LENGTH + IV_LENGTH + TAG_LENGTH);
+    const tag = combined.slice(
+      SALT_LENGTH + IV_LENGTH,
+      SALT_LENGTH + IV_LENGTH + TAG_LENGTH
+    );
     const encrypted = combined.slice(SALT_LENGTH + IV_LENGTH + TAG_LENGTH);
-    
+
     // Derive the key using the same salt
-    const key = crypto.pbkdf2Sync(masterKey, salt, ITERATIONS, KEY_LENGTH, 'sha256');
-    
+    const key = crypto.pbkdf2Sync(
+      masterKey,
+      salt,
+      ITERATIONS,
+      KEY_LENGTH,
+      'sha256'
+    );
+
     // Create decipher
     const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
     decipher.setAuthTag(tag);
-    
+
     // Decrypt the data
     const decrypted = Buffer.concat([
       decipher.update(encrypted),
-      decipher.final()
+      decipher.final(),
     ]);
-    
+
     return decrypted.toString('utf8');
   } catch (error) {
     console.error('Decryption error:', error);
@@ -144,10 +159,10 @@ export function hashSecret(text: string): string {
 export function verifyHashedSecret(text: string, hashedText: string): boolean {
   const [salt, hash] = hashedText.split(':');
   const verifyHash = crypto.pbkdf2Sync(
-    text, 
-    Buffer.from(salt, 'hex'), 
-    ITERATIONS, 
-    64, 
+    text,
+    Buffer.from(salt, 'hex'),
+    ITERATIONS,
+    64,
     'sha256'
   );
   return hash === verifyHash.toString('hex');

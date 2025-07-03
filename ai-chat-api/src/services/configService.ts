@@ -9,7 +9,9 @@ import { getApiCredentials } from './apiCredentialsService';
  * Gets the OpenAI API key for an organization
  * Falls back to environment variable if not found in encrypted storage
  */
-export async function getOpenAIApiKey(organizationId?: string): Promise<string | null> {
+export async function getOpenAIApiKey(
+  organizationId?: string
+): Promise<string | null> {
   // If organization ID is provided, try to get from encrypted storage first
   if (organizationId) {
     const credentials = await getApiCredentials(organizationId, 'openai');
@@ -17,13 +19,13 @@ export async function getOpenAIApiKey(organizationId?: string): Promise<string |
       return credentials.apiKey;
     }
   }
-  
+
   // Fall back to environment variable
   const envKey = process.env.OPENAI_API_KEY;
   if (!envKey || envKey === 'your_openai_api_key_here') {
     return null;
   }
-  
+
   return envKey;
 }
 
@@ -31,7 +33,9 @@ export async function getOpenAIApiKey(organizationId?: string): Promise<string |
  * Gets the Stripe secret key for an organization
  * Falls back to environment variable if not found in encrypted storage
  */
-export async function getStripeSecretKey(organizationId?: string): Promise<string | null> {
+export async function getStripeSecretKey(
+  organizationId?: string
+): Promise<string | null> {
   // If organization ID is provided, try to get from encrypted storage first
   if (organizationId) {
     const credentials = await getApiCredentials(organizationId, 'stripe');
@@ -39,13 +43,13 @@ export async function getStripeSecretKey(organizationId?: string): Promise<strin
       return credentials.secretKey;
     }
   }
-  
+
   // Fall back to environment variable
   const envKey = process.env.STRIPE_SECRET_KEY;
   if (!envKey || envKey.startsWith('sk_test_development')) {
     return null;
   }
-  
+
   return envKey;
 }
 
@@ -62,12 +66,12 @@ export async function getZendeskConfig(organizationId: string): Promise<{
   if (!credentials) {
     return null;
   }
-  
+
   // Validate required fields
   if (!credentials.subdomain || !credentials.email || !credentials.token) {
     return null;
   }
-  
+
   return {
     subdomain: credentials.subdomain,
     email: credentials.email,
@@ -87,12 +91,12 @@ export async function getIntercomConfig(organizationId: string): Promise<{
   if (!credentials) {
     return null;
   }
-  
+
   // Validate required fields
   if (!credentials.accessToken || !credentials.workspaceId) {
     return null;
   }
-  
+
   return {
     accessToken: credentials.accessToken,
     workspaceId: credentials.workspaceId,
@@ -113,7 +117,13 @@ export async function getSmtpConfig(organizationId?: string): Promise<{
   // If organization ID is provided, try to get from encrypted storage first
   if (organizationId) {
     const credentials = await getApiCredentials(organizationId, 'smtp');
-    if (credentials && credentials.host && credentials.port && credentials.user && credentials.pass) {
+    if (
+      credentials &&
+      credentials.host &&
+      credentials.port &&
+      credentials.user &&
+      credentials.pass
+    ) {
       return {
         host: credentials.host,
         port: credentials.port,
@@ -123,17 +133,17 @@ export async function getSmtpConfig(organizationId?: string): Promise<{
       };
     }
   }
-  
+
   // Fall back to environment variables
   const host = process.env.SMTP_HOST;
   const port = process.env.SMTP_PORT;
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-  
+
   if (!host || !port || !user || !pass) {
     return null;
   }
-  
+
   return {
     host,
     port: parseInt(port, 10),
@@ -155,7 +165,7 @@ export async function getOpenAIModel(organizationId?: string): Promise<string> {
       return credentials.model;
     }
   }
-  
+
   // Fall back to environment variable or default
   return process.env.OPENAI_MODEL || 'gpt-4o-mini-2024-07-18';
 }

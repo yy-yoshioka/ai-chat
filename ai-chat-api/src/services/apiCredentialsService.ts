@@ -1,5 +1,5 @@
 import { prisma } from '../lib/prisma';
-import { encrypt, decrypt, encryptObject, decryptObject } from '../lib/encryption';
+import { encryptObject, decryptObject } from '../lib/encryption';
 import { ApiCredentials } from '@prisma/client';
 import { logSecurityEvent } from './securityService';
 
@@ -32,7 +32,7 @@ export async function createApiCredentials(
   try {
     // Encrypt the credentials
     const encryptedData = encryptObject(input.credentials);
-    
+
     // Create the credentials record
     const apiCredentials = await prisma.apiCredentials.create({
       data: {
@@ -43,7 +43,7 @@ export async function createApiCredentials(
         expiresAt: input.expiresAt,
       },
     });
-    
+
     // Log security event
     await logSecurityEvent({
       userId,
@@ -60,7 +60,7 @@ export async function createApiCredentials(
       },
       risk_level: 'medium',
     });
-    
+
     return apiCredentials;
   } catch (error) {
     // Log failed attempt
@@ -79,7 +79,7 @@ export async function createApiCredentials(
       },
       risk_level: 'high',
     });
-    
+
     throw error;
   }
 }
@@ -98,20 +98,20 @@ export async function getApiCredentials(
       service,
       isActive: true,
     };
-    
+
     if (name) {
       where.name = name;
     }
-    
+
     const apiCredentials = await prisma.apiCredentials.findFirst({
       where,
       orderBy: { createdAt: 'desc' },
     });
-    
+
     if (!apiCredentials) {
       return null;
     }
-    
+
     // Check if credentials have expired
     if (apiCredentials.expiresAt && apiCredentials.expiresAt < new Date()) {
       await prisma.apiCredentials.update({
@@ -120,13 +120,13 @@ export async function getApiCredentials(
       });
       return null;
     }
-    
+
     // Update last used timestamp
     await prisma.apiCredentials.update({
       where: { id: apiCredentials.id },
       data: { lastUsed: new Date() },
     });
-    
+
     // Decrypt and return the credentials
     return decryptObject<CredentialData>(apiCredentials.encryptedData);
   } catch (error) {
@@ -148,24 +148,24 @@ export async function updateApiCredentials(
     const updateData: any = {
       updatedAt: new Date(),
     };
-    
+
     if (input.name !== undefined) {
       updateData.name = input.name;
     }
-    
+
     if (input.credentials !== undefined) {
       updateData.encryptedData = encryptObject(input.credentials);
       updateData.lastRotated = new Date();
     }
-    
+
     if (input.expiresAt !== undefined) {
       updateData.expiresAt = input.expiresAt;
     }
-    
+
     if (input.isActive !== undefined) {
       updateData.isActive = input.isActive;
     }
-    
+
     const apiCredentials = await prisma.apiCredentials.update({
       where: {
         id,
@@ -173,7 +173,7 @@ export async function updateApiCredentials(
       },
       data: updateData,
     });
-    
+
     // Log security event
     await logSecurityEvent({
       userId,
@@ -190,7 +190,7 @@ export async function updateApiCredentials(
       },
       risk_level: 'medium',
     });
-    
+
     return apiCredentials;
   } catch (error) {
     // Log failed attempt
@@ -208,7 +208,7 @@ export async function updateApiCredentials(
       },
       risk_level: 'high',
     });
-    
+
     throw error;
   }
 }
@@ -228,7 +228,7 @@ export async function deleteApiCredentials(
         organizationId, // Ensure org isolation
       },
     });
-    
+
     // Log security event
     await logSecurityEvent({
       userId,
@@ -257,7 +257,7 @@ export async function deleteApiCredentials(
       },
       risk_level: 'high',
     });
-    
+
     throw error;
   }
 }
@@ -272,11 +272,11 @@ export async function listApiCredentials(
   const where: any = {
     organizationId,
   };
-  
+
   if (service) {
     where.service = service;
   }
-  
+
   const credentials = await prisma.apiCredentials.findMany({
     where,
     select: {
@@ -291,12 +291,9 @@ export async function listApiCredentials(
       createdAt: true,
       updatedAt: true,
     },
-    orderBy: [
-      { service: 'asc' },
-      { name: 'asc' },
-    ],
+    orderBy: [{ service: 'asc' }, { name: 'asc' }],
   });
-  
+
   return credentials;
 }
 
@@ -318,7 +315,7 @@ export async function checkExpiredCredentials(
       isActive: false,
     },
   });
-  
+
   return result.count;
 }
 
@@ -328,7 +325,11 @@ export async function checkExpiredCredentials(
  */
 export async function migrateExistingCredentials(
   organizationId: string,
-  plainCredentials: { service: string; name: string; credentials: CredentialData }[],
+  plainCredentials: {
+    service: string;
+    name: string;
+    credentials: CredentialData;
+  }[],
   userId: string
 ): Promise<void> {
   for (const cred of plainCredentials) {
@@ -343,7 +344,10 @@ export async function migrateExistingCredentials(
         userId
       );
     } catch (error) {
-      console.error(`Failed to migrate credentials for ${cred.service}:${cred.name}:`, error);
+      console.error(
+        `Failed to migrate credentials for ${cred.service}:${cred.name}:`,
+        error
+      );
     }
   }
 }

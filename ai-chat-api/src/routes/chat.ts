@@ -327,8 +327,8 @@ async function handleChatRequest(
 
 // Authenticated user chat endpoint with rate limiting
 router.post(
-  '/', 
-  authMiddleware, 
+  '/',
+  authMiddleware,
   combinedRateLimit(), // Apply both IP and organization rate limiting
   async (req: AuthRequest, res: Response) => {
     await handleChatRequest(req as AuthRequest & WidgetRequest, res, false);

@@ -35,12 +35,12 @@ router.get(
   async (req: Request, res: Response) => {
     try {
       const { service } = req.query;
-      
+
       const credentials = await listApiCredentials(
         req.organizationId!,
         service as string | undefined
       );
-      
+
       res.json({ credentials });
     } catch (error) {
       console.error('Failed to list API credentials:', error);
@@ -60,9 +60,9 @@ router.post(
       if (!validation.success) {
         return res.status(400).json({ error: validation.error.flatten() });
       }
-      
+
       const { service, name, credentials, expiresAt } = validation.data;
-      
+
       const apiCredentials = await createApiCredentials(
         {
           organizationId: req.organizationId!,
@@ -73,10 +73,10 @@ router.post(
         },
         req.user!.id
       );
-      
+
       // Don't return the encrypted data
       const { encryptedData, ...response } = apiCredentials;
-      
+
       res.status(201).json({ credentials: response });
     } catch (error) {
       console.error('Failed to create API credentials:', error);
@@ -93,12 +93,12 @@ router.put(
   async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      
+
       const validation = updateCredentialsSchema.safeParse(req.body);
       if (!validation.success) {
         return res.status(400).json({ error: validation.error.flatten() });
       }
-      
+
       const updateData: any = {};
       if (validation.data.name !== undefined) {
         updateData.name = validation.data.name;
@@ -112,17 +112,17 @@ router.put(
       if (validation.data.isActive !== undefined) {
         updateData.isActive = validation.data.isActive;
       }
-      
+
       const apiCredentials = await updateApiCredentials(
         id,
         req.organizationId!,
         updateData,
         req.user!.id
       );
-      
+
       // Don't return the encrypted data
       const { encryptedData, ...response } = apiCredentials;
-      
+
       res.json({ credentials: response });
     } catch (error) {
       console.error('Failed to update API credentials:', error);
@@ -139,13 +139,9 @@ router.delete(
   async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      
-      await deleteApiCredentials(
-        id,
-        req.organizationId!,
-        req.user!.id
-      );
-      
+
+      await deleteApiCredentials(id, req.organizationId!, req.user!.id);
+
       res.status(204).send();
     } catch (error) {
       console.error('Failed to delete API credentials:', error);
@@ -162,11 +158,11 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const { service, credentials } = req.body;
-      
+
       // Service-specific validation logic
       let isValid = false;
       let message = '';
-      
+
       switch (service) {
         case 'openai':
           // Test OpenAI API key
@@ -174,11 +170,13 @@ router.post(
             try {
               const response = await fetch('https://api.openai.com/v1/models', {
                 headers: {
-                  'Authorization': `Bearer ${credentials.apiKey}`,
+                  Authorization: `Bearer ${credentials.apiKey}`,
                 },
               });
               isValid = response.ok;
-              message = isValid ? 'OpenAI API key is valid' : 'Invalid OpenAI API key';
+              message = isValid
+                ? 'OpenAI API key is valid'
+                : 'Invalid OpenAI API key';
             } catch (error) {
               message = 'Failed to validate OpenAI API key';
             }
@@ -186,18 +184,26 @@ router.post(
             message = 'Invalid OpenAI API key format';
           }
           break;
-          
+
         case 'stripe':
           // Test Stripe secret key
-          if (credentials.secretKey && credentials.secretKey.startsWith('sk_')) {
+          if (
+            credentials.secretKey &&
+            credentials.secretKey.startsWith('sk_')
+          ) {
             try {
-              const response = await fetch('https://api.stripe.com/v1/customers?limit=1', {
-                headers: {
-                  'Authorization': `Bearer ${credentials.secretKey}`,
-                },
-              });
+              const response = await fetch(
+                'https://api.stripe.com/v1/customers?limit=1',
+                {
+                  headers: {
+                    Authorization: `Bearer ${credentials.secretKey}`,
+                  },
+                }
+              );
               isValid = response.ok;
-              message = isValid ? 'Stripe secret key is valid' : 'Invalid Stripe secret key';
+              message = isValid
+                ? 'Stripe secret key is valid'
+                : 'Invalid Stripe secret key';
             } catch (error) {
               message = 'Failed to validate Stripe secret key';
             }
@@ -205,7 +211,7 @@ router.post(
             message = 'Invalid Stripe secret key format';
           }
           break;
-          
+
         case 'zendesk':
           // Test Zendesk credentials
           if (credentials.subdomain && credentials.email && credentials.token) {
@@ -215,12 +221,14 @@ router.post(
                 `https://${credentials.subdomain}.zendesk.com/api/v2/users/me.json`,
                 {
                   headers: {
-                    'Authorization': authHeader,
+                    Authorization: authHeader,
                   },
                 }
               );
               isValid = response.ok;
-              message = isValid ? 'Zendesk credentials are valid' : 'Invalid Zendesk credentials';
+              message = isValid
+                ? 'Zendesk credentials are valid'
+                : 'Invalid Zendesk credentials';
             } catch (error) {
               message = 'Failed to validate Zendesk credentials';
             }
@@ -228,19 +236,21 @@ router.post(
             message = 'Missing required Zendesk fields';
           }
           break;
-          
+
         case 'intercom':
           // Test Intercom access token
           if (credentials.accessToken) {
             try {
               const response = await fetch('https://api.intercom.io/me', {
                 headers: {
-                  'Authorization': `Bearer ${credentials.accessToken}`,
-                  'Accept': 'application/json',
+                  Authorization: `Bearer ${credentials.accessToken}`,
+                  Accept: 'application/json',
                 },
               });
               isValid = response.ok;
-              message = isValid ? 'Intercom access token is valid' : 'Invalid Intercom access token';
+              message = isValid
+                ? 'Intercom access token is valid'
+                : 'Invalid Intercom access token';
             } catch (error) {
               message = 'Failed to validate Intercom access token';
             }
@@ -248,11 +258,11 @@ router.post(
             message = 'Missing Intercom access token';
           }
           break;
-          
+
         default:
           message = `Validation not implemented for service: ${service}`;
       }
-      
+
       res.json({ valid: isValid, message });
     } catch (error) {
       console.error('Failed to test API credentials:', error);
