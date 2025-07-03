@@ -4,72 +4,155 @@ import {
   requireOrganizationAccess,
   OrganizationRequest,
 } from '../middleware/organizationAccess';
-import { prisma } from '../lib/prisma';
-import { PlanType } from '@prisma/client';
+import { requirePermission } from '../middleware/permissions';
+import { validateRequest } from '../middleware/validateRequest';
+import { Permission, PlanType } from '@prisma/client';
+import { z } from 'zod';
+import { billingService } from '../services/billingService';
 import {
   createCheckoutSession,
   createTokenCheckoutSession,
   cancelSubscription,
   stripe,
-  PRICING_PLANS,
 } from '../lib/stripe';
 import Stripe from 'stripe';
 
 const router = Router();
 
-// Get current billing information
+// Input validation schemas
+const startTrialSchema = z.object({
+  planType: z.nativeEnum(PlanType).refine((val) => val !== 'free', {
+    message: 'Cannot start trial for free plan',
+  }),
+});
+
+const convertTrialSchema = z.object({
+  paymentMethodId: z.string(),
+});
+
+const checkoutSchema = z.object({
+  planType: z.enum(['pro', 'enterprise']),
+});
+
+const tokenPurchaseSchema = z.object({
+  tokenAmount: z.number().min(10000),
+});
+
+// Get billing overview including trial status
 router.get(
   '/',
   authMiddleware,
   requireOrganizationAccess,
+  requirePermission(Permission.BILLING_READ),
   async (req: OrganizationRequest, res: Response) => {
     try {
-      const company = await prisma.company.findUnique({
-        where: { id: req.companyId! },
-        include: {
-          usage: {
-            where: {
-              date: {
-                gte: new Date(
-                  new Date().getFullYear(),
-                  new Date().getMonth(),
-                  1
-                ), // Current month
-              },
-            },
-          },
-        },
+      const overview = await billingService.getBillingOverview(req.companyId!);
+      res.json(overview);
+    } catch (error) {
+      console.error('Get billing overview error:', error);
+      res.status(500).json({
+        error: 'Failed to fetch billing information',
+        message: error instanceof Error ? error.message : 'Unknown error',
       });
+    }
+  }
+);
 
-      if (!company) {
-        return res.status(404).json({ error: 'Company not found' });
-      }
+// Start a trial
+router.post(
+  '/trial/start',
+  authMiddleware,
+  requireOrganizationAccess,
+  requirePermission(Permission.BILLING_WRITE),
+  validateRequest({ body: startTrialSchema }),
+  async (req: OrganizationRequest, res: Response) => {
+    try {
+      const { planType } = req.body;
+      const userId = req.user!.id;
 
-      // Get current usage for the month
-      const currentUsage = company.usage.reduce(
-        (
-          acc: { messages: number; tokens: number },
-          usage: { messages: number; tokens: number }
-        ) => ({
-          messages: acc.messages + usage.messages,
-          tokens: acc.tokens + usage.tokens,
-        }),
-        { messages: 0, tokens: 0 }
+      const company = await billingService.startTrial(
+        req.companyId!,
+        planType,
+        userId
       );
 
-      // Get plan limits
-      const planLimits = PRICING_PLANS[company.plan];
-
       res.json({
-        plan: company.plan,
-        planLimits,
-        currentUsage,
-        stripeCustomerId: company.stripeCustomerId || null,
-        subscriptionStatus: company.subscriptionStatus || 'inactive',
+        success: true,
+        trial: {
+          plan: company.plan,
+          startedAt: company.trialStartedAt,
+          endsAt: company.trialEndsAt,
+        },
       });
     } catch (error) {
-      console.error('Get billing info error:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error('Start trial error:', error);
+      const status =
+        error instanceof Error && error.message.includes('already') ? 409 : 500;
+      res.status(status).json({
+        error: error instanceof Error ? error.message : 'Failed to start trial',
+      });
+    }
+  }
+);
+
+// Get trial status
+router.get(
+  '/trial/status',
+  authMiddleware,
+  requireOrganizationAccess,
+  requirePermission(Permission.BILLING_READ),
+  async (req: OrganizationRequest, res: Response) => {
+    try {
+      const status = await billingService.getTrialStatus(req.companyId!);
+
+      if (!status) {
+        res.json({
+          hasTrialHistory: false,
+        });
+        return;
+      }
+
+      res.json(status);
+    } catch (error) {
+      console.error('Get trial status error:', error);
+      res.status(500).json({
+        error: 'Failed to fetch trial status',
+      });
+    }
+  }
+);
+
+// Convert trial to subscription
+router.post(
+  '/trial/convert',
+  authMiddleware,
+  requireOrganizationAccess,
+  requirePermission(Permission.BILLING_WRITE),
+  validateRequest({ body: convertTrialSchema }),
+  async (req: OrganizationRequest, res: Response) => {
+    try {
+      const { paymentMethodId } = req.body;
+      const userId = req.user!.id;
+
+      const company = await billingService.convertTrialToSubscription(
+        req.companyId!,
+        paymentMethodId,
+        userId
+      );
+
+      res.json({
+        success: true,
+        subscription: {
+          id: company.subscriptionId,
+          status: company.subscriptionStatus,
+        },
+      });
+    } catch (error) {
+      console.error('Convert trial error:', error);
+      res.status(500).json({
+        error:
+          error instanceof Error ? error.message : 'Failed to convert trial',
+      });
     }
   }
 );
@@ -79,13 +162,11 @@ router.post(
   '/checkout/subscription',
   authMiddleware,
   requireOrganizationAccess,
+  requirePermission(Permission.BILLING_WRITE),
+  validateRequest({ body: checkoutSchema }),
   async (req: OrganizationRequest, res: Response) => {
     try {
       const { planType } = req.body;
-
-      if (!['pro', 'enterprise'].includes(planType)) {
-        return res.status(400).json({ error: 'Invalid plan type' });
-      }
 
       const successUrl = `${process.env.FRONTEND_URL}/billing/success?session_id={CHECKOUT_SESSION_ID}`;
       const cancelUrl = `${process.env.FRONTEND_URL}/billing/cancel`;
@@ -110,15 +191,11 @@ router.post(
   '/checkout/tokens',
   authMiddleware,
   requireOrganizationAccess,
+  requirePermission(Permission.BILLING_WRITE),
+  validateRequest({ body: tokenPurchaseSchema }),
   async (req: OrganizationRequest, res: Response) => {
     try {
       const { tokenAmount } = req.body;
-
-      if (!tokenAmount || tokenAmount < 10000) {
-        return res
-          .status(400)
-          .json({ error: 'Minimum token purchase is 10,000' });
-      }
 
       const successUrl = `${process.env.FRONTEND_URL}/billing/success?session_id={CHECKOUT_SESSION_ID}`;
       const cancelUrl = `${process.env.FRONTEND_URL}/billing/cancel`;
@@ -143,6 +220,7 @@ router.post(
   '/cancel',
   authMiddleware,
   requireOrganizationAccess,
+  requirePermission(Permission.BILLING_WRITE),
   async (req: OrganizationRequest, res: Response) => {
     try {
       const company = await prisma.company.findUnique({
@@ -172,6 +250,86 @@ router.post(
   }
 );
 
+// Get invoices
+router.get(
+  '/invoices',
+  authMiddleware,
+  requireOrganizationAccess,
+  requirePermission(Permission.BILLING_READ),
+  async (req: OrganizationRequest, res: Response) => {
+    try {
+      const company = await prisma.company.findUnique({
+        where: { id: req.companyId! },
+      });
+
+      if (!company?.stripeCustomerId) {
+        return res.json({ invoices: [] });
+      }
+
+      const invoices = await stripe.invoices.list({
+        customer: company.stripeCustomerId,
+        limit: 10,
+      });
+
+      const formattedInvoices = invoices.data.map((invoice) => ({
+        id: invoice.id,
+        number: invoice.number,
+        amount: invoice.total / 100,
+        currency: invoice.currency,
+        status: invoice.status,
+        date: new Date(invoice.created * 1000),
+        pdfUrl: invoice.invoice_pdf,
+        hostedUrl: invoice.hosted_invoice_url,
+      }));
+
+      res.json({ invoices: formattedInvoices });
+    } catch (error) {
+      console.error('Get invoices error:', error);
+      res.status(500).json({ error: 'Failed to fetch invoices' });
+    }
+  }
+);
+
+// Get payment methods
+router.get(
+  '/payment-methods',
+  authMiddleware,
+  requireOrganizationAccess,
+  requirePermission(Permission.BILLING_READ),
+  async (req: OrganizationRequest, res: Response) => {
+    try {
+      const company = await prisma.company.findUnique({
+        where: { id: req.companyId! },
+      });
+
+      if (!company?.stripeCustomerId) {
+        return res.json({ paymentMethods: [] });
+      }
+
+      const paymentMethods = await stripe.paymentMethods.list({
+        customer: company.stripeCustomerId,
+        type: 'card',
+      });
+
+      const formattedMethods = paymentMethods.data.map((method) => ({
+        id: method.id,
+        brand: method.card!.brand,
+        last4: method.card!.last4,
+        expMonth: method.card!.exp_month,
+        expYear: method.card!.exp_year,
+        isDefault:
+          method.id === company.stripeCustomerId ||
+          method.metadata?.default === 'true',
+      }));
+
+      res.json({ paymentMethods: formattedMethods });
+    } catch (error) {
+      console.error('Get payment methods error:', error);
+      res.status(500).json({ error: 'Failed to fetch payment methods' });
+    }
+  }
+);
+
 // Stripe webhook handler
 router.post('/webhook', async (req: Request, res: Response) => {
   const sig = req.headers['stripe-signature'] as string;
@@ -182,7 +340,7 @@ router.post('/webhook', async (req: Request, res: Response) => {
     return res.status(400).send('Webhook secret not configured');
   }
 
-  let event;
+  let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
@@ -192,6 +350,15 @@ router.post('/webhook', async (req: Request, res: Response) => {
   }
 
   try {
+    // Handle subscription events through billing service
+    if (event.type.startsWith('customer.subscription.')) {
+      await billingService.handleSubscriptionEvent(
+        event,
+        event.data.object as Stripe.Subscription
+      );
+    }
+
+    // Handle other events
     switch (event.type) {
       case 'checkout.session.completed':
         await handleCheckoutCompleted(
@@ -199,20 +366,12 @@ router.post('/webhook', async (req: Request, res: Response) => {
         );
         break;
 
-      case 'customer.subscription.updated':
-        await handleSubscriptionUpdated(event.data.object);
-        break;
-
-      case 'customer.subscription.deleted':
-        await handleSubscriptionDeleted(event.data.object);
-        break;
-
       case 'invoice.payment_succeeded':
-        await handlePaymentSucceeded(event.data.object);
+        await handlePaymentSucceeded(event.data.object as Stripe.Invoice);
         break;
 
       case 'invoice.payment_failed':
-        await handlePaymentFailed(event.data.object);
+        await handlePaymentFailed(event.data.object as Stripe.Invoice);
         break;
 
       default:
@@ -227,9 +386,6 @@ router.post('/webhook', async (req: Request, res: Response) => {
 });
 
 // Webhook event handlers
-/**
- * Handle successful checkout completion
- */
 async function handleCheckoutCompleted(
   session: Stripe.Checkout.Session
 ): Promise<void> {
@@ -275,50 +431,70 @@ async function handleCheckoutCompleted(
   }
 }
 
-async function handleSubscriptionUpdated(subscription: {
-  id: string;
-  status: string;
-}) {
-  const company = await prisma.company.findFirst({
-    where: { subscriptionId: subscription.id },
-  });
-
-  if (company) {
-    await prisma.company.update({
-      where: { id: company.id },
-      data: {
-        subscriptionStatus: subscription.status,
-      },
-    });
-  }
-}
-
-async function handleSubscriptionDeleted(subscription: { id: string }) {
-  const company = await prisma.company.findFirst({
-    where: { subscriptionId: subscription.id },
-  });
-
-  if (company) {
-    await prisma.company.update({
-      where: { id: company.id },
-      data: {
-        plan: 'free',
-        subscriptionStatus: 'canceled',
-        subscriptionId: null,
-      },
-    });
-  }
-}
-
-async function handlePaymentSucceeded(invoice: { id: string }) {
+async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
   // Log successful payment
   console.log(`Payment succeeded for invoice: ${invoice.id}`);
+
+  // Check if this is for token overage
+  const overageItem = invoice.lines.data.find(
+    (item) => item.metadata?.type === 'token_overage'
+  );
+
+  if (overageItem && invoice.customer) {
+    const company = await prisma.company.findFirst({
+      where: { stripeCustomerId: invoice.customer as string },
+    });
+
+    if (company && company.organizationId) {
+      // Send notification
+      await prisma.notification.create({
+        data: {
+          organizationId: company.organizationId,
+          type: 'billing',
+          title: 'Token Overage Charge',
+          message: `You have been charged $${(invoice.total / 100).toFixed(
+            2
+          )} for token overage usage.`,
+          data: {
+            invoiceId: invoice.id,
+            amount: invoice.total,
+            tokens: overageItem.metadata?.tokens,
+          },
+        },
+      });
+    }
+  }
 }
 
-async function handlePaymentFailed(invoice: { id: string }) {
-  // Handle failed payment - could send notification email
+async function handlePaymentFailed(invoice: Stripe.Invoice) {
   console.log(`Payment failed for invoice: ${invoice.id}`);
+
+  if (invoice.customer) {
+    const company = await prisma.company.findFirst({
+      where: { stripeCustomerId: invoice.customer as string },
+    });
+
+    if (company && company.organizationId) {
+      // Send notification
+      await prisma.notification.create({
+        data: {
+          organizationId: company.organizationId,
+          type: 'alert',
+          title: 'Payment Failed',
+          message:
+            'Your payment method was declined. Please update your payment information.',
+          data: {
+            invoiceId: invoice.id,
+            amount: invoice.total,
+          },
+        },
+      });
+    }
+  }
 }
+
+// Import prisma after to avoid circular dependency
+import { prisma } from '../lib/prisma';
 
 export { router as billingRoutes };
 export default router;
