@@ -6,6 +6,7 @@ import {
   WidgetRequest,
 } from '../middleware/requireValidWidget';
 import { rateLimiter } from '../utils/rateLimiter';
+import { combinedRateLimit } from '../middleware/chatRateLimit';
 import { searchKnowledgeBase } from '../services/knowledgeBaseService';
 import { webhookService } from '../services/webhookService';
 import type { UserPayload } from '../utils/jwt';
@@ -324,15 +325,21 @@ async function handleChatRequest(
   }
 }
 
-// Authenticated user chat endpoint
-router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
-  await handleChatRequest(req as AuthRequest & WidgetRequest, res, false);
-});
+// Authenticated user chat endpoint with rate limiting
+router.post(
+  '/', 
+  authMiddleware, 
+  combinedRateLimit(), // Apply both IP and organization rate limiting
+  async (req: AuthRequest, res: Response) => {
+    await handleChatRequest(req as AuthRequest & WidgetRequest, res, false);
+  }
+);
 
-// Widget chat endpoint (no authentication required)
+// Widget chat endpoint (no authentication required) with rate limiting
 router.post(
   '/widget/:widgetKey',
   requireValidWidget,
+  combinedRateLimit(), // Apply both IP and organization rate limiting
   async (req: WidgetRequest, res: Response) => {
     await handleChatRequest(req as AuthRequest & WidgetRequest, res, true);
   }
